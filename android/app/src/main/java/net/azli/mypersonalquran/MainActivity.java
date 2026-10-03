@@ -26,6 +26,16 @@ import androidx.webkit.WebViewAssetLoader;
 
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
+
 import java.util.ArrayList;
 
 /**
@@ -35,6 +45,39 @@ import java.util.ArrayList;
 public class MainActivity extends Activity {
     private static final String HOST = "appassets.androidplatform.net";
     private static final int REQ_MIC = 7;
+    private static final String QUL_HOST = "static-cdn.tarteel.ai";
+
+    /** Printed-page fonts from QUL: downloaded once, then served from the phone so pages open offline. */
+    private WebResourceResponse qulFont(Uri u) {
+        try {
+            String path = u.getPath();
+            if (path == null || !path.startsWith("/qul/fonts/")) return null;
+            File f = new File(getFilesDir(), "qul" + path);
+            if (!f.exists()) {
+                File dir = f.getParentFile();
+                if (dir != null) dir.mkdirs();
+                HttpURLConnection c = (HttpURLConnection) new URL(u.toString()).openConnection();
+                c.setConnectTimeout(15000);
+                c.setReadTimeout(30000);
+                if (c.getResponseCode() != 200) { c.disconnect(); return null; }
+                File tmp = new File(f.getPath() + ".part");
+                try (InputStream in = c.getInputStream(); OutputStream out = new FileOutputStream(tmp)) {
+                    byte[] buf = new byte[16384];
+                    int n;
+                    while ((n = in.read(buf)) > 0) out.write(buf, 0, n);
+                }
+                c.disconnect();
+                if (!tmp.renameTo(f)) return null;
+            }
+            Map<String, String> h = new HashMap<>();
+            h.put("Access-Control-Allow-Origin", "*");
+            h.put("Cache-Control", "max-age=31536000");
+            String mime = path.endsWith(".woff") ? "font/woff" : "font/woff2";
+            return new WebResourceResponse(mime, null, 200, "OK", h, new FileInputStream(f));
+        } catch (Exception e) {
+            return null;
+        }
+    }
 
     private WebView web;
     private SpeechRecognizer recognizer;
@@ -68,7 +111,9 @@ public class MainActivity extends Activity {
         web.setWebViewClient(new WebViewClient() {
             @Override
             public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
-                return loader.shouldInterceptRequest(request.getUrl());
+                Uri u = request.getUrl();
+                if (QUL_HOST.equals(u.getHost()) && "GET".equals(request.getMethod())) return qulFont(u);
+                return loader.shouldInterceptRequest(u);
             }
 
             @Override
