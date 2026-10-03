@@ -1,0 +1,35 @@
+# My Personal Quran v1.0
+
+A personal Madinah Mushaf reader and hafazan (memorisation) checker.
+
+Open it at **https://azali69.github.io/my-personal/** in Chrome. On Android, use Chrome's menu → *Add to Home screen* to install it.
+
+## Features
+
+- 604-page Madinah Mushaf layout with waqf signs
+- Translation on or off, in Bahasa Melayu or English
+- Search in Arabic (harakat ignored), Malay or English, or jump by reference (18:10, p296)
+- Six background colours and adjustable Arabic size
+- Waqaf and ibtida' blocks: ruku' (ع) sections, or your own blocks
+- Hafazan: hidden text that appears as you recite, with wrong, skipped and unclear words marked, and a session history
+- Works offline after the first visit
+
+## Sources
+
+| Content | Source |
+|---|---|
+| Qur'an text, waqf signs, pages, juz | King Fahd Glorious Qur'an Printing Complex (KFGQPC), Uthmanic Hafs data v2.0 (Hafs 'an 'Asim) |
+| Cross-check of the text | Tanzil Project Uthmani text: no letter differences across 6,236 ayat |
+| Ruku' sections | Tanzil metadata, cross-checked against a second compilation (556 of 556 match) |
+| Bahasa Melayu | Abdullah Muhammad Basmeih, via [QuranEnc.com](https://quranenc.com/en/browse/malay_basumayyah) (malay_basumayyah v1.0.0) |
+| English | Saheeh International, via [QuranEnc.com](https://quranenc.com/en/browse/english_saheeh) (english_saheeh v1.1.2) |
+| Arabic font | KFGQPC Uthmanic Script HAFS, © King Fahd Glorious Qur'an Printing Complex, included unmodified |
+| Word-judging logic | Adapted from [Tilawi quran-asr](https://github.com/Tilawi/quran-asr), MIT licence, © 2025-2026 Muhammed Durakovic |
+
+The Qur'an text and translations are reproduced without modification. The app checks its own copy against the verified build (Settings → Sources & verification).
+
+## Limits
+
+- Voice checking uses the browser's speech recognition. In Chrome this is Google's online service, so it needs internet and sends audio to Google.
+- It checks words only. It does not judge tajwid, makhraj, or where you stop and start.
+- Speech recognition can mishear. Check flagged words against the text.
