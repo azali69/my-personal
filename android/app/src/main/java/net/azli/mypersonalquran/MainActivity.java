@@ -43,6 +43,11 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (Build.VERSION.SDK_INT >= 28) {
+            WindowManager.LayoutParams lp = getWindow().getAttributes();
+            lp.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
+            getWindow().setAttributes(lp);
+        }
         web = new WebView(this);
         web.setBackgroundColor(Color.parseColor("#f4efe2"));
         setContentView(web);
@@ -120,12 +125,14 @@ public class MainActivity extends Activity {
                     WindowInsetsController c = getWindow().getInsetsController();
                     if (c == null) return;
                     int types = WindowInsets.Type.statusBars() | WindowInsets.Type.navigationBars();
+                    getWindow().setDecorFitsSystemWindows(!on);
                     if (on) {
                         c.setSystemBarsBehavior(WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
                         c.hide(types);
                     } else c.show(types);
                 } else {
-                    int f = on ? (View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
+                    int f = on ? (View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                                  | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_STABLE)
                                : View.SYSTEM_UI_FLAG_VISIBLE;
                     getWindow().getDecorView().setSystemUiVisibility(f);
                 }

@@ -19,6 +19,7 @@
   --ui:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
   --read:"Literata",Georgia,"Times New Roman",serif;
   --arsize:30px;
+  --bm1:#2f8a5f; --bm2:#c38a1e; --bm3:#c0514a; --bm4:#3b6fb3; --bm5:#8a57b8;
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
   --bg:#141a17; --surface:#1b231f; --fg:#dcdccf; --muted:#9aa294; --line:#2c3730;
@@ -64,7 +65,7 @@ main.fit{padding-block:8px 76px}
 .ay{cursor:pointer;border-radius:4px;padding-block:.42em;-webkit-box-decoration-break:clone;box-decoration-break:clone}
 .ay.sh{background:var(--shade)}
 .ay.sel{outline:2px solid var(--accent);outline-offset:1px}
-.num{display:inline-grid;place-items:center;min-width:1.32em;height:1.32em;padding:0 .1em;border-radius:50%;border:1.5px solid var(--accent);color:var(--accent);font-family:var(--ui);font-size:.5em;font-weight:600;line-height:1;vertical-align:.32em;margin-inline:.18em;font-variant-numeric:tabular-nums}
+.num{display:inline-block;font-family:var(--ar);font-size:1.2em;line-height:1;color:var(--accent);margin-inline:.06em;vertical-align:-.08em;font-variant-numeric:normal}
 .surah-h{direction:rtl;margin:18px 0 6px;padding:10px 12px;border:1px solid var(--line);border-radius:14px;background:var(--surface);display:flex;align-items:center;justify-content:space-between;gap:12px}
 .surah-h .ar{font-family:var(--ar);font-size:calc(var(--arsize)*.95);line-height:1.6}
 .surah-h .meta{direction:ltr;text-align:right;color:var(--muted);font-size:12.5px;line-height:1.35}
@@ -78,7 +79,8 @@ main.fit{padding-block:8px 76px}
 .mline>.sp{flex:1 1 0;min-width:.22em;max-width:1.15em;cursor:default}
 .mline .sh{background:var(--shade)}
 .mline .sel{background:color-mix(in srgb,var(--accent) 22%,transparent)}
-.mline .num{margin-inline:.08em;vertical-align:0}
+.mline .num{margin-inline:.04em;vertical-align:0;font-size:1.25em}
+.num.bm{color:var(--bmc);background:color-mix(in srgb,var(--bmc) 26%,transparent);border-radius:50%;box-shadow:0 0 0 .06em var(--bmc)}
 .mline.bl{align-items:center}
 .mline.hd{align-items:center}
 .sframe{flex:1;height:82%;display:flex;align-items:center;justify-content:center;gap:.5em;border:1px solid var(--line);border-radius:.4em;background:var(--surface);font-size:.86em}
@@ -92,7 +94,15 @@ main.fit{padding-block:8px 76px}
 body.immersive .top{display:none}
 body.immersive .dock{transform:translateY(110%);opacity:0;pointer-events:none}
 body.immersive main.fit{padding-block:max(10px,env(safe-area-inset-top,0px)) 10px}
-body.immersive main.fit{min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;justify-content:center}
+body.immersive main.fit{min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;justify-content:center;padding-inline:8px}
+@media (orientation:landscape){ main.fit{max-width:none;padding-inline:max(24px,env(safe-area-inset-left,0px))} body.immersive main.fit{display:block;padding-inline:max(28px,env(safe-area-inset-left,0px))} }
+.bmrow{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.bmc{width:40px;height:40px;border-radius:50%;border:3px solid var(--surface);box-shadow:0 0 0 1.5px var(--line);background:var(--c)}
+.bmc[aria-pressed="true"]{box-shadow:0 0 0 2.5px var(--fg)}
+.dot{width:12px;height:12px;border-radius:50%;background:var(--c);flex:none}
+.bml .x{width:36px;height:36px;border:0;background:none;color:var(--muted);border-radius:10px;flex:none}
+.bml li{display:flex;align-items:center;gap:6px;border-bottom:1px solid var(--line)}
+.bml li>button.go{border-bottom:0}
 @media (prefers-reduced-motion:reduce){.top,.dock{transition:none}}
 /* Translation view */
 .rows{display:flex;flex-direction:column;gap:2px}
@@ -200,6 +210,7 @@ mark{background:color-mix(in srgb,var(--accent) 28%,transparent);color:inherit;b
 <header class="top"><div class="top-in">
   <button class="ib" id="btnNav" aria-label="Surahs and pages"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg></button>
   <button class="where" id="where"><b id="whereT">My Personal Quran</b><small id="whereS">v1.0</small></button>
+  <button class="ib" id="btnBm" aria-label="Bookmarks"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M7 4h10v16l-5-3.5L7 20z"/></svg></button>
   <button class="ib" id="btnSearch" aria-label="Search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/></svg></button>
   <button class="ib" id="btnSet" aria-label="Settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="17" r="2"/></svg></button>
 </div></header>
@@ -249,10 +260,12 @@ const store = {
 const st = {
   page: store.get('page', 1), tr: store.get('tr', false), lang: store.get('lang','ms'),
   bg: store.get('bg','auto'), size: store.get('tsize', 0), blocks: store.get('blocks','ruku'),
-  fn: store.get('fn', false), mine: new Set(store.get('mine', [])), sel: null
+  fn: store.get('fn', false), mine: new Set(store.get('mine', [])), sel: null, bm: store.get('bm', {})
 };
 function save(){ ['page','tr','lang','bg','blocks','fn'].forEach(k=>store.set(k, st[k])); store.set('tsize', st.size); store.set('mine',[...st.mine]); }
 
+const BMC=[['1','Hijau'],['2','Emas'],['3','Merah'],['4','Biru'],['5','Ungu']];
+function bmAttr(g){ const b=st.bm[g]; return b? ` bm" style="--bmc:var(--bm${b.c})` : ''; }
 function applyLook(){
   const r=document.documentElement;
   if(st.bg==='auto') r.removeAttribute('data-bg'); else r.setAttribute('data-bg', st.bg);
@@ -308,7 +321,7 @@ function renderReader(){
       else if(isBlockStart(g) && g!==g0) parity^=1;
       const sh = st.blocks!=='off' && parity===1;
       const t = st.lang==='ms'? a[6] : a[7];
-      h+=`<div class="row${sh?' sh':''}" data-g="${g}"><div class="arl">${a[2]}<span class="num">${arNum(a[1])}</span></div>`+
+      h+=`<div class="row${sh?' sh':''}" data-g="${g}"><div class="arl">${a[2]}<span class="num${bmAttr(g)}">${arNum(a[1])}</span></div>`+
          `<div class="tr" lang="${st.lang}">${esc(t)}</div>`+
          (st.lang==='en' && st.fn && a[8] ? `<div class="fn">${esc(a[8])}</div>`:'')+
          `<span class="ref">${a[0]}:${a[1]}</span></div>`;
@@ -331,7 +344,7 @@ function buildMushaf(g0,g1){
     else if(isBlockStart(g) && g!==g0) parity^=1;
     if(!inP){ h+='<div class="mushaf"><p>'; inP=true; }
     const sh = st.blocks!=='off' && parity===1;
-    h+=`<span class="ay${sh?' sh':''}${st.sel===g?' sel':''}" data-g="${g}">${a[2]}<span class="num">${arNum(a[1])}</span> </span>`;
+    h+=`<span class="ay${sh?' sh':''}${st.sel===g?' sel':''}" data-g="${g}">${a[2]}<span class="num${bmAttr(g)}">${arNum(a[1])}</span> </span>`;
   }
   if(inP) h+='</p></div>';
   return h;
@@ -356,7 +369,7 @@ function buildPage(p){
       const g = x<0 ? -x-1 : (x>>8);
       if(i>0){ const both = shade.get(prevG) && shade.get(g) && (prevG===g || !isBlockStart(g)); h+=`<span class="sp${both?' sh':''}"></span>`; }
       const cls = (shade.get(g)?' sh':'') + (st.sel===g?' sel':'');
-      if(x<0) h+=`<span class="mk${cls}" data-g="${g}"><span class="num">${arNum(A[g][1])}</span></span>`;
+      if(x<0) h+=`<span class="mk${cls}" data-g="${g}"><span class="num${bmAttr(g)}">${arNum(A[g][1])}</span></span>`;
       else h+=`<span class="wd${cls}" data-g="${g}">${tok(g, x&255)}</span>`;
       prevG=g;
     });
@@ -371,9 +384,11 @@ function fitPage(){
   const dock=imm?0:document.getElementById('dock').getBoundingClientRect().height;
   const top=pg.getBoundingClientRect().top + window.scrollY;
   const H=Math.max(300, window.innerHeight - top - dock - (imm?44:52));
-  let fs=Math.min(W/REF_EM, H/n/1.55);
+  const land = window.innerWidth > window.innerHeight;
+  let fs=W/REF_EM, lh;
+  if(land){ lh=fs*1.9; }                       // landscape: full width, scroll down the page like Quran.com
+  else { fs=Math.min(fs, H/n/1.45); lh=Math.min(H/n, fs*2.8); }   // portrait: whole page on one screen
   fs=Math.max(13, fs);
-  const lh=Math.min(H/n, fs*2.3);
   pg.style.fontSize=fs+'px'; pg.style.setProperty('--lh', lh+'px');
   for(const line of pg.children){ line.style.fontSize=''; let f=fs;
     for(let k=0;k<4 && line.scrollWidth>line.clientWidth+0.5;k++){ f=f*line.clientWidth/line.scrollWidth*0.985; line.style.fontSize=f+'px'; } }
@@ -396,7 +411,7 @@ function goAyah(g){ goPage(A[g][4], g); }
 
 /* ============================ SHEETS ============================ */
 const sheet=document.getElementById('sheet'), scrim=document.getElementById('scrim'), sheetB=document.getElementById('sheetB');
-function openSheet(title, html){ document.getElementById('sheetT').textContent=title; sheetB.innerHTML=html; sheetB.scrollTop=0; sheet.classList.add('open'); scrim.classList.add('open'); }
+function openSheet(title, html){ sheetB.onclick=null; document.getElementById('sheetT').textContent=title; sheetB.innerHTML=html; sheetB.scrollTop=0; sheet.classList.add('open'); scrim.classList.add('open'); }
 function closeSheet(){ sheet.classList.remove('open'); scrim.classList.remove('open'); if(st.sel!=null && !hz){ st.sel=null; main.querySelectorAll('.sel').forEach(x=>x.classList.remove('sel')); } }
 scrim.onclick=closeSheet; document.getElementById('sheetX').onclick=closeSheet;
 document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeSheet();
@@ -503,12 +518,19 @@ function ayahSheet(g){
   const startLbl = st.mine.has(g)?'Remove this block start':'Start a block here';
   openSheet(`${S[a[0]-1][1]} ${a[0]}:${a[1]}`, `
    <p class="note" style="margin-top:0">${esc(st.lang==='ms'?a[6]:a[7])}</p>
+   <div class="label" style="margin-top:4px">Bookmark</div>
+   <div class="bmrow" id="aBm">${BMC.map(([c,l])=>`<button class="bmc" style="--c:var(--bm${c})" data-c="${c}" aria-label="${l}" aria-pressed="${st.bm[g]?.c===c}"></button>`).join('')}${st.bm[g]?'<button class="pill" id="aBmX">Remove</button>':''}</div>
+   <div class="label">Actions</div>
    <div class="actions">
     <button id="aHz">${ic('mic')}Hafazan from this ayah to the end of the page</button>
     ${st.blocks!=='off'?`<button id="aHzB">${ic('mic')}Hafazan this block (${a[0]}:${A[b0][1]}–${A[b1][1]})</button>`:''}
     ${a[1]!==1?`<button id="aBlk">${ic('blk')}${startLbl}</button>`:''}
     <button id="aCopy">${ic('copy')}Copy ayah</button>
    </div>`);
+  sheetB.querySelector('#aBm').onclick=e=>{ const b=e.target.closest('button'); if(!b) return;
+    if(b.id==='aBmX'){ delete st.bm[g]; toast('Bookmark removed'); }
+    else { st.bm[g]={c:b.dataset.c,t:Date.now()}; toast(`Bookmarked ${a[0]}:${a[1]}`); }
+    store.set('bm',st.bm); closeSheet(); renderReader(); };
   sheetB.querySelector('#aHz').onclick=()=>{ closeSheet(); startHz(g, pageStart[a[4]+1]-1); };
   const hb=sheetB.querySelector('#aHzB'); if(hb) hb.onclick=()=>{ closeSheet(); startHz(b0,b1); };
   const bb=sheetB.querySelector('#aBlk'); if(bb) bb.onclick=()=>{ st.mine.has(g)?st.mine.delete(g):st.mine.add(g); if(st.blocks!=='mine'){st.blocks='mine'; toast('Switched to My blocks');} else toast(st.mine.has(g)?'Block starts here':'Block start removed'); save(); closeSheet(); renderReader(); };
@@ -723,6 +745,17 @@ function hzSheet(){
   sheetB.querySelector('#hGo').onclick=()=>{ const s=+hs.value, n=S[s-1][5]; let f=Math.max(1,Math.min(n,+hf.value||1)), t=Math.max(f,Math.min(n,+ht.value||f)); closeSheet(); startHz(gOf(s,f),gOf(s,t)); };
 }
 
+function bmSheet(filter){
+  const all=Object.entries(st.bm).map(([g,b])=>({g:+g,...b})).sort((x,y)=>x.g-y.g);
+  const list=filter? all.filter(b=>b.c===filter):all;
+  openSheet('Bookmarks', all.length? `
+   <div class="seg" id="bmF"><button data-c="" aria-pressed="${!filter}">All · ${all.length}</button>${BMC.map(([c,l])=>{ const n=all.filter(b=>b.c===c).length; return n?`<button data-c="${c}" aria-pressed="${filter===c}"><span class="dot" style="--c:var(--bm${c});display:inline-block;margin-inline-end:6px;vertical-align:-1px"></span>${l} · ${n}</button>`:''; }).join('')}</div>
+   <ul class="list bml">${list.map(b=>{ const a=A[b.g]; return `<li><button class="go" data-g="${b.g}"><span class="dot" style="--c:var(--bm${b.c})"></span><span class="t"><b>${esc(S[a[0]-1][1])} ${a[0]}:${a[1]}</b><small>Page ${a[4]} · Juz ${a[5]} · ${new Date(b.t).toLocaleDateString()}</small></span><span class="a" style="font-size:18px;max-width:40%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${a[2].split(' ').slice(0,3).join(' ')}</span></button><button class="x" data-del="${b.g}" aria-label="Remove bookmark">✕</button></li>`; }).join('')}</ul>`
+   : `<p class="empty">No bookmarks yet. Long-press an ayah and pick a colour.</p>`);
+  sheetB.onclick=e=>{ const f=e.target.closest('#bmF button'); if(f){ sheetB.onclick=null; bmSheet(f.dataset.c||null); return; }
+    const d=e.target.closest('[data-del]'); if(d){ delete st.bm[d.dataset.del]; store.set('bm',st.bm); sheetB.onclick=null; bmSheet(filter); renderReader(); return; }
+    const go=e.target.closest('.go'); if(go){ sheetB.onclick=null; closeSheet(); goAyah(+go.dataset.g); } };
+}
 function histSheet(){
   const h=store.get('hist',[]);
   const weak={}; h.forEach(s=>s.items.forEach(i=>{ weak[i.ref]=(weak[i.ref]||0)+1; }));
@@ -765,6 +798,7 @@ function aboutSheet(){
 document.getElementById('btnNav').onclick=navSheet;
 document.getElementById('where').onclick=()=>{ if(!hz) navSheet(); };
 document.getElementById('btnSearch').onclick=searchSheet;
+document.getElementById('btnBm').onclick=()=>bmSheet(null);
 document.getElementById('btnSet').onclick=setSheet;
 document.getElementById('btnTr').onclick=()=>{ st.tr=!st.tr; renderReader(); };
 document.getElementById('btnHz').onclick=hzSheet;
