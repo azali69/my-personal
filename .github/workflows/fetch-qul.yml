@@ -1,0 +1,37 @@
+name: Fetch QUL mushaf data
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/fetch-qul.yml']
+
+permissions:
+  contents: write
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download QUL exports and check the font CDN
+        run: |
+          set -e
+          mkdir out && cd out
+          Q=https://s3.us-east-1.wasabisys.com/static-cdn.tarteel.ai/qul-exports
+          curl -sSfL -o qpc-v4-words.json.zip "$Q/quran-script/1748433334-i11ov-qpc-v4.json.zip"
+          curl -sSfL -o qpc-v4-layout.db.zip "$Q/mushaf-layout/1748288079-a96tc-qpc-v4-tajweed-15-lines.db.zip"
+          sha256sum *.zip > SHA256SUMS
+          F=https://static-cdn.tarteel.ai/qul/fonts/quran_fonts
+          {
+            echo "== plain p1"; curl -sSI -H "Origin: https://azali69.github.io" "$F/v4/woff2/p1.woff2"
+            echo "== tajweed p1"; curl -sSI -H "Origin: https://azali69.github.io" "$F/v4-tajweed/woff2/p1.woff2?v=3.1"
+            echo "== tajweed p328"; curl -sSI -H "Origin: https://azali69.github.io" "$F/v4-tajweed/woff/p328.woff?v=3.1"
+          } > cdn-headers.txt 2>&1 || true
+          ls -la
+      - name: Commit to the qul-data branch
+        run: |
+          cd out
+          git init -q -b qul-data
+          git config user.name "github-actions"; git config user.email "actions@users.noreply.github.com"
+          git add -A; git commit -q -m "QUL exports (qpc-v4 words, 15-line layout) and CDN header check"
+          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" qul-data
