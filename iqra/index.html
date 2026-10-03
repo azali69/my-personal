@@ -1,0 +1,327 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1E6B57"><style>:root{padding-block:env(safe-area-inset-top,0px) env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style></head><body>
+<title>Iqra' Reading Steps</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;600&family=Newsreader:opsz,wght@6..72,500;6..72,600&family=Public+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: one calm reading column; level list → lesson board of large Arabic tiles → practice. */
+:root{
+  --paper:#F3F5F1; --surface:#FFFFFF; --ink:#1C2826; --muted:#5B6B67; --line:#D9E0DB;
+  --accent:#1E6B57; --accent-soft:#E2EFE9; --gold:#A8741A; --gold-soft:#F6ECD9; --warn:#9A3B26;
+  --f-display:"Newsreader", Georgia, serif;
+  --f-body:"Public Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-ar:"Noto Naskh Arabic", "Scheherazade New", "Traditional Arabic", serif;
+  --r:14px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#121918; --surface:#1A2422; --ink:#E6ECE9; --muted:#9AABA6; --line:#2C3A37;
+  --accent:#5FBF9F; --accent-soft:#1D3530; --gold:#E0B060; --gold-soft:#33291A; --warn:#E58A70; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#121918; --surface:#1A2422; --ink:#E6ECE9; --muted:#9AABA6; --line:#2C3A37;
+  --accent:#5FBF9F; --accent-soft:#1D3530; --gold:#E0B060; --gold-soft:#33291A; --warn:#E58A70; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font:16px/1.55 var(--f-body);padding-inline:16px;padding-block:20px 48px}
+.wrap{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:22px}
+h1,h2,h3{font-family:var(--f-display);font-weight:600;line-height:1.15;margin:0;text-wrap:balance}
+h1{font-size:2rem}h2{font-size:1.5rem}h3{font-size:1.1rem}
+p{margin:0}
+.muted{color:var(--muted)}
+.eyebrow{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.ar{font-family:var(--f-ar);direction:rtl;unicode-bidi:isolate}
+button{font:inherit;cursor:pointer}
+button:focus-visible,.tile:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.btn{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:9px 16px;font-weight:500}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--paper)}
+.btn.ghost{background:transparent}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.top{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap}
+.hero-ar{font-size:3rem;color:var(--accent);line-height:1}
+/* level list */
+.levels{display:flex;flex-direction:column;gap:10px}
+.lvl{display:grid;grid-template-columns:56px 1fr auto;gap:14px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;text-align:left;color:var(--ink)}
+.lvl:hover{border-color:var(--accent)}
+.lvl .num{font-family:var(--f-display);font-size:1.6rem;color:var(--accent);text-align:center}
+.lvl .sample{font-size:1.9rem;color:var(--ink)}
+.lvl .meta{min-width:0}
+.bar{height:5px;border-radius:5px;background:var(--line);overflow:hidden;margin-top:8px}
+.bar i{display:block;height:100%;background:var(--accent)}
+.done-chip{font-size:.75rem;background:var(--accent-soft);color:var(--accent);border-radius:999px;padding:2px 9px;font-weight:600}
+/* lesson */
+.rule{background:var(--gold-soft);border-radius:var(--r);padding:14px 16px;display:flex;flex-direction:column;gap:6px}
+.rule h3{color:var(--gold)}
+.rule-body{display:flex;gap:16px;align-items:center}
+.rule-body .txt{display:flex;flex-direction:column;gap:6px;min-width:0}
+.mark{font-size:4.2rem;line-height:1.25;color:var(--gold);background:var(--surface);border-radius:12px;padding:0 14px;flex:none}
+@media (max-width:480px){.rule-body{flex-direction:column;align-items:flex-start}}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:10px;direction:rtl}
+.grid.words{grid-template-columns:repeat(auto-fill,minmax(140px,1fr))}
+.tile{direction:ltr;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 6px 8px;display:flex;flex-direction:column;align-items:center;gap:2px;color:var(--ink);min-width:0}
+.tile .ar{font-size:2.6rem;line-height:1.5}
+.grid.words .tile .ar{font-size:2.2rem}
+.tile .tr{font-size:.85rem;color:var(--muted);min-height:1.2em}
+.tile .code{font-size:.66rem;color:var(--muted);opacity:.7;font-variant-numeric:tabular-nums}
+.tile.sel{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent) inset}
+.tile.has-audio .code::after{content:" ♪";color:var(--accent)}
+.hide-tr .tile .tr{visibility:hidden}
+.detail{position:sticky;bottom:12px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:12px 16px;display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;box-shadow:0 6px 24px rgb(0 0 0 / .08)}
+.detail .ar{font-size:2.6rem;line-height:1.3;color:var(--accent)}
+.detail .info{min-width:0}
+.section-h{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap}
+.switch{display:flex;align-items:center;gap:8px;font-size:.9rem;color:var(--muted)}
+/* practice */
+.q{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:22px 16px;display:flex;flex-direction:column;align-items:center;gap:16px;text-align:center}
+.q .big{font-size:4rem;line-height:1.4}
+.opts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;width:100%}
+.opt{border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:12px;padding:12px;font-size:1.05rem}
+.opt.ar-opt{font-family:var(--f-ar);font-size:2rem;line-height:1.3}
+.opt.right{background:var(--accent-soft);border-color:var(--accent);color:var(--accent);font-weight:600}
+.opt.wrong{border-color:var(--warn);color:var(--warn)}
+.score{font-family:var(--f-display);font-size:3rem;color:var(--accent)}
+/* recordings */
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px;display:flex;flex-direction:column;gap:12px}
+.codes{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.8rem;background:var(--paper);border-radius:10px;padding:10px;max-height:220px;overflow:auto;white-space:pre-wrap;word-break:break-word}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:9px 16px;border-radius:999px;font-size:.9rem;max-width:calc(100% - 32px)}
+.note{font-size:.85rem;color:var(--muted)}
+.vres{font-size:.92rem;color:var(--muted)}.vres:empty{display:none}
+.vres.ok{color:var(--accent);font-weight:600}.vres.close{color:var(--gold);font-weight:600}.vres.no{color:var(--warn)}
+.vres .ar{font-size:1.4rem;font-weight:400}
+.mic::before{content:"";display:inline-block;width:.6em;height:.9em;border:2px solid currentColor;border-radius:.4em;margin-right:.45em;vertical-align:-.1em}
+@media (max-width:480px){h1{font-size:1.6rem}.lvl{grid-template-columns:40px 1fr}.lvl .sample{display:none}.detail{grid-template-columns:auto 1fr}.detail .btn{grid-column:1/-1}}
+@media (prefers-reduced-motion:no-preference){.tile,.opt,.lvl{transition:border-color .15s,background .15s}}
+</style>
+
+<div class="wrap" id="app"></div>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+/* ---------- Content (original lessons following the standard beginner progression) ---------- */
+const F='َ',K='ِ',D='ُ',S='ْ',SH='ّ';
+const LET=[['ب','b','Ba'],['ت','t','Ta'],['ث','th','Tha'],['ج','j','Jim'],['ح','ḥ','Ḥa'],['خ','kh','Kha'],['د','d','Dal'],['ذ','dh','Dhal'],['ر','r','Ra'],['ز','z','Zay'],['س','s','Sin'],['ش','sh','Shin'],['ص','ṣ','Ṣad'],['ض','ḍ','Ḍad'],['ط','ṭ','Ṭa'],['ظ','ẓ','Ẓa'],['ع','ʿ','ʿAyn'],['غ','gh','Ghayn'],['ف','f','Fa'],['ق','q','Qaf'],['ك','k','Kaf'],['ل','l','Lam'],['م','m','Mim'],['ن','n','Nun'],['و','w','Waw'],['ه','h','Ha'],['ي','y','Ya']];
+const AR_NAMES=['ألف','باء','تاء','ثاء','جيم','حاء','خاء','دال','ذال','راء','زاي','سين','شين','صاد','ضاد','طاء','ظاء','عين','غين','فاء','قاف','كاف','لام','ميم','نون','واو','هاء','ياء'];
+const HEAVY=new Set(['خ','ص','ض','ط','ظ','غ','ق']);
+const TIP={'ا':'Alif has no sound of its own. It carries a vowel (with hamzah) or lengthens the “a” before it.','ث':'Tongue tip between the teeth, as in “think”.','ح':'From the middle of the throat; a breathy h without scraping.','خ':'Back of the tongue, raspy, as in Scottish “loch”. Heavy.','ذ':'Tongue tip between the teeth, as in “this”.','ر':'Tongue tip taps once. Heavy with fathah and dammah, light with kasrah.','ص':'A heavy s with a full mouth.','ض':'Heavy. The side of the tongue presses the upper back teeth.','ط':'A heavy t with a full mouth.','ظ':'Heavy, tongue between the teeth.','ع':'Squeezed from the middle of the throat.','غ':'Like light gargling. Heavy.','ق':'Back of the tongue against the soft palate. Heavy.','ه':'A light breath from the deepest part of the throat.','أ':'A short catch in the throat (glottal stop), then the vowel.','إ':'A short catch in the throat (glottal stop), then the vowel.'};
+function drill(mark, vowel, alifForm){
+  const out=[{ar:alifForm+mark, tr:vowel, name:'Alif (hamzah)', syl:true}];
+  LET.forEach(([c,t,n])=>out.push({ar:c+mark, tr:t+vowel, name:n, syl:true}));
+  return out;
+}
+const W=(ar,tr,en)=>({ar,tr,en});
+const BARE=[{ar:'ا',tr:'Alif',bare:true,say:[AR_NAMES[0]]}].concat(LET.map(([c,t,n],i)=>({ar:c,tr:n,bare:true,say:[AR_NAMES[i+1]]})));
+const LEVELS=[
+ {t:'The 28 letters and their names', s:'ا ب ت', mark:'ب', rule:['Start by knowing each letter by its shape and its name, with no vowel marks yet. Arabic is read from right to left.','Say the name of each letter aloud: Alif, Ba, Ta, Tha. Alif has no sound of its own; the other letters get their sound from the vowel marks in the next steps.'], groups:[{h:'All 28 letters', items:BARE}]},
+ {t:'The letters with fathah', s:'بَ', mark:'بَ', rule:['Each letter carries a small stroke above it, the fathah. It gives the short “a” sound.','Read every letter as a whole syllable: ba, ta, tha. The heavy letters (خ ص ض ط ظ غ ق) are said with a full, rounded mouth, so they sound closer to “o”.'], groups:[{h:'All 28 letters', items:drill(F,'a','أ')}]},
+ {t:'Joined letters', s:'كَتَبَ', rule:['Letters join together and change shape: most take a short form at the start or middle of a word.','Six letters never join to the letter after them: ا د ذ ر ز و. Read each syllable evenly, with no lengthening.'], groups:[{h:'Words with fathah only', words:true, items:[W('كَتَبَ','kataba','he wrote'),W('ذَهَبَ','dhahaba','he went'),W('جَلَسَ','jalasa','he sat'),W('فَتَحَ','fataḥa','he opened'),W('خَلَقَ','khalaqa','he created'),W('نَصَرَ','naṣara','he helped'),W('صَبَرَ','ṣabara','he was patient'),W('شَكَرَ','shakara','he thanked'),W('غَفَرَ','ghafara','he forgave'),W('ظَلَمَ','ẓalama','he wronged'),W('طَلَبَ','ṭalaba','he sought'),W('دَخَلَ','dakhala','he entered'),W('ذَكَرَ','dhakara','he remembered'),W('رَجَعَ','rajaʿa','he returned'),W('وَعَدَ','waʿada','he promised'),W('زَرَعَ','zaraʿa','he planted'),W('أَمَرَ','amara','he commanded'),W('سَأَلَ','saʾala','he asked'),W('قَرَأَ','qaraʾa','he read'),W('ثَبَتَ','thabata','he stood firm')]}]},
+ {t:'Long “ā” with alif', s:'قَالَ', mark:'بَا', rule:['A letter with fathah followed by a plain alif (ا) is stretched to two counts: bā, not ba.','Count evenly: about the time of two short vowels. Do not stretch three or four counts here.'], groups:[{h:'Words with the long ā', words:true, items:[W('قَالَ','qāla','he said'),W('كَانَ','kāna','he was'),W('جَاءَ','jāʾa','he came'),W('نَامَ','nāma','he slept'),W('صَامَ','ṣāma','he fasted'),W('زَادَ','zāda','he increased'),W('خَافَ','khāfa','he feared'),W('قَامَ','qāma','he stood')]}]},
+ {t:'Kasrah, dammah and long ī, ū', s:'بِ بُ', mark:'بِ بُ', rule:['Kasrah is a stroke below the letter: short “i” (bi). Dammah is a small waw above: short “u” (bu).','Kasrah followed by ya (ي) gives a long ī. Dammah followed by waw (و) gives a long ū. Both are two counts.'], groups:[{h:'Letters with kasrah', items:drill(K,'i','إ')},{h:'Letters with dammah', items:drill(D,'u','أ')},{h:'Words', words:true, items:[W('عَلِمَ','ʿalima','he knew'),W('سَمِعَ','samiʿa','he heard'),W('شَرِبَ','shariba','he drank'),W('كُتِبَ','kutiba','it was written'),W('خُلِقَ','khuliqa','he was created'),W('رُسُلُ','rusulu','messengers'),W('كُتُبُ','kutubu','books'),W('فِي','fī','in'),W('قِيلَ','qīla','it was said'),W('نُورُ','nūru','light'),W('يَقُولُ','yaqūlu','he says'),W('يَكُونُ','yakūnu','it will be')]}]},
+ {t:'Tanwin (double vowels)', s:'بٌ بٍ بًا', mark:'بٌ بٍ بًا', rule:['A doubled vowel adds an “n” sound at the end of a word: -an, -in, -un.','Fathatan usually sits on a letter followed by an alif (ـًا). Read it “-an” when continuing; when you stop on it, read a long “ā” and drop the n.'], groups:[{h:'Words', words:true, items:[W('كِتَابٌ','kitābun','a book'),W('رَجُلٌ','rajulun','a man'),W('قَلَمٍ','qalamin','a pen'),W('بَابًا','bāban','a door'),W('عَلِيمٌ','ʿalīmun','all-knowing'),W('حَكِيمًا','ḥakīman','all-wise'),W('غَفُورٌ','ghafūrun','oft-forgiving'),W('رَحِيمٌ','raḥīmun','merciful')]}]},
+ {t:'Sukun (no vowel)', s:'قُلْ', mark:'بْ', rule:['The sukun is a small round circle (like an “o”) on top of a letter. It means the letter has no vowel: it closes the syllable before it, as in qul and min.','The letters ق ط ب ج د with sukun are read with a slight bounce (qalqalah), as in qad.'], groups:[{h:'Words', words:true, items:[W('قُلْ','qul','say'),W('لَمْ','lam','did not'),W('مِنْ','min','from'),W('عَنْ','ʿan','about'),W('هَلْ','hal','is it? (question)'),W('بَلْ','bal','rather'),W('قَدْ','qad','indeed'),W('يَعْلَمُ','yaʿlamu','he knows'),W('أَنْتُمْ','antum','you (plural)')]}]},
+ {t:'Shaddah (doubled letter)', s:'رَبِّ', mark:'بَّ', rule:['The shaddah (ّ) doubles a letter: hold it once to close the syllable, then read it again with its vowel: rab-bi.','Nun and mim with shaddah (نّ مّ) carry ghunnah, a nasal hum held for two counts.'], groups:[{h:'Words', words:true, items:[W('رَبِّ','rabbi','my Lord'),W('إِنَّ','inna','indeed'),W('ثُمَّ','thumma','then'),W('حَقٌّ','ḥaqqun','truth'),W('كُلُّ','kullu','every'),W('عَلَّمَ','ʿallama','he taught'),W('يُسَبِّحُ','yusabbiḥu','glorifies'),W('مُحَمَّدٌ','muḥammadun','Muhammad')]}]},
+ {t:'“Al-” : moon and sun letters', s:'الشَّمْسُ', rule:['Moon letters: the lam of “al” is pronounced and carries a sukun (الْقَمَرُ, al-qamaru).','Sun letters: the lam is silent and the next letter doubles with shaddah (الشَّمْسُ, ash-shamsu). The opening alif is read only when you start from that word.'], groups:[{h:'Moon letters (lam is read)', words:true, items:[W('الْقَمَرُ','al-qamaru','the moon'),W('الْكِتَابُ','al-kitābu','the book'),W('الْحَمْدُ','al-ḥamdu','the praise'),W('الْأَرْضُ','al-arḍu','the earth')]},{h:'Sun letters (lam is silent)', words:true, items:[W('الشَّمْسُ','ash-shamsu','the sun'),W('النَّاسُ','an-nāsu','mankind'),W('الرَّحِيمِ','ar-raḥīmi','the Most Merciful'),W('السَّمَاءُ','as-samāʾu','the sky'),W('الدِّينِ','ad-dīni','the Judgement')]}]}
+];
+// stable codes: level-NN, used as recording filenames
+LEVELS.forEach((L,li)=>{let n=0;L.groups.forEach(g=>g.items.forEach(it=>{n++;it.code=(li+1)+'-'+String(n).padStart(2,'0');it.lvl=li;}));L.all=L.groups.flatMap(g=>g.items);});
+const ALL=LEVELS.flatMap(L=>L.all);
+const BY_CODE=Object.fromEntries(ALL.map(i=>[i.code,i]));
+
+/* ---------- Storage ---------- */
+const store={get(k,d){try{const v=localStorage.getItem('iqra2:'+k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem('iqra2:'+k,JSON.stringify(v))}catch(e){}}};
+let seen=store.get('seen',{});      // code -> true
+let done=store.get('done',{});      // level index -> true
+let best=store.get('best',{});      // level index -> best score
+let showTr=store.get('showTr',true);
+
+// recordings live in IndexedDB on this device
+const audio={};  // code -> objectURL
+function idb(){return new Promise((res,rej)=>{try{const r=indexedDB.open('iqra-audio',1);r.onupgradeneeded=()=>r.result.createObjectStore('clips');r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)}catch(e){rej(e)}})}
+async function loadClips(){try{const db=await idb();const tx=db.transaction('clips');const st=tx.objectStore('clips');const req=st.openCursor();await new Promise(r=>{req.onsuccess=()=>{const c=req.result;if(c){audio[c.key]=URL.createObjectURL(c.value);c.continue()}else r()};req.onerror=r});}catch(e){}}
+async function saveClip(code,blob){const db=await idb();await new Promise((res,rej)=>{const tx=db.transaction('clips','readwrite');tx.objectStore('clips').put(blob,code);tx.oncomplete=res;tx.onerror=()=>rej(tx.error)});if(audio[code])URL.revokeObjectURL(audio[code]);audio[code]=URL.createObjectURL(blob)}
+async function clearClips(){try{const db=await idb();await new Promise(res=>{const tx=db.transaction('clips','readwrite');tx.objectStore('clips').clear();tx.oncomplete=res;tx.onerror=res});}catch(e){}Object.values(audio).forEach(u=>URL.revokeObjectURL(u));for(const k in audio)delete audio[k]}
+
+const player=new Audio();
+function play(code){const u=audio[code];if(!u)return false;player.src=u;player.play().catch(()=>{});return true}
+
+/* ---------- Voice check (Chrome speech recognition, Arabic) ---------- */
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+const PAGES_URL='https://azali69.github.io/my-personal/iqra/';
+const norm=s=>String(s).replace(/[ً-ٰٟـ]/g,'').replace(/[أإآٱ]/g,'ا').replace(/ى/g,'ي').replace(/ة/g,'ه').replace(/[^ء-ي ]/g,'').replace(/\s+/g,' ').trim();
+function lev(a,b){const m=a.length,n=b.length;const d=Array.from({length:m+1},(_,i)=>[i]);for(let j=1;j<=n;j++)d[0][j]=j;for(let i=1;i<=m;i++)for(let j=1;j<=n;j++)d[i][j]=Math.min(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+(a[i-1]===b[j-1]?0:1));return d[m][n]}
+function accepts(it){
+  const ok=new Set();let main;
+  if(it.bare){it.say.forEach(n=>{const x=norm(n);ok.add(x);ok.add(x.replace(/ء$/,''))});main=norm(it.say[0])}
+  else if(it.syl){const b=norm(it.ar);const v=it.tr.slice(-1);(v==='a'?['','ا','ه']:v==='i'?['','ي']:['','و']).forEach(x=>ok.add(b+x));main=b}
+  else{main=norm(it.ar);ok.add(main);if(/an$/.test(it.tr)&&main.endsWith('ا'))ok.add(main.slice(0,-1))}
+  return {ok,main};
+}
+function judge(it,alts){
+  const {ok,main}=accepts(it);let close=null;
+  for(const a of alts){const t=norm(a);const parts=[t,t.replace(/ /g,''),...t.split(' ')];
+    if(parts.some(p=>ok.has(p)))return {res:'ok',heard:a};
+    if(!close&&main.length>=3&&parts.some(p=>p&&lev(p,main)<=1))close=a}
+  return close?{res:'close',heard:close}:{res:'no',heard:alts[0]||''};
+}
+function listen(){return new Promise((resolve,reject)=>{
+  let r;try{r=new SR()}catch(e){return reject('blocked')}
+  r.lang='ar-SA';r.maxAlternatives=5;r.interimResults=false;r.continuous=false;let got=false;
+  r.onresult=e=>{got=true;resolve(Array.from(e.results[0]).map(x=>x.transcript))};
+  r.onerror=e=>{got=true;reject(e.error==='not-allowed'||e.error==='service-not-allowed'||e.error==='audio-capture'?'blocked':e.error==='no-speech'?'nospeech':e.error==='network'?'network':'other')};
+  r.onend=()=>{if(!got)reject('nospeech')};
+  try{r.start()}catch(e){reject('blocked')}
+})}
+const VMSG={blocked:'The microphone isn’t available here. Open the app in Chrome at '+PAGES_URL+' and allow the microphone.',nospeech:'Nothing heard. Tap “Say it” and read clearly, close to the phone.',network:'Voice check needs an internet connection.',other:'Voice check failed. Try again.'};
+async function voiceCheck(it,btn,out){
+  if(!SR){out.className='vres no';out.textContent=VMSG.blocked;return null}
+  const label=btn.textContent;btn.disabled=true;btn.textContent='Listening…';out.className='vres';out.textContent='Read it aloud now.';
+  try{const alts=await listen();const j=judge(it,alts);
+    out.className='vres '+j.res;
+    out.innerHTML=(j.res==='ok'?'Recognised. ':j.res==='close'?'Close, but not the same. Compare carefully with the tile. ':'Not recognised. Try again. ')+(j.heard?`Heard: <span class="ar">${esc(j.heard)}</span>`:'');
+    return j.res}
+  catch(code){out.className='vres no';out.textContent=VMSG[code]||VMSG.other;return null}
+  finally{btn.disabled=false;btn.textContent=label}
+}
+
+/* ---------- UI helpers ---------- */
+const app=document.getElementById('app');
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let toastT;function toast(m){const t=document.getElementById('toast');t.textContent=m;t.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>t.hidden=true,2200)}
+function pct(li){const L=LEVELS[li];return Math.round(100*L.all.filter(i=>seen[i.code]).length/L.all.length)}
+const firstChar=s=>s.replace(/^ال/,'').charAt(0);
+
+/* ---------- Views ---------- */
+function home(){
+  const n=Object.keys(audio).length;
+  app.innerHTML=`
+  <div class="top"><div><p class="eyebrow">Learn to read the Qur'an script</p><h1>Iqra' Reading Steps</h1></div><div class="ar hero-ar" aria-hidden="true">اقْرَأْ</div></div>
+  <p class="muted">${LEVELS.length} short steps from the letter names to full words. Tap a tile to see how it is read${n?' and hear it':''}. Each step ends with a short practice round.</p>
+  <div class="levels">${LEVELS.map((L,i)=>`
+    <button class="lvl" data-l="${i}"><span class="num">${i+1}</span>
+      <span class="meta"><span class="row" style="gap:8px"><h3>${esc(L.t)}</h3>${done[i]?'<span class="done-chip">Done</span>':''}</span>
+      <span class="note">${L.all.length} items${best[i]!=null?` · best practice ${best[i]}/10`:''}</span>
+      <span class="bar"><i style="width:${pct(i)}%"></i></span></span>
+      <span class="ar sample">${L.s}</span></button>`).join('')}</div>
+  <div class="panel"><div class="section-h"><h3>Audio recordings</h3><span class="note">${n} of ${ALL.length} loaded on this device</span></div>
+  <p class="note">Recordings must come from a qualified reciter. Synthetic voices mispronounce Arabic letters, so this app plays only real recordings you add.</p>
+  <div class="row"><button class="btn" id="goRec">Manage recordings</button></div></div>
+  <div class="panel"><h3>Voice check</h3><p class="note">Tap “Say it” on any tile, or use “Read-aloud check” in a step. Chrome’s Arabic speech recognition listens and says whether the letter or word was recognised. It cannot judge makhraj, vowel length or tajwid, and it is least reliable for single letters, so treat it as a rough self-check and read to a teacher as well.</p>${SR?'':`<p class="note">This browser has no speech recognition. Open <strong>${PAGES_URL}</strong> in Chrome.</p>`}</div>`;
+  app.querySelectorAll('.lvl').forEach(b=>b.onclick=()=>lesson(+b.dataset.l));
+  document.getElementById('goRec').onclick=recordings;
+  scrollTo(0,0);
+}
+
+function lesson(li){
+  const L=LEVELS[li];
+  app.innerHTML=`
+  <div class="row"><button class="btn ghost" id="back">← All steps</button></div>
+  <div><p class="eyebrow">Step ${li+1} of ${LEVELS.length}</p><h2>${esc(L.t)}</h2></div>
+  <div class="rule"><h3>How to read it</h3><div class="rule-body">${L.mark?`<span class="ar mark" aria-hidden="true">${L.mark}</span>`:''}<div class="txt">${L.rule.map(r=>`<p>${esc(r)}</p>`).join('')}</div></div></div>
+  <label class="switch"><input type="checkbox" id="trT" ${showTr?'checked':''}> Show transliteration under each tile</label>
+  <div id="groups" class="${showTr?'':'hide-tr'}" style="display:flex;flex-direction:column;gap:18px">
+  ${L.groups.map(g=>`<section style="display:flex;flex-direction:column;gap:10px"><div class="section-h"><h3>${esc(g.h)}</h3><span class="note">Read right to left</span></div>
+    <div class="grid ${g.words?'words':''}">${g.items.map(it=>`<button class="tile ${audio[it.code]?'has-audio':''}" data-c="${it.code}" aria-label="${esc(it.tr)}"><span class="ar">${it.ar}</span><span class="tr">${esc(it.tr)}</span><span class="code">${it.code}</span></button>`).join('')}</div></section>`).join('')}
+  </div>
+  <div class="detail" id="detail" hidden></div>
+  <div class="row"><button class="btn primary" id="prac">Practice this step</button><button class="btn mic" id="voice">Read-aloud check</button><button class="btn" id="mark">${done[li]?'Marked as done':'Mark step as done'}</button>${li<LEVELS.length-1?`<button class="btn ghost" id="next">Next step →</button>`:''}</div>`;
+  document.getElementById('back').onclick=home;
+  document.getElementById('trT').onchange=e=>{showTr=e.target.checked;store.set('showTr',showTr);document.getElementById('groups').classList.toggle('hide-tr',!showTr)};
+  document.getElementById('prac').onclick=()=>practice(li);
+  document.getElementById('voice').onclick=()=>readAloud(li);
+  document.getElementById('mark').onclick=e=>{done[li]=!done[li];store.set('done',done);e.target.textContent=done[li]?'Marked as done':'Mark step as done'};
+  const nx=document.getElementById('next');if(nx)nx.onclick=()=>lesson(li+1);
+  let warned=false;
+  app.querySelectorAll('.tile').forEach(b=>b.onclick=()=>{
+    app.querySelectorAll('.tile.sel').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');
+    const it=BY_CODE[b.dataset.c];seen[it.code]=true;store.set('seen',seen);
+    const ch=it.en?firstChar(it.ar):it.ar.charAt(0);
+    const tip=it.en?'':(TIP[ch]||(HEAVY.has(ch)?'Heavy letter: full, rounded mouth.':''));
+    const d=document.getElementById('detail');d.hidden=false;
+    d.innerHTML=`<span class="ar">${it.ar}</span><span class="info"><strong>${esc(it.tr)}</strong>${it.name?` <span class="muted">· ${esc(it.name)}</span>`:''}${it.en?`<br><span class="muted">${esc(it.en)}</span>`:''}${tip?`<br><span class="note">${esc(tip)}</span>`:''}</span><span class="row">${audio[it.code]?'<button class="btn" id="again">Play</button>':''}<button class="btn primary mic" id="say">Say it</button></span><p class="vres" id="vres" style="grid-column:1/-1" aria-live="polite"></p>`;
+    const ag=document.getElementById('again');if(ag)ag.onclick=()=>play(it.code);
+    const sy=document.getElementById('say');sy.onclick=()=>voiceCheck(it,sy,document.getElementById('vres'));
+    if(!play(it.code)&&!warned&&!Object.keys(audio).length){warned=true;toast('No recordings yet. Add them under Manage recordings.')}
+  });
+  scrollTo(0,0);
+}
+
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function practice(li){
+  const pool=LEVELS[li].all;const qs=shuffle(pool).slice(0,10);let k=0,score=0;
+  function ask(){
+    if(k>=qs.length)return finish();
+    const it=qs[k];const listen=!!audio[it.code]&&Math.random()<.5;
+    const others=shuffle(pool.filter(p=>p.tr!==it.tr&&p.ar!==it.ar)).slice(0,3);
+    const opts=shuffle([it,...others]);
+    app.innerHTML=`<div class="row"><button class="btn ghost" id="quit">← Back to step ${li+1}</button></div>
+    <div class="top"><h2>Practice</h2><span class="note">Question ${k+1} of ${qs.length} · ${score} correct</span></div>
+    <div class="q">${listen?`<p class="muted">Listen, then choose the matching text.</p><button class="btn primary" id="hear">Play sound</button>`:`<p class="muted">How is this read?</p><div class="ar big">${it.ar}</div>`}
+    <div class="opts">${opts.map(o=>`<button class="opt ${listen?'ar-opt':''}" data-c="${o.code}">${listen?o.ar:esc(o.tr)}</button>`).join('')}</div>
+    <p class="note" id="fb" aria-live="polite">&nbsp;</p></div>`;
+    document.getElementById('quit').onclick=()=>lesson(li);
+    if(listen){document.getElementById('hear').onclick=()=>play(it.code)}
+    let answered=false;
+    app.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{
+      if(answered)return;answered=true;const ok=b.dataset.c===it.code;if(ok)score++;
+      app.querySelectorAll('.opt').forEach(x=>{if(x.dataset.c===it.code)x.classList.add('right')});if(!ok)b.classList.add('wrong');
+      seen[it.code]=true;store.set('seen',seen);
+      document.getElementById('fb').textContent=(ok?'Correct. ':'Not quite. ')+`${it.ar} is read “${it.tr}”${it.en?` (${it.en})`:''}.`;
+      if(!listen)play(it.code);
+      setTimeout(()=>{k++;ask()},ok?1100:2300);
+    });
+  }
+  function finish(){
+    if(best[li]==null||score>best[li]){best[li]=score;store.set('best',best)}
+    app.innerHTML=`<div class="q"><p class="eyebrow">Step ${li+1} practice</p><div class="score">${score}/${qs.length}</div>
+    <p class="muted">${score>=9?'Ready for the next step.':score>=7?'Good. Review the tiles you missed, then try again.':'Spend more time on the tiles, ideally with a teacher listening.'}</p>
+    <div class="row" style="justify-content:center"><button class="btn primary" id="again">Try again</button><button class="btn" id="bk">Back to step</button>${li<LEVELS.length-1?'<button class="btn ghost" id="nx">Next step →</button>':''}</div></div>`;
+    document.getElementById('again').onclick=()=>practice(li);
+    document.getElementById('bk').onclick=()=>lesson(li);
+    const nx=document.getElementById('nx');if(nx)nx.onclick=()=>lesson(li+1);
+  }
+  ask();
+}
+
+function readAloud(li){
+  const qs=shuffle(LEVELS[li].all).slice(0,10);let k=0,score=0;
+  function ask(){
+    if(k>=qs.length){app.innerHTML=`<div class="q"><p class="eyebrow">Step ${li+1} read-aloud check</p><div class="score">${score}/${qs.length}</div><p class="muted">Recognised by the speech engine. This checks the letter or word, not makhraj or tajwid, so read to a teacher as well.</p><div class="row" style="justify-content:center"><button class="btn primary" id="again">Try again</button><button class="btn" id="bk">Back to step</button></div></div>`;document.getElementById('again').onclick=()=>readAloud(li);document.getElementById('bk').onclick=()=>lesson(li);return}
+    const it=qs[k];let counted=false;
+    app.innerHTML=`<div class="row"><button class="btn ghost" id="quit">← Back to step ${li+1}</button></div>
+    <div class="top"><h2>Read aloud</h2><span class="note">${k+1} of ${qs.length} · ${score} recognised</span></div>
+    <div class="q"><p class="muted">${it.bare?'Say the name of this letter.':'Read this aloud.'}</p><div class="ar big">${it.ar}</div>
+    <p class="note" id="ans" hidden>${esc(it.tr)}${it.en?` · ${esc(it.en)}`:''}</p>
+    <div class="row" style="justify-content:center"><button class="btn primary mic" id="say">Say it</button>${audio[it.code]?'<button class="btn" id="hear">Play</button>':''}<button class="btn ghost" id="show">Show answer</button><button class="btn" id="next">Next →</button></div>
+    <p class="vres" id="vres" aria-live="polite"></p></div>`;
+    document.getElementById('quit').onclick=()=>lesson(li);
+    const h=document.getElementById('hear');if(h)h.onclick=()=>play(it.code);
+    document.getElementById('show').onclick=()=>{document.getElementById('ans').hidden=false};
+    document.getElementById('next').onclick=()=>{k++;ask()};
+    const sy=document.getElementById('say');
+    sy.onclick=async()=>{const r=await voiceCheck(it,sy,document.getElementById('vres'));if(r==='ok'&&!counted){counted=true;score++;seen[it.code]=true;store.set('seen',seen)}};
+  }
+  ask();
+}
+
+function recordings(){
+  const list=LEVELS.map((L,i)=>`Step ${i+1}: ${L.t}\n`+L.all.map(it=>`  ${it.code}  ${it.tr}${audio[it.code]?'  ✓':''}`).join('\n')).join('\n\n');
+  app.innerHTML=`<div class="row"><button class="btn ghost" id="back">← All steps</button></div>
+  <h2>Audio recordings</h2>
+  <div class="panel"><h3>How it works</h3>
+  <p>Every tile has a code, such as <strong>1-02</strong> for “ba”. Record each item once, name the file by its code (for example <strong>1-02.mp3</strong> or <strong>4-15.m4a</strong>), then add the files here. Any common audio format works.</p>
+  <p class="note">Ask a qualified teacher to record, or check every recording with one. Recordings are saved in this browser on this device only.</p>
+  <div class="row"><label class="btn primary" for="pick" style="display:inline-block">Add recording files</label><input id="pick" type="file" accept="audio/*" multiple hidden><button class="btn" id="clr">Remove all</button></div>
+  <p class="note" id="res" aria-live="polite"></p></div>
+  <div class="panel"><div class="section-h"><h3>Item codes</h3><button class="btn" id="cp">Copy list</button></div><div class="codes" id="codes">${esc(list)}</div></div>`;
+  document.getElementById('back').onclick=home;
+  document.getElementById('cp').onclick=()=>{navigator.clipboard.writeText(list).then(()=>toast('List copied'),()=>{const r=document.createRange();r.selectNodeContents(document.getElementById('codes'));const s=getSelection();s.removeAllRanges();s.addRange(r);toast('Selected. Copy it from here.')})};
+  let armed=false;
+  document.getElementById('clr').onclick=async e=>{if(!armed){armed=true;e.target.textContent='Tap again to remove all';setTimeout(()=>{armed=false;e.target.textContent='Remove all'},3000);return}await clearClips();toast('All recordings removed');recordings()};
+  document.getElementById('pick').onchange=async e=>{
+    let ok=0,bad=[];
+    for(const f of e.target.files){const m=f.name.replace(/\.[^.]+$/,'').match(/^(\d+)[-_ ](\d+)$/);const code=m?(+m[1])+'-'+String(+m[2]).padStart(2,'0'):null;
+      if(code&&BY_CODE[code]){try{await saveClip(code,f);ok++}catch(err){bad.push(f.name)}}else bad.push(f.name)}
+    recordings();document.getElementById('res').textContent=`Added ${ok} recording${ok===1?'':'s'}.`+(bad.length?` Skipped (name not a valid code): ${bad.join(', ')}`:'');
+  };
+  scrollTo(0,0);
+}
+
+loadClips().then(home);
+</script>
+
+</body></html>
