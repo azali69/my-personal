@@ -23,7 +23,7 @@ Open it at **https://azali69.github.io/my-personal/** in Chrome. On Android, use
 | Ruku' sections | Tanzil metadata, cross-checked against a second compilation (556 of 556 match) |
 | Bahasa Melayu | Abdullah Muhammad Basmeih, via [QuranEnc.com](https://quranenc.com/en/browse/malay_basumayyah) (malay_basumayyah v1.0.0) |
 | English | Saheeh International, via [QuranEnc.com](https://quranenc.com/en/browse/english_saheeh) (english_saheeh v1.1.2) |
-| Arabic font | KFGQPC Uthmanic Script HAFS, © King Fahd Glorious Qur'an Printing Complex, included unmodified |
+| Arabic fonts | KFGQPC HAFS Uthmanic Script 1.001 (2021) for the text; KFGQPC Uthmanic Script HAFS 0.09 for ayah markers. © King Fahd Glorious Qur'an Printing Complex, included unmodified |
 | Word-judging logic | Adapted from [Tilawi quran-asr](https://github.com/Tilawi/quran-asr), MIT licence, © 2025-2026 Muhammed Durakovic |
 
 The Qur'an text and translations are reproduced without modification. The app checks its own copy against the verified build (Settings → Sources & verification).
