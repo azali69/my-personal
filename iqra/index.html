@@ -84,6 +84,9 @@ button:focus-visible,.tile:focus-visible,input:focus-visible{outline:3px solid v
 .vres{font-size:.92rem;color:var(--muted)}.vres:empty{display:none}
 .vres.ok{color:var(--accent);font-weight:600}.vres.close{color:var(--gold);font-weight:600}.vres.no{color:var(--warn)}
 .vres .ar{font-size:1.4rem;font-weight:400}
+.rec::before{content:"";display:inline-block;width:.6em;height:.6em;border-radius:50%;background:currentColor;margin-right:.45em;vertical-align:.05em}
+.btn.live{background:var(--warn);border-color:var(--warn);color:var(--paper)}
+.teacher-bar{background:var(--gold-soft);color:var(--gold);border-radius:10px;padding:8px 12px;font-size:.9rem;font-weight:600}
 .mic::before{content:"";display:inline-block;width:.6em;height:.9em;border:2px solid currentColor;border-radius:.4em;margin-right:.45em;vertical-align:-.1em}
 @media (max-width:480px){h1{font-size:1.6rem}.lvl{grid-template-columns:40px 1fr}.lvl .sample{display:none}.detail{grid-template-columns:auto 1fr}.detail .btn{grid-column:1/-1}}
 @media (prefers-reduced-motion:no-preference){.tile,.opt,.lvl{transition:border-color .15s,background .15s}}
@@ -128,6 +131,7 @@ let seen=store.get('seen',{});      // code -> true
 let done=store.get('done',{});      // level index -> true
 let best=store.get('best',{});      // level index -> best score
 let showTr=store.get('showTr',true);
+let teacher=store.get('teacher',false);
 
 // recordings live in IndexedDB on this device
 const audio={};  // code -> objectURL
@@ -137,7 +141,24 @@ async function saveClip(code,blob){const db=await idb();await new Promise((res,r
 async function clearClips(){try{const db=await idb();await new Promise(res=>{const tx=db.transaction('clips','readwrite');tx.objectStore('clips').clear();tx.oncomplete=res;tx.onerror=res});}catch(e){}Object.values(audio).forEach(u=>URL.revokeObjectURL(u));for(const k in audio)delete audio[k]}
 
 const player=new Audio();
-function play(code){const u=audio[code];if(!u)return false;player.src=u;player.play().catch(()=>{});return true}
+function play(code){const u=audio[code];if(!u)return false;player.onended=null;player.src=u;player.play().catch(()=>{});return true}
+const tries={}; // learner attempts, kept only until the page closes
+function compare(code){const t=tries[code];if(!t)return;if(audio[code]){player.src=audio[code];player.onended=()=>{player.onended=null;setTimeout(()=>{player.src=t;player.play().catch(()=>{})},400)};player.play().catch(()=>{})}else{player.onended=null;player.src=t;player.play().catch(()=>{})}}
+async function deleteClip(code){try{const db=await idb();await new Promise(res=>{const tx=db.transaction('clips','readwrite');tx.objectStore('clips').delete(code);tx.oncomplete=res;tx.onerror=res})}catch(e){}if(audio[code]){URL.revokeObjectURL(audio[code]);delete audio[code]}}
+async function allClips(){const out=[];try{const db=await idb();const req=db.transaction('clips').objectStore('clips').openCursor();await new Promise(r=>{req.onsuccess=()=>{const c=req.result;if(c){out.push([c.key,c.value]);c.continue()}else r()};req.onerror=r})}catch(e){}return out}
+const REC_MAX=10000;let rec=null;
+function recMime(){if(!window.MediaRecorder)return null;return ['audio/webm;codecs=opus','audio/webm','audio/mp4','audio/ogg'].find(t=>{try{return MediaRecorder.isTypeSupported(t)}catch(e){return false}})||''}
+async function recordToggle(btn,out,onDone){
+  if(rec){if(rec.btn===btn)rec.mr.stop();return}
+  const mime=recMime();
+  if(mime===null||!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){out.className='vres no';out.textContent='Recording isn’t available here. Open the app in Chrome at '+PAGES_URL+'.';return}
+  let stream;try{stream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true}})}catch(e){out.className='vres no';out.textContent='The microphone isn’t available here. Open the app in Chrome at '+PAGES_URL+' and allow the microphone.';return}
+  const mr=new MediaRecorder(stream,mime?{mimeType:mime}:undefined);const chunks=[];const label=btn.textContent;
+  rec={mr,btn};mr.ondataavailable=e=>{if(e.data.size)chunks.push(e.data)};
+  mr.onstop=()=>{clearTimeout(rec.t);stream.getTracks().forEach(t=>t.stop());btn.textContent=label;btn.classList.remove('live');rec=null;const blob=new Blob(chunks,{type:(mr.mimeType||mime||'audio/webm').split(';')[0]});if(blob.size>500)onDone(blob);else{out.className='vres no';out.textContent='Nothing was recorded. Try again.'}};
+  player.pause();mr.start();btn.textContent='Stop';btn.classList.add('live');out.className='vres';out.textContent='Recording… tap Stop when finished.';
+  rec.t=setTimeout(()=>{if(mr.state==='recording')mr.stop()},REC_MAX);
+}
 
 /* ---------- Voice check (Chrome speech recognition, Arabic) ---------- */
 const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
@@ -198,11 +219,13 @@ function home(){
       <span class="bar"><i style="width:${pct(i)}%"></i></span></span>
       <span class="ar sample">${L.s}</span></button>`).join('')}</div>
   <div class="panel"><div class="section-h"><h3>Audio recordings</h3><span class="note">${n} of ${ALL.length} loaded on this device</span></div>
-  <p class="note">Recordings must come from a qualified reciter. Synthetic voices mispronounce Arabic letters, so this app plays only real recordings you add.</p>
+  <p class="note">Record your own voice for each tile, or add files from a qualified reciter. Synthetic voices mispronounce Arabic letters, so this app plays only real recordings you add.</p>
+  <label class="switch"><input type="checkbox" id="tmode" ${teacher?'checked':''}> Teacher recording mode: tap a tile, then Record to save your voice as its reference</label>
   <div class="row"><button class="btn" id="goRec">Manage recordings</button></div></div>
   <div class="panel"><h3>Voice check</h3><p class="note">Tap “Say it” on any tile, or use “Read-aloud check” in a step. Chrome’s Arabic speech recognition listens and says whether the letter or word was recognised. It cannot judge makhraj, vowel length or tajwid, and it is least reliable for single letters, so treat it as a rough self-check and read to a teacher as well.</p>${SR?'':`<p class="note">This browser has no speech recognition. Open <strong>${PAGES_URL}</strong> in Chrome.</p>`}</div>`;
   app.querySelectorAll('.lvl').forEach(b=>b.onclick=()=>lesson(+b.dataset.l));
   document.getElementById('goRec').onclick=recordings;
+  document.getElementById('tmode').onchange=e=>{teacher=e.target.checked;store.set('teacher',teacher);toast(teacher?'Teacher recording mode on':'Teacher recording mode off')};
   scrollTo(0,0);
 }
 
@@ -211,6 +234,7 @@ function lesson(li){
   app.innerHTML=`
   <div class="row"><button class="btn ghost" id="back">← All steps</button></div>
   <div><p class="eyebrow">Step ${li+1} of ${LEVELS.length}</p><h2>${esc(L.t)}</h2></div>
+  ${teacher?'<p class="teacher-bar">Teacher recording mode is on. Tap a tile, then Record. Tiles marked ♪ already have your voice.</p>':''}
   <div class="rule"><h3>How to read it</h3><div class="rule-body">${L.mark?`<span class="ar mark" aria-hidden="true">${L.mark}</span>`:''}<div class="txt">${L.rule.map(r=>`<p>${esc(r)}</p>`).join('')}</div></div></div>
   <label class="switch"><input type="checkbox" id="trT" ${showTr?'checked':''}> Show transliteration under each tile</label>
   <div id="groups" class="${showTr?'':'hide-tr'}" style="display:flex;flex-direction:column;gap:18px">
@@ -231,13 +255,26 @@ function lesson(li){
     const it=BY_CODE[b.dataset.c];seen[it.code]=true;store.set('seen',seen);
     const ch=it.en?firstChar(it.ar):it.ar.charAt(0);
     const tip=it.en?'':(TIP[ch]||(HEAVY.has(ch)?'Heavy letter: full, rounded mouth.':''));
-    const d=document.getElementById('detail');d.hidden=false;
-    d.innerHTML=`<span class="ar">${it.ar}</span><span class="info"><strong>${esc(it.tr)}</strong>${it.name?` <span class="muted">· ${esc(it.name)}</span>`:''}${it.en?`<br><span class="muted">${esc(it.en)}</span>`:''}${tip?`<br><span class="note">${esc(tip)}</span>`:''}</span><span class="row">${audio[it.code]?'<button class="btn" id="again">Play</button>':''}<button class="btn primary mic" id="say">Say it</button></span><p class="vres" id="vres" style="grid-column:1/-1" aria-live="polite"></p>`;
-    const ag=document.getElementById('again');if(ag)ag.onclick=()=>play(it.code);
-    const sy=document.getElementById('say');sy.onclick=()=>voiceCheck(it,sy,document.getElementById('vres'));
-    if(!play(it.code)&&!warned&&!Object.keys(audio).length){warned=true;toast('No recordings yet. Add them under Manage recordings.')}
+    renderDetail(it,b,tip);
+    if(!play(it.code)&&!warned&&!Object.keys(audio).length&&!teacher){warned=true;toast('No recordings yet. Ask the teacher to record, or add files under Manage recordings.')}
   });
   scrollTo(0,0);
+}
+
+function renderDetail(it,tile,tip){
+  const d=document.getElementById('detail');d.hidden=false;
+  const has=!!audio[it.code];const hasTry=!!tries[it.code];
+  const btns=teacher
+    ?`${has?'<button class="btn" id="again">Play</button>':''}<button class="btn primary rec" id="rec">${has?'Re-record':'Record'}</button>${has?'<button class="btn ghost" id="del">Delete</button>':''}`
+    :`${has?'<button class="btn" id="again">Play</button>':''}<button class="btn primary mic" id="say">Say it</button><button class="btn rec" id="mytry">Record my try</button>${hasTry?'<button class="btn" id="cmp">'+(has?'Compare':'Play my try')+'</button>':''}`;
+  d.innerHTML=`<span class="ar">${it.ar}</span><span class="info"><strong>${esc(it.tr)}</strong>${it.name?` <span class="muted">· ${esc(it.name)}</span>`:''}${it.en?`<br><span class="muted">${esc(it.en)}</span>`:''}${tip?`<br><span class="note">${esc(tip)}</span>`:''}</span><span class="row">${btns}</span><p class="vres" id="vres" style="grid-column:1/-1" aria-live="polite"></p>`;
+  const out=document.getElementById('vres');const $=id=>document.getElementById(id);
+  if($('again'))$('again').onclick=()=>play(it.code);
+  if($('say'))$('say').onclick=()=>voiceCheck(it,$('say'),out);
+  if($('cmp'))$('cmp').onclick=()=>compare(it.code);
+  if($('rec'))$('rec').onclick=()=>recordToggle($('rec'),out,async blob=>{try{await saveClip(it.code,blob);tile.classList.add('has-audio');renderDetail(it,tile,tip);const o=document.getElementById('vres');o.className='vres ok';o.textContent='Saved as the reference for '+it.code+'. Tap Play to check it.';play(it.code)}catch(e){out.className='vres no';out.textContent='Could not save the recording on this device.'}});
+  if($('mytry'))$('mytry').onclick=()=>recordToggle($('mytry'),out,blob=>{if(tries[it.code])URL.revokeObjectURL(tries[it.code]);tries[it.code]=URL.createObjectURL(blob);renderDetail(it,tile,tip);const o=document.getElementById('vres');o.className='vres';o.textContent=audio[it.code]?'Tap Compare to hear the teacher, then your try.':'Recorded. There is no teacher recording for this tile yet.'});
+  if($('del')){let armed=false;$('del').onclick=async()=>{if(!armed){armed=true;$('del').textContent='Tap again to delete';setTimeout(()=>{armed=false;const x=$('del');if(x)x.textContent='Delete'},3000);return}await deleteClip(it.code);tile.classList.remove('has-audio');renderDetail(it,tile,tip);toast('Recording deleted')}}
 }
 
 function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
@@ -298,18 +335,30 @@ function readAloud(li){
   ask();
 }
 
+function loadScript(src){return new Promise((res,rej)=>{const s=document.createElement('script');s.src=src;s.onload=res;s.onerror=rej;document.head.appendChild(s)})}
+async function exportZip(){
+  const clips=await allClips();if(!clips.length){toast('No recordings to download yet');return}
+  try{if(!window.JSZip)await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js');
+    const zip=new JSZip();const ext=t=>/mp4|m4a|aac/.test(t)?'m4a':/mpeg|mp3/.test(t)?'mp3':/ogg/.test(t)?'ogg':/wav/.test(t)?'wav':'webm';
+    clips.forEach(([code,blob])=>zip.file(code+'.'+ext(blob.type||''),blob));
+    const z=await zip.generateAsync({type:'blob'});const a=document.createElement('a');a.href=URL.createObjectURL(z);a.download='iqra-recordings.zip';document.body.appendChild(a);a.click();a.remove();
+    toast(clips.length+' recordings saved to a .zip')}
+  catch(e){toast('Download isn’t available here. Use the Chrome version.')}
+}
+
 function recordings(){
   const list=LEVELS.map((L,i)=>`Step ${i+1}: ${L.t}\n`+L.all.map(it=>`  ${it.code}  ${it.tr}${audio[it.code]?'  ✓':''}`).join('\n')).join('\n\n');
   app.innerHTML=`<div class="row"><button class="btn ghost" id="back">← All steps</button></div>
   <h2>Audio recordings</h2>
   <div class="panel"><h3>How it works</h3>
-  <p>Every tile has a code, such as <strong>1-02</strong> for “ba”. Record each item once, name the file by its code (for example <strong>1-02.mp3</strong> or <strong>4-15.m4a</strong>), then add the files here. Any common audio format works.</p>
+  <p>The easiest way: turn on <strong>Teacher recording mode</strong> on the home screen, open a step, tap a tile and tap Record. To use existing files instead: every tile has a code, such as <strong>2-02</strong> for “ba”. Record each item once, name the file by its code (for example <strong>2-02.mp3</strong> or <strong>5-15.m4a</strong>), then add the files here. Any common audio format works.</p>
   <p class="note">Ask a qualified teacher to record, or check every recording with one. Recordings are saved in this browser on this device only.</p>
-  <div class="row"><label class="btn primary" for="pick" style="display:inline-block">Add recording files</label><input id="pick" type="file" accept="audio/*" multiple hidden><button class="btn" id="clr">Remove all</button></div>
+  <div class="row"><label class="btn primary" for="pick" style="display:inline-block">Add recording files</label><input id="pick" type="file" accept="audio/*" multiple hidden><button class="btn" id="exp">Download all as .zip</button><button class="btn" id="clr">Remove all</button></div>
   <p class="note" id="res" aria-live="polite"></p></div>
   <div class="panel"><div class="section-h"><h3>Item codes</h3><button class="btn" id="cp">Copy list</button></div><div class="codes" id="codes">${esc(list)}</div></div>`;
   document.getElementById('back').onclick=home;
   document.getElementById('cp').onclick=()=>{navigator.clipboard.writeText(list).then(()=>toast('List copied'),()=>{const r=document.createRange();r.selectNodeContents(document.getElementById('codes'));const s=getSelection();s.removeAllRanges();s.addRange(r);toast('Selected. Copy it from here.')})};
+  document.getElementById('exp').onclick=exportZip;
   let armed=false;
   document.getElementById('clr').onclick=async e=>{if(!armed){armed=true;e.target.textContent='Tap again to remove all';setTimeout(()=>{armed=false;e.target.textContent='Remove all'},3000);return}await clearClips();toast('All recordings removed');recordings()};
   document.getElementById('pick').onchange=async e=>{
