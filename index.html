@@ -485,7 +485,20 @@ function lastE(al,a){ const i=al.indexOf(a); for(let k=i;k>=0;k--) if(al[k].ei!=
 
 /* ============================ HAFAZAN ============================ */
 let hz=null, rec=null;
-const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+/* In the Android app, WebView has no Web Speech API, so the app provides Android's recogniser through a bridge. */
+const AndroidSR = (window.AndroidSpeech && window.AndroidSpeech.isAvailable && window.AndroidSpeech.isAvailable()) ? (function(){
+  let active=null;
+  window.__androidSpeech={
+    onstart(){ active&&active.onstart&&active.onstart(); },
+    onresult(o){ if(!active) return; const r=[{isFinal:!!o.final,0:{transcript:o.text||''},length:1}]; active.onresult&&active.onresult({results:r}); },
+    onerror(o){ active&&active.onerror&&active.onerror({error:o.error}); },
+    onend(){ active&&active.onend&&active.onend(); }
+  };
+  return class{ constructor(){ this.lang='ar-SA'; } start(){ active=this; window.AndroidSpeech.start(this.lang); } stop(){ window.AndroidSpeech.stop(); } };
+})() : null;
+const IS_ANDROID_APP = !!window.AndroidSpeech;
+const SR = AndroidSR || window.SpeechRecognition || window.webkitSpeechRecognition;
+const keepOn = on => { try{ IS_ANDROID_APP && window.AndroidSpeech.keepScreenOn(on); }catch(e){} };
 const ISTI=normAr('أعوذ بالله من الشيطان الرجيم').split(' '), BASM=normAr('بسم الله الرحمن الرحيم').split(' ');
 function startHz(g0,g1){
   let words=0; for(let g=g0;g<=g1;g++) words+=A[g][3].split(' ').length;
@@ -510,7 +523,7 @@ function renderHz(){
     toks.forEach((t,i)=>{ const ids=map[i]; h+= ids.length? `<span class="w hid" data-g="${g}" data-t="${i}">${t}</span> ` : `<span>${t}</span> `; });
     h+=`<span class="num">${arNum(x[1])}</span> `;
   }
-  h+=`</div><div class="hz-live" id="live" data-empty="${SR?'What the app hears will appear here.':'Voice recognition is not available in this browser. Use Type, or open the app in Chrome on Android.'}"></div>
+  h+=`</div><div class="hz-live" id="live" data-empty="${SR?'What the app hears will appear here.':(IS_ANDROID_APP?'Speech recognition is not available on this phone. Install or update the Google app, or use Type.':'Voice recognition is not available in this browser. Use Type, or open the app in Chrome on Android.')}"></div>
   <div class="hz-status" id="hzS"></div>
   <div class="legend"><span><i style="color:var(--ok)">●</i> correct</span><span><i style="color:var(--bad)">●</i> wrong word (tap)</span><span><i style="color:var(--warn)">●</i> skipped</span><span><i style="color:var(--unsure)">●</i> unclear</span></div>
   <div id="hzR"></div>`;
@@ -545,7 +558,7 @@ function startListen(){
   renderHz(); setStatus('Starting the microphone…');
   rec=new SR(); rec.lang='ar-SA'; rec.continuous=true; rec.interimResults=true; rec.maxAlternatives=1;
   let sessionFinals=[];
-  rec.onstart=()=>{ setStatus('Listening. Recite at your normal pace.'); document.getElementById('mic')?.classList.add('live'); };
+  rec.onstart=()=>{ keepOn(true); setStatus('Listening. Recite at your normal pace.'); document.getElementById('mic')?.classList.add('live'); };
   rec.onresult=ev=>{ let interim=''; sessionFinals=[];
     for(let i=0;i<ev.results.length;i++){ const t=ev.results[i][0].transcript.trim();
       if(ev.results[i].isFinal){ const prev=sessionFinals[sessionFinals.length-1]; if(prev && t.startsWith(prev)) sessionFinals[sessionFinals.length-1]=t; else sessionFinals.push(t); }
@@ -560,9 +573,9 @@ function startListen(){
   try{ rec.start(); }catch(e){ setStatus('Could not start the microphone.'); rec=null; }
 }
 let schT; function schedule(){ clearTimeout(schT); schT=setTimeout(evaluate,120); }
-function stopListen(show){ const r=rec; rec=null; if(r){ try{ r.stop(); }catch(e){} }
+function stopListen(show){ const r=rec; rec=null; keepOn(false); if(r){ try{ r.stop(); }catch(e){} }
   document.getElementById('mic')?.classList.remove('live');
-  setTimeout(()=>{ if(!hz) return; if(hz.cur){ hz.finals.push(...hz.cur); hz.cur=null; } hz.interim=''; evaluate(); if(show) summary(); }, 450); }
+  setTimeout(()=>{ if(!hz) return; if(hz.cur){ hz.finals.push(...hz.cur); hz.cur=null; } hz.interim=''; evaluate(); if(show) summary(); }, IS_ANDROID_APP?1000:450); }
 function setStatus(t){ const s=document.getElementById('hzS'); if(s) s.textContent=t; }
 function summary(){
   const r=hz.res; if(!r) return; setStatus('');
@@ -659,6 +672,8 @@ document.getElementById('next').onclick=()=>goPage(st.page+1);
 document.getElementById('prev').onclick=()=>goPage(st.page-1);
 window.matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change',applyLook);
 
+window.__back=()=>{ if(sheet.classList.contains('open')){ closeSheet(); return true; } if(hz){ if(rec) stopListen(false); hz=null; renderReader(); return true; } return false; };
+window.__pause=()=>{ if(rec) stopListen(false); };
 applyLook();
 if('serviceWorker' in navigator && /github\.io$/.test(location.hostname)){ navigator.serviceWorker.register('sw.js').catch(()=>{}); }
 (function boot(){ const h=(location.hash||'').slice(1); let r=null;
