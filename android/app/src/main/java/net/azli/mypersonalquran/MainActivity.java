@@ -164,6 +164,14 @@ public class MainActivity extends Activity {
         }
 
         @JavascriptInterface
+        public void copyText(final String text) {
+            runOnUiThread(() -> {
+                android.content.ClipboardManager cm = (android.content.ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                if (cm != null) cm.setPrimaryClip(android.content.ClipData.newPlainText("Quran", text));
+            });
+        }
+
+        @JavascriptInterface
         public void setImmersive(final boolean on) {
             runOnUiThread(() -> {
                 if (Build.VERSION.SDK_INT >= 30) {

@@ -613,6 +613,48 @@ function setSheet(){
   sheetB.querySelector('#size').oninput=e=>{ const v=+e.target.value; st.size = v===0?0:22+v*2; applyLook(); save(); sizeLbl(); rerender(); };
   sheetB.querySelector('#openHist').onclick=histSheet; sheetB.querySelector('#openAbout').onclick=aboutSheet;
 }
+/* Copy one or many ayat, with Arabic and/or translations. Texts are copied exactly as stored. */
+const copyPref=Object.assign({ar:true,ms:true,en:false,ref:true}, store.get('copyPref',{}));
+function copyText(g0,g1){
+  const out=[]; const s=A[g0][0];
+  for(let g=g0; g<=g1; g++){ const a=A[g], parts=[];
+    if(copyPref.ar) parts.push(`${a[2]} ﴿${arNum(a[1])}﴾`);
+    if(copyPref.ms) parts.push((copyPref.ar||copyPref.en?'[BM] ':'')+a[6]);
+    if(copyPref.en) parts.push((copyPref.ar||copyPref.ms?'[EN] ':'')+a[7]);
+    out.push(parts.join('\n')); }
+  let t=out.join('\n\n');
+  if(copyPref.ref) t+=`\n\n(${S[s-1][1]} ${s}:${A[g0][1]}${g1>g0?'–'+A[g1][1]:''}${copyPref.ms?' · Terjemahan: Abdullah Muhammad Basmeih':''}${copyPref.en?' · Translation: Saheeh International':''})`;
+  return t;
+}
+async function putClipboard(t){
+  try{ if(window.AndroidSpeech?.copyText){ window.AndroidSpeech.copyText(t); return true; } }catch(e){}
+  try{ await navigator.clipboard.writeText(t); return true; }catch(e){}
+  try{ const ta=document.createElement('textarea'); ta.value=t; ta.style.cssText='position:fixed;opacity:0'; document.body.appendChild(ta); ta.select(); const ok=document.execCommand('copy'); ta.remove(); return ok; }catch(e){ return false; }
+}
+function copySheet(g){
+  const a=A[g], s=a[0], n=S[s-1][5];
+  const chk=(k,l)=>`<button data-k="${k}" aria-pressed="${copyPref[k]}">${l}</button>`;
+  openSheet('Copy ayat', `
+   <div class="label" style="margin-top:0">${esc(S[s-1][1])} · from ayah to ayah</div>
+   <div class="row2"><input class="field" id="cF" type="number" inputmode="numeric" min="1" max="${n}" value="${a[1]}" style="flex:1" aria-label="From ayah">
+   <span class="note">to</span><input class="field" id="cT" type="number" inputmode="numeric" min="1" max="${n}" value="${a[1]}" style="flex:1" aria-label="To ayah"></div>
+   <div class="seg" style="margin-top:8px" id="cQuick"><button data-q="1">Only this ayah</button><button data-q="page">To end of page</button><button data-q="5">+5 ayat</button><button data-q="surah">Whole surah</button></div>
+   <div class="label">Include</div><div class="seg" id="cInc">${chk('ar','Arabic')}${chk('ms','Bahasa Melayu')}${chk('en','English')}${chk('ref','Reference')}</div>
+   <div class="label">Preview</div><div id="cPrev" style="white-space:pre-wrap;text-align:start;font-family:'Literata','KFGQPC Hafs',Georgia,serif;font-size:15px;line-height:1.8;max-height:30vh;overflow:auto;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:10px;margin:0"></div>
+   <div class="row2" style="margin-top:12px"><button class="pill primary" id="cGo">Copy</button></div>`);
+  const F=document.getElementById('cF'), T=document.getElementById('cT'), P=document.getElementById('cPrev');
+  const rng=()=>{ let f=Math.max(1,Math.min(n,+F.value||1)), t=Math.max(f,Math.min(n,+T.value||f)); if(t-f>285) t=f+285; return [gOf(s,f),gOf(s,t)]; };
+  const upd=()=>{ const [x,y]=rng(); const t=copyText(x,y), v=t.length>1500?t.slice(0,1500)+'…':t; P.innerHTML=v.split('\n').map(l=>`<div dir="auto">${esc(l)||'&nbsp;'}</div>`).join(''); document.getElementById('cGo').textContent=`Copy ${y-x+1} ayat`; };
+  F.oninput=T.oninput=upd;
+  document.getElementById('cQuick').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; const q=b.dataset.q, f=+F.value||a[1];
+    if(q==='1') T.value=f; else if(q==='5') T.value=Math.min(n,(+T.value||f)+5); else if(q==='surah'){ F.value=1; T.value=n; }
+    else if(q==='page'){ const last=Math.min(pageStart[A[gOf(s,f)][4]+1]-1, gOf(s,n)); T.value=A[last][1]; } upd(); };
+  document.getElementById('cInc').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; const k=b.dataset.k; copyPref[k]=!copyPref[k];
+    if(!copyPref.ar&&!copyPref.ms&&!copyPref.en){ copyPref[k]=true; toast('Choose at least one text'); }
+    b.setAttribute('aria-pressed',copyPref[k]); store.set('copyPref',copyPref); upd(); };
+  document.getElementById('cGo').onclick=async()=>{ const [x,y]=rng(); const ok=await putClipboard(copyText(x,y)); if(ok){ closeSheet(); toast(`Copied ${y-x+1} ayat`); } else toast('Copy is blocked here. Long-press the preview to select it.'); };
+  upd();
+}
 let offRun=0;
 async function saveOffline(set){
   const my=++offRun, msg=()=>document.getElementById('offMsg'); let ok=0, fail=0;
@@ -640,7 +682,7 @@ function ayahSheet(g){
     <button id="aHz">${ic('mic')}Hafazan from this ayah to the end of the page</button>
     ${st.blocks!=='off'?`<button id="aHzB">${ic('mic')}Hafazan this block (${a[0]}:${A[b0][1]}–${A[b1][1]})</button>`:''}
     ${a[1]!==1?`<button id="aBlk">${ic('blk')}${startLbl}</button>`:''}
-    <button id="aCopy">${ic('copy')}Copy ayah</button>
+    <button id="aCopy">${ic('copy')}Copy ayat and translation…</button>
    </div>`);
   sheetB.querySelector('#aBm').onclick=e=>{ const b=e.target.closest('button'); if(!b) return;
     if(b.id==='aBmX'){ delete st.bm[g]; toast('Bookmark removed'); }
@@ -649,7 +691,7 @@ function ayahSheet(g){
   sheetB.querySelector('#aHz').onclick=()=>{ closeSheet(); startHz(g, pageStart[a[4]+1]-1); };
   const hb=sheetB.querySelector('#aHzB'); if(hb) hb.onclick=()=>{ closeSheet(); startHz(b0,b1); };
   const bb=sheetB.querySelector('#aBlk'); if(bb) bb.onclick=()=>{ st.mine.has(g)?st.mine.delete(g):st.mine.add(g); if(st.blocks!=='mine'){st.blocks='mine'; toast('Switched to My blocks');} else toast(st.mine.has(g)?'Block starts here':'Block start removed'); save(); closeSheet(); renderReader(); };
-  sheetB.querySelector('#aCopy').onclick=async()=>{ const t=`${a[2]}\n(${S[a[0]-1][1]} ${a[0]}:${a[1]})`; try{ await navigator.clipboard.writeText(t); toast('Copied'); }catch(e){ toast('Copy is not allowed here. Select the text instead.'); } };
+  sheetB.querySelector('#aCopy').onclick=()=>copySheet(g);
 }
 /* Reading gestures: tap = show/hide bars, long-press on an ayah = its menu. Translation rows open the menu on tap. */
 let lpT=null, lpFired=false, lpX=0, lpY=0;
