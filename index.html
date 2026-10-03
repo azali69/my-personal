@@ -619,8 +619,8 @@ function copyText(g0,g1){
   const out=[]; const s=A[g0][0];
   for(let g=g0; g<=g1; g++){ const a=A[g], parts=[];
     if(copyPref.ar) parts.push(`${a[2]} ﴿${arNum(a[1])}﴾`);
-    if(copyPref.ms) parts.push((copyPref.ar||copyPref.en?'[BM] ':'')+a[6]);
-    if(copyPref.en) parts.push((copyPref.ar||copyPref.ms?'[EN] ':'')+a[7]);
+    if(copyPref.ms) parts.push(a[6]);
+    if(copyPref.en) parts.push(a[7]);
     out.push(parts.join('\n')); }
   let t=out.join('\n\n');
   if(copyPref.ref) t+=`\n\n(${S[s-1][1]} ${s}:${A[g0][1]}${g1>g0?'–'+A[g1][1]:''}${copyPref.ms?' · Terjemahan: Abdullah Muhammad Basmeih':''}${copyPref.en?' · Translation: Saheeh International':''})`;
