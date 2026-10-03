@@ -27,7 +27,12 @@ jobs:
             echo "== tajweed p1"; curl -sSI -H "Origin: https://azali69.github.io" "$F/v4-tajweed/woff2/p1.woff2?v=3.1"
             echo "== tajweed p328"; curl -sSI -H "Origin: https://azali69.github.io" "$F/v4-tajweed/woff/p328.woff?v=3.1"
           } > cdn-headers.txt 2>&1 || true
-          ls -la
+          mkdir -p testfonts/v4 testfonts/v4-tajweed
+          for n in 1 2 3 7 296 604; do
+            curl -sSfL -o testfonts/v4/p$n.woff2 "$F/v4/woff2/p$n.woff2"
+            curl -sSfL -o testfonts/v4-tajweed/p$n.woff2 "$F/v4-tajweed/woff2/p$n.woff2?v=3.1"
+          done
+          ls -la testfonts/*
       - name: Commit to the qul-data branch
         run: |
           cd out
