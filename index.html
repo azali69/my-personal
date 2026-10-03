@@ -88,8 +88,9 @@ main.fit{padding-block:8px 76px}
 .num.bm{color:var(--bmc);background:color-mix(in srgb,var(--bmc) 26%,transparent);border-radius:50%;box-shadow:0 0 0 .06em var(--bmc)}
 .mline.bl{align-items:center}
 .mline.hd{align-items:center}
-.sframe{flex:1;height:82%;display:flex;align-items:center;justify-content:center;gap:.5em;border:1px solid var(--line);border-radius:.4em;background:var(--surface);font-size:.86em}
-.sframe small{font-family:var(--ui);font-size:.42em;color:var(--muted)}
+.sframe{flex:1;height:82%;display:flex;align-items:center;justify-content:center;gap:.5em;position:relative;padding-inline:.6em;border:1px solid var(--line);border-radius:.4em;background:var(--surface);font-size:.86em}
+.sframe small{font-family:var(--ar);font-size:.68em;color:var(--muted);position:absolute;left:.7em;top:50%;transform:translateY(-50%)}
+.sframe .sn{color:var(--accent)}
 .mpage.short .mline{justify-content:center}
 .mpage.short .mline>.sp{flex:0 0 .32em;min-width:.32em}
 .pagehead.tight{margin:0 2px 4px}
@@ -112,8 +113,11 @@ body.fitmode.immersive .top{transform:translateY(-110%);opacity:0;pointer-events
 body.immersive:not(.fitmode) .top{display:none}
 body.immersive .dock{transform:translateY(110%);opacity:0;pointer-events:none}
 
-main.fit{padding-inline:10px}
-@media (orientation:landscape){ main.fit{max-width:none;padding-inline:max(28px,env(safe-area-inset-left,0px))} }
+main.fit{position:fixed;left:0;right:0;top:env(safe-area-inset-top,0px);bottom:env(safe-area-inset-bottom,0px);max-width:none;margin:0;padding:6px 10px 6px;
+  display:flex;flex-direction:column;justify-content:center;overflow:hidden}
+main.fit>*{width:100%;max-width:46rem;margin-inline:auto}
+main.fit .pagefoot.tight{margin-top:4px}
+@media (orientation:landscape){ main.fit{padding-inline:max(28px,env(safe-area-inset-left,0px));justify-content:flex-start;overflow-y:auto} main.fit>*{max-width:none} }
 .bmrow{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
 .bmc{width:40px;height:40px;border-radius:50%;border:3px solid var(--surface);box-shadow:0 0 0 1.5px var(--line);background:var(--c)}
 .bmc[aria-pressed="true"]{box-shadow:0 0 0 2.5px var(--fg)}
@@ -384,7 +388,7 @@ function buildPage(p){
   for(const items of lines){
     const f=items[0];
     if(Array.isArray(f)){
-      if(f[0]==='h'){ const s=S[f[1]-1]; h+=`<div class="mline hd"><div class="sframe">سُورَةُ ${esc(s[0])}<small>${s[5]} ayat</small></div></div>`; }
+      if(f[0]==='h'){ const s=S[f[1]-1]; h+=`<div class="mline hd"><div class="sframe"><span class="sn">${arNum(f[1])}</span><span>سُورَةُ ${esc(s[0])}</span><small>آياتها ${arNum(s[5])}</small></div></div>`; }
       else h+=`<div class="mline bl">${BASMALA}</div>`;
       continue;
     }
@@ -407,7 +411,7 @@ function fitPage(){
   const box=pageBox(pg), H=box.H, land=box.land, k=textZoom();
   let fs=W/REF_EM, lh;
   if(land){ lh=fs*1.9; }                       // landscape: full width, scroll down the page like Quran.com
-  else { fs=Math.min(fs, H/n/1.45); lh=Math.min(H/n, fs*2.8); }   // portrait: whole page on one screen
+  else { fs=Math.min(fs, box.Hfont/n/1.45); lh=Math.min(H/n, fs*2.8); }   // portrait: whole page on one screen
   fs=Math.max(13, fs);
   pg.style.fontSize=(fs/k)+'px'; pg.style.setProperty('--lh', lh+'px');
   squeeze(pg);
@@ -419,9 +423,11 @@ function textZoom(){ const d=document.createElement('div'); d.style.cssText='pos
 const maxH={p:0,l:0};
 function pageBox(pg){
   const land=window.innerWidth>window.innerHeight, o=land?'l':'p';
-  maxH[o]=Math.max(maxH[o], window.innerHeight);
-  const head=48, foot=44;
-  return {W:pg.clientWidth, H:maxH[o]-head-foot, land};
+  const cs=getComputedStyle(main), inner=main.clientHeight-parseFloat(cs.paddingTop)-parseFloat(cs.paddingBottom);
+  const head=main.querySelector('.pagehead')?.offsetHeight||24, foot=main.querySelector('.pagefoot')?.offsetHeight||30;
+  const H=inner-head-foot-12;
+  maxH[o]=Math.max(maxH[o], H);          // font size uses the tallest frame seen, so it never changes when bars hide/show
+  return {W:pg.clientWidth, H, Hfont:maxH[o], land};
 }
 function lineContentWidth(line){ const a=line.firstElementChild, b=line.lastElementChild; if(!a) return 0;
   const r1=a.getBoundingClientRect(), r2=b.getBoundingClientRect(); return Math.max(r1.right,r2.right)-Math.min(r1.left,r2.left); }
@@ -446,7 +452,7 @@ function buildGlyph(p,set){
   const shade=new Map(); for(let g=pageStart[p]; g<pageStart[p+1]; g++) shade.set(g, shadeOf(g));
   let h=`<div class="pagehead tight"><span>${esc(S[first[0]-1][1])}</span><span>Juz ${first[5]}</span></div><div class="mpage gpage${p<=2?' short':''}" id="mpage" style="font-family:'${set}p${p}'">`;
   for(const ln of lines){
-    if(ln[0]==='h'){ const s=S[ln[1]-1]; h+=`<div class="mline hd"><div class="sframe">سُورَةُ ${esc(s[0])}<small>${s[5]} ayat</small></div></div>`; continue; }
+    if(ln[0]==='h'){ const s=S[ln[1]-1]; h+=`<div class="mline hd"><div class="sframe"><span class="sn">${arNum(ln[1])}</span><span>سُورَةُ ${esc(s[0])}</span><small>آياتها ${arNum(s[5])}</small></div></div>`; continue; }
     if(ln[0]==='b'){ h+=`<div class="mline bl" style="font-family:'${set}p1'">${D.G.bas.map(w=>`<span>${w}</span>`).join('')}</div>`; continue; }
     const [cen,words,gs]=ln; let prevG=null;
     h+=`<div class="mline${cen?' cen':''}">`;
@@ -461,9 +467,9 @@ function buildGlyph(p,set){
 }
 function fitGlyph(){
   const pg=document.getElementById('mpage'); if(!pg) return;
-  const {W,H,land}=pageBox(pg), n=15, k=textZoom();
+  const {W,H,Hfont,land}=pageBox(pg), n=15, k=textZoom();
   let fs=W/G_EM*0.985, lh;
-  if(land) lh=fs*1.85; else { fs=Math.min(fs, H/n/1.62); lh=Math.min(H/n, fs*2.6); }
+  if(land) lh=fs*1.85; else { fs=Math.min(fs, Hfont/n/1.62); lh=Math.min(H/n, fs*2.6); }
   pg.style.fontSize=(fs/k)+'px'; pg.style.setProperty('--lh', lh+'px');
   squeeze(pg);
 }
@@ -490,7 +496,8 @@ function fitWhenReady(){
   setTimeout(refit,400); setTimeout(refit,1500);
 }
 if(document.fonts){ document.fonts.addEventListener?.('loadingdone', refit); }
-let rT; window.addEventListener('resize',()=>{ clearTimeout(rT); rT=setTimeout(refit,120); });
+let rT; window.addEventListener('resize',()=>{ clearTimeout(rT); rT=setTimeout(refit,80); });
+try{ new ResizeObserver(()=>{ if(main.classList.contains('fit')){ clearTimeout(rT); rT=setTimeout(refit,60); } }).observe(main); }catch(e){}
 
 
 function pageFoot(p){ return `<div class="pagefoot"><span class="pageno">${p}</span></div>`; }
