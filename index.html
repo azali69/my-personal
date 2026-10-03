@@ -73,7 +73,7 @@ main.fit{padding-block:8px 76px}
 
 /* Mushaf page: the 15 lines of the Madinah Mushaf, each line filling the width */
 .mpage{direction:rtl;font-family:var(--ar);--lh:2.1em;user-select:none;-webkit-user-select:none}
-.mline{display:flex;align-items:stretch;justify-content:center;height:var(--lh);white-space:nowrap;overflow:hidden}
+.mline{display:flex;align-items:stretch;justify-content:center;height:var(--lh);white-space:nowrap;padding-inline:.12em}
 .mline>span{display:flex;align-items:center;flex:none;cursor:pointer}
 .mline>.sp{flex:1 1 0;min-width:.22em;max-width:1.15em;cursor:default}
 .mline .sh{background:var(--shade)}
@@ -87,6 +87,13 @@ main.fit{padding-block:8px 76px}
 .mpage.short .mline>.sp{flex:0 0 .32em;min-width:.32em}
 .pagehead.tight{margin:0 2px 4px}
 .pagefoot.tight{margin-top:6px}
+/* Full-screen reading: tap the page to hide or show the bars */
+.top,.dock{transition:transform .22s ease,opacity .22s ease}
+body.immersive .top{display:none}
+body.immersive .dock{transform:translateY(110%);opacity:0;pointer-events:none}
+body.immersive main.fit{padding-block:max(10px,env(safe-area-inset-top,0px)) 10px}
+body.immersive main.fit{min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;justify-content:center}
+@media (prefers-reduced-motion:reduce){.top,.dock{transition:none}}
 /* Translation view */
 .rows{display:flex;flex-direction:column;gap:2px}
 .row{padding:12px 12px 14px;border-radius:14px;cursor:pointer}
@@ -251,6 +258,7 @@ function applyLook(){
   if(st.bg==='auto') r.removeAttribute('data-bg'); else r.setAttribute('data-bg', st.bg);
   r.style.setProperty('--arsize', (st.size||28)+'px');
   const m=document.querySelector('meta[name=theme-color]'); if(m) m.content=getComputedStyle(r).getPropertyValue('--bg').trim();
+  try{ const bg=getComputedStyle(r).getPropertyValue('--bg').trim(); window.AndroidSpeech?.setBarColor?.(bg, getComputedStyle(r).colorScheme.includes('dark')); }catch(e){}
 }
 
 /* Blocks (waqaf & ibtida' units) */
@@ -289,7 +297,7 @@ function renderReader(){
   main.classList.remove('fit');
   if(!st.tr && !st.size){
     main.classList.add('fit'); main.innerHTML = buildPage(p);
-    fitPage();
+    fitWhenReady();
   } else if(!st.tr){
     main.innerHTML = buildMushaf(g0,g1) + pageFoot(p);
   } else {
@@ -359,18 +367,27 @@ function buildPage(p){
 function fitPage(){
   const pg=document.getElementById('mpage'); if(!pg) return;
   const W=pg.clientWidth, n=Math.max(15,pg.children.length);
-  const dock=document.getElementById('dock').getBoundingClientRect().height;
+  const imm=document.body.classList.contains('immersive');
+  const dock=imm?0:document.getElementById('dock').getBoundingClientRect().height;
   const top=pg.getBoundingClientRect().top + window.scrollY;
-  const H=Math.max(300, window.innerHeight - top - dock - 52);
+  const H=Math.max(300, window.innerHeight - top - dock - (imm?44:52));
   let fs=Math.min(W/REF_EM, H/n/1.55);
   fs=Math.max(13, fs);
   const lh=Math.min(H/n, fs*2.3);
   pg.style.fontSize=fs+'px'; pg.style.setProperty('--lh', lh+'px');
-  for(const line of pg.children){ line.style.fontSize='';
-    if(line.scrollWidth>line.clientWidth+1){ line.style.fontSize=(fs*line.clientWidth/line.scrollWidth*0.99)+'px'; } }
+  for(const line of pg.children){ line.style.fontSize=''; let f=fs;
+    for(let k=0;k<4 && line.scrollWidth>line.clientWidth+0.5;k++){ f=f*line.clientWidth/line.scrollWidth*0.985; line.style.fontSize=f+'px'; } }
 }
-let rT; window.addEventListener('resize',()=>{ clearTimeout(rT); rT=setTimeout(()=>{ if(!hz && !st.tr && !st.size) fitPage(); },120); });
-if(document.fonts && document.fonts.ready) document.fonts.ready.then(()=>{ if(!hz && !st.tr && !st.size) fitPage(); });
+/* Fit only once the Arabic font is really in use; refit again when late fonts arrive. */
+function refit(){ if(hz || st.tr || st.size) return; fitPage(); }
+function fitWhenReady(){
+  refit();
+  try{ document.fonts.load('30px "KFGQPC Hafs"','بِسۡمِ').then(()=>{ refit(); requestAnimationFrame(refit); }); }catch(e){}
+  setTimeout(refit,400); setTimeout(refit,1500);
+}
+if(document.fonts){ document.fonts.addEventListener?.('loadingdone', refit); }
+let rT; window.addEventListener('resize',()=>{ clearTimeout(rT); rT=setTimeout(refit,120); });
+
 
 function pageFoot(p){ return `<div class="pagefoot"><span class="pageno">${p}</span></div>`; }
 function goPage(p, sel){ st.page=Math.min(604,Math.max(1,p)); st.sel = sel ?? null; renderReader();
@@ -380,7 +397,7 @@ function goAyah(g){ goPage(A[g][4], g); }
 /* ============================ SHEETS ============================ */
 const sheet=document.getElementById('sheet'), scrim=document.getElementById('scrim'), sheetB=document.getElementById('sheetB');
 function openSheet(title, html){ document.getElementById('sheetT').textContent=title; sheetB.innerHTML=html; sheetB.scrollTop=0; sheet.classList.add('open'); scrim.classList.add('open'); }
-function closeSheet(){ sheet.classList.remove('open'); scrim.classList.remove('open'); }
+function closeSheet(){ sheet.classList.remove('open'); scrim.classList.remove('open'); if(st.sel!=null && !hz){ st.sel=null; main.querySelectorAll('.sel').forEach(x=>x.classList.remove('sel')); } }
 scrim.onclick=closeSheet; document.getElementById('sheetX').onclick=closeSheet;
 document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeSheet();
   if(!sheet.classList.contains('open') && !hz && !/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)){
@@ -497,7 +514,22 @@ function ayahSheet(g){
   const bb=sheetB.querySelector('#aBlk'); if(bb) bb.onclick=()=>{ st.mine.has(g)?st.mine.delete(g):st.mine.add(g); if(st.blocks!=='mine'){st.blocks='mine'; toast('Switched to My blocks');} else toast(st.mine.has(g)?'Block starts here':'Block start removed'); save(); closeSheet(); renderReader(); };
   sheetB.querySelector('#aCopy').onclick=async()=>{ const t=`${a[2]}\n(${S[a[0]-1][1]} ${a[0]}:${a[1]})`; try{ await navigator.clipboard.writeText(t); toast('Copied'); }catch(e){ toast('Copy is not allowed here. Select the text instead.'); } };
 }
-main.addEventListener('click',e=>{ if(hz) return; const t=e.target.closest('[data-g]'); if(t) ayahSheet(+t.dataset.g); });
+/* Reading gestures: tap = show/hide bars, long-press on an ayah = its menu. Translation rows open the menu on tap. */
+let lpT=null, lpFired=false, lpX=0, lpY=0;
+function setImmersive(on){ document.body.classList.toggle('immersive',on); try{ window.AndroidSpeech?.setImmersive?.(on); }catch(e){} setTimeout(refit,240); store.set('imm',on); }
+main.addEventListener('pointerdown',e=>{ if(hz) return; lpFired=false; lpX=e.clientX; lpY=e.clientY; clearTimeout(lpT);
+  const t=e.target.closest('.mline [data-g], .ay[data-g]'); if(!t) return;
+  lpT=setTimeout(()=>{ lpFired=true; if(navigator.vibrate) try{navigator.vibrate(12);}catch(_){} ayahSheet(+t.dataset.g); },480); });
+main.addEventListener('pointermove',e=>{ if(Math.abs(e.clientX-lpX)>10||Math.abs(e.clientY-lpY)>10) clearTimeout(lpT); });
+['pointerup','pointercancel','pointerleave'].forEach(ev=>main.addEventListener(ev,()=>clearTimeout(lpT)));
+main.addEventListener('contextmenu',e=>{ if(!hz) e.preventDefault(); });
+main.addEventListener('click',e=>{ if(hz) return;
+  if(lpFired){ lpFired=false; return; }
+  if(Math.abs(e.clientX-lpX)>10||Math.abs(e.clientY-lpY)>10) return;
+  const row=e.target.closest('.row[data-g]'); if(row){ ayahSheet(+row.dataset.g); return; }
+  if(e.target.closest('.surah-h,.pagehead')) return;
+  setImmersive(!document.body.classList.contains('immersive'));
+  if(!store.get('tipImm',false)){ store.set('tipImm',true); toast('Tap to show or hide the bars. Long-press an ayah for options.'); } });
 
 /* Swipe (RTL book: swipe right = next page) */
 let tx=null,ty=null;
@@ -572,6 +604,7 @@ function startHz(g0,g1){
   while(words>420 && g1>g0){ words-=A[g1][3].split(' ').length; g1--; }
   const E=[],ref=[],vb=new Set(),idx=new Map();
   for(let g=g0;g<=g1;g++){ vb.add(E.length); A[g][3].split(' ').forEach((w,j)=>{ idx.set(g+','+j,E.length); E.push(normAr(w)); ref.push([g,j]); }); }
+  if(document.body.classList.contains('immersive')) setImmersive(false);
   hz={g0,g1,E,ref,vb,idx,finals:[],interim:'',peek:false,res:null,typed:false,done:false,startedAt:Date.now()};
   document.getElementById('dock').classList.add('hz');
   renderHz(); window.scrollTo(0,0);
@@ -739,9 +772,10 @@ document.getElementById('next').onclick=()=>goPage(st.page+1);
 document.getElementById('prev').onclick=()=>goPage(st.page-1);
 window.matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change',applyLook);
 
-window.__back=()=>{ if(sheet.classList.contains('open')){ closeSheet(); return true; } if(hz){ if(rec) stopListen(false); hz=null; renderReader(); return true; } return false; };
+window.__back=()=>{ if(sheet.classList.contains('open')){ closeSheet(); return true; } if(document.body.classList.contains('immersive')){ setImmersive(false); return true; } if(hz){ if(rec) stopListen(false); hz=null; renderReader(); return true; } return false; };
 window.__pause=()=>{ if(rec) stopListen(false); };
 applyLook();
+if(store.get('imm',false)) setImmersive(true);
 if('serviceWorker' in navigator && /github\.io$/.test(location.hostname)){ navigator.serviceWorker.register('sw.js').catch(()=>{}); }
 (function boot(){ const h=(location.hash||'').slice(1); let r=null;
   if(h){ r=parseRef(h.replace('.',':')) || parseRef(h); }

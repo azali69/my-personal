@@ -11,6 +11,9 @@ import android.os.Bundle;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
+import android.view.View;
+import android.view.WindowInsets;
+import android.view.WindowInsetsController;
 import android.view.WindowManager;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebResourceRequest;
@@ -108,6 +111,49 @@ public class MainActivity extends Activity {
         @JavascriptInterface
         public void stop() {
             runOnUiThread(() -> { if (recognizer != null) recognizer.stopListening(); });
+        }
+
+        @JavascriptInterface
+        public void setImmersive(final boolean on) {
+            runOnUiThread(() -> {
+                if (Build.VERSION.SDK_INT >= 30) {
+                    WindowInsetsController c = getWindow().getInsetsController();
+                    if (c == null) return;
+                    int types = WindowInsets.Type.statusBars() | WindowInsets.Type.navigationBars();
+                    if (on) {
+                        c.setSystemBarsBehavior(WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
+                        c.hide(types);
+                    } else c.show(types);
+                } else {
+                    int f = on ? (View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
+                               : View.SYSTEM_UI_FLAG_VISIBLE;
+                    getWindow().getDecorView().setSystemUiVisibility(f);
+                }
+            });
+        }
+
+        @JavascriptInterface
+        public void setBarColor(final String hex, final boolean dark) {
+            runOnUiThread(() -> {
+                try {
+                    int c = Color.parseColor(hex);
+                    getWindow().setStatusBarColor(c);
+                    getWindow().setNavigationBarColor(c);
+                    web.setBackgroundColor(c);
+                    if (Build.VERSION.SDK_INT >= 30) {
+                        WindowInsetsController ic = getWindow().getInsetsController();
+                        if (ic != null) {
+                            int mask = WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS | WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS;
+                            ic.setSystemBarsAppearance(dark ? 0 : mask, mask);
+                        }
+                    } else if (Build.VERSION.SDK_INT >= 23) {
+                        View d = getWindow().getDecorView();
+                        int f = d.getSystemUiVisibility();
+                        f = dark ? (f & ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR) : (f | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+                        d.setSystemUiVisibility(f);
+                    }
+                } catch (Exception ignored) { }
+            });
         }
 
         @JavascriptInterface
