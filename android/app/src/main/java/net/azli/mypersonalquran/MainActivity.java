@@ -103,6 +103,8 @@ public class MainActivity extends Activity {
         s.setMediaPlaybackRequiresUserGesture(true);
         s.setAllowFileAccess(false);
         s.setAllowContentAccess(false);
+        // The app has its own text-size setting: ignore the phone's system font size so pages look the same on every phone
+        s.setTextZoom(100);
 
         final WebViewAssetLoader loader = new WebViewAssetLoader.Builder()
                 .setDomain(HOST)

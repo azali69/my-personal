@@ -632,7 +632,8 @@ function goAyah(g){ goPage(A[g][4], g); }
 const sheet=document.getElementById('sheet'), scrim=document.getElementById('scrim'), sheetB=document.getElementById('sheetB');
 function openSheet(title, html){ sheetB.onclick=null; document.getElementById('sheetT').textContent=title; sheetB.innerHTML=html; sheetB.scrollTop=0; sheet.classList.add('open'); scrim.classList.add('open'); sheetAt=performance.now(); }
 function closeSheet(){ try{ stopVoiceSearch(); }catch(e){} sheet.classList.remove('open'); scrim.classList.remove('open'); if(st.sel!=null && !hz){ st.sel=null; main.querySelectorAll('.sel').forEach(x=>x.classList.remove('sel')); } }
-let sheetAt=0; scrim.onclick=()=>{ if(performance.now()-sheetAt<500) return; closeSheet(); };  // the tap that ends a long-press must not close the box it opened document.getElementById('sheetX').onclick=closeSheet;
+let sheetAt=0; scrim.onclick=()=>{ if(performance.now()-sheetAt<500) return; closeSheet(); };  // the tap that ends a long-press must not close the box it opened
+document.getElementById('sheetX').onclick=closeSheet;
 document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeSheet();
   if(!sheet.classList.contains('open') && !hz && !/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)){
     if(e.key==='ArrowLeft') turnPage(1); if(e.key==='ArrowRight') turnPage(-1); }});
