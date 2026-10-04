@@ -96,6 +96,11 @@ main.fit{padding-block:8px 76px}
 .pagehead.tight{margin:0 2px 4px}
 .pagefoot.tight{margin-top:6px}
 .mline .sh2,.sh2{background:color-mix(in srgb,var(--accent) 17%,var(--bg))}
+.mline .rk,.ay.rk,.row.rk{background:color-mix(in srgb,#c79a3a 12%,var(--bg))}
+.mline .rk2,.ay.rk2,.row.rk2{background:color-mix(in srgb,#c79a3a 36%,var(--bg))}
+body:has(.selbar) .toast{bottom:auto;top:calc(80px + env(safe-area-inset-top,0px))}
+.rkedit .mline [data-g],.rkedit .ay,.rkedit .row{cursor:cell}
+.rkstart{box-shadow:inset -3px 0 0 #b07d1f}
 .mline .pick{background:color-mix(in srgb,var(--accent) 38%,transparent)!important}
 main{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
 .selbar{position:fixed;left:0;right:0;bottom:calc(76px + env(safe-area-inset-bottom,0px));z-index:30;display:flex;justify-content:center;pointer-events:none;padding:0 12px}
@@ -317,7 +322,7 @@ function applyLook(){
 /* Blocks (waqaf & ibtida' units) */
 function isBlockStart(g){
   if (A[g][1]===1) return true;
-  if (st.blocks==='ruku') return rukuStarts.has(g);
+  if (st.blocks==='ruku') return rkIsStart(g);
   if (st.blocks==='mine') return false;
   return false;
 }
@@ -352,9 +357,36 @@ function posLabel(p,end){ const g=Pg(p), w=Pw(p), a=A[g]; const n=wcount(g);
   return `${a[0]}:${a[1]} (word ${w+1})`; }
 function blockLabel(b){ return `${S[A[Pg(b.s)][0]-1][1]} ${posLabel(b.s,false)} – ${posLabel(b.e,true)}`; }
 /* shading helpers shared by every view */
-function wshade(g,w){ if(st.blocks==='mine'){ const i=myBlockAt(P_(g,w)); return i<0?'':(i%2?' sh2':' sh'); } return shadeOf(g)?' sh':''; }
-function ashade(g){ if(st.blocks==='mine'){ const i=myBlockInAyah(g); return i<0?'':(i%2?' sh2':' sh'); } return shadeOf(g)?' sh':''; }
+function rkTone(g){ return st.blocks==='ruku' ? (blockIndex(g)%2?' rk2':' rk') : ''; }
+function wshade(g,w){ if(st.blocks==='mine'){ const i=myBlockAt(P_(g,w)); return i<0?'':(i%2?' sh2':' sh'); } return rkTone(g); }
+function ashade(g){ if(st.blocks==='mine'){ const i=myBlockInAyah(g); return i<0?'':(i%2?' sh2':' sh'); } return rkTone(g); }
 function sameGroup(pg,pw,g,w){ if(st.blocks==='mine'){ const a=myBlockAt(P_(pg,pw)); return a>=0 && a===myBlockAt(P_(g,w)); } return pg===g || !isBlockStart(g); }
+/* ---- Ruku' sections: original Tanzil set plus your saved changes ---- */
+let rkEd=Object.assign({add:[],del:[]}, store.get('rkEdit',{})); let rkAdd=new Set(rkEd.add), rkDel=new Set(rkEd.del); let rkDraft=null;
+function rkIsStart(g){ if(A[g][1]===1) return true; if(rkDraft) return rkDraft.has(g); return (rukuStarts.has(g)&&!rkDel.has(g))||rkAdd.has(g); }
+function rkEffective(){ const s=new Set(); for(let g=0;g<N;g++) if(A[g][1]!==1 && ((rukuStarts.has(g)&&!rkDel.has(g))||rkAdd.has(g))) s.add(g); return s; }
+function rkChanges(){ return rkAdd.size+rkDel.size; }
+function rkSave(draft){ rkAdd=new Set(); rkDel=new Set();
+  for(const g of draft) if(!rukuStarts.has(g)) rkAdd.add(g);
+  for(const g of rukuStarts) if(A[g][1]!==1 && !draft.has(g)) rkDel.add(g);
+  store.set('rkEdit',{add:[...rkAdd],del:[...rkDel]}); }
+let rkBar=null;
+function rkEditStart(){ st.blocks='ruku'; store.set('lastBlocks','ruku'); save(); syncBlkBtn(); rkDraft=rkEffective(); closeSheet(); document.body.classList.add('rkedit');
+  if(rkBar) rkBar.remove(); rkBar=document.createElement('div'); rkBar.className='selbar';
+  rkBar.innerHTML=`<div class="selbar-in"><div class="selbar-t" id="rkT"></div><div class="selbar-b">
+    <button class="pri" data-a="save">Save</button><button data-a="cancel">Cancel</button><button data-a="surah">Original for this surah</button></div></div>`;
+  document.body.appendChild(rkBar); rkInfo();
+  rkBar.onclick=e=>{ const b=e.target.closest('button'); if(!b) return; const a=b.dataset.a;
+    if(a==='save'){ rkSave(rkDraft); rkEditEnd(); toast(`Ruku' sections saved${rkChanges()?` · ${rkChanges()} change${rkChanges()===1?'':'s'} from the original`:''}`); }
+    else if(a==='cancel'){ rkEditEnd(); toast('No changes saved'); }
+    else if(a==='surah'){ const sNo=A[pageStart[st.page]][0], s0=surahStart[sNo], s1=s0+S[sNo-1][5]-1;
+      for(let g=s0;g<=s1;g++){ rkDraft.delete(g); if(rukuStarts.has(g)&&A[g][1]!==1) rkDraft.add(g); } rkInfo(); renderReader(); } };
+  renderReader(); }
+function rkInfo(){ const t=document.getElementById('rkT'); if(t) t.textContent="Editing ruku' sections: tap an ayah to start a new section there. Tap the first ayah of a section to join it to the one before."; }
+function rkEditEnd(){ rkDraft=null; document.body.classList.remove('rkedit'); if(rkBar){ rkBar.remove(); rkBar=null; } renderReader(); }
+function rkToggle(g){ if(A[g][1]===1){ toast('Ayah 1 always starts a section'); return; }
+  if(rkDraft.has(g)){ rkDraft.delete(g); toast(`Joined ${A[g][0]}:${A[g][1]} to the section before`); } else { rkDraft.add(g); toast(`New section starts at ${A[g][0]}:${A[g][1]}`); }
+  renderReader(); }
 function blockFor(g){
   if(st.blocks==='mine'){ const i=myBlockInAyah(g); if(i<0) return null; const b=st.myb[i]; return {g0:Pg(b.s),g1:Pg(b.e),b,label:blockLabel(b)}; }
   if(st.blocks==='ruku'){ const [a,z]=blockRange(g); return {g0:a,g1:z,b:null,label:`Ruku' ${A[a][0]}:${A[a][1]}–${A[z][1]}`}; }
@@ -693,7 +725,7 @@ function setSheet(){
   <div class="label">More</div>
   <div class="actions"><button id="openHist">${ic('hist')}Hafazan history</button><button id="openAbout">${ic('info')}Sources &amp; verification</button></div>`);
   const note=()=>{ document.getElementById('blkNote').innerHTML = st.blocks==='ruku'
-    ? "Shading follows the traditional <b>ruku'</b> sections, each marked ع in many mushafs. They group ayat by theme. They are not the same as the Ayah app's blocks."
+    ? "Gold shading follows the traditional <b>ruku'</b> sections, marked ع in many mushafs. You can edit them from the blocks button in the top bar."
     : st.blocks==='mine' ? `Long-press a word, keep holding and drag to the last word, then tap <b>Make block</b>. Or use the blocks button in the top bar to enter numbers. You have ${st.myb.length} block${st.myb.length===1?'':'s'} on this device.`
     : 'No shading. The waqf signs inside the text are always shown.'; };
   note();
@@ -762,6 +794,9 @@ function blocksSheet(g){
      <button data-go="${i}">Go</button><button data-hz="${i}">Hafazan</button><button data-del="${i}" aria-label="Delete block">✕</button></li>`).join('');
   openSheet("Waqaf & ibtida' blocks", `
    <div class="seg" id="bkMode">${[['off','Off'],['ruku',"Ruku' (ع)"],['mine','My blocks']].map(([v,l])=>`<button data-v="${v}" aria-pressed="${st.blocks===v}">${l}</button>`).join('')}</div>
+   ${st.blocks==='ruku'?`<div class="label">Ruku' sections</div>
+   <div class="actions"><button id="rkE">${ic('blk')}Edit ruku' sections</button>${rkChanges()?`<button id="rkR">${ic('hist')}Restore all original sections (${rkChanges()} change${rkChanges()===1?'':'s'})</button>`:''}</div>
+   <p class="note">Ruku' are shown in gold, My blocks in green.${rkChanges()?' Your edited version is in use.':''}</p>`:''}
    <div class="label">Add a block by number</div>
    <div class="grid3"><label>From</label>
      <select class="field" id="bS1">${sOpts(s)}</select><input class="field" id="bA1" type="number" inputmode="numeric" min="1" value="${a[1]}" aria-label="From ayah" placeholder="Ayah"><input class="field" id="bW1" type="number" inputmode="numeric" min="1" placeholder="Word" aria-label="From word (optional)">
@@ -773,6 +808,8 @@ function blocksSheet(g){
    ${st.myb.length?`<ul class="blist" style="list-style:none;padding:0;margin:8px 0 0">${list}</ul><div class="row2" style="margin-top:10px"><button class="pill" id="bClr">Delete all blocks</button></div>`:'<p class="empty">No blocks yet.</p>'}`);
   document.getElementById('bkMode').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; st.blocks=b.dataset.v; if(st.blocks!=='off') store.set('lastBlocks',st.blocks);
     sheetB.querySelectorAll('#bkMode button').forEach(x=>x.setAttribute('aria-pressed',x===b)); save(); syncBlkBtn(); rerender(); };
+  const rkE=document.getElementById('rkE'); if(rkE) rkE.onclick=rkEditStart;
+  const rkR=document.getElementById('rkR'); if(rkR) rkR.onclick=()=>{ if(rkR.dataset.sure){ rkAdd=new Set(); rkDel=new Set(); store.set('rkEdit',{add:[],del:[]}); rerender(); blocksSheet(cur); toast("Original ruku' sections restored"); } else { rkR.dataset.sure='1'; rkR.lastChild.textContent='Tap again to restore the original sections'; } };
   document.getElementById('bAdd').onclick=()=>{
     const num=id=>{ const v=document.getElementById(id).value.trim(); return v===''?null:+v; };
     const s1=+bS1.value, s2=+bS2.value; let a1=num('bA1'), a2=num('bA2'); const w1=num('bW1'), w2=num('bW2');
@@ -816,6 +853,7 @@ function ayahSheet(g){
     <button id="aHz">${ic('mic')}Hafazan from this ayah to the end of the page</button>
     ${bf?`<button id="aHzB">${ic('mic')}Hafazan this block (${esc(bf.label)})</button>`:''}
     <button id="aBlk">${ic('blk')}Make a block starting here…</button>
+    ${st.blocks==='ruku'?`<button id="aRk">${ic('blk')}Edit ruku' sections</button>`:''}
     <button id="aCopy">${ic('copy')}Copy ayat and translation…</button>
    </div>`);
   sheetB.querySelector('#aBm').onclick=e=>{ const b=e.target.closest('button'); if(!b) return;
@@ -825,6 +863,7 @@ function ayahSheet(g){
   sheetB.querySelector('#aHz').onclick=()=>{ closeSheet(); startHz(g, pageStart[a[4]+1]-1); };
   const hb=sheetB.querySelector('#aHzB'); if(hb) hb.onclick=()=>{ closeSheet(); startHz(bf.g0,bf.g1,bf.b); };
   sheetB.querySelector('#aBlk').onclick=()=>blocksSheet(g);
+  const ark=sheetB.querySelector('#aRk'); if(ark) ark.onclick=rkEditStart;
   sheetB.querySelector('#aCopy').onclick=()=>copySheet(g);
 }
 /* Reading gestures: tap = show/hide bars, long-press on an ayah = its menu. Translation rows open the menu on tap. */
@@ -843,7 +882,7 @@ function paintSel(){ const lo=Math.min(selA,selB), hi=Math.max(selA,selB);
   main.querySelectorAll('.mline [data-g][data-w]').forEach(x=>{ const p=posOf(x); if(p>=lo&&p<=hi) x.classList.add('pick'); });
   main.querySelectorAll('.ay[data-g], .row[data-g]').forEach(x=>{ const g=+x.dataset.g; if(P_(g,wcount(g)-1)>=lo && P_(g,0)<=hi) x.classList.add('pick'); }); }
 function hitToRange(h,first){ if(h.p!=null) return [h.p,h.p]; return [P_(h.g,0),P_(h.g,wcount(h.g)-1)]; }
-main.addEventListener('pointerdown',e=>{ if(hz) return; lpFired=false; selMoved=false; lpX=e.clientX; lpY=e.clientY; clearTimeout(lpT);
+main.addEventListener('pointerdown',e=>{ if(hz||rkDraft) return; lpFired=false; selMoved=false; lpX=e.clientX; lpY=e.clientY; clearTimeout(lpT);
   const h=hitAt(e.clientX,e.clientY); if(!h) return;
   lpT=setTimeout(()=>{ lpFired=true; selecting=true; if(navigator.vibrate) try{navigator.vibrate(12);}catch(_){}
     const r=hitToRange(h); selA=r[0]; selB=r[1]; selAnchor=h; paintSel(); },430); });
@@ -875,6 +914,7 @@ main.addEventListener('contextmenu',e=>{ if(!hz) e.preventDefault(); });
 main.addEventListener('click',e=>{ if(hz) return;
   if(lpFired){ lpFired=false; return; }
   if(selBar){ hideSelBar(); return; }
+  if(rkDraft){ const t=e.target.closest('[data-g]'); if(t) rkToggle(+t.dataset.g); return; }
   if(Math.abs(e.clientX-lpX)>10||Math.abs(e.clientY-lpY)>10) return;
   const row=e.target.closest('.row[data-g]'); if(row){ ayahSheet(+row.dataset.g); return; }
   if(e.target.closest('.surah-h,.pagehead')) return;
@@ -1143,7 +1183,7 @@ document.getElementById('next').onclick=()=>goPage(st.page+1);
 document.getElementById('prev').onclick=()=>goPage(st.page-1);
 window.matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change',applyLook);
 
-window.__back=()=>{ if(sheet.classList.contains('open')){ closeSheet(); return true; } if(document.body.classList.contains('immersive')){ setImmersive(false); return true; } if(hz){ if(rec) stopListen(false); hz=null; renderReader(); return true; } return false; };
+window.__back=()=>{ if(sheet.classList.contains('open')){ closeSheet(); return true; } if(rkDraft){ rkEditEnd(); toast('No changes saved'); return true; } if(document.body.classList.contains('immersive')){ setImmersive(false); return true; } if(hz){ if(rec) stopListen(false); hz=null; renderReader(); return true; } return false; };
 window.__pause=()=>{ if(rec) stopListen(false); };
 applyLook();
 if(store.get('imm',false)) setImmersive(true);
