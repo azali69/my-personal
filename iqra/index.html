@@ -62,7 +62,9 @@ button:focus-visible,.tile:focus-visible,input:focus-visible{outline:3px solid v
 .tile.sel{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent) inset}
 .tile.has-audio .code::after{content:" ♪";color:var(--accent)}
 .hide-tr .tile .tr{visibility:hidden}
-.detail{position:sticky;bottom:12px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:12px 16px;display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;box-shadow:0 6px 24px rgb(0 0 0 / .08)}
+.detail .row{grid-column:1/-1}
+.spk::before{content:"";display:inline-block;width:0;height:0;border-style:solid;border-width:.38em .5em .38em 0;border-color:transparent currentColor transparent transparent;margin-right:.5em;transform:scaleX(-1);vertical-align:.02em}
+.detail{position:sticky;bottom:12px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:12px 16px;display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:center;box-shadow:0 6px 24px rgb(0 0 0 / .08)}
 .detail .ar{font-size:2.6rem;line-height:1.3;color:var(--accent)}
 .detail .info{min-width:0}
 .section-h{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap}
@@ -169,7 +171,7 @@ function lev(a,b){const m=a.length,n=b.length;const d=Array.from({length:m+1},(_
 function accepts(it){
   const ok=new Set();let main;
   if(it.bare){it.say.forEach(n=>{const x=norm(n);ok.add(x);ok.add(x.replace(/ء$/,''))});main=norm(it.say[0])}
-  else if(it.syl){const b=norm(it.ar);const v=it.tr.slice(-1);(v==='a'?['','ا','ه']:v==='i'?['','ي']:['','و']).forEach(x=>ok.add(b+x));main=b}
+  else if(it.syl){const b=norm(it.ar);const v=it.tr.slice(-1);(v==='a'?['','ا','ه','اء','اه','ى']:v==='i'?['','ي','يء','ىء']:['','و','وء']).forEach(x=>ok.add(b+x));main=b}
   else{main=norm(it.ar);ok.add(main);if(/an$/.test(it.tr)&&main.endsWith('ا'))ok.add(main.slice(0,-1))}
   return {ok,main};
 }
@@ -205,7 +207,9 @@ const VMSG={blocked:'The microphone isn’t available here. Open the app in Chro
 async function voiceCheck(it,btn,out){
   if(!SR){out.className='vres no';out.textContent=VMSG.blocked;return null}
   const label=btn.textContent;btn.disabled=true;btn.textContent='Listening…';out.className='vres';out.textContent='Read it aloud now.';
-  try{const alts=await listen();const j=judge(it,alts);
+  try{const t0=Date.now();let alts;
+    try{alts=await listen()}catch(c){if(c==='nospeech'&&Date.now()-t0<3000){out.textContent='Read it aloud now.';alts=await listen()}else throw c}
+    const j=judge(it,alts);
     out.className='vres '+j.res;
     out.innerHTML=(j.res==='ok'?'Recognised. ':j.res==='close'?'Close, but not the same. Compare carefully with the tile. ':'Not recognised. Try again. ')+(j.heard?`Heard: <span class="ar">${esc(j.heard)}</span>`:'');
     return j.res}
@@ -281,10 +285,11 @@ function renderDetail(it,tile,tip){
   const has=!!audio[it.code];const hasTry=!!tries[it.code];
   const btns=teacher
     ?`${has?'<button class="btn" id="again">Play</button>':''}<button class="btn primary rec" id="rec">${has?'Re-record':'Record'}</button>${has?'<button class="btn ghost" id="del">Delete</button>':''}`
-    :`${has?'<button class="btn" id="again">Play</button>':''}<button class="btn primary mic" id="say">Say it</button><button class="btn rec" id="mytry">Record my try</button>${hasTry?'<button class="btn" id="cmp">'+(has?'Compare':'Play my try')+'</button>':''}`;
+    :`<button class="btn spk" id="tv">Teacher’s voice</button><button class="btn primary mic" id="say">Say it</button><button class="btn rec" id="mytry">Record my try</button>${hasTry?'<button class="btn" id="cmp">'+(has?'Compare':'Play my try')+'</button>':''}`;
   d.innerHTML=`<span class="ar">${it.ar}</span><span class="info"><strong>${esc(it.tr)}</strong>${it.name?` <span class="muted">· ${esc(it.name)}</span>`:''}${it.en?`<br><span class="muted">${esc(it.en)}</span>`:''}${tip?`<br><span class="note">${esc(tip)}</span>`:''}</span><span class="row">${btns}</span><p class="vres" id="vres" style="grid-column:1/-1" aria-live="polite"></p>`;
   const out=document.getElementById('vres');const $=id=>document.getElementById(id);
   if($('again'))$('again').onclick=()=>play(it.code);
+  if($('tv'))$('tv').onclick=()=>{if(!play(it.code)){out.className='vres';out.textContent='No teacher recording for this tile yet. Turn on Teacher recording mode at the top of the step to record it.'}};
   if($('say'))$('say').onclick=()=>voiceCheck(it,$('say'),out);
   if($('cmp'))$('cmp').onclick=()=>compare(it.code);
   if($('rec'))$('rec').onclick=()=>recordToggle($('rec'),out,async blob=>{try{await saveClip(it.code,blob);tile.classList.add('has-audio');renderDetail(it,tile,tip);const o=document.getElementById('vres');o.className='vres ok';o.textContent='Saved as the reference for '+it.code+'. Tap Play to check it.';play(it.code)}catch(e){out.className='vres no';out.textContent='Could not save the recording on this device.'}});
@@ -336,9 +341,9 @@ function readAloud(li){
     const it=qs[k];let counted=false;
     app.innerHTML=`<div class="row"><button class="btn ghost" id="quit">← Back to step ${li+1}</button></div>
     <div class="top"><h2>Read aloud</h2><span class="note">${k+1} of ${qs.length} · ${score} recognised</span></div>
-    <div class="q"><p class="muted">${it.bare?'Say the name of this letter.':'Read this aloud.'}</p><div class="ar big">${it.ar}</div>
+    <div class="q"><p class="muted">${it.bare?'Say the name of this letter.':'Read this aloud.'}${audio[it.code]?' Tap “Teacher’s voice” to hear it first.':''}</p><div class="ar big">${it.ar}</div>
     <p class="note" id="ans" hidden>${esc(it.tr)}${it.en?` · ${esc(it.en)}`:''}</p>
-    <div class="row" style="justify-content:center"><button class="btn primary mic" id="say">Say it</button>${audio[it.code]?'<button class="btn" id="hear">Play</button>':''}<button class="btn ghost" id="show">Show answer</button><button class="btn" id="next">Next →</button></div>
+    <div class="row" style="justify-content:center"><button class="btn primary mic" id="say">Say it</button>${audio[it.code]?'<button class="btn spk" id="hear">Teacher’s voice</button>':''}<button class="btn ghost" id="show">Show answer</button><button class="btn" id="next">Next →</button></div>
     <p class="vres" id="vres" aria-live="polite"></p></div>`;
     document.getElementById('quit').onclick=()=>lesson(li);
     const h=document.getElementById('hear');if(h)h.onclick=()=>play(it.code);
