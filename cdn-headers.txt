@@ -1,0 +1,81 @@
+== plain p1
+HTTP/2 200 
+date: Sun, 04 Oct 2026 18:40:11 GMT
+content-type: font/woff2
+content-length: 24428
+accept-ranges: bytes
+access-control-allow-headers: *
+access-control-allow-methods: GET, HEAD, POST, PUT, DELETE, MOVE, OPTIONS
+access-control-allow-origin: *
+access-control-expose-headers: Date, Etag, Content-Length, Accept-Ranges, Content-Range, Server, Location, X-Amz-Version-Id, X-Amz-Checksum-Crc32, X-Amz-Checksum-Crc32c, X-Amz-Checksum-Crc64nvme, X-Amz-Checksum-Sha1, X-Amz-Checksum-Sha256
+access-control-max-age: 86400
+etag: "27d6b879a0535ea3d17cbf35b550f198"
+last-modified: Mon, 05 Jan 2026 16:55:56 GMT
+server: cloudflare
+x-amz-id-2: bzhjGTDJfU6QKd3+1tejqGeG1uel2GcD/+FA51lXJlFu2z7PZz2Ng5EeRhDELYk5U3VYYcROqkbV
+x-amz-request-id: 5895713DD4D1FDEE:A
+x-amz-version-id: 001767632155891696530-4RybhPGpUZ
+x-wasabi-cm-reference-id: 1791018000 B11-U16.prod1.ashburn 1836285116:17609992:82
+age: 121211
+cache-control: max-age=14400
+cf-cache-status: HIT
+vary: accept-encoding
+report-to: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=7b9od8OO4w8B6Rd92%2BB%2FjD%2BhoZR3ay%2BnCFWlnrjvoIFHe48S%2FQpKstPNGvb2AB8yL2lvAeXZENNBe2L39Y1EwuZAtloL7QUweGiivxT9nT9dC4kor6XQ056P49WBCMfRuMiT29codg%3D%3D"}]}
+nel: {"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}
+cf-ray: a456504a3d4ed6dd-IAD
+alt-svc: h3=":443"; ma=86400
+
+== tajweed p1
+HTTP/2 200 
+date: Sun, 04 Oct 2026 18:40:11 GMT
+content-type: font/woff2
+content-length: 27432
+accept-ranges: bytes
+access-control-allow-headers: *
+access-control-allow-methods: GET, HEAD, POST, PUT, DELETE, MOVE, OPTIONS
+access-control-allow-origin: *
+access-control-expose-headers: Date, Etag, Content-Length, Accept-Ranges, Content-Range, Server, Location, X-Amz-Version-Id, X-Amz-Checksum-Crc32, X-Amz-Checksum-Crc32c, X-Amz-Checksum-Crc64nvme, X-Amz-Checksum-Sha1, X-Amz-Checksum-Sha256
+access-control-max-age: 86400
+etag: "d62cc89357a412f5c58f11fa8063fde3"
+last-modified: Tue, 06 Jan 2026 07:37:23 GMT
+server: cloudflare
+x-amz-id-2: XBMrw/EV2Iqp5tgr4L7qJtCzc7e5VHc0te+hrhxk6648kxVAo9aidVLmsmJ6DPT7QNm/OFwkw1nX
+x-amz-request-id: 88B23F86B0FC88FC:A
+x-amz-version-id: 001767685043262811116-PE7VQf22UK
+x-wasabi-cm-reference-id: 1791018000 B11-U16.prod1.ashburn 1836285285:17698861:22
+age: 121210
+cache-control: max-age=14400
+cf-cache-status: HIT
+vary: accept-encoding
+report-to: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=hQK%2FdVi50chSiQsYg%2BJbCsQodIZyiOUHLNBhmm2KEP%2FIz1Rp1YEGdGM1Rp6FHslbz%2BVdPZQeqoQieb7ELc1OQDCzNJIUqFzbbIZvp8tevIeBmC09rRUi6ztaUJFyz9O%2F9L58g5DcGg%3D%3D"}]}
+nel: {"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}
+cf-ray: a456504a7d099c2e-IAD
+alt-svc: h3=":443"; ma=86400
+
+== tajweed p328
+HTTP/2 200 
+date: Sun, 04 Oct 2026 18:40:11 GMT
+content-type: font/woff
+content-length: 105800
+accept-ranges: bytes
+access-control-allow-headers: *
+access-control-allow-methods: GET, HEAD, POST, PUT, DELETE, MOVE, OPTIONS
+access-control-allow-origin: *
+access-control-expose-headers: Date, Etag, Content-Length, Accept-Ranges, Content-Range, Server, Location, X-Amz-Version-Id, X-Amz-Checksum-Crc32, X-Amz-Checksum-Crc32c, X-Amz-Checksum-Crc64nvme, X-Amz-Checksum-Sha1, X-Amz-Checksum-Sha256
+access-control-max-age: 86400
+etag: "2af5d3636183097c610dfc2054c039a8"
+last-modified: Thu, 08 Jan 2026 10:18:49 GMT
+server: cloudflare
+x-amz-id-2: oG/Oswoco2hDg211T4O38i/sPDLKFzcnEi/sTkLq1XVXjLLXYcaRfE45+5Byy6UToU1AwEOhaFfV
+x-amz-request-id: 11CD8244588B5510:A
+x-amz-version-id: 001767867528667688467-HFZ2eu77bF
+x-wasabi-cm-reference-id: 1791018001 B11-U16.prod1.ashburn 1836285422:17595218:102
+age: 121210
+cache-control: max-age=14400
+cf-cache-status: HIT
+vary: accept-encoding
+report-to: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=AP2KvuhjDn2c5Bxkw9CMc5EG2b4bgrlngJJtsUPdk4WI6d0Q0FGnc9CWEsAgg66%2FeHCMJLU%2BGFZSs5z2gZ1DNSufx5WfhTlMGMRmBtS9ZYjooRRG%2F9PZx31Uo4sstWKO5I27rqwUSw%3D%3D"}]}
+nel: {"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}
+cf-ray: a456504acc765d29-IAD
+alt-svc: h3=":443"; ma=86400
+

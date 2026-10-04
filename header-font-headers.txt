@@ -1,0 +1,25 @@
+HTTP/2 200 
+date: Sun, 04 Oct 2026 18:40:11 GMT
+content-type: font/ttf
+content-length: 1832408
+accept-ranges: bytes
+access-control-allow-headers: *
+access-control-allow-methods: GET, HEAD, POST, PUT, DELETE, MOVE, OPTIONS
+access-control-allow-origin: *
+access-control-expose-headers: Date, Etag, Content-Length, Accept-Ranges, Content-Range, Server, Location, X-Amz-Version-Id, X-Amz-Checksum-Crc32, X-Amz-Checksum-Crc32c, X-Amz-Checksum-Crc64nvme, X-Amz-Checksum-Sha1, X-Amz-Checksum-Sha256
+access-control-max-age: 86400
+etag: "ef26dea98bb7962cf841ca95ee5aef77"
+last-modified: Mon, 05 Jan 2026 11:47:14 GMT
+server: cloudflare
+x-amz-id-2: A/mEAFNWtAYkZfiyeQWW4Ojk4SxGgi1BfHi9KU02wMzkThyJB68/LfoZQOXNQ87Duto6k3tluFJy
+x-amz-request-id: 2A83173F9B89CD4F:A
+x-amz-version-id: 001767613634269695661-Clylo9WL2O
+x-wasabi-cm-reference-id: 1791139211 A11-U18.prod1.ashburn 2038585860:19649231:17
+cache-control: max-age=14400
+cf-cache-status: MISS
+vary: accept-encoding
+report-to: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=XQtgY%2Bb%2BTMUix5%2F%2FTTBpioi0KCq0jGXYqcG1NJFTDv9%2BZFnE0a0k1O31bv0nGf7TKm5HBF5Q5wIZVA0jPfdfb1v40X303t%2B7oEYQ5LE4Ub2Niyb5BRWyBDdGiedvSlHurOpuz27uHw%3D%3D"}]}
+nel: {"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}
+cf-ray: a45650498cc5fe57-IAD
+alt-svc: h3=":443"; ma=86400
+
