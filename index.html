@@ -131,6 +131,13 @@ body.immersive .selbar{bottom:calc(14px + env(safe-area-inset-bottom,0px))}
 .grid3{display:grid;grid-template-columns:2fr 1fr 1fr;gap:8px;align-items:center}
 .grid3 label{font-size:12px;color:var(--muted);grid-column:1/-1;margin-top:4px}
 /* Page turn: the page itself swings on the spine; nothing is copied or left behind */
+/* Page curl: the next page is drawn underneath; the current page folds back over it */
+.under{position:fixed;z-index:0;overflow:hidden;background:var(--bg);display:flex;flex-direction:column;justify-content:center;padding:6px 10px}
+.under>*{width:100%;max-width:46rem;margin-inline:auto}
+main.fit.curling{z-index:1;will-change:clip-path;background:var(--bg)}
+.flap{position:fixed;z-index:2;pointer-events:none;background:linear-gradient(var(--fd,90deg),color-mix(in srgb,var(--bg) 82%,#000) 0%,var(--bg) 22%,color-mix(in srgb,var(--bg) 92%,#fff) 70%,color-mix(in srgb,var(--bg) 88%,#000) 100%);box-shadow:0 0 18px rgba(0,0,0,.22)}
+.ushade{position:fixed;z-index:0;pointer-events:none;width:46px;background:linear-gradient(var(--sd,90deg),rgba(0,0,0,0),rgba(0,0,0,.20))}
+@media (orientation:landscape){ .under{padding-inline:max(28px,env(safe-area-inset-left,0px));justify-content:flex-start} .under>*{max-width:none} }
 main.turnfx{will-change:transform;backface-visibility:hidden;-webkit-backface-visibility:hidden}
 /* Printed (glyph) pages */
 .gpage{direction:rtl;--lh:2em}
@@ -989,16 +996,55 @@ async function turnTo(dir,fromDeg){
     await animTurn(90, 0, -dir, 260);                                   // new page settles in from the other edge
   } finally { setTurn(0); clearTimeout(guard); turning=false; }
 }
-function turnPage(dir){ turnTo(dir,0); }
+/* ---- Curl turn (page view) ---- */
+let curl=null;
+function curlBegin(dir){
+  const to=st.page+dir; if(to<1||to>604||!main.classList.contains('fit')) return null;
+  const r=main.getBoundingClientRect(), cur=document.getElementById('mpage');
+  const u=document.createElement('div'); u.className='under'; u.style.cssText+=`;left:${r.left}px;top:${r.top}px;width:${r.width}px;height:${r.height}px`;
+  const glyph=st.mushaf!=='text' && !!document.querySelector('.gpage');
+  const fill=()=>{ u.innerHTML = glyph? buildGlyph(to,st.mushaf) : buildPage(to);
+    const m=u.querySelector('#mpage'); if(m){ m.removeAttribute('id'); if(cur){ m.style.fontSize=cur.style.fontSize; m.style.setProperty('--lh',cur.style.getPropertyValue('--lh')); } squeeze(m); } };
+  if(glyph){ u.innerHTML='<p class="loadmsg">Loading page…</p>'; loadPageFont(st.mushaf,to).then(ok=>{ if(ok&&u.isConnected) fill(); }); } else fill();
+  const flap=document.createElement('div'); flap.className='flap';
+  const sh=document.createElement('div'); sh.className='ushade';
+  document.body.append(u,sh,flap); main.classList.add('curling');
+  return {dir,to,r,u,flap,sh,p:0};
+}
+function curlSet(c,p){ c.p=Math.max(0,Math.min(1,p)); const W=c.r.width, t=2*W*c.p, fold=Math.min(W,t/2), fw=Math.min(t/2, W-fold);
+  if(c.dir>0){ // pull from the left edge towards the spine on the right
+    main.style.clipPath=`inset(0 0 0 ${fold}px)`;
+    c.flap.style.cssText=`left:${c.r.left+fold}px;top:${c.r.top}px;width:${fw}px;height:${c.r.height}px;--fd:270deg;display:${fw>0.5?'block':'none'}`;
+    c.sh.style.cssText=`left:${c.r.left+Math.max(0,fold-46)}px;top:${c.r.top}px;height:${c.r.height}px;--sd:90deg;opacity:${(1-c.p).toFixed(2)}`;
+  } else {      // pull from the right edge towards the left
+    main.style.clipPath=`inset(0 ${fold}px 0 0)`;
+    c.flap.style.cssText=`left:${c.r.left+W-fold-fw}px;top:${c.r.top}px;width:${fw}px;height:${c.r.height}px;--fd:90deg;display:${fw>0.5?'block':'none'}`;
+    c.sh.style.cssText=`left:${c.r.left+W-fold}px;top:${c.r.top}px;height:${c.r.height}px;--sd:270deg;opacity:${(1-c.p).toFixed(2)}`;
+  } }
+function curlEnd(c){ c.u.remove(); c.flap.remove(); c.sh.remove(); main.style.clipPath=''; main.classList.remove('curling'); }
+function curlAnim(c,to,ms){ return new Promise(res=>{ const p0=c.p, t0=performance.now(); if(RM.matches||ms<=0){ curlSet(c,to); return res(); }
+  const step=now=>{ const k=Math.min(1,(now-t0)/ms), e=1-Math.pow(1-k,3); curlSet(c,p0+(to-p0)*e); if(k<1) requestAnimationFrame(step); else res(); }; requestAnimationFrame(step); }); }
+async function curlFinish(c,commit){
+  turning=true; const guard=setTimeout(()=>{ curlEnd(c); turning=false; },3500);
+  try{
+    await curlAnim(c, commit?1:0, commit? 120+420*(1-c.p) : 220*c.p+60);
+    if(commit){ st.page=c.to; st.sel=null; renderReader(); main.scrollTop=0; await Promise.race([pageReady,new Promise(r=>setTimeout(r,1200))]); }
+  } finally { curlEnd(c); clearTimeout(guard); turning=false; }
+}
+function turnPage(dir){ if(turning) return; const c=curlBegin(dir); if(!c) return turnTo(dir,0); curlSet(c,0.01); curlFinish(c,true); }
 main.addEventListener('touchstart',e=>{ if(hz||turning||e.touches.length>1) return; tx=e.touches[0].clientX; ty=e.touches[0].clientY; drag=null; },{passive:true});
 main.addEventListener('touchmove',e=>{ if(tx===null||hz||lpFired||selecting||turning) return;
   const dx=e.touches[0].clientX-tx, dy=e.touches[0].clientY-ty;
-  if(!drag){ if(Math.abs(dx)<14 || Math.abs(dx)<Math.abs(dy)*1.3) return; clearTimeout(lpT); drag={dir:dx>0?1:-1,deg:0}; }
-  e.preventDefault(); drag.deg=Math.max(0,Math.min(80, (dx*drag.dir)/(innerWidth*0.8)*90)); setTurn(drag.deg,drag.dir); },{passive:false});
+  if(!drag){ if(Math.abs(dx)<14 || Math.abs(dx)<Math.abs(dy)*1.3) return; clearTimeout(lpT); const dir=dx>0?1:-1;
+    const c=curlBegin(dir); drag= c? {dir,curl:c} : {dir,deg:0}; }
+  e.preventDefault();
+  if(drag.curl) curlSet(drag.curl, (dx*drag.dir)/(drag.curl.r.width*1.6));
+  else { drag.deg=Math.max(0,Math.min(80, (dx*drag.dir)/(innerWidth*0.8)*90)); setTurn(drag.deg,drag.dir); } },{passive:false});
 main.addEventListener('touchend',e=>{ const d=drag; drag=null; if(tx===null) return; const dx=e.changedTouches[0].clientX-tx; tx=null; if(!d) return;
   lpFired=true; setTimeout(()=>{ lpFired=false; },60);
+  if(d.curl){ curlFinish(d.curl, d.curl.p>0.18 || Math.abs(dx)>110); return; }
   if(d.deg>22 || Math.abs(dx)>110) turnTo(d.dir,d.deg); else animTurn(d.deg,0,d.dir,160).then(()=>setTurn(0)); },{passive:true});
-main.addEventListener('touchcancel',()=>{ if(drag) animTurn(drag.deg,0,drag.dir,140).then(()=>setTurn(0)); drag=null; tx=null; });
+main.addEventListener('touchcancel',()=>{ if(drag){ if(drag.curl) curlFinish(drag.curl,false); else animTurn(drag.deg,0,drag.dir,140).then(()=>setTurn(0)); } drag=null; tx=null; });
 
 /* ============================ MATCHING ============================
    Word judging adapted from Tilawi quran-asr judge.ts (MIT License,
