@@ -24,6 +24,8 @@ Open it at **https://azali69.github.io/my-personal/** in Chrome. On Android, use
 | Bahasa Melayu | Abdullah Muhammad Basmeih, via [QuranEnc.com](https://quranenc.com/en/browse/malay_basumayyah) (malay_basumayyah v1.0.0) |
 | English | Saheeh International, via [QuranEnc.com](https://quranenc.com/en/browse/english_saheeh) (english_saheeh v1.1.2) |
 | Arabic fonts | KFGQPC HAFS Uthmanic Script 1.001 (2021) for the text; KFGQPC Uthmanic Script HAFS 0.09 for ayah markers. © King Fahd Glorious Qur'an Printing Complex, included unmodified |
+| Surah header frames | KFGQPC surah header font (QCF_SurahHeader, v1.000, Sept 2025), via [QUL / Tarteel](https://qul.tarteel.ai/resources/font/458). © King Fahd Complex, included unmodified |
+| Printed pages | KFGQPC V4 (1441H) page fonts, plain and tajweed, via [QUL / Tarteel](https://qul.tarteel.ai), downloaded when a page is first opened |
 | Word-judging logic | Adapted from [Tilawi quran-asr](https://github.com/Tilawi/quran-asr), MIT licence, © 2025-2026 Muhammed Durakovic |
 
 The Qur'an text and translations are reproduced without modification. The app checks its own copy against the verified build (Settings → Sources & verification).

@@ -80,6 +80,8 @@ public class MainActivity extends Activity {
     }
 
     private WebView web;
+    private volatile String insets = "";
+    private static final int BASE_UI = View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION;
     private SpeechRecognizer recognizer;
     private String pendingLang;
 
@@ -95,6 +97,28 @@ public class MainActivity extends Activity {
         web = new WebView(this);
         web.setBackgroundColor(Color.parseColor("#f4efe2"));
         setContentView(web);
+        // Draw edge to edge all the time, so the page never resizes when the system bars hide or show.
+        // The page keeps fixed margins for the bars instead (sent to it as CSS pixels below).
+        if (Build.VERSION.SDK_INT >= 30) getWindow().setDecorFitsSystemWindows(false);
+        else getWindow().getDecorView().setSystemUiVisibility(BASE_UI);
+        web.setOnApplyWindowInsetsListener((v, ins) -> {
+            float d = getResources().getDisplayMetrics().density;
+            int t, r, b, l;
+            if (Build.VERSION.SDK_INT >= 30) {
+                android.graphics.Insets i = ins.getInsetsIgnoringVisibility(WindowInsets.Type.systemBars() | WindowInsets.Type.displayCutout());
+                t = i.top; r = i.right; b = i.bottom; l = i.left;
+            } else {
+                t = ins.getStableInsetTop(); r = ins.getStableInsetRight(); b = ins.getStableInsetBottom(); l = ins.getStableInsetLeft();
+                if (Build.VERSION.SDK_INT >= 28 && ins.getDisplayCutout() != null) {
+                    android.view.DisplayCutout c = ins.getDisplayCutout();
+                    t = Math.max(t, c.getSafeInsetTop()); r = Math.max(r, c.getSafeInsetRight());
+                    b = Math.max(b, c.getSafeInsetBottom()); l = Math.max(l, c.getSafeInsetLeft());
+                }
+            }
+            String now = Math.round(t / d) + "," + Math.round(r / d) + "," + Math.round(b / d) + "," + Math.round(l / d);
+            if (!now.equals(insets)) { insets = now; web.evaluateJavascript("window.__insets && window.__insets()", null); }
+            return ins;
+        });
 
         WebSettings s = web.getSettings();
         s.setJavaScriptEnabled(true);
@@ -166,6 +190,10 @@ public class MainActivity extends Activity {
             runOnUiThread(() -> { if (recognizer != null) recognizer.stopListening(); });
         }
 
+        /** Fixed margins for the status bar, navigation bar and camera cutout, in CSS pixels: "top,right,bottom,left". */
+        @JavascriptInterface
+        public String getInsets() { return insets; }
+
         @JavascriptInterface
         public void copyText(final String text) {
             runOnUiThread(() -> {
@@ -181,16 +209,15 @@ public class MainActivity extends Activity {
                     WindowInsetsController c = getWindow().getInsetsController();
                     if (c == null) return;
                     int types = WindowInsets.Type.statusBars() | WindowInsets.Type.navigationBars();
-                    getWindow().setDecorFitsSystemWindows(!on);
                     if (on) {
                         c.setSystemBarsBehavior(WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
                         c.hide(types);
                     } else c.show(types);
                 } else {
-                    int f = on ? (View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                                  | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_STABLE)
-                               : View.SYSTEM_UI_FLAG_VISIBLE;
-                    getWindow().getDecorView().setSystemUiVisibility(f);
+                    View dv = getWindow().getDecorView();
+                    int keep = dv.getSystemUiVisibility() & View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+                    int f = BASE_UI | keep | (on ? (View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION) : 0);
+                    dv.setSystemUiVisibility(f);
                 }
             });
         }
