@@ -96,6 +96,8 @@ main.fit{padding-block:8px 76px}
 .pagehead.tight{margin:0 2px 4px}
 .pagefoot.tight{margin-top:6px}
 .mline .sh2,.sh2{background:color-mix(in srgb,var(--accent) 17%,var(--bg))}
+.mline .mr,.ay.mr,.row.mr{background:color-mix(in srgb,#4a78b8 13%,var(--bg))}
+.mline .mr2,.ay.mr2,.row.mr2{background:color-mix(in srgb,#4a78b8 30%,var(--bg))}
 .mline .rk,.ay.rk,.row.rk{background:color-mix(in srgb,#c79a3a 12%,var(--bg))}
 .mline .rk2,.ay.rk2,.row.rk2{background:color-mix(in srgb,#c79a3a 36%,var(--bg))}
 body:has(.selbar) .toast{bottom:auto;top:calc(80px + env(safe-area-inset-top,0px))}
@@ -103,6 +105,17 @@ body:has(.selbar) .toast{bottom:auto;top:calc(80px + env(safe-area-inset-top,0px
 .rkstart{box-shadow:inset -3px 0 0 #b07d1f}
 .mline .pick{background:color-mix(in srgb,var(--accent) 38%,transparent)!important}
 main{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+.selbar.mini{left:0;right:0;bottom:auto;padding:0 8px}
+.selbar.mini.at-top{top:calc(env(safe-area-inset-top,0px) + 4px)}
+.selbar.mini.at-bottom{top:auto;bottom:calc(env(safe-area-inset-bottom,0px) + 4px)}
+.selbar.mini .selbar-in{padding:6px 8px;border-radius:14px}
+.selbar.mini .selbar-t{font-size:12px;margin:0 2px 4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.selbar.mini .selbar-b{flex-wrap:nowrap;overflow-x:auto;gap:5px}
+.selbar.mini .selbar-b button{height:34px;padding:0 10px;font-size:13px;flex:none}
+body.selecting .top{transform:translateY(-110%);opacity:0;pointer-events:none}
+body.selecting.sel-top main.fit{padding-top:calc(env(safe-area-inset-top,0px) + 76px)}
+body.selecting.sel-bottom main.fit{padding-bottom:76px}
+body.selecting .dock{transform:translateY(110%);opacity:0;pointer-events:none}
 .selbar{position:fixed;left:0;right:0;bottom:calc(76px + env(safe-area-inset-bottom,0px));z-index:30;display:flex;justify-content:center;pointer-events:none;padding:0 12px}
 body.immersive .selbar{bottom:calc(14px + env(safe-area-inset-bottom,0px))}
 .selbar-in{pointer-events:auto;background:var(--surface);border:1px solid var(--line);border-radius:18px;box-shadow:0 6px 24px rgba(0,0,0,.18);padding:10px;max-width:34rem;width:100%}
@@ -304,7 +317,7 @@ const store = {
 };
 const st = {
   page: store.get('page', 1), tr: store.get('tr', false), lang: store.get('lang','ms'),
-  bg: store.get('bg','auto'), size: store.get('tsize', 0), mushaf: store.get('mushaf','v4'), blocks: store.get('blocks','ruku'),
+  bg: store.get('bg','auto'), size: store.get('tsize', 0), mushaf: store.get('mushaf','v4'), blocks: store.get('blocks','off'),
   fn: store.get('fn', false), mine: new Set(store.get('mine', [])), sel: null, bm: store.get('bm', {})
 };
 function save(){ ['page','tr','lang','bg','blocks','fn','mushaf'].forEach(k=>store.set(k, st[k])); store.set('tsize', st.size); store.set('mine',[...st.mine]); }
@@ -343,13 +356,18 @@ if(!st.myb){ // convert block starts from the earlier version
   for(const sNo in bySurah){ const s0=surahStart[sNo], s1=s0+S[sNo-1][5]-1; const starts=[s0,...bySurah[sNo].sort((a,b)=>a-b)];
     starts.forEach((g,i)=>{ const e=i+1<starts.length?starts[i+1]-1:s1; if(e>=g) st.myb.push({s:P_(g,0),e:P_(e,wcount(e)-1),t:Date.now()}); }); }
   store.set('myb',st.myb); }
-function saveMyb(){ st.myb.sort((a,b)=>a.s-b.s); store.set('myb',st.myb); }
-function myBlockAt(p){ let lo=0,hi=st.myb.length-1; while(lo<=hi){ const m=(lo+hi)>>1, b=st.myb[m]; if(p<b.s) hi=m-1; else if(p>b.e) lo=m+1; else return m; } return -1; }
-function myBlockInAyah(g){ const a=P_(g,0), z=P_(g,511); for(let i=0;i<st.myb.length;i++){ const b=st.myb[i]; if(b.s<=z && b.e>=a) return i; if(b.s>z) break; } return -1; }
-function addMyBlock(s,e){ if(s>e) [s,e]=[e,s]; const out=[];
-  for(const b of st.myb){ if(b.e<s||b.s>e){ out.push(b); continue; }
+st.myr=store.get('myr',[]);
+if(!store.get('blk2',false)){ if(st.blocks==='ruku') st.blocks='off'; store.set('blk2',true); store.set('blocks',st.blocks); }  // original ruku' starts switched off
+const SETK={mine:'myb',myruku:'myr'};
+function curSet(){ const k=SETK[st.blocks]; return k?st[k]:null; }
+function saveSet(k){ st[k].sort((a,b)=>a.s-b.s); store.set(k,st[k]); }
+function saveMyb(){ saveSet('myb'); }
+function myBlockAt(p,arr){ arr=arr||curSet()||[]; let lo=0,hi=arr.length-1; while(lo<=hi){ const m=(lo+hi)>>1, b=arr[m]; if(p<b.s) hi=m-1; else if(p>b.e) lo=m+1; else return m; } return -1; }
+function myBlockInAyah(g,arr){ arr=arr||curSet()||[]; const a=P_(g,0), z=P_(g,511); for(let i=0;i<arr.length;i++){ const b=arr[i]; if(b.s<=z && b.e>=a) return i; if(b.s>z) break; } return -1; }
+function addMyBlock(s,e,k){ k=k||'myb'; if(s>e) [s,e]=[e,s]; const out=[];
+  for(const b of st[k]){ if(b.e<s||b.s>e){ out.push(b); continue; }
     if(b.s<s) out.push({s:b.s,e:prevPos(s),t:b.t}); if(b.e>e) out.push({s:nextPos(e),e:b.e,t:b.t}); }
-  out.push({s,e,t:Date.now()}); st.myb=out.filter(b=>b.s<=b.e); saveMyb(); }
+  out.push({s,e,t:Date.now()}); st[k]=out.filter(b=>b.s<=b.e); saveSet(k); }
 function prevPos(p){ const g=Pg(p), w=Pw(p); return w>0?P_(g,w-1):(g>0?P_(g-1,wcount(g-1)-1):p); }
 function nextPos(p){ const g=Pg(p), w=Pw(p); return w<wcount(g)-1?P_(g,w+1):(g+1<N?P_(g+1,0):p); }
 function posLabel(p,end){ const g=Pg(p), w=Pw(p), a=A[g]; const n=wcount(g);
@@ -358,12 +376,13 @@ function posLabel(p,end){ const g=Pg(p), w=Pw(p), a=A[g]; const n=wcount(g);
 function blockLabel(b){ return `${S[A[Pg(b.s)][0]-1][1]} ${posLabel(b.s,false)} – ${posLabel(b.e,true)}`; }
 /* shading helpers shared by every view */
 function rkTone(g){ return st.blocks==='ruku' ? (blockIndex(g)%2?' rk2':' rk') : ''; }
-function wshade(g,w){ if(st.blocks==='mine'){ const i=myBlockAt(P_(g,w)); return i<0?'':(i%2?' sh2':' sh'); } return rkTone(g); }
-function ashade(g){ if(st.blocks==='mine'){ const i=myBlockInAyah(g); return i<0?'':(i%2?' sh2':' sh'); } return rkTone(g); }
-function sameGroup(pg,pw,g,w){ if(st.blocks==='mine'){ const a=myBlockAt(P_(pg,pw)); return a>=0 && a===myBlockAt(P_(g,w)); } return pg===g || !isBlockStart(g); }
+const TONES={mine:[' sh',' sh2'],myruku:[' mr',' mr2']};
+function wshade(g,w){ const t=TONES[st.blocks]; if(t){ const i=myBlockAt(P_(g,w)); return i<0?'':t[i%2]; } return rkTone(g); }
+function ashade(g){ const t=TONES[st.blocks]; if(t){ const i=myBlockInAyah(g); return i<0?'':t[i%2]; } return rkTone(g); }
+function sameGroup(pg,pw,g,w){ if(TONES[st.blocks]){ const a=myBlockAt(P_(pg,pw)); return a>=0 && a===myBlockAt(P_(g,w)); } return pg===g || !isBlockStart(g); }
 /* ---- Ruku' sections: original Tanzil set plus your saved changes ---- */
 let rkEd=Object.assign({add:[],del:[]}, store.get('rkEdit',{})); let rkAdd=new Set(rkEd.add), rkDel=new Set(rkEd.del); let rkDraft=null;
-function rkIsStart(g){ if(A[g][1]===1) return true; if(rkDraft) return rkDraft.has(g); return (rukuStarts.has(g)&&!rkDel.has(g))||rkAdd.has(g); }
+function rkIsStart(g){ return A[g][1]===1 || rukuStarts.has(g); }
 function rkEffective(){ const s=new Set(); for(let g=0;g<N;g++) if(A[g][1]!==1 && ((rukuStarts.has(g)&&!rkDel.has(g))||rkAdd.has(g))) s.add(g); return s; }
 function rkChanges(){ return rkAdd.size+rkDel.size; }
 function rkSave(draft){ rkAdd=new Set(); rkDel=new Set();
@@ -388,7 +407,7 @@ function rkToggle(g){ if(A[g][1]===1){ toast('Ayah 1 always starts a section'); 
   if(rkDraft.has(g)){ rkDraft.delete(g); toast(`Joined ${A[g][0]}:${A[g][1]} to the section before`); } else { rkDraft.add(g); toast(`New section starts at ${A[g][0]}:${A[g][1]}`); }
   renderReader(); }
 function blockFor(g){
-  if(st.blocks==='mine'){ const i=myBlockInAyah(g); if(i<0) return null; const b=st.myb[i]; return {g0:Pg(b.s),g1:Pg(b.e),b,label:blockLabel(b)}; }
+  if(TONES[st.blocks]){ const i=myBlockInAyah(g); if(i<0) return null; const b=curSet()[i]; return {g0:Pg(b.s),g1:Pg(b.e),b,label:blockLabel(b)}; }
   if(st.blocks==='ruku'){ const [a,z]=blockRange(g); return {g0:a,g1:z,b:null,label:`Ruku' ${A[a][0]}:${A[a][1]}–${A[z][1]}`}; }
   return null; }
 function blockRange(g){
@@ -720,12 +739,13 @@ function setSheet(){
   <div class="label">English footnotes</div>${seg('fn',[[false,'Hide'],[true,'Show']],st.fn)}
   <div class="label">Text size</div><div class="row2"><input type="range" id="size" min="0" max="10" step="1" value="${st.size?Math.round((st.size-22)/2):0}" aria-label="Arabic text size" style="flex:1"><span id="sizeL" class="note" style="min-width:9.5em;text-align:right"></span></div>
   <p class="note">For the Uthmani text mushaf, translation and Hafazan. The printed mushaf always fits the page to your screen; turn the phone sideways for larger text.</p>
-  <div class="label">Waqaf &amp; ibtida' blocks</div>${seg('blocks',[['off','Off'],['ruku',"Ruku' (ع)"],['mine','My blocks']],st.blocks)}
+  <div class="label">Waqaf &amp; ibtida' blocks</div>${seg('blocks',MODES,st.blocks)}
   <p class="note" id="blkNote"></p>
   <div class="label">More</div>
   <div class="actions"><button id="openHist">${ic('hist')}Hafazan history</button><button id="openAbout">${ic('info')}Sources &amp; verification</button></div>`);
   const note=()=>{ document.getElementById('blkNote').innerHTML = st.blocks==='ruku'
-    ? "Gold shading follows the traditional <b>ruku'</b> sections, marked ع in many mushafs. You can edit them from the blocks button in the top bar."
+    ? "Gold shading follows the original <b>ruku'</b> sections, marked ع in many mushafs. To make your own, use My ruku'."
+    : st.blocks==='myruku' ? `Blue shading shows <b>My ruku'</b>. Add or delete them from the blocks button in the top bar. You have ${st.myr.length}.`
     : st.blocks==='mine' ? `Long-press a word, keep holding and drag to the last word, then tap <b>Make block</b>. Or use the blocks button in the top bar to enter numbers. You have ${st.myb.length} block${st.myb.length===1?'':'s'} on this device.`
     : 'No shading. The waqf signs inside the text are always shown.'; };
   note();
@@ -787,32 +807,34 @@ function copySheet(g,gEnd){
   upd();
 }
 /* Blocks panel: on/off, mode, add by numbers, list */
-function blocksSheet(g){
+const MODES=[['off','Off'],['ruku',"Ruku' (original)"],['myruku',"My ruku'"],['mine','My blocks']];
+const SETNAME={myb:'My blocks',myr:"My ruku'"};
+function blocksSheet(g,tab){
   const cur=g ?? st.sel ?? pageStart[st.page]; const a=A[cur], s=a[0];
+  tab = tab || (st.blocks==='myruku'?'myr':'myb'); const arr=st[tab];
+  const dotc=i=> tab==='myr' ? (i%2?'color-mix(in srgb,#4a78b8 30%,var(--bg))':'color-mix(in srgb,#4a78b8 13%,var(--bg))') : (i%2?'color-mix(in srgb,var(--accent) 17%,var(--bg))':'var(--shade)');
   const sOpts=sel=>S.map((x,i)=>`<option value="${i+1}"${i+1===sel?' selected':''}>${i+1}. ${esc(x[1])}</option>`).join('');
-  const list=st.myb.map((b,i)=>`<li><span class="dot" style="--c:${i%2?'color-mix(in srgb,var(--accent) 45%,var(--bg))':'var(--shade)'};border:1px solid var(--line)"></span><span class="t"><b>${esc(blockLabel(b))}</b><small>Page ${A[Pg(b.s)][4]}</small></span>
-     <button data-go="${i}">Go</button><button data-hz="${i}">Hafazan</button><button data-del="${i}" aria-label="Delete block">✕</button></li>`).join('');
-  openSheet("Waqaf & ibtida' blocks", `
-   <div class="seg" id="bkMode">${[['off','Off'],['ruku',"Ruku' (ع)"],['mine','My blocks']].map(([v,l])=>`<button data-v="${v}" aria-pressed="${st.blocks===v}">${l}</button>`).join('')}</div>
-   ${st.blocks==='ruku'?`<div class="label">Ruku' sections</div>
-   <div class="actions"><button id="rkE">${ic('blk')}Edit ruku' sections</button>${rkChanges()?`<button id="rkR">${ic('hist')}Restore all original sections (${rkChanges()} change${rkChanges()===1?'':'s'})</button>`:''}</div>
-   <p class="note">Ruku' are shown in gold, My blocks in green.${rkChanges()?' Your edited version is in use.':''}</p>`:''}
-   <div class="label">Add a block by number</div>
-   <div class="grid3"><label>From</label>
+  const list=arr.map((b,i)=>`<li><span class="dot" style="--c:${dotc(i)};border:1px solid var(--line)"></span><span class="t"><b>${esc(blockLabel(b))}</b><small>Page ${A[Pg(b.s)][4]}</small></span>
+     <button data-go="${i}">Go</button><button data-hz="${i}">Hafazan</button><button data-del="${i}" aria-label="Delete">✕</button></li>`).join('');
+  openSheet("Waqaf & ibtida'", `
+   <div class="label" style="margin-top:0">Show on the page</div>
+   <div class="seg" id="bkMode">${MODES.map(([v,l])=>`<button data-v="${v}" aria-pressed="${st.blocks===v}">${l}</button>`).join('')}</div>
+   <p class="note">Gold: original ruku' (read-only). Blue: My ruku'. Green: My blocks.</p>
+   <div class="label">Edit</div>
+   <div class="seg" id="bkTab"><button data-t="myr" aria-pressed="${tab==='myr'}">My ruku' · ${st.myr.length}</button><button data-t="myb" aria-pressed="${tab==='myb'}">My blocks · ${st.myb.length}</button></div>
+   <div class="grid3" style="margin-top:8px"><label>From</label>
      <select class="field" id="bS1">${sOpts(s)}</select><input class="field" id="bA1" type="number" inputmode="numeric" min="1" value="${a[1]}" aria-label="From ayah" placeholder="Ayah"><input class="field" id="bW1" type="number" inputmode="numeric" min="1" placeholder="Word" aria-label="From word (optional)">
      <label>To</label>
      <select class="field" id="bS2">${sOpts(s)}</select><input class="field" id="bA2" type="number" inputmode="numeric" min="1" value="${a[1]}" aria-label="To ayah" placeholder="Ayah"><input class="field" id="bW2" type="number" inputmode="numeric" min="1" placeholder="Word" aria-label="To word (optional)"></div>
-   <p class="note">Word is optional: leave it empty to start at the first word and end at the last word of the ayah. You can also long-press a word on the page and drag.</p>
-   <div class="row2"><button class="pill primary" id="bAdd">Add block</button></div>
-   <div class="label">My blocks · ${st.myb.length}</div>
-   ${st.myb.length?`<ul class="blist" style="list-style:none;padding:0;margin:8px 0 0">${list}</ul><div class="row2" style="margin-top:10px"><button class="pill" id="bClr">Delete all blocks</button></div>`:'<p class="empty">No blocks yet.</p>'}`);
+   <p class="note">Word is optional. Or long-press a word on the page, keep holding, drag to the last word and choose where to save it.</p>
+   <div class="row2"><button class="pill primary" id="bAdd">Add to ${SETNAME[tab]}</button></div>
+   ${arr.length?`<ul class="blist" style="list-style:none;padding:0;margin:12px 0 0">${list}</ul><div class="row2" style="margin-top:10px"><button class="pill" id="bClr">Delete all of ${SETNAME[tab]}</button></div>`:`<p class="empty">No ${SETNAME[tab]} yet.</p>`}`);
   document.getElementById('bkMode').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; st.blocks=b.dataset.v; if(st.blocks!=='off') store.set('lastBlocks',st.blocks);
     sheetB.querySelectorAll('#bkMode button').forEach(x=>x.setAttribute('aria-pressed',x===b)); save(); syncBlkBtn(); rerender(); };
-  const rkE=document.getElementById('rkE'); if(rkE) rkE.onclick=rkEditStart;
-  const rkR=document.getElementById('rkR'); if(rkR) rkR.onclick=()=>{ if(rkR.dataset.sure){ rkAdd=new Set(); rkDel=new Set(); store.set('rkEdit',{add:[],del:[]}); rerender(); blocksSheet(cur); toast("Original ruku' sections restored"); } else { rkR.dataset.sure='1'; rkR.lastChild.textContent='Tap again to restore the original sections'; } };
+  document.getElementById('bkTab').onclick=e=>{ const b=e.target.closest('button'); if(b) blocksSheet(cur,b.dataset.t); };
   document.getElementById('bAdd').onclick=()=>{
     const num=id=>{ const v=document.getElementById(id).value.trim(); return v===''?null:+v; };
-    const s1=+bS1.value, s2=+bS2.value; let a1=num('bA1'), a2=num('bA2'); const w1=num('bW1'), w2=num('bW2');
+    const s1=+document.getElementById('bS1').value, s2=+document.getElementById('bS2').value; const a1=num('bA1'), a2=num('bA2'), w1=num('bW1'), w2=num('bW2');
     if(!a1||a1<1||a1>S[s1-1][5]) return toast(`${S[s1-1][1]} has ${S[s1-1][5]} ayat`);
     if(!a2||a2<1||a2>S[s2-1][5]) return toast(`${S[s2-1][1]} has ${S[s2-1][5]} ayat`);
     const g1=gOf(s1,a1), g2=gOf(s2,a2);
@@ -820,13 +842,15 @@ function blocksSheet(g){
     if(w2!=null && (w2<1||w2>wcount(g2))) return toast(`${s2}:${a2} has ${wcount(g2)} words`);
     const p1=P_(g1,w1==null?0:w1-1), p2=P_(g2,w2==null?wcount(g2)-1:w2-1);
     if(p2<p1) return toast('The end must come after the start');
-    addMyBlock(p1,p2); st.blocks='mine'; store.set('lastBlocks','mine'); save(); syncBlkBtn(); toast('Block saved'); goPage(A[g1][4]); blocksSheet(g1); };
+    saveRange(p1,p2,tab,false); goPage(A[g1][4]); blocksSheet(g1,tab); };
   sheetB.onclick=e=>{ const b=e.target.closest('button'); if(!b) return;
-    if(b.dataset.go){ const x=st.myb[+b.dataset.go]; closeSheet(); goAyah(Pg(x.s)); }
-    else if(b.dataset.hz){ const x=st.myb[+b.dataset.hz]; closeSheet(); startHz(Pg(x.s),Pg(x.e),{s:x.s,e:x.e}); }
-    else if(b.dataset.del){ st.myb.splice(+b.dataset.del,1); saveMyb(); rerender(); blocksSheet(cur); }
-    else if(b.id==='bClr'){ if(b.dataset.sure){ st.myb=[]; saveMyb(); rerender(); blocksSheet(cur); } else { b.dataset.sure='1'; b.textContent='Tap again to delete all'; } } };
+    if(b.dataset.go){ const x=arr[+b.dataset.go]; closeSheet(); goAyah(Pg(x.s)); }
+    else if(b.dataset.hz){ const x=arr[+b.dataset.hz]; closeSheet(); startHz(Pg(x.s),Pg(x.e),{s:x.s,e:x.e}); }
+    else if(b.dataset.del){ arr.splice(+b.dataset.del,1); saveSet(tab); rerender(); blocksSheet(cur,tab); }
+    else if(b.id==='bClr'){ if(b.dataset.sure){ st[tab]=[]; saveSet(tab); rerender(); blocksSheet(cur,tab); } else { b.dataset.sure='1'; b.textContent='Tap again to delete all'; } } };
 }
+function saveRange(lo,hi,k,render=true){ addMyBlock(lo,hi,k); st.blocks = k==='myr'?'myruku':'mine'; store.set('lastBlocks',st.blocks); save(); syncBlkBtn();
+  if(render) renderReader(); toast(k==='myr'?"Saved to My ruku'":'Saved to My blocks'); }
 let offRun=0;
 async function saveOffline(set){
   const my=++offRun, msg=()=>document.getElementById('offMsg'); let ok=0, fail=0;
@@ -852,8 +876,8 @@ function ayahSheet(g){
    <div class="actions">
     <button id="aHz">${ic('mic')}Hafazan from this ayah to the end of the page</button>
     ${bf?`<button id="aHzB">${ic('mic')}Hafazan this block (${esc(bf.label)})</button>`:''}
-    <button id="aBlk">${ic('blk')}Make a block starting here…</button>
-    ${st.blocks==='ruku'?`<button id="aRk">${ic('blk')}Edit ruku' sections</button>`:''}
+    <button id="aBlk">${ic('blk')}Add My ruku' or My block from here…</button>
+
     <button id="aCopy">${ic('copy')}Copy ayat and translation…</button>
    </div>`);
   sheetB.querySelector('#aBm').onclick=e=>{ const b=e.target.closest('button'); if(!b) return;
@@ -863,7 +887,6 @@ function ayahSheet(g){
   sheetB.querySelector('#aHz').onclick=()=>{ closeSheet(); startHz(g, pageStart[a[4]+1]-1); };
   const hb=sheetB.querySelector('#aHzB'); if(hb) hb.onclick=()=>{ closeSheet(); startHz(bf.g0,bf.g1,bf.b); };
   sheetB.querySelector('#aBlk').onclick=()=>blocksSheet(g);
-  const ark=sheetB.querySelector('#aRk'); if(ark) ark.onclick=rkEditStart;
   sheetB.querySelector('#aCopy').onclick=()=>copySheet(g);
 }
 /* Reading gestures: tap = show/hide bars, long-press on an ayah = its menu. Translation rows open the menu on tap. */
@@ -899,28 +922,22 @@ main.addEventListener('pointerup',endSelect); main.addEventListener('pointercanc
 main.addEventListener('pointerleave',()=>{ if(!selecting) clearTimeout(lpT); });
 main.addEventListener('touchmove',e=>{ if(selecting) e.preventDefault(); },{passive:false});
 let selBar=null;
-function hideSelBar(){ if(selBar){ selBar.remove(); selBar=null; } main.querySelectorAll('.pick').forEach(x=>x.classList.remove('pick')); }
+function hideSelBar(){ const had=document.body.classList.contains('selecting'); document.body.classList.remove('selecting','sel-top','sel-bottom'); if(had) setTimeout(refit,0); if(selBar){ selBar.remove(); selBar=null; } main.querySelectorAll('.pick').forEach(x=>x.classList.remove('pick')); }
 function showSelBar(lo,hi){ if(selBar){ selBar.remove(); selBar=null; }
-  selBar=document.createElement('div'); selBar.className='selbar';
+  selBar=document.createElement('div'); selBar.className='selbar mini';
   selBar.innerHTML=`<div class="selbar-in"><div class="selbar-t">${esc(blockLabel({s:lo,e:hi}))}</div><div class="selbar-b">
-    <button class="pri" data-a="blk">Make block</button><button data-a="hz">Hafazan</button><button data-a="copy">Copy</button><button data-a="x">Cancel</button></div></div>`;
+    <button class="pri" data-a="myr">My ruku'</button><button class="pri" data-a="myb">My blocks</button><button data-a="hz">Hafazan</button><button data-a="copy">Copy</button><button data-a="x" aria-label="Cancel">✕</button></div></div>`;
+  // put the bar on the half of the screen away from the selection, and hide the app bars so nothing else covers the page
+  const picks=[...main.querySelectorAll('.pick')]; let top=1e9,bot=-1e9; picks.forEach(p=>{ const r=p.getBoundingClientRect(); top=Math.min(top,r.top); bot=Math.max(bot,r.bottom); });
+  const mid=(top+bot)/2, atTop=mid>innerHeight/2; selBar.classList.add(atTop?'at-top':'at-bottom');
+  document.body.classList.add('selecting', atTop?'sel-top':'sel-bottom');   // the page makes room for the bar, so no line is covered
+  setTimeout(refit,0);
   document.body.appendChild(selBar);
   selBar.onclick=e=>{ const b=e.target.closest('button'); if(!b) return; const a=b.dataset.a; hideSelBar();
-    if(a==='blk'){ addMyBlock(lo,hi); if(st.blocks!=='mine'){ st.blocks='mine'; store.set('lastBlocks','mine'); } save(); renderReader(); toast('Block saved'); }
+    if(a==='myr'||a==='myb') saveRange(lo,hi,a);
     else if(a==='hz') startHz(Pg(lo),Pg(hi),{s:lo,e:hi});
     else if(a==='copy') copySheet(Pg(lo),Pg(hi)); };
 }
-main.addEventListener('contextmenu',e=>{ if(!hz) e.preventDefault(); });
-main.addEventListener('click',e=>{ if(hz) return;
-  if(lpFired){ lpFired=false; return; }
-  if(selBar){ hideSelBar(); return; }
-  if(rkDraft){ const t=e.target.closest('[data-g]'); if(t) rkToggle(+t.dataset.g); return; }
-  if(Math.abs(e.clientX-lpX)>10||Math.abs(e.clientY-lpY)>10) return;
-  const row=e.target.closest('.row[data-g]'); if(row){ ayahSheet(+row.dataset.g); return; }
-  if(e.target.closest('.surah-h,.pagehead')) return;
-  setImmersive(!document.body.classList.contains('immersive'));
-  if(!store.get('tipImm',false)){ store.set('tipImm',true); toast('Tap to show or hide the bars. Long-press an ayah for options.'); } });
-
 /* Swipe (RTL book: swipe right = next page) */
 let tx=null,ty=null;
 main.addEventListener('touchstart',e=>{ if(hz) return; tx=e.touches[0].clientX; ty=e.touches[0].clientY; },{passive:true});
