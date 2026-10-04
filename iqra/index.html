@@ -86,7 +86,8 @@ button:focus-visible,.tile:focus-visible,input:focus-visible{outline:3px solid v
 .vres .ar{font-size:1.4rem;font-weight:400}
 .rec::before{content:"";display:inline-block;width:.6em;height:.6em;border-radius:50%;background:currentColor;margin-right:.45em;vertical-align:.05em}
 .btn.live{background:var(--warn);border-color:var(--warn);color:var(--paper)}
-.teacher-bar{background:var(--gold-soft);color:var(--gold);border-radius:10px;padding:8px 12px;font-size:.9rem;font-weight:600}
+.teacher-bar{background:var(--gold-soft);color:var(--gold);border-radius:10px;padding:10px 12px;font-size:.9rem;font-weight:600}
+.teacher-bar input{width:1.15em;height:1.15em;accent-color:var(--gold)}
 .mic::before{content:"";display:inline-block;width:.6em;height:.9em;border:2px solid currentColor;border-radius:.4em;margin-right:.45em;vertical-align:-.1em}
 @media (max-width:480px){h1{font-size:1.6rem}.lvl{grid-template-columns:40px 1fr}.lvl .sample{display:none}.detail{grid-template-columns:auto 1fr}.detail .btn{grid-column:1/-1}}
 @media (prefers-reduced-motion:no-preference){.tile,.opt,.lvl{transition:border-color .15s,background .15s}}
@@ -179,15 +180,28 @@ function judge(it,alts){
     if(!close&&main.length>=3&&parts.some(p=>p&&lev(p,main)<=1))close=a}
   return close?{res:'close',heard:close}:{res:'no',heard:alts[0]||''};
 }
-function listen(){return new Promise((resolve,reject)=>{
-  let r;try{r=new SR()}catch(e){return reject('blocked')}
-  r.lang='ar-SA';r.maxAlternatives=5;r.interimResults=false;r.continuous=false;let got=false;
-  r.onresult=e=>{got=true;resolve(Array.from(e.results[0]).map(x=>x.transcript))};
-  r.onerror=e=>{got=true;reject(e.error==='not-allowed'||e.error==='service-not-allowed'||e.error==='audio-capture'?'blocked':e.error==='no-speech'?'nospeech':e.error==='network'?'network':'other')};
-  r.onend=()=>{if(!got)reject('nospeech')};
-  try{r.start()}catch(e){reject('blocked')}
-})}
-const VMSG={blocked:'The microphone isn’t available here. Open the app in Chrome at '+PAGES_URL+' and allow the microphone.',nospeech:'Nothing heard. Tap “Say it” and read clearly, close to the phone.',network:'Voice check needs an internet connection.',other:'Voice check failed. Try again.'};
+let curRec=null,lastEnd=0;
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+async function listen(){
+  // Chrome on Android needs the previous session fully closed and audio silent before a new one starts
+  if(curRec){try{curRec.abort()}catch(e){}curRec=null;await sleep(350)}
+  player.pause();
+  const gap=Date.now()-lastEnd;if(gap<600)await sleep(600-gap);
+  return new Promise((resolve,reject)=>{
+    let r;try{r=new SR()}catch(e){return reject('blocked')}
+    curRec=r;r.lang='ar-SA';r.maxAlternatives=5;r.interimResults=true;r.continuous=false;
+    let finals=null,interim=null,err=null,done=false;
+    const stopT=setTimeout(()=>{try{r.stop()}catch(e){}},8000);
+    r.onresult=e=>{for(let i=e.resultIndex;i<e.results.length;i++){const alts=Array.from(e.results[i]).map(x=>x.transcript).filter(Boolean);if(!alts.length)continue;if(e.results[i].isFinal)finals=(finals||[]).concat(alts);else interim=alts}};
+    r.onerror=e=>{if(e.error!=='aborted')err=e.error};
+    r.onend=()=>{if(done)return;done=true;clearTimeout(stopT);lastEnd=Date.now();if(curRec===r)curRec=null;
+      const got=finals||interim;
+      if(got&&got.length)return resolve(got);
+      reject(err==='not-allowed'||err==='service-not-allowed'||err==='audio-capture'?'blocked':err==='network'?'network':err&&err!=='no-speech'?'other':'nospeech')};
+    try{r.start()}catch(e){done=true;clearTimeout(stopT);curRec=null;reject('other')}
+  });
+}
+const VMSG={blocked:'The microphone isn’t available here. Open the app in Chrome at '+PAGES_URL+' and allow the microphone.',nospeech:'Nothing heard. Wait for the beep after tapping “Say it”, then read clearly, close to the phone.',network:'Voice check needs an internet connection.',other:'Voice check failed. Try again.'};
 async function voiceCheck(it,btn,out){
   if(!SR){out.className='vres no';out.textContent=VMSG.blocked;return null}
   const label=btn.textContent;btn.disabled=true;btn.textContent='Listening…';out.className='vres';out.textContent='Read it aloud now.';
@@ -234,19 +248,20 @@ function lesson(li){
   app.innerHTML=`
   <div class="row"><button class="btn ghost" id="back">← All steps</button></div>
   <div><p class="eyebrow">Step ${li+1} of ${LEVELS.length}</p><h2>${esc(L.t)}</h2></div>
-  ${teacher?'<p class="teacher-bar">Teacher recording mode is on. Tap a tile, then Record. Tiles marked ♪ already have your voice.</p>':''}
+  <label class="switch teacher-bar"><input type="checkbox" id="tmodeL" ${teacher?'checked':''}> Teacher recording mode${teacher?': tap a tile, then Record. Tiles marked ♪ have your voice.':''}</label>
   <div class="rule"><h3>How to read it</h3><div class="rule-body">${L.mark?`<span class="ar mark" aria-hidden="true">${L.mark}</span>`:''}<div class="txt">${L.rule.map(r=>`<p>${esc(r)}</p>`).join('')}</div></div></div>
   <label class="switch"><input type="checkbox" id="trT" ${showTr?'checked':''}> Show transliteration under each tile</label>
   <div id="groups" class="${showTr?'':'hide-tr'}" style="display:flex;flex-direction:column;gap:18px">
   ${L.groups.map(g=>`<section style="display:flex;flex-direction:column;gap:10px"><div class="section-h"><h3>${esc(g.h)}</h3><span class="note">Read right to left</span></div>
     <div class="grid ${g.words?'words':''}">${g.items.map(it=>`<button class="tile ${audio[it.code]?'has-audio':''}" data-c="${it.code}" aria-label="${esc(it.tr)}"><span class="ar">${it.ar}</span><span class="tr">${esc(it.tr)}</span><span class="code">${it.code}</span></button>`).join('')}</div></section>`).join('')}
   </div>
-  <div class="detail" id="detail" hidden></div>
-  <div class="row"><button class="btn primary" id="prac">Practice this step</button><button class="btn mic" id="voice">Read-aloud check</button><button class="btn" id="mark">${done[li]?'Marked as done':'Mark step as done'}</button>${li<LEVELS.length-1?`<button class="btn ghost" id="next">Next step →</button>`:''}</div>`;
+  <div class="row"><button class="btn primary" id="prac">Practice this step</button><button class="btn mic" id="voice">Read-aloud check</button><button class="btn" id="mark">${done[li]?'Marked as done':'Mark step as done'}</button>${li<LEVELS.length-1?`<button class="btn ghost" id="next">Next step →</button>`:''}</div>
+  <div class="detail" id="detail" hidden></div>`;
   document.getElementById('back').onclick=home;
   document.getElementById('trT').onchange=e=>{showTr=e.target.checked;store.set('showTr',showTr);document.getElementById('groups').classList.toggle('hide-tr',!showTr)};
   document.getElementById('prac').onclick=()=>practice(li);
   document.getElementById('voice').onclick=()=>readAloud(li);
+  document.getElementById('tmodeL').onchange=e=>{teacher=e.target.checked;store.set('teacher',teacher);const y=scrollY;const sel=app.querySelector('.tile.sel');const c=sel&&sel.dataset.c;lesson(li);scrollTo(0,y);if(c){const t=app.querySelector(`.tile[data-c="${c}"]`);if(t)t.click()}};
   document.getElementById('mark').onclick=e=>{done[li]=!done[li];store.set('done',done);e.target.textContent=done[li]?'Marked as done':'Mark step as done'};
   const nx=document.getElementById('next');if(nx)nx.onclick=()=>lesson(li+1);
   let warned=false;
