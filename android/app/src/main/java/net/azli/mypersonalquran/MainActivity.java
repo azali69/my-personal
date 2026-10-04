@@ -91,6 +91,7 @@ public class MainActivity extends Activity {
             lp.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
             getWindow().setAttributes(lp);
         }
+        getWindow().setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(Color.parseColor("#f4efe2")));
         web = new WebView(this);
         web.setBackgroundColor(Color.parseColor("#f4efe2"));
         setContentView(web);
@@ -197,6 +198,8 @@ public class MainActivity extends Activity {
             runOnUiThread(() -> {
                 try {
                     int c = Color.parseColor(hex);
+                    getWindow().setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(c));
+                    getWindow().getDecorView().setBackgroundColor(c);
                     getWindow().setStatusBarColor(c);
                     getWindow().setNavigationBarColor(c);
                     web.setBackgroundColor(c);
