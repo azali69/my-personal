@@ -130,11 +130,8 @@ body.immersive .selbar{bottom:calc(14px + env(safe-area-inset-bottom,0px))}
 .blist button{height:34px;border-radius:10px;border:1px solid var(--line);background:var(--bg);padding:0 10px;font-size:13px;font-weight:600}
 .grid3{display:grid;grid-template-columns:2fr 1fr 1fr;gap:8px;align-items:center}
 .grid3 label{font-size:12px;color:var(--muted);grid-column:1/-1;margin-top:4px}
-/* Page turn: the old page lifts at its outer edge and turns over the spine */
-.flip{position:fixed;z-index:15;overflow:hidden;background:var(--bg);pointer-events:none;will-change:transform;backface-visibility:hidden;-webkit-backface-visibility:hidden}
-.flip-wrap{position:fixed;inset:0;z-index:15;pointer-events:none;perspective:2200px}
-.flip::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:var(--sh,0);background:linear-gradient(var(--sd,90deg),rgba(0,0,0,0) 40%,rgba(0,0,0,.10) 75%,rgba(0,0,0,.28))}
-.flip-shade{position:fixed;inset:0;z-index:14;pointer-events:none;background:#000;opacity:0}
+/* Page turn: the page itself swings on the spine; nothing is copied or left behind */
+main.turnfx{will-change:transform;backface-visibility:hidden;-webkit-backface-visibility:hidden}
 /* Printed (glyph) pages */
 .gpage{direction:rtl;--lh:2em}
 .gpage .mline>.sp{min-width:0;max-width:none}
@@ -555,7 +552,7 @@ function loadPageFont(set,p){ const key=set+p; if(fontState.has(key)) return fon
   const ff=new FontFace(`${set}p${p}`, `url("${fontUrl(set,p)}")`, {display:'block'});
   const pr=ff.load().then(f=>{ document.fonts.add(f); return true; }).catch(()=>{ fontState.delete(key); return false; });
   fontState.set(key,pr); return pr; }
-let glyphOff=false, turnSeq=0, glyphEverOk=false;
+let glyphOff=false, turnSeq=0, glyphEverOk=false, pageReady=Promise.resolve(), pageReadyRes=null;
 const G_EM=17.0;   // printed line width in em (QUL metrics: 42501 / 2500 units)
 function buildGlyph(p,set){
   const lines=D.G.P[p-1], first=A[pageStart[p]];
@@ -585,17 +582,17 @@ function fitGlyph(){
   squeeze(pg);
 }
 function renderGlyph(p){
-  const set=st.mushaf, my=++turnSeq;
+  const set=st.mushaf, my=++turnSeq; pageReady=new Promise(r=>pageReadyRes=r);
   const needB = D.G.P[p-1].some(l=>l[0]==='b');
   const show=()=>{ if(my!==turnSeq || hz || st.tr) return;
-    main.classList.add('fit','turning'); setFitMode(true); main.innerHTML=buildGlyph(p,set); fitGlyph(); main.classList.remove('turning'); glyphEverOk=true;
+    main.classList.add('fit','turning'); setFitMode(true); main.innerHTML=buildGlyph(p,set); fitGlyph(); main.classList.remove('turning'); glyphEverOk=true; pageReadyRes&&pageReadyRes();
     [p+1,p-1,p+2].forEach(q=>{ if(q>=1&&q<=604) loadPageFont(set,q); }); if(needB||p<=3) loadPageFont(set,1); };
   const fonts=[loadPageFont(set,p)]; if(needB) fonts.push(loadPageFont(set,1));
   let done=false;
   Promise.all(fonts).then(r=>{ done=true; if(r.every(Boolean)) show(); else if(my===turnSeq && !hz && !st.tr) glyphFail(p); });
   setTimeout(()=>{ if(!done && my===turnSeq && !hz && !st.tr && !main.querySelector('.gpage')) main.innerHTML='<p class="loadmsg">Loading page…</p>'; },250);
 }
-function glyphFail(p){
+function glyphFail(p){ pageReadyRes&&pageReadyRes();
   glyphOff=true; toast(glyphEverOk? 'This page needs internet the first time. Showing Uthmani text.' : 'Printed pages need internet the first time. Showing Uthmani text.');
   renderReader(); glyphOff=false; }
 
@@ -973,46 +970,35 @@ main.addEventListener('click',e=>{ if(hz) return;
   if(!store.get('tipImm',false)){ store.set('tipImm',true); toast('Tap to show or hide the bars. Long-press a word for options.'); } });
 
 /* Swipe (RTL book: swipe right = next page) */
-let tx=null,ty=null,flip=null;
+let tx=null,ty=null,drag=null,turning=false;
 const RM=window.matchMedia('(prefers-reduced-motion: reduce)');
-/* Make a copy of the page as it looks now, render the new page underneath, and turn the copy away. */
-function flipBegin(dir){ // dir +1 = next page (turns to the right), -1 = previous
-  const to=st.page+dir; if(to<1||to>604) return null;
-  const fixed=main.classList.contains('fit'), r=fixed?main.getBoundingClientRect():{left:0,top:0,width:innerWidth,height:innerHeight};
-  const scroll=fixed?main.scrollTop:window.scrollY;
-  const wrap=document.createElement('div'); wrap.className='flip-wrap';
-  const shade=document.createElement('div'); shade.className='flip-shade';
-  const sheet=document.createElement('div'); sheet.className='flip';
-  sheet.style.cssText=`left:${r.left}px;top:${r.top}px;width:${r.width}px;height:${r.height}px;transform-origin:${dir>0?'right':'left'} center`;
-  const copy=main.cloneNode(true); copy.removeAttribute('id'); copy.querySelectorAll('[id]').forEach(x=>x.removeAttribute('id'));
-  copy.style.cssText=`position:absolute;left:0;top:${fixed?0:-scroll}px;width:${r.width}px;height:${fixed?r.height+'px':'auto'};margin:0;${fixed?'':'max-width:none'}`;
-  if(fixed) copy.scrollTop=scroll;
-  sheet.appendChild(copy); wrap.appendChild(sheet); document.body.append(shade,wrap);
-  if(fixed){ copy.scrollTop=scroll; }
-  sheet.style.setProperty('--sd', dir>0?'270deg':'90deg');
-  st.page=to; st.sel=null; renderReader(); if(!fixed) window.scrollTo(0,0); else main.scrollTop=0;
-  return {dir,from:to-dir,to,wrap,shade,sheet,w:r.width,p:0};
+function setTurn(deg,dir){ // dir +1: next page, hinge on the right edge; -1: hinge on the left edge
+  if(!deg){ main.style.transform=''; main.style.transformOrigin=''; main.style.boxShadow=''; main.classList.remove('turnfx'); return; }
+  main.classList.add('turnfx'); main.style.transformOrigin=(dir>0?'right':'left')+' center';
+  main.style.transform=`perspective(1800px) rotateY(${deg*dir}deg)`;
+  main.style.boxShadow=`${dir>0?'-':''}${Math.round(deg/3)}px 0 ${Math.round(deg/2)}px rgba(0,0,0,${(deg/90*0.18).toFixed(3)})`; }
+function animTurn(from,to,dir,ms){ return new Promise(res=>{ if(RM.matches||ms<=0){ setTurn(to,dir); return res(); }
+  const t0=performance.now(); const step=now=>{ const k=Math.min(1,(now-t0)/ms), e=k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2; setTurn(from+(to-from)*e,dir); if(k<1) requestAnimationFrame(step); else res(); }; requestAnimationFrame(step); }); }
+async function turnTo(dir,fromDeg){
+  const to=st.page+dir; if(to<1||to>604){ toast(dir>0?'This is the last page':'This is the first page'); await animTurn(fromDeg||0,0,dir,180); setTurn(0); return; }
+  if(turning) return; turning=true; const guard=setTimeout(()=>{ setTurn(0); turning=false; },3000);
+  try{
+    await animTurn(fromDeg||0, 90, dir, 230*(1-(fromDeg||0)/90)+60);   // old page turns away
+    st.page=to; st.sel=null; renderReader(); if(!main.classList.contains('fit')) window.scrollTo(0,0); else main.scrollTop=0;
+    await Promise.race([pageReady, new Promise(r=>setTimeout(r,1200))]);
+    await animTurn(90, 0, -dir, 260);                                   // new page settles in from the other edge
+  } finally { setTurn(0); clearTimeout(guard); turning=false; }
 }
-function flipSet(f,p){ f.p=Math.max(0,Math.min(1,p)); const deg=f.p*180*(f.dir>0?1:-1);
-  f.sheet.style.transform=`rotateY(${deg}deg)`; f.sheet.style.setProperty('--sh',Math.min(1,f.p*2.2).toFixed(3));
-  f.shade.style.opacity=(0.18*(1-f.p)).toFixed(3); f.sheet.style.visibility=f.p>=0.5?'hidden':'visible'; }
-function flipFinish(f,commit,ms){
-  const p0=f.p, p1=commit?1:0, t0=performance.now(), dur=RM.matches?0:(ms??Math.max(160,380*Math.abs(p1-p0)));
-  if(!commit){ st.page=f.from; renderReader(); }
-  const step=now=>{ const k=dur?Math.min(1,(now-t0)/dur):1, e=1-Math.pow(1-k,3); flipSet(f,p0+(p1-p0)*e);
-    if(k<1) requestAnimationFrame(step); else { f.wrap.remove(); f.shade.remove(); } };
-  requestAnimationFrame(step);
-}
-function turnPage(dir){ if(flip) return; const f=flipBegin(dir); if(!f){ toast(dir>0?'This is the last page':'This is the first page'); return; } flipSet(f,0.02); flipFinish(f,true,RM.matches?0:520); }
-main.addEventListener('touchstart',e=>{ if(hz||e.touches.length>1) return; tx=e.touches[0].clientX; ty=e.touches[0].clientY; flip=null; },{passive:true});
-main.addEventListener('touchmove',e=>{ if(tx===null||hz||lpFired||selecting) return;
+function turnPage(dir){ turnTo(dir,0); }
+main.addEventListener('touchstart',e=>{ if(hz||turning||e.touches.length>1) return; tx=e.touches[0].clientX; ty=e.touches[0].clientY; drag=null; },{passive:true});
+main.addEventListener('touchmove',e=>{ if(tx===null||hz||lpFired||selecting||turning) return;
   const dx=e.touches[0].clientX-tx, dy=e.touches[0].clientY-ty;
-  if(!flip){ if(Math.abs(dx)<14 || Math.abs(dx)<Math.abs(dy)*1.3) return; clearTimeout(lpT); flip=flipBegin(dx>0?1:-1) || 'none'; }
-  if(flip==='none') return; e.preventDefault(); flipSet(flip, Math.abs(dx)/(flip.w*0.85)); },{passive:false});
-main.addEventListener('touchend',e=>{ const f=flip; flip=null; if(tx===null){ return; }
-  const dx=e.changedTouches[0].clientX-tx; tx=null;
-  if(f && f!=='none'){ lpFired=true; setTimeout(()=>{ lpFired=false; },50); flipFinish(f, f.p>0.28 || Math.abs(dx)>110); } },{passive:true});
-main.addEventListener('touchcancel',()=>{ if(flip && flip!=='none') flipFinish(flip,false); flip=null; tx=null; });
+  if(!drag){ if(Math.abs(dx)<14 || Math.abs(dx)<Math.abs(dy)*1.3) return; clearTimeout(lpT); drag={dir:dx>0?1:-1,deg:0}; }
+  e.preventDefault(); drag.deg=Math.max(0,Math.min(80, (dx*drag.dir)/(innerWidth*0.8)*90)); setTurn(drag.deg,drag.dir); },{passive:false});
+main.addEventListener('touchend',e=>{ const d=drag; drag=null; if(tx===null) return; const dx=e.changedTouches[0].clientX-tx; tx=null; if(!d) return;
+  lpFired=true; setTimeout(()=>{ lpFired=false; },60);
+  if(d.deg>22 || Math.abs(dx)>110) turnTo(d.dir,d.deg); else animTurn(d.deg,0,d.dir,160).then(()=>setTurn(0)); },{passive:true});
+main.addEventListener('touchcancel',()=>{ if(drag) animTurn(drag.deg,0,drag.dir,140).then(()=>setTurn(0)); drag=null; tx=null; });
 
 /* ============================ MATCHING ============================
    Word judging adapted from Tilawi quran-asr judge.ts (MIT License,
