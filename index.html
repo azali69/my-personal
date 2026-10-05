@@ -259,8 +259,15 @@ mark{background:color-mix(in srgb,var(--accent) 28%,transparent);color:inherit;b
 
 /* Hafazan */
 .hz-bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:4px 0 12px}
-/* the microphone floats above the bottom bar, so it is always within reach however long the passage */
-.hz-bar .mic{position:fixed;right:max(16px,var(--sar));bottom:calc(var(--sab) + 82px);z-index:26;box-shadow:0 4px 14px rgba(0,0,0,.22)}
+/* Hafazan bottom bar: Close, Show text, Type and the microphone at the right end */
+.dock.hz .dock-in{gap:6px}
+.dock.hz .pill{padding-inline:12px}
+.dock .mic.hz-only{width:48px;height:48px;margin-inline-start:auto;box-shadow:0 2px 8px rgba(0,0,0,.18)}
+.dock .mic.hz-only svg{width:22px;height:22px}
+/* bars hidden while reciting: only the microphone stays, in the same place */
+body.immersive .dock.hz{transform:none;opacity:1;pointer-events:none;background:none}
+body.immersive .dock.hz .dock-in>*{visibility:hidden}
+body.immersive .dock.hz #mic{visibility:visible;pointer-events:auto}
 .hz-range{flex:1;min-width:0;font-weight:600}
 .hz-range small{display:block;color:var(--muted);font-weight:400}
 .hz-text{direction:rtl;text-align:right;font-family:var(--ar);font-size:var(--arsize);line-height:2.35}
@@ -314,6 +321,7 @@ mark{background:color-mix(in srgb,var(--accent) 28%,transparent);color:inherit;b
   <button class="pill hz-only" id="hzExit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>Close</button>
   <button class="pill hz-only" id="hzPeek" aria-pressed="false">Show text</button>
   <button class="pill hz-only" id="hzType">Type</button>
+  <button class="mic hz-only" id="mic" aria-label="Start listening"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button>
 </div></nav>
 
 <div class="scrim" id="scrim"></div>
@@ -1016,7 +1024,8 @@ function showSelBar(lo,hi){ if(selBar){ selBar.remove(); selBar=null; }
     else if(a==='hz') startHz(Pg(lo),Pg(hi),{s:lo,e:hi});
     else if(a==='copy') copySheet(Pg(lo),Pg(hi)); };
 }
-main.addEventListener('click',e=>{ if(hz) return;
+main.addEventListener('click',e=>{
+  if(hz){ if(e.target.closest('.w.e,button,a,input,textarea,#hzR,.legend')) return; setImmersive(!document.body.classList.contains('immersive')); return; }
   if(lpFired){ lpFired=false; return; }
   if(selBar){ hideSelBar(); return; }
   if(Math.abs(e.clientX-lpX)>10||Math.abs(e.clientY-lpY)>10) return;
@@ -1178,7 +1187,7 @@ function startHz(g0,g1,b){
   for(let g=g0;g<=g1;g++){ vb.add(E.length);
     const toks=A[g][2].split(' '), map=A[g][9]||toks.map((_,i)=>[i]), inv=[]; map.forEach((ids,i)=>ids.forEach(j=>inv[j]=i));
     A[g][3].split(' ').forEach((w,j)=>{ if(!tokIn(b,g,inv[j]??0)) return; idx.set(g+','+j,E.length); E.push(normAr(w)); ref.push([g,j]); }); }
-  turnSeq++; setFitMode(false);
+  turnSeq++; setFitMode(false); main.classList.remove('fit','turning'); main.style.fontSize='';
   if(document.body.classList.contains('immersive')) setImmersive(false);
   hz={g0,g1,b,E,ref,vb,idx,finals:[],interim:'',peek:false,res:null,typed:false,done:false,startedAt:Date.now()};
   document.getElementById('dock').classList.add('hz');
@@ -1189,8 +1198,7 @@ function renderHz(){
   const a=A[hz.g0];
   document.getElementById('whereT').textContent='Hafazan · '+hzRangeLabel();
   document.getElementById('whereS').textContent=`${hz.E.length} words · Page ${a[4]}${A[hz.g1][4]!==a[4]?'–'+A[hz.g1][4]:''}`;
-  let h=`<div class="hz-bar"><div class="hz-range">Recite from memory<small>Words appear as you recite them correctly.</small></div>
-    <button class="mic" id="mic" aria-label="Start listening">${ic('mic')}</button></div><div class="hz-text${hz.peek?' peek':''}" id="hzT">`;
+  let h=`<div class="hz-bar"><div class="hz-range">Recite from memory<small>Press the microphone at the bottom right. Words appear as you recite them correctly. Tap the page to hide the bars.</small></div></div><div class="hz-text${hz.peek?' peek':''}" id="hzT">`;
   for(let g=hz.g0; g<=hz.g1; g++){
     const x=A[g];
     if(x[1]===1 && x[0]!==1 && x[0]!==9 && g===hz.g0) h+=`<div class="basmala">${BASMALA}</div>`;
@@ -1203,7 +1211,6 @@ function renderHz(){
   <div class="legend"><span><i style="color:var(--ok)">●</i> correct</span><span><i style="color:var(--bad)">●</i> wrong word (tap)</span><span><i style="color:var(--warn)">●</i> skipped</span><span><i style="color:var(--unsure)">●</i> unclear</span></div>
   <div id="hzR"></div>`;
   main.innerHTML=h;
-  document.getElementById('mic').onclick=()=> rec? stopListen(true) : startListen();
   document.getElementById('hzT').onclick=e=>{ const w=e.target.closest('.w.e'); if(w && w.dataset.heard) toast('Heard: '+w.dataset.heard); };
   if(hz.res) paint();
 }
@@ -1227,30 +1234,42 @@ function paint(){
   });
   const live=document.getElementById('live'); live.textContent=hz.H.join(' ');
 }
+function segHtml(id,opts,cur){ return `<div class="seg" id="${id}">${opts.map(([v,l])=>`<button data-v="${v}" aria-pressed="${String(cur)===String(v)}">${l}</button>`).join('')}</div>`; }
+function applyMic(){ try{ window.AndroidSpeech?.setMicPrefs?.(store.get('micLvl',1), store.get('micBt',true)); }catch(e){} }
+function micLine(){ try{ const v=window.AndroidSpeech?.micInfo?.(); if(!v) return ''; const [dev,mode]=v.split(',');
+  return (dev==='bt'?'Bluetooth headset':'Phone microphone')+(mode==='boost'?` · quiet-voice boost ${['normal','high','maximum'][store.get('micLvl',1)]}`:mode==='plain'?' · boost not available on this phone':''); }catch(e){ return ''; } }
 function startListen(){
+  applyMic();
   if(!SR){ toast('Voice recognition is not available here. Use Type.'); return; }
-  hz.done=false; hz.res=null; hz.finals=[]; hz.interim=''; document.getElementById('hzR').innerHTML='';
+  hz.done=false; hz.res=null; hz.finals=[]; hz.interim=''; hz.cur=null; hz.lastHeard=''; document.getElementById('hzR').innerHTML='';
   renderHz(); setStatus('Starting the microphone…');
   rec=new SR(); rec.lang='ar-SA'; rec.continuous=true; rec.interimResults=true; rec.maxAlternatives=1;
   let sessionFinals=[];
-  rec.onstart=()=>{ keepOn(true); setStatus('Listening. Recite at your normal pace.'); document.getElementById('mic')?.classList.add('live'); };
+  rec.onstart=()=>{ keepOn(true); const ml=micLine(); setStatus('Listening. Recite at your normal pace.'+(ml?' ('+ml+')':'')); document.getElementById('mic')?.classList.add('live'); };
   rec.onresult=ev=>{ let interim=''; sessionFinals=[];
     for(let i=0;i<ev.results.length;i++){ const t=ev.results[i][0].transcript.trim();
-      if(ev.results[i].isFinal){ const prev=sessionFinals[sessionFinals.length-1]; if(prev && t.startsWith(prev)) sessionFinals[sessionFinals.length-1]=t; else sessionFinals.push(t); }
+      if(ev.results[i].isFinal){ if(!t) continue;   // an empty final (common when you press stop) must not wipe what was heard
+        const prev=sessionFinals[sessionFinals.length-1]; if(prev && t.startsWith(prev)) sessionFinals[sessionFinals.length-1]=t; else sessionFinals.push(t); }
       else interim+=' '+t; }
-    hz.cur=sessionFinals; hz.interim=[...sessionFinals,interim].join(' ');
+    const all=[...sessionFinals,interim].join(' ').trim(); if(!all) return;
+    if(sessionFinals.length) hz.cur=sessionFinals;
+    hz.interim=all; hz.lastHeard=all;   // the most complete text of this listening session so far
     schedule(); };
   rec.onerror=ev=>{ const m={ 'not-allowed':'Microphone access is blocked here. Open the app from its own web address in Chrome, or use Type.', 'service-not-allowed':'Speech recognition is blocked in this view. Use Type, or open the app in Chrome.', 'network':'Speech recognition needs an internet connection.', 'no-speech':'No speech heard yet.', 'audio-capture':'No microphone found.' }[ev.error];
     if(m) setStatus(m); if(ev.error==='not-allowed'||ev.error==='service-not-allowed'||ev.error==='audio-capture'){ rec=null; document.getElementById('mic')?.classList.remove('live'); } };
   rec.onend=()=>{ // keep what this session heard, then restart if still listening
-    if(hz && hz.cur){ hz.finals.push(...hz.cur); hz.cur=null; } if(hz) hz.interim='';
+    flushSession();
     if(rec){ try{ rec.start(); }catch(e){} } };
   try{ rec.start(); }catch(e){ setStatus('Could not start the microphone.'); rec=null; }
 }
+/* End of one listening session: keep its final text, or, if the recognizer gave no final text, the last thing it showed. */
+function flushSession(){ if(!hz) return; const fin=(hz.cur||[]).join(' ').trim(), last=(hz.lastHeard||'').trim();
+  const keep = fin && fin.split(' ').length>=last.split(' ').length ? fin : last;
+  if(keep) hz.finals.push(keep); hz.cur=null; hz.lastHeard=''; hz.interim=''; }
 let schT; function schedule(){ clearTimeout(schT); schT=setTimeout(evaluate,120); }
 function stopListen(show){ const r=rec; rec=null; keepOn(false); if(r){ try{ r.stop(); }catch(e){} }
   document.getElementById('mic')?.classList.remove('live');
-  setTimeout(()=>{ if(!hz) return; if(hz.cur){ hz.finals.push(...hz.cur); hz.cur=null; } hz.interim=''; evaluate(); if(show) summary(); }, IS_ANDROID_APP?1000:450); }
+  setTimeout(()=>{ if(!hz) return; flushSession(); evaluate(); if(show) summary(); }, IS_ANDROID_APP?1000:450); }
 function setStatus(t){ const s=document.getElementById('hzS'); if(s) s.textContent=t; }
 function summary(){
   const r=hz.res; if(!r) return; setStatus('');
@@ -1278,6 +1297,7 @@ function typeSheet(){
 document.getElementById('hzExit').onclick=()=>{ if(rec) stopListen(false); hz=null; renderReader(); };
 document.getElementById('hzPeek').onclick=e=>{ hz.peek=!hz.peek; e.currentTarget.setAttribute('aria-pressed',hz.peek); e.currentTarget.classList.toggle('on',hz.peek); e.currentTarget.textContent=hz.peek?'Hide text':'Show text'; document.getElementById('hzT')?.classList.toggle('peek',hz.peek); };
 document.getElementById('hzType').onclick=typeSheet;
+document.getElementById('mic').onclick=()=>{ if(!hz) return; rec? stopListen(true) : startListen(); };
 
 function hzSheet(){
   const p=st.page, g0=pageStart[p], g1=pageStart[p+1]-1;
@@ -1292,7 +1312,12 @@ function hzSheet(){
    <input class="field" id="hf" type="number" inputmode="numeric" min="1" value="${A[cur][1]}" style="flex:1;min-width:70px" aria-label="From ayah">
    <input class="field" id="ht" type="number" inputmode="numeric" min="1" value="${Math.min(S[A[cur][0]-1][5],A[cur][1]+9)}" style="flex:1;min-width:70px" aria-label="To ayah"></div>
    <div class="row2" style="margin-top:10px"><button class="pill primary" id="hGo">Start</button></div>
-   <p class="note">Long ranges are trimmed to about 420 words, roughly two pages, so checking stays fast.</p>`);
+   <p class="note">Long ranges are trimmed to about 420 words, roughly two pages, so checking stays fast.</p>
+   ${IS_ANDROID_APP?`<div class="label">Microphone sensitivity</div>${segHtml('micLvl',[[0,'Normal'],[1,'High'],[2,'Maximum']],store.get('micLvl',1))}
+   <p class="note">For a quiet voice choose High or Maximum. Maximum also raises background noise, so use it in a quiet room. Works on Android 13 and newer.</p>
+   <div class="label">Bluetooth headset</div>${segHtml('micBt',[[true,'Use when connected'],[false,'Phone microphone only']],store.get('micBt',true))}`:''}`);
+  ['micLvl','micBt'].forEach(id=>{ const el=sheetB.querySelector('#'+id); if(!el) return; el.onclick=e=>{ const b=e.target.closest('button'); if(!b) return;
+    el.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b)); store.set(id, id==='micLvl'? +b.dataset.v : b.dataset.v==='true'); applyMic(); }; });
   sheetB.querySelector('#hP').onclick=()=>{ closeSheet(); startHz(g0,g1); };
   const hb=sheetB.querySelector('#hB'); if(hb) hb.onclick=()=>{ closeSheet(); startHz(bf.g0,bf.g1,bf.b); };
   sheetB.querySelector('#hGo').onclick=()=>{ const s=+hs.value, n=S[s-1][5]; let f=Math.max(1,Math.min(n,+hf.value||1)), t=Math.max(f,Math.min(n,+ht.value||f)); closeSheet(); startHz(gOf(s,f),gOf(s,t)); };

@@ -11,7 +11,9 @@ import android.os.Bundle;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
+import android.media.AudioDeviceInfo;
 import android.media.AudioFormat;
+import android.media.AudioManager;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
 import android.media.audiofx.AutomaticGainControl;
@@ -102,6 +104,58 @@ public class MainActivity extends Activity {
     private AudioRecord pumpRec;
     private Thread pumpThread;
     private ParcelFileDescriptor pumpRead;
+
+    /* Microphone choices from the page: sensitivity (0 normal, 1 high, 2 maximum) and Bluetooth headset use. */
+    private volatile int micLevel = 1;
+    private boolean useBt = true, btOn = false, wantListen = false;
+    private AudioDeviceInfo btIn;
+    private static final float[] MAX_GAIN = {3f, 6f, 12f}, TARGET = {2400f, 2800f, 3400f}, GATE = {120f, 80f, 45f};
+
+    /** A Bluetooth headset microphone, if one is connected. */
+    private AudioDeviceInfo findBtMic(AudioManager am) {
+        for (AudioDeviceInfo d : am.getDevices(AudioManager.GET_DEVICES_INPUTS)) {
+            int t = d.getType();
+            if (t == AudioDeviceInfo.TYPE_BLUETOOTH_SCO || (Build.VERSION.SDK_INT >= 31 && t == AudioDeviceInfo.TYPE_BLE_HEADSET)) return d;
+        }
+        return null;
+    }
+
+    /** Routes recording to the Bluetooth headset. Returns true if the route was just switched on (it needs a moment to connect). */
+    private boolean btRouteOn() {
+        AudioManager am = (AudioManager) getSystemService(AUDIO_SERVICE);
+        if (am == null || !useBt) { btRouteOff(); return false; }
+        AudioDeviceInfo mic = findBtMic(am);
+        if (mic == null) { btRouteOff(); return false; }
+        btIn = mic;
+        if (btOn) return false;
+        try {
+            am.setMode(AudioManager.MODE_IN_COMMUNICATION);
+            if (Build.VERSION.SDK_INT >= 31) {
+                for (AudioDeviceInfo d : am.getAvailableCommunicationDevices()) {
+                    int t = d.getType();
+                    if (t == AudioDeviceInfo.TYPE_BLUETOOTH_SCO || t == AudioDeviceInfo.TYPE_BLE_HEADSET) { am.setCommunicationDevice(d); break; }
+                }
+            } else {
+                am.startBluetoothSco();
+                am.setBluetoothScoOn(true);
+            }
+            btOn = true;
+            return true;
+        } catch (Exception e) { btRouteOff(); return false; }
+    }
+
+    private void btRouteOff() {
+        btIn = null;
+        if (!btOn) return;
+        btOn = false;
+        AudioManager am = (AudioManager) getSystemService(AUDIO_SERVICE);
+        if (am == null) return;
+        try {
+            if (Build.VERSION.SDK_INT >= 31) am.clearCommunicationDevice();
+            else { am.setBluetoothScoOn(false); am.stopBluetoothSco(); }
+            am.setMode(AudioManager.MODE_NORMAL);
+        } catch (Exception ignored) { }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -195,6 +249,7 @@ public class MainActivity extends Activity {
         @JavascriptInterface
         public void start(final String lang) {
             runOnUiThread(() -> {
+                wantListen = true;
                 if (Build.VERSION.SDK_INT >= 23 &&
                         checkSelfPermission(Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
                     pendingLang = lang;
@@ -207,12 +262,23 @@ public class MainActivity extends Activity {
 
         @JavascriptInterface
         public void stop() {
-            runOnUiThread(() -> { if (recognizer != null) recognizer.stopListening(); });
+            runOnUiThread(() -> { wantListen = false; if (recognizer != null) recognizer.stopListening(); btRouteOff(); });
         }
 
         /** Fixed margins for the status bar, navigation bar and camera cutout, plus the keyboard height, in CSS pixels: "top,right,bottom,left,keyboard". */
         @JavascriptInterface
         public String getInsets() { return insets; }
+
+        /** level: 0 normal, 1 high, 2 maximum. bt: use a Bluetooth headset microphone when one is connected. */
+        @JavascriptInterface
+        public void setMicPrefs(int level, boolean bt) {
+            micLevel = Math.max(0, Math.min(2, level));
+            runOnUiThread(() -> { useBt = bt; if (!bt) btRouteOff(); });
+        }
+
+        /** What the last listening session used, for the status line: "bt|phone" + ",boost|plain". */
+        @JavascriptInterface
+        public String micInfo() { return (btIn != null ? "bt" : "phone") + "," + (usingBoost ? "boost" : (Build.VERSION.SDK_INT >= 33 && !boostFailed ? "ready" : "plain")); }
 
         @JavascriptInterface
         public void copyText(final String text) {
@@ -301,6 +367,7 @@ public class MainActivity extends Activity {
         }
         lastLang = lang;
         stopPump();
+        if (btRouteOn()) { web.postDelayed(() -> { if (wantListen) startRecognizer(lang); }, 900); return; }   // give the headset time to connect
         Intent i = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         i.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         i.putExtra(RecognizerIntent.EXTRA_LANGUAGE, lang);
@@ -342,6 +409,7 @@ public class MainActivity extends Activity {
         final AudioRecord rec = new AudioRecord(MediaRecorder.AudioSource.VOICE_RECOGNITION, PUMP_RATE,
                 AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT, Math.max(min, PUMP_RATE));
         if (rec.getState() != AudioRecord.STATE_INITIALIZED) { rec.release(); throw new IllegalStateException("mic"); }
+        if (btIn != null) { try { rec.setPreferredDevice(btIn); } catch (Exception ignored) { } }
         try { if (AutomaticGainControl.isAvailable()) { AutomaticGainControl agc = AutomaticGainControl.create(rec.getAudioSessionId()); if (agc != null) agc.setEnabled(true); } } catch (Exception ignored) { }
         ParcelFileDescriptor[] p = ParcelFileDescriptor.createPipe();
         final OutputStream out = new ParcelFileDescriptor.AutoCloseOutputStream(p[1]);
@@ -358,9 +426,10 @@ public class MainActivity extends Activity {
                     double sum = 0; for (int j = 0; j < n; j++) sum += (double) buf[j] * buf[j];
                     float rms = (float) Math.sqrt(sum / n);
                     if (rms > pumpPeakRms) pumpPeakRms = rms;
-                    // Raise quiet speech towards a normal speaking level (up to 6x, about +15 dB).
+                    // Raise quiet speech towards a normal speaking level (up to 3x, 6x or 12x by the sensitivity setting).
                     // Near-silence (room noise) is not raised further, so background hiss is not turned into "speech".
-                    float want = rms > 90 ? Math.max(1f, Math.min(6f, 2600f / rms)) : Math.min(gain, 2f);
+                    int lv = micLevel;
+                    float want = rms > GATE[lv] ? Math.max(1f, Math.min(MAX_GAIN[lv], TARGET[lv] / rms)) : Math.min(gain, 2f);
                     gain += (want - gain) * (want < gain ? 0.5f : 0.08f);   // come down fast, go up slowly
                     for (int j = 0; j < n; j++) {
                         float y = buf[j] * gain;
@@ -465,6 +534,7 @@ public class MainActivity extends Activity {
         super.onPause();
         if (recognizer != null) recognizer.cancel();
         stopPump();
+        btRouteOff();
         web.evaluateJavascript("window.__pause && window.__pause()", null);
     }
 
@@ -472,6 +542,7 @@ public class MainActivity extends Activity {
     protected void onDestroy() {
         if (recognizer != null) { recognizer.destroy(); recognizer = null; }
         stopPump();
+        btRouteOff();
         web.destroy();
         super.onDestroy();
     }
