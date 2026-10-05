@@ -110,10 +110,11 @@ main.fit{padding-block:8px 76px}
 .where b.arname{text-align:left;font-size:18px;line-height:1.25}
 .pagefoot.tight{margin-top:6px}
 .mline .sh2,.sh2{background:color-mix(in srgb,var(--accent) 17%,var(--bg))}
-.mline .mr,.ay.mr,.row.mr{background:color-mix(in srgb,#4a78b8 13%,var(--bg))}
-.mline .mr2,.ay.mr2,.row.mr2{background:color-mix(in srgb,#4a78b8 30%,var(--bg))}
-.mline .rk,.ay.rk,.row.rk{background:color-mix(in srgb,#c79a3a 12%,var(--bg))}
-.mline .rk2,.ay.rk2,.row.rk2{background:color-mix(in srgb,#c79a3a 36%,var(--bg))}
+.mline .mr,.ay.mr,.row.mr{background:color-mix(in srgb,#4a78b8 22%,var(--bg));--bsc:color-mix(in srgb,#4a78b8 80%,var(--fg))}
+.mline .rk,.ay.rk,.row.rk{background:color-mix(in srgb,#c79a3a 24%,var(--bg));--bsc:color-mix(in srgb,#c79a3a 85%,var(--fg))}
+.mline .sh2,.ay.sh2,.row.sh2{--bsc:color-mix(in srgb,var(--accent) 85%,var(--fg))}
+.mline .bs,.ay.bs{box-shadow:inset -3px 0 0 var(--bsc)}
+.row.bs{box-shadow:inset 0 3px 0 var(--bsc)}
 body:has(.selbar) .toast{bottom:auto;top:calc(80px + var(--sat))}
 .rkedit .mline [data-g],.rkedit .ay,.rkedit .row{cursor:cell}
 .rkstart{box-shadow:inset -3px 0 0 #b07d1f}
@@ -210,7 +211,7 @@ main.fit .pagefoot.tight{margin-top:4px}
 /* Sheets */
 .scrim{position:fixed;inset:0;background:rgba(10,14,12,.38);z-index:40;opacity:0;pointer-events:none;transition:opacity .2s}
 .scrim.open{opacity:1;pointer-events:auto}
-.sheet{position:fixed;left:0;right:0;bottom:0;z-index:50;max-height:88%;display:flex;flex-direction:column;background:var(--surface);border-radius:20px 20px 0 0;border-top:1px solid var(--line);transform:translateY(105%);transition:transform .25s ease;padding-bottom:var(--sab)}
+.sheet{position:fixed;left:0;right:0;bottom:var(--kb,0px);z-index:50;max-height:calc(88% - var(--kb,0px));display:flex;flex-direction:column;background:var(--surface);border-radius:20px 20px 0 0;border-top:1px solid var(--line);transform:translateY(105%);transition:transform .25s ease;padding-bottom:var(--sab)}
 .sheet.open{transform:none;visibility:visible}
 .sheet:not(.open){visibility:hidden;transition:transform .25s ease,visibility 0s .25s}
 .sheet-in{max-width:46rem;width:100%;margin:0 auto;display:flex;flex-direction:column;min-height:0;flex:1}
@@ -258,6 +259,8 @@ mark{background:color-mix(in srgb,var(--accent) 28%,transparent);color:inherit;b
 
 /* Hafazan */
 .hz-bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:4px 0 12px}
+/* the microphone floats above the bottom bar, so it is always within reach however long the passage */
+.hz-bar .mic{position:fixed;right:max(16px,var(--sar));bottom:calc(var(--sab) + 82px);z-index:26;box-shadow:0 4px 14px rgba(0,0,0,.22)}
 .hz-range{flex:1;min-width:0;font-weight:600}
 .hz-range small{display:block;color:var(--muted);font-weight:400}
 .hz-text{direction:rtl;text-align:right;font-family:var(--ar);font-size:var(--arsize);line-height:2.35}
@@ -409,10 +412,14 @@ function blockLabel(b){ const g=Pg(b.s), nm=S[A[g][0]-1][1];
   if(g===Pg(b.e)){ const n=wcount(g); return (Pw(b.s)===0&&Pw(b.e)===n-1)? `${nm} ${A[g][0]}:${A[g][1]}` : `${nm} ${A[g][0]}:${A[g][1]} (words ${Pw(b.s)+1}–${Pw(b.e)+1})`; }
   return `${nm} ${posLabel(b.s,false)} – ${posLabel(b.e,true)}`; }
 /* shading helpers shared by every view */
-function rkTone(g){ return st.blocks==='ruku' ? (blockIndex(g)%2?' rk2':' rk') : ''; }
-const TONES={mine:[' sh',' sh2'],myruku:[' mr',' mr2']};
-function wshade(g,w){ const t=TONES[st.blocks]; if(t){ const i=myBlockAt(P_(g,w)); return i<0?'':t[i%2]; } return rkTone(g); }
-function ashade(g){ const t=TONES[st.blocks]; if(t){ const i=myBlockInAyah(g); return i<0?'':t[i%2]; } return rkTone(g); }
+/* One colour per set: original ruku' gold, My ruku' blue, My blocks green. A darker bar marks where each block starts. */
+const TONES={mine:' sh2',myruku:' mr'};
+function wshade(g,w){ const t=TONES[st.blocks];
+  if(t){ const i=myBlockAt(P_(g,w)); return i<0?'' : t+(curSet()[i].s===P_(g,w)?' bs':''); }
+  return st.blocks==='ruku' ? ' rk'+(w===0&&isBlockStart(g)?' bs':'') : ''; }
+function ashade(g){ const t=TONES[st.blocks];
+  if(t){ const i=myBlockInAyah(g); return i<0?'' : t+(Pg(curSet()[i].s)===g?' bs':''); }
+  return st.blocks==='ruku' ? ' rk'+(isBlockStart(g)?' bs':'') : ''; }
 function sameGroup(pg,pw,g,w){ if(TONES[st.blocks]){ const a=myBlockAt(P_(pg,pw)); return a>=0 && a===myBlockAt(P_(g,w)); } return pg===g || !isBlockStart(g); }
 /* ---- Ruku' sections: original Tanzil set plus your saved changes ---- */
 let rkEd=Object.assign({add:[],del:[]}, store.get('rkEdit',{})); let rkAdd=new Set(rkEd.add), rkDel=new Set(rkEd.del); let rkDraft=null;
@@ -954,7 +961,11 @@ function ayahSheet(g){
 /* Reading gestures: tap = show/hide bars, long-press on an ayah = its menu (in every view, translation included). */
 let lpT=null, lpFired=false, lpX=0, lpY=0;
 /* In the Android app the window is edge to edge and never resizes; it tells us the fixed margins of the system bars. */
-window.__insets=()=>{ try{ const v=window.AndroidSpeech?.getInsets?.(); if(!v) return; const [t,r,b,l]=v.split(',').map(Number), R=document.documentElement.style;
+let lastBars='';
+window.__insets=()=>{ try{ const v=window.AndroidSpeech?.getInsets?.(); if(!v) return; const [t,r,b,l,k]=v.split(',').map(Number), R=document.documentElement.style;
+  R.setProperty('--kb',(k||0)+'px');   // keyboard: sheets sit above it so the field you type in stays visible
+  if(k>0){ const f=document.activeElement; if(f && f.matches('input,textarea,select')) setTimeout(()=>f.scrollIntoView({block:'center',behavior:'smooth'}),60); }
+  const bars=[t,r,b,l].join(); if(bars===lastBars) return; lastBars=bars;
   R.setProperty('--sat',t+'px'); R.setProperty('--sar',r+'px'); R.setProperty('--sab',b+'px'); R.setProperty('--sal',l+'px'); maxH.p=maxH.l=0; setTimeout(refit,0); }catch(e){} };
 window.__insets();
 function setImmersive(on){ document.body.classList.toggle('immersive',on); try{ window.AndroidSpeech?.setImmersive?.(on); }catch(e){} store.set('imm',on); }

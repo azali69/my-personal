@@ -11,6 +11,12 @@ import android.os.Bundle;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
+import android.media.AudioFormat;
+import android.media.AudioRecord;
+import android.media.MediaRecorder;
+import android.media.audiofx.AutomaticGainControl;
+import android.os.ParcelFileDescriptor;
+import android.os.SystemClock;
 import android.view.View;
 import android.view.WindowInsets;
 import android.view.WindowInsetsController;
@@ -85,6 +91,18 @@ public class MainActivity extends Activity {
     private SpeechRecognizer recognizer;
     private String pendingLang;
 
+    /* Quiet-voice boost (Android 13+): we record the microphone ourselves, raise quiet speech, and hand the
+       stream to the speech recognizer. If the phone's recognizer does not accept it, we go back to its own microphone. */
+    private boolean boostFailed = false, usingBoost = false;
+    private String lastLang = "ar-SA";
+    private long boostStart = 0;
+    private int boostNoSpeech = 0;
+    private volatile boolean pumping = false;
+    private volatile float pumpPeakRms = 0;
+    private AudioRecord pumpRec;
+    private Thread pumpThread;
+    private ParcelFileDescriptor pumpRead;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,11 +121,13 @@ public class MainActivity extends Activity {
         else getWindow().getDecorView().setSystemUiVisibility(BASE_UI);
         web.setOnApplyWindowInsetsListener((v, ins) -> {
             float d = getResources().getDisplayMetrics().density;
-            int t, r, b, l;
+            int t, r, b, l, k;
             if (Build.VERSION.SDK_INT >= 30) {
                 android.graphics.Insets i = ins.getInsetsIgnoringVisibility(WindowInsets.Type.systemBars() | WindowInsets.Type.displayCutout());
                 t = i.top; r = i.right; b = i.bottom; l = i.left;
+                k = ins.getInsets(WindowInsets.Type.ime()).bottom;   // the on-screen keyboard (0 when hidden)
             } else {
+                k = Math.max(0, ins.getSystemWindowInsetBottom() - ins.getStableInsetBottom());
                 t = ins.getStableInsetTop(); r = ins.getStableInsetRight(); b = ins.getStableInsetBottom(); l = ins.getStableInsetLeft();
                 if (Build.VERSION.SDK_INT >= 28 && ins.getDisplayCutout() != null) {
                     android.view.DisplayCutout c = ins.getDisplayCutout();
@@ -115,7 +135,7 @@ public class MainActivity extends Activity {
                     b = Math.max(b, c.getSafeInsetBottom()); l = Math.max(l, c.getSafeInsetLeft());
                 }
             }
-            String now = Math.round(t / d) + "," + Math.round(r / d) + "," + Math.round(b / d) + "," + Math.round(l / d);
+            String now = Math.round(t / d) + "," + Math.round(r / d) + "," + Math.round(b / d) + "," + Math.round(l / d) + "," + Math.round(k / d);
             if (!now.equals(insets)) { insets = now; web.evaluateJavascript("window.__insets && window.__insets()", null); }
             return ins;
         });
@@ -190,7 +210,7 @@ public class MainActivity extends Activity {
             runOnUiThread(() -> { if (recognizer != null) recognizer.stopListening(); });
         }
 
-        /** Fixed margins for the status bar, navigation bar and camera cutout, in CSS pixels: "top,right,bottom,left". */
+        /** Fixed margins for the status bar, navigation bar and camera cutout, plus the keyboard height, in CSS pixels: "top,right,bottom,left,keyboard". */
         @JavascriptInterface
         public String getInsets() { return insets; }
 
@@ -279,6 +299,8 @@ public class MainActivity extends Activity {
             recognizer = SpeechRecognizer.createSpeechRecognizer(this);
             recognizer.setRecognitionListener(new Listener());
         }
+        lastLang = lang;
+        stopPump();
         Intent i = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         i.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         i.putExtra(RecognizerIntent.EXTRA_LANGUAGE, lang);
@@ -288,18 +310,88 @@ public class MainActivity extends Activity {
         i.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS, 4000L);
         i.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_POSSIBLY_COMPLETE_SILENCE_LENGTH_MILLIS, 3000L);
         i.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_MINIMUM_LENGTH_MILLIS, 15000L);
+        usingBoost = false;
+        if (Build.VERSION.SDK_INT >= 33 && !boostFailed) {
+            try {
+                ParcelFileDescriptor rd = startPump();
+                i.putExtra(RecognizerIntent.EXTRA_AUDIO_SOURCE, rd);
+                i.putExtra(RecognizerIntent.EXTRA_AUDIO_SOURCE_CHANNEL_COUNT, 1);
+                i.putExtra(RecognizerIntent.EXTRA_AUDIO_SOURCE_ENCODING, AudioFormat.ENCODING_PCM_16BIT);
+                i.putExtra(RecognizerIntent.EXTRA_AUDIO_SOURCE_SAMPLING_RATE, PUMP_RATE);
+                usingBoost = true;
+                boostStart = SystemClock.elapsedRealtime();
+            } catch (Exception e) {
+                stopPump();
+                usingBoost = false;
+            }
+        }
         try {
             recognizer.startListening(i);
         } catch (Exception e) {
+            if (usingBoost) { boostFailed = true; stopPump(); startRecognizer(lang); return; }
             emitError("aborted");
             emit("onend", null);
         }
     }
 
+    private static final int PUMP_RATE = 16000;
+
+    /** Starts recording and returns the read end of a pipe carrying 16 kHz mono 16-bit PCM, with quiet speech raised. */
+    private ParcelFileDescriptor startPump() throws Exception {
+        int min = AudioRecord.getMinBufferSize(PUMP_RATE, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT);
+        final AudioRecord rec = new AudioRecord(MediaRecorder.AudioSource.VOICE_RECOGNITION, PUMP_RATE,
+                AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT, Math.max(min, PUMP_RATE));
+        if (rec.getState() != AudioRecord.STATE_INITIALIZED) { rec.release(); throw new IllegalStateException("mic"); }
+        try { if (AutomaticGainControl.isAvailable()) { AutomaticGainControl agc = AutomaticGainControl.create(rec.getAudioSessionId()); if (agc != null) agc.setEnabled(true); } } catch (Exception ignored) { }
+        ParcelFileDescriptor[] p = ParcelFileDescriptor.createPipe();
+        final OutputStream out = new ParcelFileDescriptor.AutoCloseOutputStream(p[1]);
+        pumpRec = rec; pumpRead = p[0]; pumping = true; pumpPeakRms = 0;
+        pumpThread = new Thread(() -> {
+            short[] buf = new short[PUMP_RATE / 20];          // 50 ms
+            byte[] bytes = new byte[buf.length * 2];
+            float gain = 1f;
+            try {
+                rec.startRecording();
+                while (pumping) {
+                    int n = rec.read(buf, 0, buf.length);
+                    if (n <= 0) continue;
+                    double sum = 0; for (int j = 0; j < n; j++) sum += (double) buf[j] * buf[j];
+                    float rms = (float) Math.sqrt(sum / n);
+                    if (rms > pumpPeakRms) pumpPeakRms = rms;
+                    // Raise quiet speech towards a normal speaking level (up to 6x, about +15 dB).
+                    // Near-silence (room noise) is not raised further, so background hiss is not turned into "speech".
+                    float want = rms > 90 ? Math.max(1f, Math.min(6f, 2600f / rms)) : Math.min(gain, 2f);
+                    gain += (want - gain) * (want < gain ? 0.5f : 0.08f);   // come down fast, go up slowly
+                    for (int j = 0; j < n; j++) {
+                        float y = buf[j] * gain;
+                        if (y > 24000f) y = 24000f + (y - 24000f) * 0.15f; else if (y < -24000f) y = -24000f + (y + 24000f) * 0.15f;  // soft limit
+                        int v = Math.max(-32768, Math.min(32767, Math.round(y)));
+                        bytes[2 * j] = (byte) (v & 0xff); bytes[2 * j + 1] = (byte) ((v >> 8) & 0xff);
+                    }
+                    out.write(bytes, 0, n * 2);
+                }
+            } catch (Exception ignored) {
+                // the recognizer closed the stream: this listening session is over
+            } finally {
+                try { rec.stop(); } catch (Exception ignored) { }
+                rec.release();
+                try { out.close(); } catch (Exception ignored) { }
+            }
+        }, "mic-boost");
+        pumpThread.start();
+        return p[0];
+    }
+
+    private void stopPump() {
+        pumping = false;
+        if (pumpRead != null) { try { pumpRead.close(); } catch (Exception ignored) { } pumpRead = null; }
+        pumpThread = null; pumpRec = null;
+    }
+
     private class Listener implements RecognitionListener {
         private boolean ended;
 
-        private void end() { if (!ended) { ended = true; emit("onend", null); } }
+        private void end() { stopPump(); if (!ended) { ended = true; emit("onend", null); } }
 
         private String first(Bundle b) {
             ArrayList<String> r = b == null ? null : b.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
@@ -323,11 +415,24 @@ public class MainActivity extends Activity {
         }
 
         @Override public void onResults(Bundle b) {
+            boostNoSpeech = 0;
             result(first(b), true);
             end();
         }
 
         @Override public void onError(int error) {
+            if (usingBoost) {
+                long t = SystemClock.elapsedRealtime() - boostStart;
+                boolean refused = t < 3000 && error != SpeechRecognizer.ERROR_NO_MATCH && error != SpeechRecognizer.ERROR_SPEECH_TIMEOUT
+                        && error != SpeechRecognizer.ERROR_NETWORK && error != SpeechRecognizer.ERROR_NETWORK_TIMEOUT
+                        && error != SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS;
+                boolean deaf = (error == SpeechRecognizer.ERROR_NO_MATCH || error == SpeechRecognizer.ERROR_SPEECH_TIMEOUT) && pumpPeakRms > 1500 && ++boostNoSpeech >= 2;
+                if (refused || deaf) {   // this phone's recognizer will not take our stream: use its own microphone from now on
+                    boostFailed = true; stopPump();
+                    startRecognizer(lastLang);
+                    return;
+                }
+            }
             String code;
             switch (error) {
                 case SpeechRecognizer.ERROR_NO_MATCH:
@@ -359,12 +464,14 @@ public class MainActivity extends Activity {
     protected void onPause() {
         super.onPause();
         if (recognizer != null) recognizer.cancel();
+        stopPump();
         web.evaluateJavascript("window.__pause && window.__pause()", null);
     }
 
     @Override
     protected void onDestroy() {
         if (recognizer != null) { recognizer.destroy(); recognizer = null; }
+        stopPump();
         web.destroy();
         super.onDestroy();
     }
