@@ -105,6 +105,9 @@ main.fit{padding-block:8px 76px}
 .mpage.short .mline{justify-content:center}
 .mpage.short .mline>.sp{flex:0 0 .32em;min-width:.32em}
 .pagehead.tight{margin:0 2px 4px}
+.arname{font-family:var(--ar);font-weight:400;direction:rtl;unicode-bidi:isolate}
+.pagehead .arname{font-size:1.15em;line-height:1}
+.where b.arname{text-align:left;font-size:18px;line-height:1.25}
 .pagefoot.tight{margin-top:6px}
 .mline .sh2,.sh2{background:color-mix(in srgb,var(--accent) 17%,var(--bg))}
 .mline .mr,.ay.mr,.row.mr{background:color-mix(in srgb,#4a78b8 13%,var(--bg))}
@@ -342,10 +345,10 @@ const store = {
 };
 const st = {
   page: store.get('page', 1), tr: store.get('tr', false), lang: store.get('lang','ms'),
-  bg: store.get('bg','auto'), size: store.get('tsize', 0)||28, flow: store.get('flow', store.get('tsize',0)>0), mushaf: store.get('mushaf','v4'), blocks: store.get('blocks','off'),
+  bg: store.get('bg','auto'), sname: store.get('sname','lat'), size: store.get('tsize', 0)||28, flow: store.get('flow', store.get('tsize',0)>0), mushaf: store.get('mushaf','v4'), blocks: store.get('blocks','off'),
   fn: store.get('fn', false), mine: new Set(store.get('mine', [])), sel: null, bm: store.get('bm', {})
 };
-function save(){ ['page','tr','lang','bg','blocks','fn','mushaf'].forEach(k=>store.set(k, st[k])); store.set('tsize', st.size); store.set('flow', st.flow); store.set('mine',[...st.mine]); }
+function save(){ ['page','tr','lang','bg','blocks','fn','mushaf','sname'].forEach(k=>store.set(k, st[k])); store.set('tsize', st.size); store.set('flow', st.flow); store.set('mine',[...st.mine]); }
 
 const BMC=[['1','Hijau'],['2','Emas'],['3','Merah'],['4','Biru'],['5','Ungu']];
 function bmAttr(g){ const b=st.bm[g]; return b? ` bm" style="--bmc:var(--bm${b.c})` : ''; }
@@ -455,14 +458,17 @@ function surahHeader(s){
    + ((s!==1 && s!==9) ? `<div class="basmala">${BASMALA}</div>` : '');
 }
 function setFitMode(on){ document.body.classList.toggle('fitmode',on); }
+/* The page is named after the surah that begins on it (as in the printed mushaf); otherwise the surah it continues. */
+function pageSurah(p){ for(let g=pageStart[p]; g<pageStart[p+1]; g++) if(A[g][1]===1) return A[g][0]; return A[pageStart[p]][0]; }
+function headName(p){ const s=S[pageSurah(p)-1]; return st.sname==='ar'? `<span class="arname">سورة ${esc(s[0])}</span>` : `<span>${esc(s[1])}</span>`; }
 function renderReader(){
   hz=null; document.getElementById('dock').classList.remove('hz');
   const p=st.page, g0=pageStart[p], g1=pageStart[p+1]-1;
   const first=A[g0];
-  document.getElementById('whereT').textContent = `${S[first[0]-1][1]} · ${S[first[0]-1][0]}`;
+  { const ps=S[pageSurah(p)-1], w=document.getElementById('whereT'); w.textContent = st.sname==='ar'? `سورة ${ps[0]}` : ps[1]; w.classList.toggle('arname', st.sname==='ar'); }
   document.getElementById('whereS').textContent = `Juz ${first[5]} · Page ${p}`;
   let parity = blockIndex(g0)%2, h='';
-  h+=`<div class="pagehead"><span>${esc(S[first[0]-1][1])}</span><span>Juz ${first[5]}</span></div>`;
+  h+=`<div class="pagehead">${headName(p)}<span>Juz ${first[5]}</span></div>`;
   main.classList.remove('fit'); setFitMode(false);
   if(!st.tr && st.mushaf!=='text' && !glyphOff){
     renderGlyph(p);
@@ -483,7 +489,7 @@ function renderReader(){
 }
 function buildRows(p){
   const g0=pageStart[p], g1=pageStart[p+1]-1, first=A[g0];
-  let h=`<div class="pagehead"><span>${esc(S[first[0]-1][1])}</span><span>Juz ${first[5]}</span></div><div class="rows">`;
+  let h=`<div class="pagehead">${headName(p)}<span>Juz ${first[5]}</span></div><div class="rows">`;
   for(let g=g0; g<=g1; g++){
     const a=A[g];
     if(a[1]===1){ h+=surahHeader(a[0]); }
@@ -497,7 +503,7 @@ function buildRows(p){
 }
 function buildMushaf(g0,g1){
   const first=A[g0];
-  let h=`<div class="pagehead"><span>${esc(S[first[0]-1][1])}</span><span>Juz ${first[5]}</span></div>`;
+  let h=`<div class="pagehead">${headName(first[4])}<span>Juz ${first[5]}</span></div>`;
   let parity = blockIndex(g0)%2, inP=false;
   for(let g=g0; g<=g1; g++){
     const a=A[g];
@@ -517,7 +523,7 @@ function buildPage(p){
   const lines=D.L[p-1], first=A[pageStart[p]];
   const shade=new Map(); for(let g=pageStart[p]; g<pageStart[p+1]; g++) shade.set(g, shadeOf(g));
   const toks=new Map(); const tok=(g,t)=>{ if(!toks.has(g)) toks.set(g,A[g][2].split(' ')); return toks.get(g)[t]; };
-  let h=`<div class="pagehead tight"><span>${esc(S[first[0]-1][1])}</span><span>Juz ${first[5]}</span></div><div class="mpage${p<=2?' short':''}" id="mpage">`;
+  let h=`<div class="pagehead tight">${headName(p)}<span>Juz ${first[5]}</span></div><div class="mpage${p<=2?' short':''}" id="mpage">`;
   for(const items of lines){
     const f=items[0];
     if(Array.isArray(f)){
@@ -585,7 +591,7 @@ const G_EM=17.0;   // printed line width in em (QUL metrics: 42501 / 2500 units)
 function buildGlyph(p,set){
   const lines=D.G.P[p-1], first=A[pageStart[p]];
   const shade=new Map(); for(let g=pageStart[p]; g<pageStart[p+1]; g++) shade.set(g, shadeOf(g));
-  let h=`<div class="pagehead tight"><span>${esc(S[first[0]-1][1])}</span><span>Juz ${first[5]}</span></div><div class="mpage gpage${p<=2?' short':''}" id="mpage" style="font-family:'${set}p${p}'">`;
+  let h=`<div class="pagehead tight">${headName(p)}<span>Juz ${first[5]}</span></div><div class="mpage gpage${p<=2?' short':''}" id="mpage" style="font-family:'${set}p${p}'">`;
   for(const ln of lines){
     if(ln[0]==='h'){ h+=surahFrame(ln[1],set); continue; }
     if(ln[0]==='b'){ h+=`<div class="mline bl" style="font-family:'${set}p1'">${D.G.bas.map(w=>`<span>${w}</span>`).join('')}</div>`; continue; }
@@ -772,6 +778,7 @@ function setSheet(){
   <div class="label">Mushaf</div>${seg('mushaf',[['v4','Madinah 1441H'],['v4t','Madinah tajweed'],['text','Uthmani text']],st.mushaf)}
   <p class="note" id="mNote"></p>
   <div id="offWrap"></div>
+  <div class="label">Surah name</div>${seg('sname',[['lat','Latin (At-Takwīr)'],['ar','Arabic (سورة التكوير)']],st.sname)}
   <div class="label">Translation language</div>${seg('lang',[['ms','Bahasa Melayu'],['en','English']],st.lang)}
   <div class="label">English footnotes</div>${seg('fn',[[false,'Hide'],[true,'Show']],st.fn)}
   <div id="flowWrap"><div class="label">Uthmani text page</div>${seg('flow',[[false,'Fit page (15 lines)'],[true,'Larger text']],st.flow)}
@@ -797,7 +804,7 @@ function setSheet(){
     const ob=document.getElementById('offBtn'); if(ob) ob.onclick=()=>saveOffline(st.mushaf); };
   mNote();
   segH('mushaf',v=>{ st.mushaf=v; mNote(); sizeLbl(); });
-  segH('lang',v=>st.lang=v); segH('fn',v=>st.fn=(v==='true')); segH('blocks',v=>{ if(v!=='off') store.set('lastBlocks',v); st.blocks=v; note(); });
+  segH('lang',v=>st.lang=v); segH('sname',v=>st.sname=v); segH('fn',v=>st.fn=(v==='true')); segH('blocks',v=>{ if(v!=='off') store.set('lastBlocks',v); st.blocks=v; note(); });
   const sizeLbl=()=>{ document.getElementById('sizeL').textContent = `${st.size} px`;
     document.getElementById('flowWrap').style.display = st.mushaf==='text'?'':'none';
     document.getElementById('sizeN').textContent = 'Used for translation, Hafazan'+(st.mushaf==='text'?' and Larger text.':'.')+' A fitted page always uses the largest size that fits your screen; turn the phone sideways for bigger letters.'; }; sizeLbl();
