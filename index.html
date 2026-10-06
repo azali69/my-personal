@@ -795,6 +795,7 @@ function setSheet(){
   <p class="note">Fit page keeps the printed 15 lines on one screen. Larger text lets the lines run on, so you scroll to read the rest of the page.</p></div>
   <div class="label">Arabic size</div><div class="row2"><input type="range" id="size" min="0" max="10" step="1" value="${Math.round((st.size-22)/2)}" aria-label="Arabic text size" style="flex:1"><span id="sizeL" class="note" style="min-width:4em;text-align:right"></span></div>
   <p class="note" id="sizeN"></p>
+  ${micSettingsHtml()}
   <div class="label">Waqaf &amp; ibtida' blocks</div>${seg('blocks',MODES,st.blocks)}
   <p class="note" id="blkNote"></p>
   <div class="label">More</div>
@@ -820,6 +821,7 @@ function setSheet(){
     document.getElementById('sizeN').textContent = 'Used for translation, Hafazan'+(st.mushaf==='text'?' and Larger text.':'.')+' A fitted page always uses the largest size that fits your screen; turn the phone sideways for bigger letters.'; }; sizeLbl();
   segH('flow',v=>{ st.flow=(v==='true'); });
   sheetB.querySelector('#size').oninput=e=>{ st.size=22+(+e.target.value)*2; applyLook(); save(); sizeLbl(); rerender(); };
+  bindMicSettings();
   sheetB.querySelector('#openHist').onclick=histSheet; sheetB.querySelector('#openAbout').onclick=aboutSheet;
 }
 /* Copy one or many ayat, with Arabic and/or translations. Texts are copied exactly as stored. */
@@ -1237,9 +1239,19 @@ function follow(T){ const shown=T.querySelectorAll('.w:not(.hid)'); if(!shown.le
   if(want>24 && performance.now()-followAt>250){ followAt=performance.now();
     window.scrollTo({top:Math.min(scrollY+want, document.documentElement.scrollHeight-innerHeight), behavior:RM.matches?'auto':'smooth'}); } }
 function segHtml(id,opts,cur){ return `<div class="seg" id="${id}">${opts.map(([v,l])=>`<button data-v="${v}" aria-pressed="${String(cur)===String(v)}">${l}</button>`).join('')}</div>`; }
-function applyMic(){ try{ window.AndroidSpeech?.setMicPrefs?.(store.get('micLvl',1), store.get('micBt',true)); }catch(e){} }
+function applyMic(){ try{ window.AndroidSpeech?.setMicPrefs?.(store.get('micLvl',1), store.get('micBt',true), store.get('micNoise',false)); }catch(e){} }
+/* Microphone settings (Android app only): shown in Settings and in the Hafazan box. */
+function micSettingsHtml(){ if(!IS_ANDROID_APP) return '';
+  return `<div class="label">Microphone: quiet voice</div>${segHtml('micLvl',[[0,'Normal'],[1,'High'],[2,'Maximum']],store.get('micLvl',1))}
+   <p class="note">For a soft voice choose High or Maximum. Maximum also makes background sound louder, so it suits a quiet room.</p>
+   <div class="label">Microphone: surroundings</div>${segHtml('micNoise',[[false,'Quiet place'],[true,'Noisy or windy']],store.get('micNoise',false))}
+   <p class="note">Noisy or windy turns on the phone's noise reduction, cuts the low rumble of wind and traffic, and boosts less so noise is not made louder.</p>
+   <div class="label">Microphone: Bluetooth headset</div>${segHtml('micBt',[[true,'Use when connected'],[false,'Phone microphone only']],store.get('micBt',true))}
+   <p class="note">These need Android 13 or newer. While listening, the line under the verses says which microphone is in use and whether the boost is on.</p>`; }
+function bindMicSettings(){ ['micLvl','micNoise','micBt'].forEach(id=>{ const el=sheetB.querySelector('#'+id); if(!el) return; el.onclick=e=>{ const b=e.target.closest('button'); if(!b) return;
+    el.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b)); store.set(id, id==='micLvl'? +b.dataset.v : b.dataset.v==='true'); applyMic(); }; }); }
 function micLine(){ try{ const v=window.AndroidSpeech?.micInfo?.(); if(!v) return ''; const [dev,mode]=v.split(',');
-  return (dev==='bt'?'Bluetooth headset':'Phone microphone')+(mode==='boost'?` · quiet-voice boost ${['normal','high','maximum'][store.get('micLvl',1)]}`:mode==='plain'?' · boost not available on this phone':''); }catch(e){ return ''; } }
+  return (dev==='bt'?'Bluetooth headset':'Phone microphone')+(mode==='boost'?` · quiet-voice boost ${['normal','high','maximum'][store.get('micLvl',1)]}${store.get('micNoise',false)?' · noise reduction':''}`:mode==='plain'?' · boost not available on this phone':''); }catch(e){ return ''; } }
 function startListen(){
   applyMic();
   if(!SR){ toast('Voice recognition is not available here. Use Type.'); return; }
@@ -1254,6 +1266,9 @@ function startListen(){
         const prev=sessionFinals[sessionFinals.length-1]; if(prev && t.startsWith(prev)) sessionFinals[sessionFinals.length-1]=t; else sessionFinals.push(t); }
       else interim+=' '+t; }
     const all=[...sessionFinals,interim].join(' ').trim(); if(!all) return;
+    // Google sometimes starts a fresh stretch of text after a pause, within the same session. If the new text is not a
+    // continuation of what we had, keep the earlier stretch before it is replaced (otherwise those words look "skipped").
+    if(hz.lastHeard && !continues(hz.lastHeard, all)){ hz.finals.push(hz.lastHeard); hz.cur=null; }
     if(sessionFinals.length) hz.cur=sessionFinals;
     hz.interim=all; hz.lastHeard=all;   // the most complete text of this listening session so far
     schedule(); };
@@ -1264,6 +1279,9 @@ function startListen(){
     if(rec){ try{ rec.start(); }catch(e){} } };
   try{ rec.start(); }catch(e){ setStatus('Could not start the microphone.'); rec=null; }
 }
+/* Is "b" the same stretch of speech as "a" (revised or extended), rather than a new stretch? Compares the opening words. */
+function continues(a,b){ const A1=normAr(a).split(' ').filter(Boolean), B1=normAr(b).split(' ').filter(Boolean); if(!A1.length||!B1.length) return true;
+  const n=Math.min(3,A1.length,B1.length); return ratio(A1.slice(0,n).join(''),B1.slice(0,n).join(''))>=0.7; }
 /* End of one listening session: keep its final text, or, if the recognizer gave no final text, the last thing it showed. */
 function flushSession(){ if(!hz) return; const fin=(hz.cur||[]).join(' ').trim(), last=(hz.lastHeard||'').trim();
   const keep = fin && fin.split(' ').length>=last.split(' ').length ? fin : last;
@@ -1315,11 +1333,8 @@ function hzSheet(){
    <input class="field" id="ht" type="number" inputmode="numeric" min="1" value="${Math.min(S[A[cur][0]-1][5],A[cur][1]+9)}" style="flex:1;min-width:70px" aria-label="To ayah"></div>
    <div class="row2" style="margin-top:10px"><button class="pill primary" id="hGo">Start</button></div>
    <p class="note">Long ranges are trimmed to about 420 words, roughly two pages, so checking stays fast.</p>
-   ${IS_ANDROID_APP?`<div class="label">Microphone sensitivity</div>${segHtml('micLvl',[[0,'Normal'],[1,'High'],[2,'Maximum']],store.get('micLvl',1))}
-   <p class="note">For a quiet voice choose High or Maximum. Maximum also raises background noise, so use it in a quiet room. Works on Android 13 and newer.</p>
-   <div class="label">Bluetooth headset</div>${segHtml('micBt',[[true,'Use when connected'],[false,'Phone microphone only']],store.get('micBt',true))}`:''}`);
-  ['micLvl','micBt'].forEach(id=>{ const el=sheetB.querySelector('#'+id); if(!el) return; el.onclick=e=>{ const b=e.target.closest('button'); if(!b) return;
-    el.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b)); store.set(id, id==='micLvl'? +b.dataset.v : b.dataset.v==='true'); applyMic(); }; });
+   ${micSettingsHtml()}`);
+  bindMicSettings();
   sheetB.querySelector('#hP').onclick=()=>{ closeSheet(); startHz(g0,g1); };
   const hb=sheetB.querySelector('#hB'); if(hb) hb.onclick=()=>{ closeSheet(); startHz(bf.g0,bf.g1,bf.b); };
   sheetB.querySelector('#hGo').onclick=()=>{ const s=+hs.value, n=S[s-1][5]; let f=Math.max(1,Math.min(n,+hf.value||1)), t=Math.max(f,Math.min(n,+ht.value||f)); closeSheet(); startHz(gOf(s,f),gOf(s,t)); };

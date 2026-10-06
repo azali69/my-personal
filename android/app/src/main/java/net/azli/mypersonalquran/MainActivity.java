@@ -17,6 +17,7 @@ import android.media.AudioManager;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
 import android.media.audiofx.AutomaticGainControl;
+import android.media.audiofx.NoiseSuppressor;
 import android.os.ParcelFileDescriptor;
 import android.os.SystemClock;
 import android.view.View;
@@ -107,6 +108,7 @@ public class MainActivity extends Activity {
 
     /* Microphone choices from the page: sensitivity (0 normal, 1 high, 2 maximum) and Bluetooth headset use. */
     private volatile int micLevel = 1;
+    private volatile boolean micNoisy = false;
     private boolean useBt = true, btOn = false, wantListen = false;
     private AudioDeviceInfo btIn;
     private static final float[] MAX_GAIN = {3f, 6f, 12f}, TARGET = {2400f, 2800f, 3400f}, GATE = {120f, 80f, 45f};
@@ -271,8 +273,9 @@ public class MainActivity extends Activity {
 
         /** level: 0 normal, 1 high, 2 maximum. bt: use a Bluetooth headset microphone when one is connected. */
         @JavascriptInterface
-        public void setMicPrefs(int level, boolean bt) {
+        public void setMicPrefs(int level, boolean bt, boolean noisy) {
             micLevel = Math.max(0, Math.min(2, level));
+            micNoisy = noisy;
             runOnUiThread(() -> { useBt = bt; if (!bt) btRouteOff(); });
         }
 
@@ -406,10 +409,14 @@ public class MainActivity extends Activity {
     /** Starts recording and returns the read end of a pipe carrying 16 kHz mono 16-bit PCM, with quiet speech raised. */
     private ParcelFileDescriptor startPump() throws Exception {
         int min = AudioRecord.getMinBufferSize(PUMP_RATE, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT);
-        final AudioRecord rec = new AudioRecord(MediaRecorder.AudioSource.VOICE_RECOGNITION, PUMP_RATE,
+        final boolean noisy = micNoisy;
+        // In a noisy or windy place, VOICE_COMMUNICATION asks the phone for its call-quality processing
+        // (on most phones this uses the second microphone to cancel surrounding noise).
+        final AudioRecord rec = new AudioRecord(noisy ? MediaRecorder.AudioSource.VOICE_COMMUNICATION : MediaRecorder.AudioSource.VOICE_RECOGNITION, PUMP_RATE,
                 AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT, Math.max(min, PUMP_RATE));
         if (rec.getState() != AudioRecord.STATE_INITIALIZED) { rec.release(); throw new IllegalStateException("mic"); }
         if (btIn != null) { try { rec.setPreferredDevice(btIn); } catch (Exception ignored) { } }
+        if (noisy) { try { if (NoiseSuppressor.isAvailable()) { NoiseSuppressor ns = NoiseSuppressor.create(rec.getAudioSessionId()); if (ns != null) ns.setEnabled(true); } } catch (Exception ignored) { } }
         try { if (AutomaticGainControl.isAvailable()) { AutomaticGainControl agc = AutomaticGainControl.create(rec.getAudioSessionId()); if (agc != null) agc.setEnabled(true); } } catch (Exception ignored) { }
         ParcelFileDescriptor[] p = ParcelFileDescriptor.createPipe();
         final OutputStream out = new ParcelFileDescriptor.AutoCloseOutputStream(p[1]);
@@ -418,18 +425,28 @@ public class MainActivity extends Activity {
             short[] buf = new short[PUMP_RATE / 20];          // 50 ms
             byte[] bytes = new byte[buf.length * 2];
             float gain = 1f;
+            // High-pass filter (2nd-order Butterworth): removes wind and traffic rumble below the voice.
+            double fc = noisy ? 180.0 : 80.0, w0 = 2 * Math.PI * fc / PUMP_RATE, al = Math.sin(w0) / (2 * 0.7071), cs = Math.cos(w0), a0 = 1 + al;
+            final float b0 = (float) ((1 + cs) / 2 / a0), b1 = (float) (-(1 + cs) / a0), b2 = b0, a1 = (float) (-2 * cs / a0), a2 = (float) ((1 - al) / a0);
+            float x1 = 0, x2 = 0, y1 = 0, y2 = 0;
             try {
                 rec.startRecording();
                 while (pumping) {
                     int n = rec.read(buf, 0, buf.length);
                     if (n <= 0) continue;
+                    for (int j = 0; j < n; j++) {
+                        float x = buf[j], y = b0 * x + b1 * x1 + b2 * x2 - a1 * y1 - a2 * y2;
+                        x2 = x1; x1 = x; y2 = y1; y1 = y;
+                        buf[j] = (short) Math.max(-32768, Math.min(32767, Math.round(y)));
+                    }
                     double sum = 0; for (int j = 0; j < n; j++) sum += (double) buf[j] * buf[j];
                     float rms = (float) Math.sqrt(sum / n);
                     if (rms > pumpPeakRms) pumpPeakRms = rms;
                     // Raise quiet speech towards a normal speaking level (up to 3x, 6x or 12x by the sensitivity setting).
                     // Near-silence (room noise) is not raised further, so background hiss is not turned into "speech".
                     int lv = micLevel;
-                    float want = rms > GATE[lv] ? Math.max(1f, Math.min(MAX_GAIN[lv], TARGET[lv] / rms)) : Math.min(gain, 2f);
+                    float gate = noisy ? GATE[lv] * 2f : GATE[lv], cap = noisy ? Math.min(MAX_GAIN[lv], 4f) : MAX_GAIN[lv];   // in noise, boost less
+                    float want = rms > gate ? Math.max(1f, Math.min(cap, TARGET[lv] / rms)) : Math.min(gain, noisy ? 1f : 2f);
                     gain += (want - gain) * (want < gain ? 0.5f : 0.08f);   // come down fast, go up slowly
                     for (int j = 0; j < n; j++) {
                         float y = buf[j] * gain;
