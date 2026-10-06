@@ -113,8 +113,7 @@ main.fit{padding-block:8px 76px}
 .mline .mr,.ay.mr,.row.mr{background:color-mix(in srgb,#4a78b8 22%,var(--bg));--bsc:color-mix(in srgb,#4a78b8 80%,var(--fg))}
 .mline .rk,.ay.rk,.row.rk{background:color-mix(in srgb,#c79a3a 24%,var(--bg));--bsc:color-mix(in srgb,#c79a3a 85%,var(--fg))}
 .mline .sh2,.ay.sh2,.row.sh2{--bsc:color-mix(in srgb,var(--accent) 85%,var(--fg))}
-.mline .bs,.ay.bs{box-shadow:inset -3px 0 0 var(--bsc)}
-.row.bs{box-shadow:inset 0 3px 0 var(--bsc)}
+
 body:has(.selbar) .toast{bottom:auto;top:calc(80px + var(--sat))}
 .rkedit .mline [data-g],.rkedit .ay,.rkedit .row{cursor:cell}
 .rkstart{box-shadow:inset -3px 0 0 #b07d1f}
@@ -271,7 +270,7 @@ body.immersive .dock.hz #mic{visibility:visible;pointer-events:auto}
 .hz-range{flex:1;min-width:0;font-weight:600}
 .hz-range small{display:block;color:var(--muted);font-weight:400}
 .hz-text{direction:rtl;text-align:right;font-family:var(--ar);font-size:var(--arsize);line-height:2.35}
-.w{border-radius:6px;transition:color .2s,background .2s;padding-block:.1em}
+.w{border-radius:6px;transition:color .08s,background .08s;padding-block:.1em}
 .w.hid{color:transparent;background:var(--veil)}
 .peek .w.hid{color:var(--muted);background:transparent;opacity:.55}
 .w.c{color:var(--fg)}
@@ -420,14 +419,10 @@ function blockLabel(b){ const g=Pg(b.s), nm=S[A[g][0]-1][1];
   if(g===Pg(b.e)){ const n=wcount(g); return (Pw(b.s)===0&&Pw(b.e)===n-1)? `${nm} ${A[g][0]}:${A[g][1]}` : `${nm} ${A[g][0]}:${A[g][1]} (words ${Pw(b.s)+1}–${Pw(b.e)+1})`; }
   return `${nm} ${posLabel(b.s,false)} – ${posLabel(b.e,true)}`; }
 /* shading helpers shared by every view */
-/* One colour per set: original ruku' gold, My ruku' blue, My blocks green. A darker bar marks where each block starts. */
+/* One colour per set: original ruku' gold, My ruku' blue, My blocks green. */
 const TONES={mine:' sh2',myruku:' mr'};
-function wshade(g,w){ const t=TONES[st.blocks];
-  if(t){ const i=myBlockAt(P_(g,w)); return i<0?'' : t+(curSet()[i].s===P_(g,w)?' bs':''); }
-  return st.blocks==='ruku' ? ' rk'+(w===0&&isBlockStart(g)?' bs':'') : ''; }
-function ashade(g){ const t=TONES[st.blocks];
-  if(t){ const i=myBlockInAyah(g); return i<0?'' : t+(Pg(curSet()[i].s)===g?' bs':''); }
-  return st.blocks==='ruku' ? ' rk'+(isBlockStart(g)?' bs':'') : ''; }
+function wshade(g,w){ const t=TONES[st.blocks]; if(t) return myBlockAt(P_(g,w))<0?'':t; return st.blocks==='ruku'?' rk':''; }
+function ashade(g){ const t=TONES[st.blocks]; if(t) return myBlockInAyah(g)<0?'':t; return st.blocks==='ruku'?' rk':''; }
 function sameGroup(pg,pw,g,w){ if(TONES[st.blocks]){ const a=myBlockAt(P_(pg,pw)); return a>=0 && a===myBlockAt(P_(g,w)); } return pg===g || !isBlockStart(g); }
 /* ---- Ruku' sections: original Tanzil set plus your saved changes ---- */
 let rkEd=Object.assign({add:[],del:[]}, store.get('rkEdit',{})); let rkAdd=new Set(rkEd.add), rkDel=new Set(rkEd.del); let rkDraft=null;
@@ -1233,7 +1228,14 @@ function paint(){
     w.className='w '+(best==='pending'?'hid':best); if(heard) w.dataset.heard=heard; else delete w.dataset.heard;
   });
   const live=document.getElementById('live'); live.textContent=hz.H.join(' ');
+  if(rec) follow(T);
 }
+/* While reciting, keep the line being recited a little above the middle of the screen, scrolling gently forward. */
+let followAt=0;
+function follow(T){ const shown=T.querySelectorAll('.w:not(.hid)'); if(!shown.length) return;
+  const r=shown[shown.length-1].getBoundingClientRect(), want=r.top-innerHeight*0.38;
+  if(want>24 && performance.now()-followAt>250){ followAt=performance.now();
+    window.scrollTo({top:Math.min(scrollY+want, document.documentElement.scrollHeight-innerHeight), behavior:RM.matches?'auto':'smooth'}); } }
 function segHtml(id,opts,cur){ return `<div class="seg" id="${id}">${opts.map(([v,l])=>`<button data-v="${v}" aria-pressed="${String(cur)===String(v)}">${l}</button>`).join('')}</div>`; }
 function applyMic(){ try{ window.AndroidSpeech?.setMicPrefs?.(store.get('micLvl',1), store.get('micBt',true)); }catch(e){} }
 function micLine(){ try{ const v=window.AndroidSpeech?.micInfo?.(); if(!v) return ''; const [dev,mode]=v.split(',');
@@ -1266,7 +1268,7 @@ function startListen(){
 function flushSession(){ if(!hz) return; const fin=(hz.cur||[]).join(' ').trim(), last=(hz.lastHeard||'').trim();
   const keep = fin && fin.split(' ').length>=last.split(' ').length ? fin : last;
   if(keep) hz.finals.push(keep); hz.cur=null; hz.lastHeard=''; hz.interim=''; }
-let schT; function schedule(){ clearTimeout(schT); schT=setTimeout(evaluate,120); }
+let schT=0; function schedule(){ if(schT) return; schT=requestAnimationFrame(()=>{ schT=0; evaluate(); }); }   // show words on the next frame
 function stopListen(show){ const r=rec; rec=null; keepOn(false); if(r){ try{ r.stop(); }catch(e){} }
   document.getElementById('mic')?.classList.remove('live');
   setTimeout(()=>{ if(!hz) return; flushSession(); evaluate(); if(show) summary(); }, IS_ANDROID_APP?1000:450); }
