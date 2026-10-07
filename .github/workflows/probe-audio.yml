@@ -9,20 +9,28 @@ jobs:
   probe:
     runs-on: ubuntu-latest
     steps:
-      - name: Probe
+      - name: Fetch word timings for all surahs (Alafasy 7, Yasser 97)
         run: |
           set +e
-          exec > >(tee /tmp/probe.txt) 2>&1
-          for id in 113 562; do echo "== QUL page $id"; curl -sL "https://qul.tarteel.ai/resources/recitation/$id" -o p$id.html; grep -oE '(https?:)?//[^"'"'"' <>]*(mp3|json|sqlite|zip|download)[^"'"'"' <>]*' p$id.html | sort -u | head -30; grep -oE 'href="[^"]*download[^"]*"' p$id.html | sort -u; grep -oE 'audio_url[^,]{0,120}' p$id.html | head -5; done
-          for f in json sqlite; do for u in "https://qul.tarteel.ai/resources/recitation/113/download?format=$f" "https://qul.tarteel.ai/resources/recitation/113/download.$f"; do echo "== $u"; curl -s -o /dev/null -w "%{http_code} %{redirect_url} %{content_type}\n" "$u"; done; done
-          echo "== everyayah Maher sizes vs 64kbps (first/last ayah of 78)"; for R in MaherAlMuaiqly128kbps Maher_AlMuaiqly_64kbps; do for a in 078001 078002 078040; do curl -sI https://everyayah.com/data/$R/$a.mp3 | grep -i "content-length" | sed "s/^/$R $a /"; done; done
-          echo "== quranicaudio maher"; curl -s "https://quranicaudio.com/api/qaris" | python3 -c "import sys,json; [print(q.get('id'),q.get('name'),q.get('relative_path'),q.get('file_formats')) for q in json.load(sys.stdin) if 'aiqly' in (q.get('name') or '').lower() or 'muaiq' in (q.get('name') or '').lower() or 'maher' in (q.get('name') or '').lower()]"
-          echo "== qdc maher?"; curl -s "https://api.qurancdn.com/api/qdc/audio/reciters?locale=en" | python3 -c "import sys,json; d=json.load(sys.stdin); [print(r['id'],r['name']) for r in d['reciters']]"
-          echo "== qdc CORS"; curl -sI -H "Origin: https://azali69.github.io" "https://api.qurancdn.com/api/qdc/audio/reciters/97/audio_files?chapter=78&segments=true" | grep -i "HTTP/\|access-control-allow-origin"
-          curl -sI -H "Origin: https://azali69.github.io" "https://download.quranicaudio.com/quran/yasser_ad-dussary//078.mp3" | grep -i "HTTP/\|access-control-allow-origin\|content-type\|accept-ranges"
-          curl -s "https://api.qurancdn.com/api/qdc/audio/reciters/7/audio_files?chapter=78&segments=true" | python3 -c "import sys,json; d=json.load(sys.stdin)['audio_files'][0]; print(d['audio_url'], d.get('duration'), d['verse_timings'][0])"
-          curl -sI -H "Origin: https://azali69.github.io" "https://download.quranicaudio.com/qdc/mishari_al_afasy/murattal/78.mp3" | grep -i "HTTP/\|access-control-allow-origin"
+          mkdir o
+          python3 - <<'PY'
+          import json, urllib.request, time
+          out={}
+          for rid in (7,97):
+              out[rid]={}
+              for s in range(1,115):
+                  u=f"https://api.qurancdn.com/api/qdc/audio/reciters/{rid}/audio_files?chapter={s}&segments=true"
+                  for t in range(3):
+                      try:
+                          d=json.load(urllib.request.urlopen(u,timeout=30))['audio_files'][0]; break
+                      except Exception as e:
+                          time.sleep(2); d=None
+                  if not d: out[rid][s]=None; continue
+                  out[rid][s]={'url':d['audio_url'],'dur':d.get('duration'),'v':[[vt['verse_key'],vt['timestamp_from'],vt['timestamp_to'],[sg for sg in vt.get('segments') or []]] for vt in d['verse_timings']]}
+          json.dump(out,open('o/timings.json','w'))
+          PY
+          ls -la o
       - name: Save results
         run: |
-          mkdir o && cp /tmp/probe.txt o/ && cd o && git init -q -b probe && git config user.name a && git config user.email a@b
+          cd o && git init -q -b probe && git config user.name a && git config user.email a@b
           git add -A && git commit -qm probe && git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" probe
