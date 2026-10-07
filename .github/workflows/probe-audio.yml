@@ -3,6 +3,8 @@ on:
   push:
     branches: [main]
     paths: ['.github/workflows/probe-audio.yml']
+permissions:
+  contents: write
 jobs:
   probe:
     runs-on: ubuntu-latest
@@ -10,6 +12,7 @@ jobs:
       - name: Check which surahs exist, and CORS headers
         run: |
           set +e
+          exec > >(tee /tmp/probe.txt) 2>&1
           echo "== hazza mp3quran (r1)"; ok=""; miss=""
           for i in $(seq -w 1 114); do n=$(printf "%03d" $((10#$i)));
             c=$(curl -s -o /dev/null -w "%{http_code}" -I "https://server11.mp3quran.net/hazza/$n.mp3"); d=$(curl -s -o /dev/null -w "%{http_code}" -I "https://cdn.mp3quran.net/download/audio/hazza-balushi/r1/$n.mp3")
@@ -21,3 +24,7 @@ jobs:
           echo "== quran.com api recitations"; curl -s "https://api.quran.com/api/v4/resources/recitations?language=en" | python3 -c "import sys,json; [print(r) for r in json.load(sys.stdin)['recitations']]"
           echo "== quranicaudio"; curl -s "https://quranicaudio.com/api/qaris" | python3 -c "import sys,json; [print(q.get('id'),q.get('name'),q.get('relative_path')) for q in json.load(sys.stdin) if 'alush' in (q.get('name') or '').lower() or 'afasy' in (q.get('name') or '').lower() or 'hazza' in (q.get('name') or '').lower()]"
           echo "== CORS mp3quran"; curl -sI -H "Origin: https://azali69.github.io" https://server11.mp3quran.net/hazza/078.mp3 | grep -i "HTTP/\|access-control\|content-type"
+      - name: Save results
+        run: |
+          mkdir o && cp /tmp/probe.txt o/ && cd o && git init -q -b probe && git config user.name a && git config user.email a@b
+          git add -A && git commit -qm probe && git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" probe
