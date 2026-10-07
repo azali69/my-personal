@@ -93,6 +93,10 @@ public class MainActivity extends Activity {
     private static final int BASE_UI = View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION;
     private SpeechRecognizer recognizer;
     private String pendingLang;
+    /* Voice search: short listening, several languages allowed (first is the main one). */
+    private boolean searchMode = false, searchPlain = false;
+    private long searchStart = 0;
+    private String[] searchLangs = new String[0];
 
     /* Quiet-voice boost (Android 13+): we record the microphone ourselves, raise quiet speech, and hand the
        stream to the speech recognizer. If the phone's recognizer does not accept it, we go back to its own microphone. */
@@ -105,6 +109,55 @@ public class MainActivity extends Activity {
     private AudioRecord pumpRec;
     private Thread pumpThread;
     private ParcelFileDescriptor pumpRead;
+
+    /* Recording the person's own recitation (Hafazan), saved as WAV in the app's private storage and served to the page at /rec/. */
+    private final Object recLock = new Object();
+    private java.io.RandomAccessFile recOut;
+    private File recFile;
+    private long recBytes = 0;
+    private volatile boolean recActive = false, recStandalone = false;
+    private Thread recThread;
+    private static final int REC_KEEP = 30;
+
+    private File recDir() { File d = new File(getFilesDir(), "rec"); if (!d.exists()) d.mkdirs(); return d; }
+
+    /** Adds 16 kHz mono 16-bit PCM to the open recording. */
+    private void recWrite(byte[] b, int len) {
+        synchronized (recLock) {
+            if (!recActive || recOut == null) return;
+            try { recOut.write(b, 0, len); recBytes += len; } catch (Exception ignored) { }
+        }
+    }
+
+    private static void wavHeader(java.io.RandomAccessFile f, long data) throws Exception {
+        f.seek(0);
+        java.nio.ByteBuffer h = java.nio.ByteBuffer.allocate(44).order(java.nio.ByteOrder.LITTLE_ENDIAN);
+        h.put("RIFF".getBytes()).putInt((int) (36 + data)).put("WAVE".getBytes()).put("fmt ".getBytes()).putInt(16)
+         .putShort((short) 1).putShort((short) 1).putInt(PUMP_RATE).putInt(PUMP_RATE * 2).putShort((short) 2).putShort((short) 16)
+         .put("data".getBytes()).putInt((int) data);
+        f.write(h.array());
+    }
+
+    /** When the speech recognizer uses its own microphone (no boost), record with a separate recorder. Some phones give it silence. */
+    private void recStandaloneStart() {
+        if (recThread != null) return;
+        recStandalone = true;
+        recThread = new Thread(() -> {
+            AudioRecord r = null;
+            try {
+                int min = AudioRecord.getMinBufferSize(PUMP_RATE, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT);
+                r = new AudioRecord(MediaRecorder.AudioSource.MIC, PUMP_RATE, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT, Math.max(min, PUMP_RATE));
+                if (btIn != null) { try { r.setPreferredDevice(btIn); } catch (Exception ignored) { } }
+                r.startRecording();
+                byte[] b = new byte[PUMP_RATE / 10];
+                while (recStandalone && recActive) { int n = r.read(b, 0, b.length); if (n > 0) recWrite(b, n); }
+            } catch (Exception ignored) {
+            } finally { if (r != null) { try { r.stop(); } catch (Exception ignored) { } r.release(); } }
+        }, "rec-standalone");
+        recThread.start();
+    }
+
+    private void recStandaloneStop() { recStandalone = false; recThread = null; }
 
     /* Microphone choices from the page: sensitivity (0 normal, 1 high, 2 maximum) and Bluetooth headset use. */
     private volatile int micLevel = 1;
@@ -200,7 +253,7 @@ public class MainActivity extends Activity {
         s.setJavaScriptEnabled(true);
         s.setDomStorageEnabled(true);
         s.setDatabaseEnabled(true);
-        s.setMediaPlaybackRequiresUserGesture(true);
+        s.setMediaPlaybackRequiresUserGesture(false);   // the reciter player moves to the next ayah by itself
         s.setAllowFileAccess(false);
         s.setAllowContentAccess(false);
         // The app has its own text-size setting: ignore the phone's system font size so pages look the same on every phone
@@ -209,6 +262,7 @@ public class MainActivity extends Activity {
         final WebViewAssetLoader loader = new WebViewAssetLoader.Builder()
                 .setDomain(HOST)
                 .addPathHandler("/assets/", new WebViewAssetLoader.AssetsPathHandler(this))
+                .addPathHandler("/rec/", new WebViewAssetLoader.InternalStoragePathHandler(this, recDir()))
                 .build();
 
         web.setWebViewClient(new WebViewClient() {
@@ -252,6 +306,7 @@ public class MainActivity extends Activity {
         public void start(final String lang) {
             runOnUiThread(() -> {
                 wantListen = true;
+                searchMode = false;
                 if (Build.VERSION.SDK_INT >= 23 &&
                         checkSelfPermission(Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
                     pendingLang = lang;
@@ -262,14 +317,75 @@ public class MainActivity extends Activity {
             });
         }
 
+        /** Voice search: langs is a comma list such as "ar-SA,ms-MY,en-US"; the first is the main language. */
+        @JavascriptInterface
+        public void startSearch(final String langs) {
+            runOnUiThread(() -> {
+                searchLangs = langs.split(",");
+                searchMode = true;
+                wantListen = true;
+                if (Build.VERSION.SDK_INT >= 23 &&
+                        checkSelfPermission(Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+                    pendingLang = searchLangs[0];
+                    requestPermissions(new String[]{Manifest.permission.RECORD_AUDIO}, REQ_MIC);
+                    return;
+                }
+                startRecognizer(searchLangs[0]);
+            });
+        }
+
         @JavascriptInterface
         public void stop() {
-            runOnUiThread(() -> { wantListen = false; if (recognizer != null) recognizer.stopListening(); btRouteOff(); });
+            runOnUiThread(() -> { wantListen = false; if (recognizer != null) recognizer.stopListening(); stopPump(); btRouteOff(); });
         }
 
         /** Fixed margins for the status bar, navigation bar and camera cutout, plus the keyboard height, in CSS pixels: "top,right,bottom,left,keyboard". */
         @JavascriptInterface
         public String getInsets() { return insets; }
+
+        /** Starts saving the recitation to a new WAV file. */
+        @JavascriptInterface
+        public boolean recStart() {
+            synchronized (recLock) {
+                try {
+                    recFile = new File(recDir(), "rec-" + System.currentTimeMillis() + ".wav");
+                    recOut = new java.io.RandomAccessFile(recFile, "rw");
+                    wavHeader(recOut, 0); recBytes = 0; recActive = true;
+                } catch (Exception e) { recActive = false; return false; }
+            }
+            return true;
+        }
+
+        /** Finishes the recording. Returns "name,seconds", or "" if nothing was recorded. Keeps the newest recordings only. */
+        @JavascriptInterface
+        public String recStop() {
+            String res = "";
+            recStandaloneStop();
+            synchronized (recLock) {
+                recActive = false;
+                try {
+                    if (recOut != null) { wavHeader(recOut, recBytes); recOut.close(); }
+                    if (recFile != null) {
+                        if (recBytes < PUMP_RATE) recFile.delete();   // under half a second: nothing worth keeping
+                        else res = recFile.getName() + "," + (recBytes / (PUMP_RATE * 2));
+                    }
+                } catch (Exception ignored) { }
+                recOut = null; recFile = null;
+            }
+            File[] all = recDir().listFiles();
+            if (all != null && all.length > REC_KEEP) {
+                java.util.Arrays.sort(all, (a, b) -> Long.compare(a.lastModified(), b.lastModified()));
+                for (int k = 0; k < all.length - REC_KEEP; k++) all[k].delete();
+            }
+            return res;
+        }
+
+        /** Whether a recording file still exists (old ones are removed). */
+        @JavascriptInterface
+        public boolean recExists(String name) { return name != null && !name.contains("/") && new File(recDir(), name).exists(); }
+
+        @JavascriptInterface
+        public void recDelete(String name) { if (name != null && !name.contains("/")) new File(recDir(), name).delete(); }
 
         /** level: 0 normal, 1 high, 2 maximum. bt: use a Bluetooth headset microphone when one is connected. */
         @JavascriptInterface
@@ -377,11 +493,31 @@ public class MainActivity extends Activity {
         i.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, lang);
         i.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true);
         i.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1);
-        i.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS, 4000L);
-        i.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_POSSIBLY_COMPLETE_SILENCE_LENGTH_MILLIS, 3000L);
-        i.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_MINIMUM_LENGTH_MILLIS, 15000L);
+        if (searchMode) {
+            searchStart = SystemClock.elapsedRealtime();
+            // a short query: stop soon after the person stops speaking
+            i.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS, 1500L);
+            i.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_POSSIBLY_COMPLETE_SILENCE_LENGTH_MILLIS, 1200L);
+            if (searchLangs.length > 1) {
+                String[] more = java.util.Arrays.copyOfRange(searchLangs, 1, searchLangs.length);
+                i.putExtra("android.speech.extra.EXTRA_ADDITIONAL_LANGUAGES", more);   // Google's recognizer: also accept these
+                ArrayList<String> all = new ArrayList<>(java.util.Arrays.asList(searchLangs));
+                if (Build.VERSION.SDK_INT >= 33 && !searchPlain) {
+                    i.putExtra(RecognizerIntent.EXTRA_ENABLE_LANGUAGE_DETECTION, true);
+                    i.putStringArrayListExtra(RecognizerIntent.EXTRA_LANGUAGE_DETECTION_ALLOWED_LANGUAGES, all);
+                }
+                if (Build.VERSION.SDK_INT >= 34 && !searchPlain) {
+                    i.putExtra(RecognizerIntent.EXTRA_ENABLE_LANGUAGE_SWITCH, RecognizerIntent.LANGUAGE_SWITCH_BALANCED);
+                    i.putStringArrayListExtra(RecognizerIntent.EXTRA_LANGUAGE_SWITCH_ALLOWED_LANGUAGES, all);
+                }
+            }
+        } else {
+            i.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS, 4000L);
+            i.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_POSSIBLY_COMPLETE_SILENCE_LENGTH_MILLIS, 3000L);
+            i.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_MINIMUM_LENGTH_MILLIS, 15000L);
+        }
         usingBoost = false;
-        if (Build.VERSION.SDK_INT >= 33 && !boostFailed) {
+        if (Build.VERSION.SDK_INT >= 33 && !boostFailed && !searchMode) {
             try {
                 ParcelFileDescriptor rd = startPump();
                 i.putExtra(RecognizerIntent.EXTRA_AUDIO_SOURCE, rd);
@@ -395,6 +531,7 @@ public class MainActivity extends Activity {
                 usingBoost = false;
             }
         }
+        if (recActive) { if (usingBoost) recStandaloneStop(); else recStandaloneStart(); }
         try {
             recognizer.startListening(i);
         } catch (Exception e) {
@@ -455,6 +592,7 @@ public class MainActivity extends Activity {
                         bytes[2 * j] = (byte) (v & 0xff); bytes[2 * j + 1] = (byte) ((v >> 8) & 0xff);
                     }
                     out.write(bytes, 0, n * 2);
+                    recWrite(bytes, n * 2);
                 }
             } catch (Exception ignored) {
                 // the recognizer closed the stream: this listening session is over
@@ -507,6 +645,13 @@ public class MainActivity extends Activity {
         }
 
         @Override public void onError(int error) {
+            // A recognizer that refuses the language-detection request: ask again without it.
+            if (searchMode && !searchPlain && SystemClock.elapsedRealtime() - searchStart < 2500
+                    && (error == SpeechRecognizer.ERROR_CLIENT || error == 12 || error == 13)) {
+                searchPlain = true;
+                startRecognizer(searchLangs[0]);
+                return;
+            }
             if (usingBoost) {
                 long t = SystemClock.elapsedRealtime() - boostStart;
                 boolean refused = t < 3000 && error != SpeechRecognizer.ERROR_NO_MATCH && error != SpeechRecognizer.ERROR_SPEECH_TIMEOUT
@@ -551,6 +696,7 @@ public class MainActivity extends Activity {
         super.onPause();
         if (recognizer != null) recognizer.cancel();
         stopPump();
+        recStandaloneStop();
         btRouteOff();
         web.evaluateJavascript("window.__pause && window.__pause()", null);
     }
