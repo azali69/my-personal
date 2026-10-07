@@ -267,6 +267,8 @@ body.immersive .pbar{bottom:calc(var(--sab) + 12px);justify-content:flex-end;pad
 body.immersive .pbar-in{width:auto;padding:4px;border-radius:50%}
 body.immersive .pbar .pbar-t,body.immersive #pbPrev,body.immersive #pbNext,body.immersive #pbStop{display:none}
 .mline .playing,.ay.playing,.row.playing{background:color-mix(in srgb,var(--accent) 22%,var(--bg))!important;border-radius:4px}
+.mline .said{color:var(--said)!important}
+:root{--said:color-mix(in srgb,#d32f2f 78%,var(--fg))}
 .hz-sname{font-family:var(--ar);text-align:center;color:var(--accent);font-size:calc(var(--arsize)*.9);margin:14px 0 2px}
 .hz-bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:4px 0 12px}
 /* Hafazan bottom bar: Close, Show text, Type and the microphone at the right end */
@@ -732,7 +734,7 @@ function searchSheet(){
 function startVoiceSearch(){
   const info=document.getElementById('sinfo'), q=document.getElementById('sq'), mic=document.getElementById('vsMic');
   if(!SR){ info.textContent='Voice search is not available in this browser. Use Chrome, or the Android app.'; return; }
-  let finalText=''; vsHeard=''; vsSearched='';
+  let finalText=''; vsHeard=''; vsSearched=''; vsScore=0; vsTried=false;
   vsRec=new SR(); vsRec.lang=VS_LANG[vsLang][0]; vsRec.continuous=false; vsRec.interimResults=true;
   // Auto in the Android app: Google listens for Arabic, Malay and English together
   if(vsLang==='auto' && IS_ANDROID_APP) vsRec.langs='ar-SA,ms-MY,en-US';
@@ -740,16 +742,34 @@ function startVoiceSearch(){
   vsRec.onresult=ev=>{ let fin='', inter=''; for(let i=0;i<ev.results.length;i++){ const t=ev.results[i][0].transcript; if(ev.results[i].isFinal) fin+=t+' '; else inter+=t+' '; }
     if(fin.trim()) finalText=fin.trim(); const h=(fin+inter).trim(); if(h){ vsHeard=h; q.value=h; } };
   vsRec.onerror=ev=>{ const m={'not-allowed':'Microphone access is blocked. Allow it, or type instead.','service-not-allowed':'Speech recognition is blocked here. Type instead.','network':'Voice search needs internet.','no-speech':'Nothing heard. Tap the mic and try again.','audio-capture':'No microphone found.'}[ev.error]; if(m) info.textContent=m; };
-  vsRec.onend=()=>{ mic.classList.remove('live'); vsRec=null; const t=(finalText.length>=vsHeard.length?finalText:vsHeard).trim(); if(!t) return; q.value=t; voiceSearchNow(t); };
+  vsRec.onend=()=>{ mic.classList.remove('live'); vsRec=null; const t=(finalText.length>=vsHeard.length?finalText:vsHeard).trim(); if(!t) return; q.value=t; voiceSearchNow(t, true); };
   try{ vsRec.start(); }catch(e){ vsRec=null; info.textContent='Could not start the microphone.'; }
 }
-/* Search what was heard: Arabic script → ayah match; Latin → Malay and English translations. Runs once per new text. */
-function voiceSearchNow(t){ t=(t||'').trim(); if(!t || t===vsSearched) return; vsSearched=t;
-  if(/[\u0600-\u06FF]/.test(t)) voiceArabicSearch(t); else runSearch(t, true); }
+/* Search what was heard. Melayu / English: search that translation only. Arabic script: match it to an ayah.
+   Auto: Google is asked for Arabic first; if that does not match an ayah, the same audio is recognised again in Malay
+   and in English (Android 13+), and the language that finds ayat wins. */
+function voiceSearchNow(t, final){ t=(t||'').trim(); if(!t) return; const same=(t===vsSearched); vsSearched=t;
+  if(vsLang==='ms'||vsLang==='en'){ if(!same) runSearch(t, true, vsLang); return; }
+  if(!/[\u0600-\u06FF]/.test(t)){ if(!same) runSearch(t, true, null); return; }
+  const score = same ? (vsScore||0) : (vsScore = voiceArabicSearch(t)||0);
+  if(vsLang==='auto' && final && score<0.6 && IS_ANDROID_APP && !vsTried) autoOtherLanguages(t); }
+let vsScore=0, vsTried=false;
+function replayOnce(lang){ return new Promise(res=>{ let fin='', last=''; const tm=setTimeout(()=>res((fin||last).trim()), 9000);
+  const obj={ onstart(){}, onerror(){}, onresult(ev){ const r=ev.results[0]; const t=r[0].transcript.trim(); if(!t) return; if(r.isFinal) fin=t; else last=t; },
+    onend(){ clearTimeout(tm); res((fin.length>=last.length?fin:last).trim()); } };
+  if(!AndroidSR || !AndroidSR.replay(lang,obj)){ clearTimeout(tm); res(null); } }); }
+async function autoOtherLanguages(arText){ vsTried=true; const info=document.getElementById('sinfo'), q=document.getElementById('sq'); if(!info) return;
+  info.textContent='Not an ayah in Arabic. Checking Melayu and English…';
+  const ms=await replayOnce('ms-MY'); if(ms===null){ info.textContent='No ayah matched in Arabic. On this phone Auto can only listen in Arabic, so tap Melayu or English to search the translations.'; return; }
+  const en=await replayOnce('en-US'); if(!document.getElementById('sinfo')) return;
+  const hm=ms?latinHits(ms,'ms').length:0, he=en?latinHits(en,'en').length:0;
+  if(!hm && !he){ info.textContent=`No match. Heard in Arabic: “${arText}”${ms?`, in Melayu: “${ms}”`:''}${en?`, in English: “${en}”`:''}.`; return; }
+  const useMs = hm>=he; q.value=useMs?ms:en; runSearch(useMs?ms:en, true, useMs?'ms':'en'); }
 /* Tapping the mic off searches at once with what has been heard so far; a fuller final result, if one comes, refines it. */
 function stopVoiceSearch(){ const r=vsRec; if(!r) return; document.getElementById('vsMic')?.classList.remove('live');
   if(vsHeard && document.getElementById('sq')) voiceSearchNow(vsHeard);
-  try{ r.stop(); }catch(e){} }
+  try{ r.stop(); }catch(e){}
+  setTimeout(()=>{ if(vsRec===r){ vsRec=null; if(vsHeard) voiceSearchNow(vsHeard, true); } }, 2500); }
 let AW=null, AIDX=null;
 function arIndex(){ if(AW) return; AW=A.map(a=>normAr(a[3]).split(' ').filter(Boolean)); AIDX=new Map();
   AW.forEach((ws,g)=>{ for(const w of new Set(ws)){ let l=AIDX.get(w); if(!l) AIDX.set(w,l=[]); l.push(g); } }); }
@@ -763,17 +783,27 @@ function voiceArabicSearch(t){
   const isti=normAr('أعوذ بالله من الشيطان الرجيم').split(' '), bas=normAr('بسم الله الرحمن الرحيم').split(' ');
   if(qw.length>4 && ratio(qw.slice(0,4).join(''),isti.join(''))>0.8) qw=qw.slice(isti.length);
   if(qw.length>5 && ratio(qw.slice(0,4).join(''),bas.join(''))>0.85) qw=qw.slice(bas.length);
-  if(qw.length<2){ runSearch(t); return; }
+  if(qw.length<2){ runSearch(t); return 0; }
   const cnt=new Map(); for(const w of new Set(qw)){ const l=AIDX.get(w); if(l && l.length<1500) for(const g of l) cnt.set(g,(cnt.get(g)||0)+1); }
   let cand=[...cnt.entries()].sort((a,b)=>b[1]-a[1]).slice(0,400).map(x=>x[0]);
-  if(!cand.length){ info.textContent='No matching ayah found. Try reciting a few more words.'; out.innerHTML=''; return; }
+  if(!cand.length){ info.textContent='No matching ayah found. Try reciting a few more words.'; out.innerHTML=''; return 0; }
   const scored=cand.map(g=>{ let s=wordLcs(qw,AW[g]); if(g+1<N && A[g+1][0]===A[g][0]){ const s2=wordLcs(qw,AW[g].concat(AW[g+1])); if(s2>s) s=s2; } return [g,s/qw.length]; })
     .filter(x=>x[1]>=0.5).sort((a,b)=>b[1]-a[1]||a[0]-b[0]).slice(0,20);
-  if(!scored.length){ info.textContent='No matching ayah found. Try reciting a few more words, clearly.'; out.innerHTML=''; return; }
+  if(!scored.length){ info.textContent='No matching ayah found. Try reciting a few more words, clearly.'; out.innerHTML=''; return 0; }
   info.textContent = scored[0][1]>=0.85 ? `Best match: ${S[A[scored[0][0]][0]-1][1]} ${A[scored[0][0]][0]}:${A[scored[0][0]][1]}` : `Closest matches for what was heard`;
   out.innerHTML=scored.map(([g,sc])=>resItem(g,null).replace('<div class="ref">',`<div class="ref">${Math.round(sc*100)}% · `)).join('');
+  return scored[0][1];
 }
-function runSearch(v, spoken){
+/* Latin-script search in the translations. only: 'ms' or 'en' to search one language, or null for both. */
+function latinHits(v, only){ if(!NM){ NM=A.map(a=>fold(a[6])); NE=A.map(a=>fold(a[7])); } const q=fold(v), hits=[];
+  const inM=g=>only!=='en'&&NM[g].includes(q), inE=g=>only!=='ms'&&NE[g].includes(q);
+  for(let g=0;g<N&&hits.length<200;g++) if(inM(g)||inE(g)) hits.push(g);
+  if(!hits.length){ const ws=q.split(/\s+/).filter(w=>w.length>2); if(ws.length>1){
+    const need=ws.length>2?ws.length-1:ws.length, sc=[];
+    for(let g=0;g<N;g++){ const m=Math.max(only==='en'?0:ws.filter(w=>NM[g].includes(w)).length, only==='ms'?0:ws.filter(w=>NE[g].includes(w)).length); if(m>=need) sc.push([g,m]); }
+    sc.sort((x,y)=>y[1]-x[1]||x[0]-y[0]); for(const [g] of sc.slice(0,200)) hits.push(g); } }
+  return hits; }
+function runSearch(v, spoken, only){
   const out=document.getElementById('sr'), info=document.getElementById('sinfo'); v=v.trim();
   if(!v){ out.innerHTML=''; info.textContent='Arabic search ignores harakat. Malay and English search the translations.'; return; }
   const ref=parseRef(v);
@@ -782,19 +812,17 @@ function runSearch(v, spoken){
   if(isAr){ if(!NA) NA=A.map(a=>' '+normAr(a[3])+' '); const q=normAr(v); if(q.length<2) return;
     for(let g=0;g<N&&hits.length<200;g++) if(NA[g].includes(q)) hits.push(g); }
   else { if(v.length<3){ out.innerHTML=''; info.textContent='Type at least 3 letters.'; return; }
-    if(!NM){ NM=A.map(a=>fold(a[6])); NE=A.map(a=>fold(a[7])); } const q=fold(v);
-    for(let g=0;g<N&&hits.length<200;g++) if(NM[g].includes(q)||NE[g].includes(q)) hits.push(g);
-    if(!hits.length){ const ws=q.split(/\s+/).filter(w=>w.length>2); if(ws.length>1){
-      const need=ws.length>2?ws.length-1:ws.length, sc=[];
-      for(let g=0;g<N;g++){ const m=Math.max(ws.filter(w=>NM[g].includes(w)).length, ws.filter(w=>NE[g].includes(w)).length); if(m>=need) sc.push([g,m]); }
-      sc.sort((x,y)=>y[1]-x[1]||x[0]-y[0]); for(const [g] of sc.slice(0,200)) hits.push(g); } } }
-  info.textContent = hits.length? `${hits.length===200?'200+':hits.length} ayat found${hits.length===200?', showing the first 200':''}`:'No ayat found.';
-  out.innerHTML = hits.map(g=>resItem(g, isAr?null:v)).join('');
+    hits.push(...latinHits(v, only)); }
+  const where = isAr?'':only==='ms'?' in the Malay translation':only==='en'?' in the English translation':'';
+  info.textContent = hits.length? `${hits.length===200?'200+':hits.length} ayat found${where}${hits.length===200?', showing the first 200':''}`:`No ayat found${where}.`;
+  out.innerHTML = hits.map(g=>resItem(g, isAr?null:v, only)).join('');
 }
-function resItem(g, latinQ){
+function resItem(g, latinQ, only){
   const a=A[g];
   let tr='';
-  if(latinQ){ const useM=fold(a[6]).includes(fold(latinQ)); const t=useM?a[6]:a[7]; tr=`<div class="tr">${hl(t,latinQ)}</div>`; }
+  if(latinQ){ const ws=fold(latinQ).split(/\s+/).filter(Boolean), sc=t=>ws.filter(w=>fold(t).includes(w)).length;
+    // show the translation the words were found in (the chosen language, or the one matching more words)
+    const useM = only? only==='ms' : (fold(a[6]).includes(fold(latinQ)) || sc(a[6])>=sc(a[7])); const t=useM?a[6]:a[7]; tr=`<div class="tr">${hl(t,latinQ)}</div>`; }
   else tr=`<div class="tr">${esc(st.lang==='ms'?a[6]:a[7]).slice(0,180)}${(st.lang==='ms'?a[6]:a[7]).length>180?'…':''}</div>`;
   return `<div class="res" data-g="${g}"><div class="ref">${esc(S[a[0]-1][1])} ${a[0]}:${a[1]} · page ${a[4]}</div><div class="arl">${a[2]}</div>${tr}</div>`;
 }
@@ -1198,7 +1226,8 @@ const AndroidSR = (window.AndroidSpeech && window.AndroidSpeech.isAvailable && w
   };
   return class{ constructor(){ this.lang='ar-SA'; this.langs=null; }
     start(){ active=this; if(this.langs && window.AndroidSpeech.startSearch) window.AndroidSpeech.startSearch(this.langs); else window.AndroidSpeech.start(this.lang); }
-    stop(){ window.AndroidSpeech.stop(); } };
+    stop(){ window.AndroidSpeech.stop(); }
+    static replay(lang,obj){ if(!window.AndroidSpeech.searchReplay) return false; active=obj; return !!window.AndroidSpeech.searchReplay(lang); } };
 })() : null;
 const IS_ANDROID_APP = !!window.AndroidSpeech;
 const SR = AndroidSR || window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -1219,14 +1248,123 @@ function hzAdd(g0,g1){ const b=hz.b;
    Ayah-by-ayah audio from EveryAyah (Alafasy, Maher al-Muaiqly, Yasser ad-Dussary): play from any ayah, repeat, loop, follow the page.
    Hazza al-Balushi is only available as whole surahs (MP3Quran.net), and only 91 of the 114. */
 const RECITERS={
-  afasy:{name:'Mishary Rashid Alafasy', short:'Alafasy', ayah:'https://everyayah.com/data/Alafasy_128kbps/'},
+  afasy:{name:'Mishary Rashid Alafasy', short:'Alafasy', qdc:7, ayah:'https://everyayah.com/data/Alafasy_128kbps/'},
   maher:{name:'Maher al-Muaiqly', short:'Maher al-Muaiqly', ayah:'https://everyayah.com/data/MaherAlMuaiqly128kbps/'},
-  yasser:{name:'Yasser ad-Dussary', short:'Yasser ad-Dussary', ayah:'https://everyayah.com/data/Yasser_Ad-Dussary_128kbps/'},
+  yasser:{name:'Yasser ad-Dussary', short:'Yasser ad-Dussary', qdc:97, ayah:'https://everyayah.com/data/Yasser_Ad-Dussary_128kbps/'},
   hazza:{name:'Hazza al-Balushi', short:'Hazza al-Balushi', surah:['https://cdn.mp3quran.net/download/audio/hazza-balushi/r1/','https://server11.mp3quran.net/hazza/'],
     have:new Set([1,6,8,12,13,14,15,17,18,19,20,21,22,25,29,30,31,32,34,35,36,37,38,39,40,41,42,43,44,45,46,47,49,50,51,52,53,54,55,56,57,61,63,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114])}};
 const p3=n=>String(n).padStart(3,'0');
 let pl=null;   // the playing session
-const plAud=new Audio(), plNext=new Audio(); plAud.preload='auto'; plNext.preload='auto';
+/* Two audio elements: while one plays, the next ayah loads in the other, so ayah changes do not clip the start. */
+const plEls=[new Audio(), new Audio()]; let plCur=plEls[0];
+plEls.forEach(a=>{ a.preload='auto'; a.onended=e=>{ if(e.target===plCur) plEnded(); }; a.onerror=e=>{ if(e.target===plCur) plErr(null); };
+  a.ontimeupdate=e=>{ if(e.target===plCur && pl && pl.mode==='surah') plUI(); }; });
+const plOther=()=>plEls[plCur===plEls[0]?1:0];
+/* Word timings (Quran.com): one continuous file per surah with the start and end of every word. */
+const plTimes=new Map();
+async function plTimings(rid,s){ const key=rid+':'+s; if(plTimes.has(key)) return plTimes.get(key);
+  const r=await fetch(`https://api.qurancdn.com/api/qdc/audio/reciters/${rid}/audio_files?chapter=${s}&segments=true`); if(!r.ok) throw new Error('timings '+r.status);
+  const d=(await r.json()).audio_files[0]; const v=new Map();
+  for(const t of d.verse_timings){ const [ss,aa]=t.verse_key.split(':').map(Number); v.set(gOf(ss,aa),{from:t.timestamp_from,to:t.timestamp_to,seg:(t.segments||[]).filter(x=>x.length>=3)}); }
+  const o={url:d.audio_url.replace(/^http:/,'https:'),v}; plTimes.set(key,o); return o; }
+function plUrl(g){ const x=A[g]; return RECITERS[pl.rc].ayah+p3(x[0])+p3(x[1])+'.mp3'; }
+function playStart(g0,g1){ if(hz){ toast('Close Hafazan first'); return; }
+  const rc=store.get('plRec','afasy'); if(rc==='hazza'){ playSurah(A[g0][0]); return; }
+  playStop(true);
+  pl={rc,g0,g1,g:g0,rep:store.get('plRep',1),k:0,loop:store.get('plLoop',false),spd:store.get('plSpd',1),basm:false,paused:false,
+      mode:RECITERS[rc].qdc?'timed':'ayah', s:0, tm:null, w:-1};
+  if(pl.mode==='timed') plTimedGo(g0,true); else plAyah(true); }
+
+/* ---- Timed mode (word by word) ---- */
+async function plTimedGo(g,fresh){ const me=pl; if(!me) return; me.g=g; me.k=fresh?0:me.k; const s=A[g][0];
+  plUI(); plFollow();
+  try{ if(me.s!==s){ me.tm=await plTimings(RECITERS[me.rc].qdc,s); if(pl!==me) return; me.s=s; plCur.src=me.tm.url; } }
+  catch(e){ if(pl!==me) return; me.mode='ayah'; toast('Word timing is unavailable now, playing ayah by ayah.'); plAyah(true); return; }
+  const v=me.tm.v.get(g); if(!v){ me.mode='ayah'; plAyah(true); return; }
+  // at ayah 1 start from the beginning of the file, so the basmala before it is heard too
+  const at = (fresh && A[g][1]===1) ? 0 : v.from/1000;
+  const go=()=>{ try{ plCur.currentTime=at; }catch(e){} plCur.playbackRate=me.spd; if(!me.paused) plCur.play().catch(plErr); plTick(); };
+  if(plCur.readyState>=1) go(); else plCur.addEventListener('loadedmetadata',go,{once:true}); }
+let plRaf=0;
+function plTick(){ cancelAnimationFrame(plRaf); const step=()=>{ if(!pl||pl.mode!=='timed'||!pl.tm) return;
+    const t=plCur.currentTime*1000, v=pl.tm.v.get(pl.g);
+    if(v){ if(t>=v.to-40){ plTimedAyahEnd(); }
+      else { let w=-1; for(const sg of v.seg){ if(sg[1]<=t) w=sg[0]; else break; } if(w!==pl.w){ pl.w=w; plKara(); } } }
+    if(!plCur.paused) plRaf=requestAnimationFrame(step); };
+  plRaf=requestAnimationFrame(step); }
+function plTimedAyahEnd(){ if(!pl) return; const v=pl.tm.v.get(pl.g);
+  pl.k++; if(pl.k<pl.rep){ plCur.currentTime=v.from/1000; pl.w=-1; plKara(); plUI(); return; }
+  pl.k=0; pl.w=-1;
+  if(pl.g<pl.g1){ const n=pl.g+1;
+    if(A[n][0]===A[pl.g][0]){ pl.g=n; plUI(); plFollow(); return; }     // same surah: the file simply carries on
+    plTimedGo(n,true); return; }
+  if(pl.loop){ plTimedGo(pl.g0,true); return; }
+  toast('Finished'); playStop(); }
+/* Karaoke: in the ayah being recited, every word already recited is shown in red. */
+function plKara(){ main.querySelectorAll('.said').forEach(x=>x.classList.remove('said')); if(!pl||pl.w<1) return;
+  for(let w=0; w<pl.w; w++) main.querySelectorAll(`.mline [data-g="${pl.g}"][data-w="${w}"]`).forEach(x=>x.classList.add('said')); }
+
+/* ---- Ayah mode (one file per ayah) ---- */
+function plPlayUrl(url){ const o=plOther();
+  if(o.dataset.u===url && o.readyState>=2){ plCur.pause(); plCur=o; } else { plCur.src=url; plCur.dataset.u=url; }
+  plCur.playbackRate=pl.spd; plCur.currentTime=0; plCur.play().catch(plErr); }
+function plPreload(url){ const o=plOther(); if(o.dataset.u!==url){ o.src=url; o.dataset.u=url; o.load(); } }
+/* At ayah 1 of a surah (except Al-Fatihah and At-Tawbah) the basmala is played first. */
+function plAyah(fresh){ if(!pl) return; const x=A[pl.g];
+  pl.basm = fresh && pl.k===0 && x[1]===1 && x[0]!==1 && x[0]!==9;
+  plPlayUrl(pl.basm ? RECITERS[pl.rc].ayah+'001001.mp3' : plUrl(pl.g));
+  plPreload(pl.basm ? plUrl(pl.g) : pl.g<pl.g1 ? (A[pl.g+1][1]===1 && A[pl.g+1][0]!==9 ? RECITERS[pl.rc].ayah+'001001.mp3' : plUrl(pl.g+1)) : plUrl(pl.g0));
+  plFollow(); plUI(); }
+function plEnded(){ if(!pl) return;
+  if(pl.mode==='surah') return plSurahEnded();
+  if(pl.mode==='timed') return plTimedAyahEnd();
+  if(pl.basm){ pl.basm=false; plPlayUrl(plUrl(pl.g)); if(pl.g<pl.g1) plPreload(plUrl(pl.g+1)); plUI(); return; }
+  pl.k++; if(pl.k<pl.rep){ plCur.currentTime=0; plCur.play().catch(plErr); plUI(); return; }
+  pl.k=0; if(pl.g<pl.g1){ pl.g++; plAyah(true); return; }
+  if(pl.loop){ pl.g=pl.g0; plAyah(true); return; }
+  toast('Finished'); playStop(); }
+function plErr(e){ if(!pl) return; if(e && e.name==='AbortError') return;
+  if(pl.mode==='surah' && pl.alt<RECITERS.hazza.surah.length-1){ pl.alt++; plCur.src=RECITERS.hazza.surah[pl.alt]+p3(pl.s)+'.mp3'; plCur.play().catch(plErr); return; }
+  toast('Could not load the recitation. Check the internet connection.'); playStop(); }
+
+/* ---- Whole-surah mode (Hazza al-Balushi) ---- */
+function playSurah(s){ if(hz){ toast('Close Hafazan first'); return; }
+  if(!RECITERS.hazza.have.has(s)){ toast(`Hazza al-Balushi's recitation of surah ${s} is not available. Choose another reciter.`); return; }
+  playStop(true); pl={rc:'hazza',mode:'surah',surah:true,s,alt:0,loop:store.get('plHLoop',false),paused:false,g:gOf(s,1)};
+  plCur.src=RECITERS.hazza.surah[0]+p3(s)+'.mp3'; plCur.playbackRate=1; plCur.play().catch(plErr);
+  goPage(A[gOf(s,1)][4]); plUI(); }
+function plSurahEnded(){ if(pl.loop===true){ plCur.currentTime=0; plCur.play().catch(plErr); return; }
+  if(pl.loop==='next'){ const nx=[...RECITERS.hazza.have].find(n=>n>pl.s); if(nx){ playSurah(nx); pl.loop='next'; return; } }
+  toast('Finished'); playStop(); }
+
+function playStop(quiet){ pl=null; cancelAnimationFrame(plRaf);
+  plEls.forEach(a=>{ try{ a.pause(); a.removeAttribute('src'); delete a.dataset.u; a.load(); }catch(e){} });
+  document.getElementById('pbar').hidden=true; document.body.classList.remove('playing'); keepOn(false);
+  main.querySelectorAll('.playing,.said').forEach(x=>x.classList.remove('playing','said')); }
+function plUI(){ if(!pl) return; const bar=document.getElementById('pbar'); bar.hidden=false; document.body.classList.add('playing'); keepOn(true);
+  const R=RECITERS[pl.rc];
+  if(pl.mode==='surah'){ const t=plCur.currentTime||0, d=plCur.duration||0, f=v=>`${Math.floor(v/60)}:${String(Math.floor(v%60)).padStart(2,'0')}`;
+    pbT.textContent=`${R.short} · ${S[pl.s-1][1]}`; pbS.textContent=`Whole surah ${pl.s}${d?` · ${f(t)} / ${f(d)}`:''}`; }
+  else { const x=A[pl.g]; pbT.textContent=`${R.short} · ${S[x[0]-1][1]} ${x[0]}:${x[1]}`;
+    pbS.textContent=(pl.basm?'Basmala · ':'')+(pl.rep>1?`Repeat ${pl.k+1} of ${pl.rep} · `:'')+`ayah ${pl.g-pl.g0+1} of ${pl.g1-pl.g0+1}`+(pl.loop?' · looping':'')+(pl.spd!==1?` · ${pl.spd}×`:'')+(pl.mode==='timed'?' · word by word':''); }
+  pbPlay.innerHTML = pl.paused ? '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>' : '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6.5" y="5" width="4" height="14" rx="1"/><rect x="13.5" y="5" width="4" height="14" rx="1"/></svg>';
+  pbPlay.setAttribute('aria-label', pl.paused?'Play':'Pause');
+  pbPrev.style.visibility=pbNext.style.visibility = pl.mode==='surah'?'hidden':'visible'; }
+/* Highlight the ayah being recited, turning to its page when needed. */
+function plFollow(){ if(!pl || pl.mode==='surah' || hz) return; const pgn=A[pl.g][4];
+  if(pgn!==st.page){ goPage(pgn); return; }   // renderReader calls plMark()
+  plMark(); }
+function plMark(){ main.querySelectorAll('.playing,.said').forEach(x=>x.classList.remove('playing','said')); if(!pl||pl.mode==='surah') return;
+  const els=main.querySelectorAll(`.mline [data-g="${pl.g}"],.ay[data-g="${pl.g}"],.row[data-g="${pl.g}"]`);
+  // word by word: only the red words show progress (translation rows have no word spans, so they keep the ayah highlight)
+  els.forEach(x=>{ if(pl.mode!=='timed' || !x.matches('.mline [data-g]')) x.classList.add('playing'); });
+  if(pl.mode==='timed') plKara();
+  const e=els[0]; if(e && !main.classList.contains('fit')){ const r=e.getBoundingClientRect(); if(r.top<80||r.bottom>innerHeight-160) window.scrollTo({top:scrollY+r.top-innerHeight*.3,behavior:'smooth'}); } }
+document.getElementById('pbPlay').onclick=()=>{ if(!pl) return; if(pl.paused){ pl.paused=false; plCur.play().catch(plErr); if(pl.mode==='timed') plTick(); } else { pl.paused=true; plCur.pause(); } plUI(); };
+document.getElementById('pbStop').onclick=()=>playStop();
+const plJump=g=>{ pl.k=0; pl.paused=false; if(pl.mode==='timed') plTimedGo(g,false); else { pl.g=g; plAyah(true); } };
+document.getElementById('pbNext').onclick=()=>{ if(!pl||pl.mode==='surah') return; if(pl.g<pl.g1) plJump(pl.g+1); };
+document.getElementById('pbPrev').onclick=()=>{ if(!pl||pl.mode==='surah') return; plJump(Math.max(pl.g0,pl.g-1)); };
 function playSheet(g){
   const p=st.page, g0=pageStart[p], g1=pageStart[p+1]-1, cur=g??g0, a=A[cur];
   const rc=store.get('plRec','afasy');
@@ -1257,71 +1395,16 @@ function playSheet(g){
   segBind('plRec','plRec'); segBind('plRep','plRep',1); segBind('plLoop','plLoop'); segBind('plSpd','plSpd',1); segBind('plHLoop','plHLoop');
   const recUI=()=>{ const h=store.get('plRec','afasy')==='hazza';
     document.getElementById('plAyahOpts').hidden=h; document.getElementById('plSurahOpts').hidden=!h;
+    const rc=store.get('plRec','afasy');
     document.getElementById('plRecN').textContent = h ? `Whole surahs only, and only ${RECITERS.hazza.have.size} of the 114 surahs are available for this reciter. The page does not follow along.`
-      : 'Ayah by ayah: the page follows along and the ayah being recited is highlighted.'; };
+      : RECITERS[rc].qdc ? 'Word by word: each word turns red as it is recited, and the page follows along.'
+      : 'Ayah by ayah: the page follows along and the ayah being recited is highlighted. Word-by-word timing is not published for this reciter.'; };
   recUI();
   sheetB.querySelector('#plPage').onclick=()=>{ closeSheet(); playStart(g0,g1); };
   const pf=sheetB.querySelector('#plFrom'); if(pf) pf.onclick=()=>{ closeSheet(); playStart(cur, gOf(a[0],S[a[0]-1][5])); };
   sheetB.querySelector('#plGo').onclick=()=>{ const s=+pls.value, n=S[s-1][5]; const f=Math.max(1,Math.min(n,+plf.value||1)), t=Math.max(f,Math.min(n,+plt.value||n)); closeSheet(); playStart(gOf(s,f),gOf(s,t)); };
   sheetB.querySelector('#plHGo').onclick=()=>{ closeSheet(); playSurah(+plhs.value); };
 }
-function plUrl(g){ const x=A[g]; return RECITERS[pl.rc].ayah+p3(x[0])+p3(x[1])+'.mp3'; }
-function playStart(g0,g1){ if(hz){ toast('Close Hafazan first'); return; }
-  const rc=store.get('plRec','afasy'); if(rc==='hazza'){ playSurah(A[g0][0]); return; }
-  playStop(true);
-  pl={rc,g0,g1,g:g0,rep:store.get('plRep',1),k:0,loop:store.get('plLoop',false),spd:store.get('plSpd',1),basm:false,paused:false};
-  plAyah(true); }
-/* Play the current ayah. At ayah 1 of a surah (except Al-Fatihah and At-Tawbah) the basmala is played first. */
-function plAyah(fresh){ if(!pl) return; const x=A[pl.g];
-  pl.basm = fresh && pl.k===0 && x[1]===1 && x[0]!==1 && x[0]!==9;
-  plAud.src = pl.basm ? RECITERS[pl.rc].ayah+'001001.mp3' : plUrl(pl.g);
-  plAud.playbackRate=pl.spd; plAud.play().catch(plErr);
-  // load the next ayah's file in the background so the change is quick
-  if(pl.g<pl.g1) plNext.src=plUrl(pl.g+1);
-  plFollow(); plUI(); }
-plAud.onended=()=>{ if(!pl) return;
-  if(pl.surah){ return plSurahEnded(); }
-  if(pl.basm){ pl.basm=false; plAud.src=plUrl(pl.g); plAud.playbackRate=pl.spd; plAud.play().catch(plErr); return; }
-  pl.k++; if(pl.k<pl.rep){ plAud.currentTime=0; plAud.play().catch(plErr); plUI(); return; }
-  pl.k=0; if(pl.g<pl.g1){ pl.g++; plAyah(true); return; }
-  if(pl.loop){ pl.g=pl.g0; plAyah(true); return; }
-  toast('Finished'); playStop(); };
-function plErr(e){ if(!pl) return; if(e && e.name==='AbortError') return;
-  if(pl.surah && pl.alt<RECITERS.hazza.surah.length-1){ pl.alt++; plAud.src=RECITERS.hazza.surah[pl.alt]+p3(pl.s)+'.mp3'; plAud.play().catch(plErr); return; }
-  toast('Could not load the recitation. Check the internet connection.'); playStop(); }
-plAud.onerror=()=>plErr(null);
-plAud.ontimeupdate=()=>{ if(pl&&pl.surah) plUI(); };
-function playSurah(s){ if(hz){ toast('Close Hafazan first'); return; }
-  if(!RECITERS.hazza.have.has(s)){ toast(`Hazza al-Balushi's recitation of surah ${s} is not available. Choose another reciter.`); return; }
-  playStop(true); pl={rc:'hazza',surah:true,s,alt:0,loop:store.get('plHLoop',false),paused:false,g:gOf(s,1)};
-  plAud.src=RECITERS.hazza.surah[0]+p3(s)+'.mp3'; plAud.playbackRate=1; plAud.play().catch(plErr);
-  goPage(A[gOf(s,1)][4]); plUI(); }
-function plSurahEnded(){ if(pl.loop===true){ plAud.currentTime=0; plAud.play().catch(plErr); return; }
-  if(pl.loop==='next'){ const nx=[...RECITERS.hazza.have].find(n=>n>pl.s); if(nx){ playSurah(nx); pl.loop='next'; return; } }
-  toast('Finished'); playStop(); }
-function playStop(quiet){ const was=!!pl; pl=null; try{ plAud.pause(); plAud.removeAttribute('src'); plAud.load(); }catch(e){}
-  document.getElementById('pbar').hidden=true; document.body.classList.remove('playing'); keepOn(false);
-  main.querySelectorAll('.playing').forEach(x=>x.classList.remove('playing')); }
-function plUI(){ if(!pl) return; const bar=document.getElementById('pbar'); bar.hidden=false; document.body.classList.add('playing'); keepOn(true);
-  const R=RECITERS[pl.rc];
-  if(pl.surah){ const t=plAud.currentTime||0, d=plAud.duration||0, f=v=>`${Math.floor(v/60)}:${String(Math.floor(v%60)).padStart(2,'0')}`;
-    pbT.textContent=`${R.short} · ${S[pl.s-1][1]}`; pbS.textContent=`Whole surah ${pl.s}${d?` · ${f(t)} / ${f(d)}`:''}`; }
-  else { const x=A[pl.g]; pbT.textContent=`${R.short} · ${S[x[0]-1][1]} ${x[0]}:${x[1]}`;
-    pbS.textContent=(pl.basm?'Basmala · ':'')+(pl.rep>1?`Repeat ${pl.k+1} of ${pl.rep} · `:'')+`ayah ${pl.g-pl.g0+1} of ${pl.g1-pl.g0+1}`+(pl.loop?' · looping':'')+(pl.spd!==1?` · ${pl.spd}×`:''); }
-  pbPlay.innerHTML = pl.paused ? '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>' : '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6.5" y="5" width="4" height="14" rx="1"/><rect x="13.5" y="5" width="4" height="14" rx="1"/></svg>';
-  pbPlay.setAttribute('aria-label', pl.paused?'Play':'Pause');
-  pbPrev.style.visibility=pbNext.style.visibility = pl.surah?'hidden':'visible'; }
-/* Highlight the ayah being recited, turning to its page when needed. */
-function plFollow(){ if(!pl || pl.surah || hz) return; const pgn=A[pl.g][4];
-  if(pgn!==st.page){ goPage(pgn); return; }   // renderReader calls plMark()
-  plMark(); }
-function plMark(){ main.querySelectorAll('.playing').forEach(x=>x.classList.remove('playing')); if(!pl||pl.surah) return;
-  const els=main.querySelectorAll(`.mline [data-g="${pl.g}"],.ay[data-g="${pl.g}"],.row[data-g="${pl.g}"]`); els.forEach(x=>x.classList.add('playing'));
-  const e=els[0]; if(e && !main.classList.contains('fit')){ const r=e.getBoundingClientRect(); if(r.top<80||r.bottom>innerHeight-160) window.scrollTo({top:scrollY+r.top-innerHeight*.3,behavior:'smooth'}); } }
-document.getElementById('pbPlay').onclick=()=>{ if(!pl) return; if(pl.paused){ pl.paused=false; plAud.play().catch(plErr); } else { pl.paused=true; plAud.pause(); } plUI(); };
-document.getElementById('pbStop').onclick=()=>playStop();
-document.getElementById('pbNext').onclick=()=>{ if(!pl||pl.surah) return; pl.k=0; if(pl.g<pl.g1){ pl.g++; pl.paused=false; plAyah(true); } };
-document.getElementById('pbPrev').onclick=()=>{ if(!pl||pl.surah) return; pl.k=0; if(pl.g>pl.g0){ pl.g--; } pl.paused=false; plAyah(true); };
 
 const HZ_OPEN_STEP=160;   // words added each time an open-ended session nears the end of what is shown
 function hzMoreTo(g,words){ let n=0; while(g<N-1 && n<words){ g++; n+=A[g][3].split(' ').length; } return g; }
@@ -1477,7 +1560,13 @@ function flushSession(){ if(!hz) return; const fin=(hz.cur||[]).join(' ').trim()
 let schT=0; function schedule(){ if(schT) return; schT=requestAnimationFrame(()=>{ schT=0; evaluate(); }); }   // show words on the next frame
 function stopListen(show){ const r=rec; rec=null; keepOn(false); if(r){ try{ r.stop(); }catch(e){} } hzRecStop();
   document.getElementById('mic')?.classList.remove('live');
-  setTimeout(()=>{ if(!hz) return; flushSession(); evaluate(); if(show) summary(); }, IS_ANDROID_APP?1000:450); }
+  setTimeout(()=>{ if(!hz) return; flushSession(); evaluate(); if(show){ try{ summary(); }catch(e){ document.getElementById('hzR').innerHTML='<p class="note">Could not build the result: '+esc(String(e))+'</p>'; } hzShowResult(); } }, IS_ANDROID_APP?1000:450); }
+/* After stopping: in an open-ended session drop the hidden ayat that were never reached, then bring the result into view. */
+function hzShowResult(){ if(!hz) return; const r=hz.res;
+  if(hz.open && r){ let k=r.last; while(k>=0 && !hz.ref[k]) k--; const gEnd = k>=0 ? hz.ref[k][0] : hz.g0;
+    const T=document.getElementById('hzT'); if(T){ T.innerHTML=hzAyatHtml(hz.g0, gEnd); paint(); } }
+  setTimeout(()=>{ const el=document.getElementById('hzRec')?.firstChild ? document.getElementById('hzRec') : document.getElementById('hzR');
+    el?.scrollIntoView({behavior:RM.matches?'auto':'smooth', block:'start'}); }, 60); }
 function setStatus(t){ const s=document.getElementById('hzS'); if(s) s.textContent=t; }
 function summary(){
   const r=hz.res; if(!r) return; setStatus('');

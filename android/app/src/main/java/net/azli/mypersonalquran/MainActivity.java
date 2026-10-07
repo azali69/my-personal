@@ -96,6 +96,9 @@ public class MainActivity extends Activity {
     /* Voice search: short listening, several languages allowed (first is the main one). */
     private boolean searchMode = false, searchPlain = false;
     private long searchStart = 0;
+    /* Voice search keeps the spoken audio, so it can be recognised again in another language ("Auto"). */
+    private final java.io.ByteArrayOutputStream searchBuf = new java.io.ByteArrayOutputStream();
+    private ParcelFileDescriptor replayFd = null;
     private String[] searchLangs = new String[0];
 
     /* Quiet-voice boost (Android 13+): we record the microphone ourselves, raise quiet speech, and hand the
@@ -323,6 +326,7 @@ public class MainActivity extends Activity {
             runOnUiThread(() -> {
                 searchLangs = langs.split(",");
                 searchMode = true;
+                synchronized (searchBuf) { searchBuf.reset(); }
                 wantListen = true;
                 if (Build.VERSION.SDK_INT >= 23 &&
                         checkSelfPermission(Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
@@ -332,6 +336,20 @@ public class MainActivity extends Activity {
                 }
                 startRecognizer(searchLangs[0]);
             });
+        }
+
+        /** Recognise the last voice-search audio again, in another language. False if this phone cannot (needs Android 13+ and the boost path). */
+        @JavascriptInterface
+        public boolean searchReplay(final String lang) {
+            final byte[] audio; synchronized (searchBuf) { audio = searchBuf.toByteArray(); }
+            if (Build.VERSION.SDK_INT < 33 || boostFailed || audio.length < PUMP_RATE / 2) return false;
+            try {
+                ParcelFileDescriptor[] p = ParcelFileDescriptor.createPipe();
+                final OutputStream out = new ParcelFileDescriptor.AutoCloseOutputStream(p[1]);
+                new Thread(() -> { try { out.write(audio); } catch (Exception ignored) { } finally { try { out.close(); } catch (Exception ignored) { } } }, "search-replay").start();
+                runOnUiThread(() -> { searchMode = true; searchPlain = true; wantListen = true; searchLangs = new String[]{lang}; replayFd = p[0]; startRecognizer(lang); });
+                return true;
+            } catch (Exception e) { return false; }
         }
 
         @JavascriptInterface
@@ -517,7 +535,13 @@ public class MainActivity extends Activity {
             i.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_MINIMUM_LENGTH_MILLIS, 15000L);
         }
         usingBoost = false;
-        if (Build.VERSION.SDK_INT >= 33 && !boostFailed && !searchMode) {
+        if (replayFd != null) {
+            i.putExtra(RecognizerIntent.EXTRA_AUDIO_SOURCE, replayFd);
+            i.putExtra(RecognizerIntent.EXTRA_AUDIO_SOURCE_CHANNEL_COUNT, 1);
+            i.putExtra(RecognizerIntent.EXTRA_AUDIO_SOURCE_ENCODING, AudioFormat.ENCODING_PCM_16BIT);
+            i.putExtra(RecognizerIntent.EXTRA_AUDIO_SOURCE_SAMPLING_RATE, PUMP_RATE);
+            replayFd = null;
+        } else if (Build.VERSION.SDK_INT >= 33 && !boostFailed) {
             try {
                 ParcelFileDescriptor rd = startPump();
                 i.putExtra(RecognizerIntent.EXTRA_AUDIO_SOURCE, rd);
@@ -593,6 +617,7 @@ public class MainActivity extends Activity {
                     }
                     out.write(bytes, 0, n * 2);
                     recWrite(bytes, n * 2);
+                    if (searchMode) synchronized (searchBuf) { if (searchBuf.size() < PUMP_RATE * 2 * 20) searchBuf.write(bytes, 0, n * 2); }
                 }
             } catch (Exception ignored) {
                 // the recognizer closed the stream: this listening session is over
