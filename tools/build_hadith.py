@@ -50,7 +50,9 @@ import pandas as pd
 from huggingface_hub import snapshot_download
 p = snapshot_download('freococo/sunnah_dataset', repo_type='dataset', local_dir='/tmp/ds')
 df = pd.concat([pd.read_parquet(f) for f in glob.glob('/tmp/ds/**/*.parquet', recursive=True)])
-b = df[(df['collection'] == 'Sahih al-Bukhari') & (df['book_no'].astype(str) == '65')].to_dict('records')
+df = df.astype(object).where(pd.notnull(df), None)
+b = df[(df['collection'] == 'Sahih al-Bukhari') & (df['book_no'].astype(str).isin(['65', '65.0']))].to_dict('records')
+if not b: raise SystemExit('no Bukhari book 65 rows')
 num = lambda h: int(re.search(r'(\d+)', h['ref_raw']).group(1))
 b.sort(key=lambda h: (num(h), h['freococo_id']))
 ind_b = edition('ind-bukhari')
