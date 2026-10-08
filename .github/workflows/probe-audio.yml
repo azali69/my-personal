@@ -15,41 +15,28 @@ jobs:
           sudo apt-get -qq install -y ffmpeg >/dev/null 2>&1
           mkdir o w; exec > >(tee o/probe.txt) 2>&1
           UA="Mozilla/5.0"
-          echo "== QDC reciters with segments? (78)"
-          for rid in 7 173 97 3; do curl -s -A "$UA" "https://api.qurancdn.com/api/qdc/audio/reciters/$rid/audio_files?chapter=78&segments=true" -o w/q$rid.json
-            python3 - $rid <<'PY'
-          import json,sys,subprocess
-          rid=sys.argv[1]; d=json.load(open(f'w/q{rid}.json'))['audio_files'][0]; v=d['verse_timings']
-          print(rid, d['audio_url'], 'api duration', d.get('duration'), 'last verse ends', v[-1]['timestamp_to'], 'segments in v1:', len(v[0].get('segments') or []))
-          open(f'w/url{rid}','w').write(d['audio_url'])
-          # non-monotonic word order inside a verse = the reciter repeats a phrase
-          for t in v:
-              seg=[s for s in (t.get('segments') or []) if len(s)>=3]; ws=[s[0] for s in seg]; ts=[s[1] for s in seg]
-              if any(b<a for a,b in zip(ws,ws[1:])) or any(b<a for a,b in zip(ts,ts[1:])): print('   repeat/unsorted', t['verse_key'], seg)
+          echo "== Do verse/word timings fall on pauses in the audio? (low energy = good alignment)"
+          for spec in "7 78" "173 78" "7 67" "173 67" "97 78" "3 78"; do set -- $spec; rid=$1; ch=$2
+            curl -s -A "$UA" "https://api.qurancdn.com/api/qdc/audio/reciters/$rid/audio_files?chapter=$ch&segments=true" -o w/t.json
+            u=$(python3 -c "import json;print(json.load(open('w/t.json'))['audio_files'][0]['audio_url'])"); curl -s -A "$UA" -L -o w/a.mp3 "$u"
+            ffmpeg -v error -i w/a.mp3 -ac 1 -ar 8000 -f s16le w/a.raw -y
+            frames=$(ffprobe -v error -select_streams a -show_entries packet=size -of csv=p=0 w/a.mp3 | sort -u | wc -l)
+            python3 - $rid $ch $frames <<'PY'
+          import json,sys,array,math,statistics
+          rid,ch,fr=sys.argv[1:]
+          d=json.load(open('w/t.json'))['audio_files'][0]; v=d['verse_timings']
+          b=array.array('h',open('w/a.raw','rb').read()); sr=8000; hop=80  # 10 ms
+          env=[math.sqrt(sum(x*x for x in b[i:i+hop])/hop) for i in range(0,len(b)-hop,hop)]
+          med=statistics.median(env)
+          def lowest_near(ms,win=600):   # where is the quietest 10ms within +-win of a timestamp?
+              c=int(ms/10); lo=max(0,c-win//10); hi=min(len(env)-1,c+win//10); i=min(range(lo,hi+1),key=lambda k:env[k]); return (i-c)*10, env[c]/med
+          offs=[]; ratios=[]
+          for t in v[1:]:
+              o,r=lowest_near(t['timestamp_from']); offs.append(o); ratios.append(r)
+          print(f"reciter {rid} surah {ch}: distinct frame sizes {fr} (1-2 = constant bitrate), file {len(b)/sr:.1f}s vs timings end {v[-1]['timestamp_to']/1000:.1f}s")
+          print(f"   energy at verse starts vs median: {statistics.median(ratios):.2f}  | quietest point offset from verse start (ms): median {statistics.median(offs):+.0f}, first verses {offs[:6]}, last verses {offs[-6:]}")
           PY
-            u=$(cat w/url$rid); curl -s -A "$UA" -L -o w/a$rid.mp3 "$u"; echo "   real file duration: $(ffprobe -v error -show_entries format=duration -of csv=p=0 w/a$rid.mp3) s, bitrate $(ffprobe -v error -show_entries format=bit_rate -of csv=p=0 w/a$rid.mp3)"
           done
-          echo "== Yasser: verses with repeats in 2, 36, 67"
-          for s in 2 36 67; do curl -s -A "$UA" "https://api.qurancdn.com/api/qdc/audio/reciters/97/audio_files?chapter=$s&segments=true" | python3 -c "
-          import json,sys; v=json.load(sys.stdin)['audio_files'][0]['verse_timings']; n=0
-          for t in v:
-              seg=[s for s in (t.get('segments') or []) if len(s)>=3]; ws=[s[0] for s in seg]
-              if any(b<a for a,b in zip(ws,ws[1:])):
-                  n+=1
-                  if n<=3: print('  ',t['verse_key'],seg)
-          print('   surah $s verses with repeats:',n,'of',len(v))"; done
-          echo "== Maher ayah endings (EveryAyah 128 vs 64), surah 78"
-          for R in MaherAlMuaiqly128kbps Maher_AlMuaiqly_64kbps; do
-            for a in $(seq -w 1 40); do curl -s -o w/m.mp3 "https://everyayah.com/data/$R/0780$a.mp3"; ffmpeg -v error -i w/m.mp3 -ac 1 -ar 16000 -f s16le w/m.raw -y
-              python3 - $R $a <<'PY'
-          import sys,array,math
-          b=array.array('h',open('w/m.raw','rb').read()); n=len(b)
-          rms=lambda x: math.sqrt(sum(v*v for v in x)/max(1,len(x)))
-          body=rms(b); tail=rms(b[-960:]); head=rms(b[:960])   # last / first 60 ms
-          print(sys.argv[1], sys.argv[2], f'dur {n/16000:.2f}s', f'head {head/body:.2f}', f'tail {tail/body:.2f}', 'ABRUPT-END' if tail/body>0.35 else '', 'ABRUPT-START' if head/body>0.35 else '')
-          PY
-            done; done
-          echo "== Sudais everyayah"; for f in Abdurrahmaan_As-Sudais_192kbps Abdurrahmaan_As-Sudais_64kbps; do curl -s -o /dev/null -w "$f %{http_code}\n" -I https://everyayah.com/data/$f/078001.mp3; done
       - name: Save results
         run: |
           cd o && git init -q -b probe && git config user.name a && git config user.email a@b
