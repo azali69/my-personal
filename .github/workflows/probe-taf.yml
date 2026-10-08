@@ -1,0 +1,16 @@
+name: Probe tafsir html
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/probe-taf.yml']
+permissions:
+  contents: write
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          mkdir o && cd o
+          for k in indonesian_saadi arabic_saadi; do curl -sL -A "Mozilla/5.0" "https://quranenc.com/en/browse/$k/112" -o $k-112.html; curl -sL -A "Mozilla/5.0" "https://quranenc.com/en/browse/$k/2" -o $k-2.html; curl -s -A "Mozilla/5.0" -w "\n%{http_code}" "https://quranenc.com/api/v1/translation/sura/$k/112" -o $k-api.json; done
+          ls -la
+          git init -q -b probe && git config user.name a && git config user.email a@b && git add -A && git commit -qm probe && git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" probe
