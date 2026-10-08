@@ -15,7 +15,9 @@ jobs:
         run: |
           set +e
           sudo apt-get -qq install -y ffmpeg >/dev/null 2>&1; pip -q install numpy
-          mkdir -p o; for spec in "7 78" "173 78" "97 78" "3 78" "7 67" "7 36" "3 36" "7 1" "97 67" "3 67" "7 2" "3 112" "7 82" "97 92"; do python3 tools/drift_check.py $spec; done 2>&1 | tee o/drift.txt
+          mkdir -p o; for rid in 7 173 97 3; do seq 1 114 | xargs -P 6 -I{} python3 tools/drift_check.py $rid {} >> o/drift.txt 2>&1; done
+          python3 -c "import json,glob; out={}; [out.setdefault(r['rid'],{}).__setitem__(r['s'],r['w']) for r in (json.load(open(f)) for f in glob.glob('o/dr/*.json'))]; json.dump(out,open('o/drift.json','w')); print({k:len(v) for k,v in out.items()})"
+          rm -rf o/dr
       - name: Save results
         run: |
           cd o && rm -rf al && git init -q -b probe && git config user.name a && git config user.email a@b

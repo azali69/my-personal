@@ -12,7 +12,8 @@ for t in d['verse_timings']:
         if len(g)>=3: a,b=int(g[1]/10),int(g[2]/10); sp[max(0,a):min(n,b)]=1
 sp=(sp-sp.mean())/(sp.std()+1e-9)
 out=[]
-for w0 in range(0,n-3000,3000):
-    best=max(range(-300,301,5),key=lambda k: float(np.dot(sp[w0:w0+3000], env[w0+k:w0+3000+k])) if 0<=w0+k and w0+3000+k<=n else -1e18)
+W=3000 if n>4500 else max(600,n-200)
+for w0 in range(0,max(1,n-W),W):
+    best=max(range(-300,301,5),key=lambda k: float(np.dot(sp[w0:w0+W], env[w0+k:w0+W+k])) if 0<=w0+k and w0+W+k<=n else -1e18)
     out.append(best*10)
-print(rid,s,'shift per 30s window (ms, + means the text is ahead of the voice):',out)
+import os; os.makedirs('o/dr',exist_ok=True); json.dump({'rid':rid,'s':s,'w':out},open(f'o/dr/{rid}_{s}.json','w')); print(rid,s,out)
