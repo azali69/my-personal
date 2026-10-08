@@ -1,0 +1,20 @@
+name: Build hadith data
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['tools/build_hadith.py', '.github/workflows/hadith-data.yml']
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - run: pip -q install pandas pyarrow huggingface_hub
+      - run: python3 tools/build_hadith.py
+      - run: |
+          git config user.name "github-actions[bot]"; git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add hadith; git diff --cached --quiet && exit 0
+          git commit -qm "Hadith data (Bukhari & Muslim, Kitab at-Tafsir) [skip ci]" && git pull -q --rebase && git push
