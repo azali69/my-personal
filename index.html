@@ -263,8 +263,10 @@ mark{background:color-mix(in srgb,var(--accent) 28%,transparent);color:inherit;b
 .pbar-in{pointer-events:auto;display:flex;align-items:center;gap:4px;max-width:46rem;width:calc(100% - 24px);background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:6px 8px 6px 14px;box-shadow:0 4px 16px rgba(0,0,0,.14)}
 .pbar-t{flex:1;min-width:0;line-height:1.25}.pbar-t b{display:block;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.pbar-t small{color:var(--muted);font-size:12px;font-variant-numeric:tabular-nums}
 .pbar .ib.pbmain{background:var(--accent);color:var(--accent-ink);border-radius:50%}
-body.immersive .pbar{bottom:calc(var(--sab) + 12px);justify-content:flex-end;padding-inline:12px}
-body.immersive .pbar-in{width:auto;padding:4px;border-radius:50%}
+body.immersive .pbar{bottom:calc(var(--sab) + 4px);justify-content:flex-start;padding-inline:max(10px,var(--sal))}
+body.immersive .pbar-in{width:auto;padding:2px;border-radius:50%;box-shadow:0 1px 6px rgba(0,0,0,.15);opacity:.92}
+body.immersive .pbar .ib.pbmain{width:36px;height:36px}
+body.immersive .pbar .ib.pbmain svg{width:18px;height:18px}
 body.immersive .pbar .pbar-t,body.immersive #pbPrev,body.immersive #pbNext,body.immersive #pbStop{display:none}
 .mline .playing,.ay.playing,.row.playing{background:color-mix(in srgb,var(--accent) 22%,var(--bg))!important;border-radius:4px}
 .mline .said{color:var(--said)!important}
@@ -1279,6 +1281,10 @@ async function plTimings(rid,s){ const key=rid+':'+s; if(plTimes.has(key)) retur
   // each ayah ends where the next one starts
   for(const [g,x] of v){ const nx=v.get(g+1); if(nx) x.to=nx.from; }
   const o={url:d.audio_url.replace(/^http:/,'https:'),v}; plTimes.set(key,o); return o; }
+/* How long the red words wait behind the voice (ms). Alafasy recites slowly and the published timings mark each word as it
+   begins, so his words are held back a little more by default. Adjustable in the Listen box. */
+const DELAY_DEF={afasy:300,sudais:100,yasser:150};
+const plDelay=rc=>store.get('plDelay_'+rc, DELAY_DEF[rc]??150);
 /* Some surahs line up better in Quran.com's other edition of the same reciter (measured); use that one there. */
 function qdcFor(rc,s){ const b=RECITERS[rc].qdc, e=TFIX.ed&&TFIX.ed[b]; return (e&&e[s])||b; }
 function plUrl(g){ const x=A[g]; return RECITERS[pl.rc].ayah+p3(x[0])+p3(x[1])+'.mp3'; }
@@ -1304,7 +1310,7 @@ let plRaf=0;
 function plTick(){ cancelAnimationFrame(plRaf); const step=()=>{ if(!pl||pl.mode!=='timed'||!pl.tm) return;
     const t=plCur.currentTime*1000, v=pl.tm.v.get(pl.g);
     if(v){ if(t>=v.to-40){ plTimedAyahEnd(); }
-      else { let w=-1; for(const sg of v.seg){ if(sg[1]<=t) w=sg[0]; else break; } if(w!==pl.w){ pl.w=w; plKara(); } } }
+      else { const tw=t-plDelay(pl.rc); let w=-1; for(const sg of v.seg){ if(sg[1]<=tw) w=sg[0]; else break; } if(w!==pl.w){ pl.w=w; plKara(); } } }
     if(!plCur.paused) plRaf=requestAnimationFrame(step); };
   plRaf=requestAnimationFrame(step); }
 function plTimedAyahEnd(){ if(!pl) return; const v=pl.tm.v.get(pl.g);
@@ -1409,6 +1415,8 @@ function playSheet(g){
      <input class="field" id="plt" type="number" inputmode="numeric" min="1" value="${S[a[0]-1][5]}" style="flex:1;min-width:64px" aria-label="To ayah"></div>
     <div class="label">Repeat each ayah</div>${segHtml('plRep',[[1,'1×'],[2,'2×'],[3,'3×'],[5,'5×'],[10,'10×']],store.get('plRep',1))}
     <div class="label">When the range ends</div>${segHtml('plLoop',[[false,'Stop'],[true,'Play it again'],['next','Carry on to the next surahs']],store.get('plLoop',false))}
+    <div id="plDelayWrap"><div class="label">Red words follow the voice</div><div id="plDelayBox"></div>
+    <p class="note">If the red words run ahead of the reciter, choose a later setting; if they lag, an earlier one.</p></div>
     <div class="label">Speed</div>${segHtml('plSpd',[[0.75,'0.75×'],[1,'1×'],[1.25,'1.25×']],store.get('plSpd',1))}
     <div class="row2" style="margin-top:12px"><button class="pill primary" id="plGo">Play these ayat</button></div>
    </div>
@@ -1426,6 +1434,11 @@ function playSheet(g){
     document.getElementById('plhs').innerHTML=list.map(n=>`<option value="${n}"${n===cur?' selected':''}>${n}. ${esc(S[n-1][1])}</option>`).join('');
     document.getElementById('plAyahOpts').hidden=h; document.getElementById('plSurahOpts').hidden=!h;
     const rc=store.get('plRec','afasy');
+    const dw=document.getElementById('plDelayWrap'); dw.hidden=!RECITERS[rcNow].qdc;
+    if(RECITERS[rcNow].qdc){ const opts=[[0,'At once'],[150,'+0.15 s'],[300,'+0.3 s'],[450,'+0.45 s'],[600,'+0.6 s']];
+      document.getElementById('plDelayBox').innerHTML=segHtml('plDelay',opts,plDelay(rcNow));
+      document.getElementById('plDelay').onclick=e=>{ const b=e.target.closest('button'); if(!b) return;
+        document.querySelectorAll('#plDelay button').forEach(x=>x.setAttribute('aria-pressed',x===b)); store.set('plDelay_'+rcNow,+b.dataset.v); }; }
     document.getElementById('plRecN').textContent = h ? (RECITERS[rcNow].have ? `Whole surahs only, and only ${RECITERS[rcNow].have.size} of the 114 surahs are available for this reciter. The page does not follow along.` : 'One continuous recording per surah, so ayat flow into each other smoothly. The page shows the surah but does not highlight each ayah.')
       : RECITERS[rc].qdc ? 'Word by word: each word turns red as it is recited, and the page follows along.'
       : 'Ayah by ayah: the page follows along and the ayah being recited is highlighted. Word-by-word timing is not published for this reciter.'; };
@@ -1594,7 +1607,12 @@ function stopListen(show){ const r=rec; rec=null; keepOn(false); if(r){ try{ r.s
 /* After stopping: in an open-ended session drop the hidden ayat that were never reached, then bring the result into view. */
 function hzShowResult(){ if(!hz) return; const r=hz.res;
   if(hz.open && r){ let k=r.last; while(k>=0 && !hz.ref[k]) k--; const gEnd = k>=0 ? hz.ref[k][0] : hz.g0;
-    const T=document.getElementById('hzT'); if(T){ T.innerHTML=hzAyatHtml(hz.g0, gEnd); paint(); } }
+    const T=document.getElementById('hzT'); if(T){ T.innerHTML=hzAyatHtml(hz.g0, gEnd); paint(); }
+    // where to carry on next time: the next ayah if this one was finished, otherwise this one again
+    if(k>=0){ const [g,j]=hz.ref[k], done = j>=A[g][3].split(' ').length-1, next = done ? Math.min(N-1,g+1) : g;
+      store.set('hzResume',next);
+      const R=document.getElementById('hzR'); if(R) R.insertAdjacentHTML('afterbegin',`<div class="actions" style="margin:6px 0 4px"><button id="hzGoOn">${ic('mic')}Carry on from ${A[next][0]}:${A[next][1]} (${esc(S[A[next][0]-1][1])})</button></div>`);
+      const b=document.getElementById('hzGoOn'); if(b) b.onclick=()=>{ if(rec) stopListen(false); startHz(next,next,null,true); }; } }
   setTimeout(()=>{ const el=document.getElementById('hzRec')?.firstChild ? document.getElementById('hzRec') : document.getElementById('hzR');
     el?.scrollIntoView({behavior:RM.matches?'auto':'smooth', block:'start'}); }, 60); }
 function setStatus(t){ const s=document.getElementById('hzS'); if(s) s.textContent=t; }
@@ -1635,6 +1653,7 @@ function hzSheet(){
   const cur=st.sel??g0; const bf=blockFor(cur);
   openSheet('Hafazan', `<p class="note" style="margin-top:0">Choose what to recite. The text is hidden, and each word appears when you recite it.</p>
    <div class="actions">
+    ${store.get('hzResume',null)!=null?(()=>{ const g=store.get('hzResume'); return `<button id="hRes">${ic('mic')}Carry on from where you stopped: ${A[g][0]}:${A[g][1]} (${esc(S[A[g][0]-1][1])}), until I stop</button>`; })():''}
     <button id="hP">${ic('mic')}This page (${A[g0][0]}:${A[g0][1]} – ${A[g1][0]}:${A[g1][1]})</button>
     ${bf?`<button id="hB">${ic('blk')}${esc(bf.label)}</button>`:''}
    </div>
@@ -1657,6 +1676,7 @@ function hzSheet(){
   sheetB.querySelector('#hzOpen').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; sheetB.querySelectorAll('#hzOpen button').forEach(x=>x.setAttribute('aria-pressed',x===b)); store.set('hzOpen',b.dataset.v==='true'); opN(); };
   sheetB.querySelector('#hzRec').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; sheetB.querySelectorAll('#hzRec button').forEach(x=>x.setAttribute('aria-pressed',x===b)); store.set('hzRec',b.dataset.v==='true'); };
   sheetB.querySelector('#hP').onclick=()=>{ closeSheet(); startHz(g0,g1,null,op()); };
+  const hr=sheetB.querySelector('#hRes'); if(hr) hr.onclick=()=>{ const g=store.get('hzResume'); closeSheet(); startHz(g,g,null,true); };
   const hb=sheetB.querySelector('#hB'); if(hb) hb.onclick=()=>{ closeSheet(); startHz(bf.g0,bf.g1,bf.b,op()); };
   sheetB.querySelector('#hGo').onclick=()=>{ const s=+hs.value, n=S[s-1][5]; let f=Math.max(1,Math.min(n,+hf.value||1)), t=Math.max(f,Math.min(n,+ht.value||f)); closeSheet(); startHz(gOf(s,f),gOf(s,t),null,op()); };
 }
