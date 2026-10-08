@@ -25,5 +25,23 @@
   "hash": "003de1b8fbc4dffa",
   "retrieved": "2026-10-08",
   "source": "https://quranenc.com/en/browse/arabic_mokhtasar"
+ },
+ "indonesian_saadi": {
+  "title": "Tafsir As-Sa'di (Indonesian)",
+  "by": "Shaykh Abdurrahman as-Sa'di",
+  "language": "id",
+  "ayat": 6224,
+  "hash": "85598648a82d6ca8",
+  "retrieved": "2026-10-08",
+  "source": "https://quranenc.com/en/browse/indonesian_saadi"
+ },
+ "arabic_saadi": {
+  "title": "تيسير الكريم الرحمن (تفسير السعدي)",
+  "by": "عبد الرحمن بن ناصر السعدي",
+  "language": "ar",
+  "ayat": 6225,
+  "hash": "3b1e258d57b2e02a",
+  "retrieved": "2026-10-08",
+  "source": "https://quranenc.com/en/browse/arabic_saadi"
  }
 }
