@@ -1264,6 +1264,8 @@ let pl=null;   // the playing session
 const plEls=[new Audio(), new Audio()]; let plCur=plEls[0];
 plEls.forEach(a=>{ a.preload='auto'; a.onended=e=>{ if(e.target===plCur) plEnded(); }; a.onerror=e=>{ if(e.target===plCur) plErr(null); };
   a.ontimeupdate=e=>{ if(e.target===plCur && pl && pl.mode==='surah') plUI(); }; });
+/* Start the current audio, unless the person has paused. */
+function plPlay(){ if(!pl || pl.paused) return; plCur.play().catch(plErr); }
 const plOther=()=>plEls[plCur===plEls[0]?1:0];
 /* Word timings (Quran.com): one continuous file per surah with the start and end of every word. */
 const plTimes=new Map();
@@ -1304,7 +1306,7 @@ async function plTimedGo(g,fresh){ const me=pl; if(!me) return; me.g=g; me.k=fre
   const v=me.tm.v.get(g); if(!v){ me.mode='ayah'; plAyah(true); return; }
   // at ayah 1 start from the beginning of the file, so the basmala before it is heard too
   const at = (fresh && A[g][1]===1) ? 0 : v.from/1000;
-  const go=()=>{ try{ plCur.currentTime=at; }catch(e){} plCur.playbackRate=me.spd; if(!me.paused) plCur.play().catch(plErr); plTick(); };
+  const go=()=>{ try{ plCur.currentTime=at; }catch(e){} plCur.playbackRate=me.spd; if(!me.paused) plPlay(); plTick(); };
   if(plCur.readyState>=1) go(); else plCur.addEventListener('loadedmetadata',go,{once:true}); }
 let plRaf=0;
 function plTick(){ cancelAnimationFrame(plRaf); const step=()=>{ if(!pl||pl.mode!=='timed'||!pl.tm) return;
@@ -1333,7 +1335,7 @@ function plKara(){ main.querySelectorAll('.said,.now').forEach(x=>x.classList.re
 let plFadeRaf=0;
 function plPlayUrl(url){ const o=plOther();
   if(o.dataset.u===url && o.readyState>=2){ plCur.pause(); plCur=o; } else { plCur.src=url; plCur.dataset.u=url; }
-  plCur.playbackRate=pl.spd; plCur.currentTime=0; plCur.volume=0; plCur.play().catch(plErr); plFade(); }
+  plCur.playbackRate=pl.spd; plCur.currentTime=0; plCur.volume=0; plPlay(); plFade(); }
 function plFade(){ cancelAnimationFrame(plFadeRaf); const el=plCur, t0=performance.now();
   const step=()=>{ if(!pl||el!==plCur||pl.mode!=='ayah') { el.volume=1; return; }
     const inV=Math.min(1,(performance.now()-t0)/70), left=(el.duration||99)-el.currentTime, outV=Math.min(1,Math.max(0,left/0.09));
@@ -1349,15 +1351,15 @@ function plAyah(fresh){ if(!pl) return; const x=A[pl.g];
 function plEnded(){ if(!pl) return;
   if(pl.mode==='surah') return plSurahEnded();
   if(pl.mode==='timed') return plTimedAyahEnd();
-  if(pl.gap){ return; } pl.gap=true; setTimeout(()=>{ if(!pl) return; pl.gap=false; plEndedAyah(); }, 220/(pl.spd||1)); }
+  if(pl.gap){ return; } pl.gap=true; setTimeout(()=>{ if(!pl) return; pl.gap=false; if(pl.paused){ pl.pending=true; return; } plEndedAyah(); }, 220/(pl.spd||1)); }
 function plEndedAyah(){ if(!pl) return;
   if(pl.basm){ pl.basm=false; plPlayUrl(plUrl(pl.g)); if(pl.g<pl.g1) plPreload(plUrl(pl.g+1)); plUI(); return; }
-  pl.k++; if(pl.k<pl.rep){ plCur.currentTime=0; plCur.volume=0; plCur.play().catch(plErr); plFade(); plUI(); return; }
+  pl.k++; if(pl.k<pl.rep){ plCur.currentTime=0; plCur.volume=0; plPlay(); plFade(); plUI(); return; }
   pl.k=0; if(pl.g<pl.g1){ pl.g++; plAyah(true); return; }
   if(pl.loop){ pl.g=pl.g0; plAyah(true); return; }
   toast('Finished'); playStop(); }
 function plErr(e){ if(!pl) return; if(e && e.name==='AbortError') return;
-  if(pl.mode==='surah' && pl.alt<RECITERS[pl.rc].surah.length-1){ pl.alt++; plCur.src=RECITERS[pl.rc].surah[pl.alt]+p3(pl.s)+'.mp3'; plCur.play().catch(plErr); return; }
+  if(pl.mode==='surah' && pl.alt<RECITERS[pl.rc].surah.length-1){ pl.alt++; plCur.src=RECITERS[pl.rc].surah[pl.alt]+p3(pl.s)+'.mp3'; plPlay(); return; }
   toast('Could not load the recitation. Check the internet connection.'); playStop(); }
 
 /* ---- Whole-surah mode (Hazza al-Balushi) ---- */
@@ -1365,9 +1367,9 @@ function playSurah(s){ if(hz){ toast('Close Hafazan first'); return; }
   const rc=RECITERS[store.get('plRec','afasy')].surah ? store.get('plRec','afasy') : 'hazza', R=RECITERS[rc];
   if(R.have && !R.have.has(s)){ toast(`${R.short}'s recitation of surah ${s} is not available. Choose another reciter.`); return; }
   playStop(true); pl={rc,mode:'surah',surah:true,s,alt:0,loop:store.get('plHLoop',false),paused:false,g:gOf(s,1)};
-  plCur.src=R.surah[0]+p3(s)+'.mp3'; plCur.playbackRate=1; plCur.play().catch(plErr);
+  plCur.src=R.surah[0]+p3(s)+'.mp3'; plCur.playbackRate=1; plPlay();
   goPage(A[gOf(s,1)][4]); plUI(); }
-function plSurahEnded(){ if(pl.loop===true){ plCur.currentTime=0; plCur.play().catch(plErr); return; }
+function plSurahEnded(){ if(pl.loop===true){ plCur.currentTime=0; plPlay(); return; }
   if(pl.loop==='next'){ const R=RECITERS[pl.rc], nx=R.have?[...R.have].find(n=>n>pl.s):(pl.s<114?pl.s+1:null); if(nx){ playSurah(nx); pl.loop='next'; return; } }
   toast('Finished'); playStop(); }
 
@@ -1394,7 +1396,10 @@ function plMark(){ main.querySelectorAll('.playing,.said,.now').forEach(x=>x.cla
   els.forEach(x=>{ if(pl.mode!=='timed' || !x.matches('.mline [data-g]')) x.classList.add('playing'); });
   if(pl.mode==='timed') plKara();
   const e=els[0]; if(e && !main.classList.contains('fit')){ const r=e.getBoundingClientRect(); if(r.top<80||r.bottom>innerHeight-160) window.scrollTo({top:scrollY+r.top-innerHeight*.3,behavior:'smooth'}); } }
-document.getElementById('pbPlay').onclick=()=>{ if(!pl) return; if(pl.paused){ pl.paused=false; plCur.play().catch(plErr); if(pl.mode==='timed') plTick(); } else { pl.paused=true; plCur.pause(); } plUI(); };
+document.getElementById('pbPlay').onclick=()=>{ if(!pl) return;
+  if(pl.paused){ pl.paused=false; if(pl.pending){ pl.pending=false; plEndedAyah(); } else plPlay(); if(pl.mode==='timed') plTick(); }
+  else { pl.paused=true; plEls.forEach(a=>{ try{ a.pause(); }catch(e){} }); }   // pause both players, whichever is sounding
+  plUI(); };
 document.getElementById('pbStop').onclick=()=>playStop();
 const plJump=g=>{ pl.k=0; pl.paused=false; if(pl.mode==='timed') plTimedGo(g,false); else { pl.g=g; plAyah(true); } };
 document.getElementById('pbNext').onclick=()=>{ if(!pl||pl.mode==='surah') return; if(pl.g<pl.g1) plJump(pl.g+1); };
@@ -1569,8 +1574,12 @@ function showRec(){ const box=document.getElementById('hzRec'); if(!box||!hz||!h
 function startListen(){
   applyMic();
   if(!SR){ toast('Voice recognition is not available here. Use Type.'); return; }
-  hz.done=false; hz.res=null; hz.finals=[]; hz.interim=''; hz.cur=null; hz.lastHeard=''; document.getElementById('hzR').innerHTML='';
-  renderHz(); setStatus('Starting the microphone…');
+  // Pressing the microphone again continues the same session: what was already recited stays recited (until Close or Start again)
+  const going=!!(hz.finals&&hz.finals.length);
+  hz.done=false; hz.interim=''; hz.cur=null; hz.lastHeard=''; if(!going){ hz.res=null; hz.finals=[]; }
+  document.getElementById('hzR').innerHTML='';
+  const y=scrollY; renderHz(); if(going) window.scrollTo(0,y);
+  setStatus(going?'Carrying on from where you stopped…':'Starting the microphone…');
   rec=new SR(); hzRecStart(); rec.lang='ar-SA'; rec.continuous=true; rec.interimResults=true; rec.maxAlternatives=1;
   let sessionFinals=[];
   rec.onstart=()=>{ keepOn(true); const ml=micLine(); setStatus('Listening. Recite at your normal pace.'+(ml?' ('+ml+')':'')); document.getElementById('mic')?.classList.add('live'); };
@@ -1606,12 +1615,14 @@ function stopListen(show){ const r=rec; rec=null; keepOn(false); if(r){ try{ r.s
   setTimeout(()=>{ if(!hz) return; flushSession(); evaluate(); if(show){ try{ summary(); }catch(e){ document.getElementById('hzR').innerHTML='<p class="note">Could not build the result: '+esc(String(e))+'</p>'; } hzShowResult(); } }, IS_ANDROID_APP?1000:450); }
 /* After stopping: in an open-ended session drop the hidden ayat that were never reached, then bring the result into view. */
 function hzShowResult(){ if(!hz) return; const r=hz.res;
+  const R0=document.getElementById('hzR'); if(R0 && !R0.querySelector('#hzAgain')){ R0.insertAdjacentHTML('beforeend',`<div class="actions" style="margin-top:8px"><button id="hzAgain">${ic('hist')}Start again from ${A[hz.g0][0]}:${A[hz.g0][1]}</button></div>`);
+    document.getElementById('hzAgain').onclick=()=>{ hz.finals=[]; hz.res=null; hz.cur=null; hz.lastHeard=''; hz.interim=''; hz.fz={e:0,h:0,states:[],heardAt:[],extra:[]}; renderHz(); window.scrollTo(0,0); }; }
   if(hz.open && r){ let k=r.last; while(k>=0 && !hz.ref[k]) k--; const gEnd = k>=0 ? hz.ref[k][0] : hz.g0;
     const T=document.getElementById('hzT'); if(T){ T.innerHTML=hzAyatHtml(hz.g0, gEnd); paint(); }
     // where to carry on next time: the next ayah if this one was finished, otherwise this one again
     if(k>=0){ const [g,j]=hz.ref[k], done = j>=A[g][3].split(' ').length-1, next = done ? Math.min(N-1,g+1) : g;
       store.set('hzResume',next);
-      const R=document.getElementById('hzR'); if(R) R.insertAdjacentHTML('afterbegin',`<div class="actions" style="margin:6px 0 4px"><button id="hzGoOn">${ic('mic')}Carry on from ${A[next][0]}:${A[next][1]} (${esc(S[A[next][0]-1][1])})</button></div>`);
+      const R=document.getElementById('hzR'); if(R) R.insertAdjacentHTML('afterbegin',`<p class="note" style="margin:6px 0">Press the microphone to carry on in this session; what you have recited stays marked.</p><div class="actions" style="margin:0 0 4px"><button id="hzGoOn">${ic('mic')}New session from ${A[next][0]}:${A[next][1]} (${esc(S[A[next][0]-1][1])})</button></div>`);
       const b=document.getElementById('hzGoOn'); if(b) b.onclick=()=>{ if(rec) stopListen(false); startHz(next,next,null,true); }; } }
   setTimeout(()=>{ const el=document.getElementById('hzRec')?.firstChild ? document.getElementById('hzRec') : document.getElementById('hzR');
     el?.scrollIntoView({behavior:RM.matches?'auto':'smooth', block:'start'}); }, 60); }
@@ -1633,7 +1644,8 @@ function summary(){
    <p class="note">${reached?`Reached ${reached[0]}:${reached[1]}. `:''}${pct}% of the ${total} words ${hz.open?'up to there':'in this range'} recited correctly${u?`, ${u} unclear`:''}. ${items.length?'Review the list below.':'No mistakes detected.'}</p>
    ${items.length?`<ul class="mist">${items.map(i=>`<li><span class="k ${i.k}">${i.k==='e'?'WRONG':i.k==='m'?'SKIPPED':i.k==='u'?'UNCLEAR':'EXTRA'}</span><span>${i.ref}</span>${i.exp?`<span class="ar">${i.exp}</span>`:''}${i.heard?`<span class="note">heard <span class="ar">${esc(i.heard)}</span></span>`:''}</li>`).join('')}</ul>`:''}
    <p class="note">The app can mishear. Check flagged words against the text before treating them as mistakes.</p>`;
-  if(c+e+m>0){ const h=store.get('hist',[]); h.unshift({t:Date.now(),rec:hz.recName||null,recSec:hz.recSec||0,g0:hz.g0,g1:hz.open&&reached?refAt(r.last)[0]:hz.g1,c,e,m,x,total,typed:hz.typed,items:items.slice(0,40)}); store.set('hist',h.slice(0,60)); }
+  if(c+e+m>0){ const h=store.get('hist',[]); if(hz.histT){ const i=h.findIndex(x=>x.t===hz.histT); if(i>=0) h.splice(i,1); }   // a carried-on session updates its own entry
+    hz.histT=Date.now(); h.unshift({t:hz.histT,rec:hz.recName||null,recSec:hz.recSec||0,g0:hz.g0,g1:hz.open&&reached?refAt(r.last)[0]:hz.g1,c,e,m,x,total,typed:hz.typed,items:items.slice(0,40)}); store.set('hist',h.slice(0,60)); }
 }
 function uthOf(g,j){ const x=A[g], toks=x[2].split(' '); if(!x[9]) return toks[j]; const i=x[9].findIndex(ids=>ids.includes(j)); return toks[i]; }
 function typeSheet(){
