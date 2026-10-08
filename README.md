@@ -30,6 +30,7 @@ Open it at **https://azali69.github.io/my-personal/** in Chrome. On Android, use
 | Word timings (karaoke) | Alafasy, as-Sudais, Yasser ad-Dussary: Quran.com (api.qurancdn.com), corrected per surah where they ran ahead of the voice; measured with `tools/drift_check.py`, results in `tools/timing-corrections.json` |
 | Recitation audio (as-Sudais, Maher whole surah) | Quran.com / QuranicAudio; MP3Quran.net (Maher al-Muaiqly, all 114 surahs) |
 | Recitation audio (whole surahs) | Hazza al-Balushi, streamed from [MP3Quran.net](https://www.mp3quran.net/eng/hazza): 91 of 114 surahs are published |
+| Tafsir | Al-Mukhtasar fi Tafsir al-Qur'an (Tafsir Center for Quranic Studies), English, Indonesian and Arabic; Tafsir As-Sa'di (Taysir al-Karim ar-Rahman), Indonesian and Arabic. All from [QuranEnc.com](https://quranenc.com), shown without changes (QuranEnc gives no version number for these, so `tafsir/index.json` records the retrieval date and a hash). Refreshed monthly by `tools/fetch_tafsir.py`. As-Sa'di is not in QuranEnc's API, so it is read from their pages, with only the HTML markup removed |
 | Word-judging logic | Adapted from [Tilawi quran-asr](https://github.com/Tilawi/quran-asr), MIT licence, © 2025-2026 Muhammed Durakovic |
 
 The Qur'an text and translations are reproduced without modification. The app checks its own copy against the verified build (Settings → Sources & verification).
