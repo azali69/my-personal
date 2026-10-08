@@ -13,7 +13,6 @@ import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.media.AudioAttributes;
 import android.media.AudioDeviceInfo;
-import android.media.AudioFocusRequest;
 import android.media.MediaMetadata;
 import android.media.session.MediaSession;
 import android.media.session.PlaybackState;
@@ -96,38 +95,11 @@ public class MainActivity extends Activity {
     private WebView web;
 
     /* Reciter player: registered with Android as a media player, so headset / Bluetooth / lock-screen buttons control it,
-       other music apps pause while it plays, and it pauses when another app or a call takes the audio. */
+       the lock screen shows what is playing. */
     private MediaSession msess;
-    private AudioFocusRequest focusReq;
-    private boolean hasFocus = false, pausedByFocus = false;
-    private final AudioManager.OnAudioFocusChangeListener focusL = change -> {
-        if (change == AudioManager.AUDIOFOCUS_LOSS) { hasFocus = false; pausedByFocus = false; mediaCmd("pause"); }
-        else if (change == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT) { pausedByFocus = true; mediaCmd("pause"); }
-        else if (change == AudioManager.AUDIOFOCUS_GAIN) { hasFocus = true; if (pausedByFocus) { pausedByFocus = false; mediaCmd("play"); } }
-    };
-
+    /* Audio focus is left to the WebView itself (it already takes focus when the reciter plays and pauses when another app
+       or a call takes the audio). Asking for focus here as well made the app fight its own WebView and silenced playback. */
     private void mediaCmd(String c) { runOnUiThread(() -> web.evaluateJavascript("window.__media && window.__media('" + c + "')", null)); }
-
-    private boolean requestFocus() {
-        AudioManager am = (AudioManager) getSystemService(AUDIO_SERVICE);
-        if (am == null) return false;
-        int r;
-        if (Build.VERSION.SDK_INT >= 26) {
-            if (focusReq == null) focusReq = new AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN)
-                    .setAudioAttributes(new AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_MEDIA).setContentType(AudioAttributes.CONTENT_TYPE_SPEECH).build())
-                    .setOnAudioFocusChangeListener(focusL).setWillPauseWhenDucked(false).build();
-            r = am.requestAudioFocus(focusReq);
-        } else r = am.requestAudioFocus(focusL, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
-        hasFocus = r == AudioManager.AUDIOFOCUS_REQUEST_GRANTED;
-        return hasFocus;
-    }
-
-    private void abandonFocus() {
-        AudioManager am = (AudioManager) getSystemService(AUDIO_SERVICE);
-        if (am == null) return;
-        if (Build.VERSION.SDK_INT >= 26) { if (focusReq != null) am.abandonAudioFocusRequest(focusReq); } else am.abandonAudioFocus(focusL);
-        hasFocus = false;
-    }
 
     private void ensureSession() {
         if (msess != null) return;
@@ -531,10 +503,9 @@ public class MainActivity extends Activity {
                         | PlaybackState.ACTION_SKIP_TO_NEXT | PlaybackState.ACTION_SKIP_TO_PREVIOUS | PlaybackState.ACTION_STOP;
                 if ("stopped".equals(state)) {
                     msess.setPlaybackState(new PlaybackState.Builder().setActions(actions).setState(PlaybackState.STATE_STOPPED, 0, 0).build());
-                    msess.setActive(false); abandonFocus(); pausedByFocus = false;
+                    msess.setActive(false);
                     return;
                 }
-                if ("playing".equals(state) && !hasFocus) requestFocus();
                 msess.setMetadata(new MediaMetadata.Builder()
                         .putString(MediaMetadata.METADATA_KEY_TITLE, title == null ? "" : title)
                         .putString(MediaMetadata.METADATA_KEY_ARTIST, subtitle == null ? "" : subtitle)
@@ -806,7 +777,6 @@ public class MainActivity extends Activity {
         stopPump();
         btRouteOff();
         if (msess != null) { msess.release(); msess = null; }
-        abandonFocus();
         web.destroy();
         super.onDestroy();
     }

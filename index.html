@@ -1263,6 +1263,9 @@ let pl=null;   // the playing session
 /* Two audio elements: while one plays, the next ayah loads in the other, so ayah changes do not clip the start. */
 const plEls=[new Audio(), new Audio()]; let plCur=plEls[0];
 plEls.forEach(a=>{ a.preload='auto'; a.onended=e=>{ if(e.target===plCur) plEnded(); }; a.onerror=e=>{ if(e.target===plCur) plErr(null); };
+  /* The phone may pause the audio itself (a call, another music app, headset unplugged): show it as paused instead of fighting it. */
+  a.onpause=e=>{ const t=e.target; setTimeout(()=>{ if(!pl || pl.paused || t!==plCur || !t.paused || t.ended || pl.pending || !(t.currentTime>0)) return;
+    pl.paused=true; plEls.forEach(x=>{ try{ x.pause(); }catch(_){} }); plUI(); }, 250); };
   a.ontimeupdate=e=>{ if(e.target===plCur && pl && pl.mode==='surah') plUI(); }; });
 /* Start the current audio, unless the person has paused. */
 function plPlay(){ if(!pl || pl.paused) return; plCur.play().catch(plErr); }
@@ -1359,8 +1362,11 @@ function plEndedAyah(){ if(!pl) return;
   if(pl.loop){ pl.g=pl.g0; plAyah(true); return; }
   toast('Finished'); playStop(); }
 function plErr(e){ if(!pl) return; if(e && e.name==='AbortError') return;
+  // play() refused (no user tap yet, or the phone took the audio): keep the player, just show it paused
+  if(e && e.name==='NotAllowedError'){ pl.paused=true; plUI(); toast('Tap ▶ to play.'); return; }
   if(pl.mode==='surah' && pl.alt<RECITERS[pl.rc].surah.length-1){ pl.alt++; plCur.src=RECITERS[pl.rc].surah[pl.alt]+p3(pl.s)+'.mp3'; plPlay(); return; }
-  toast('Could not load the recitation. Check the internet connection.'); playStop(); }
+  const me=plCur.error, why = e ? (e.name||'error') : me ? ['','aborted','network','decode','not supported'][me.code]||('code '+me.code) : 'unknown';
+  toast(why==='network' ? 'Could not load the recitation. Check the internet connection.' : `Could not play the recitation (${why}).`); playStop(); }
 
 /* ---- Whole-surah mode (Hazza al-Balushi) ---- */
 function playSurah(s){ if(hz){ toast('Close Hafazan first'); return; }
