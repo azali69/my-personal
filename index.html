@@ -194,6 +194,7 @@ main.fit .pagefoot.tight{margin-top:4px}
 .row{padding:12px 12px 14px;border-radius:14px;cursor:pointer}
 .row.sh{background:var(--shade)}
 .row .arl{direction:rtl;text-align:right;font-family:var(--ar);font-size:var(--arsize);line-height:2.1}
+.row .tl{font-family:var(--read);font-size:15px;line-height:1.6;margin-top:4px;color:var(--accent);font-style:italic;max-width:65ch}
 .row .tr{font-family:var(--read);font-size:16px;line-height:1.65;margin-top:6px;color:var(--fg);max-width:65ch}
 .row .ref{font-family:var(--ui);font-size:12px;color:var(--muted);font-weight:600;letter-spacing:.04em;margin-top:6px;display:block}
 .row .fn{font-family:var(--read);font-size:13.5px;color:var(--muted);margin-top:6px;white-space:pre-line}
@@ -380,9 +381,9 @@ const store = {
 const st = {
   page: store.get('page', 1), tr: store.get('tr', false), lang: store.get('lang','ms'),
   bg: store.get('bg','auto'), sname: store.get('sname','lat'), size: store.get('tsize', 0)||28, flow: store.get('flow', store.get('tsize',0)>0), mushaf: store.get('mushaf','v4'), blocks: store.get('blocks','off'),
-  fn: store.get('fn', false), mine: new Set(store.get('mine', [])), sel: null, bm: store.get('bm', {})
+  fn: store.get('fn', false), tl: store.get('tl', 'off')==='off'?'off':'simple', mine: new Set(store.get('mine', [])), sel: null, bm: store.get('bm', {})
 };
-function save(){ ['page','tr','lang','bg','blocks','fn','mushaf','sname'].forEach(k=>store.set(k, st[k])); store.set('tsize', st.size); store.set('flow', st.flow); store.set('mine',[...st.mine]); }
+function save(){ ['page','tr','lang','bg','blocks','fn','mushaf','sname','tl'].forEach(k=>store.set(k, st[k])); store.set('tsize', st.size); store.set('flow', st.flow); store.set('mine',[...st.mine]); }
 
 const BMC=[['1','Hijau'],['2','Emas'],['3','Merah'],['4','Biru'],['5','Ungu']];
 function bmAttr(g){ const b=st.bm[g]; return b? ` bm" style="--bmc:var(--bm${b.c})` : ''; }
@@ -529,6 +530,7 @@ function buildRows(p){
     if(a[1]===1){ h+=surahHeader(a[0]); }
     const t = st.lang==='ms'? a[6] : a[7];
     h+=`<div class="row${ashade(g)}" data-g="${g}"><div class="arl">${a[2]}<span class="num${bmAttr(g)}">${arNum(a[1])}</span></div>`+
+       (st.tl!=='off' ? `<div class="tl" lang="ar-Latn">${esc(tlText(g))}</div>` : '')+
        `<div class="tr" lang="${st.lang}">${esc(t)}</div>`+
        (st.lang==='en' && st.fn && a[8] ? `<div class="fn">${esc(a[8])}</div>`:'')+
        `<span class="ref">${a[0]}:${a[1]}</span></div>`;
@@ -847,6 +849,8 @@ function setSheet(){
   <div id="offWrap"></div>
   <div class="label">Surah name</div>${seg('sname',[['lat','Latin (At-Takwīr)'],['ar','Arabic (سورة التكوير)']],st.sname)}
   <div class="label">Translation language</div>${seg('lang',[['ms','Bahasa Melayu'],['en','English']],st.lang)}
+  <div class="label">Transliteration (in the translation view)</div>${seg('tl',[['off','Off'],['simple','Show']],st.tl)}
+  <p class="note">Shown under the Arabic, never in place of it: a help while learning, not a replacement for reading the Arabic letters. It is approximate. Its key: <b>AA</b> = ع, <b>/</b> = hamzah (ء), <b>th</b> = ث or ذ, <b>kh</b> = خ, <b>sh</b> = ش, <b>gh</b> = غ, doubled letters = shaddah (e.g. arrahmani), <b>oo</b>/<b>ee</b> = long u/i. Check pronunciation with a teacher. From Quran.com; needs the internet once.</p>
   <div class="label">English footnotes</div>${seg('fn',[[false,'Hide'],[true,'Show']],st.fn)}
   <div id="flowWrap"><div class="label">Uthmani text page</div>${seg('flow',[[false,'Fit page (15 lines)'],[true,'Larger text']],st.flow)}
   <p class="note">Fit page keeps the printed 15 lines on one screen. Larger text lets the lines run on, so you scroll to read the rest of the page.</p></div>
@@ -872,7 +876,7 @@ function setSheet(){
     const ob=document.getElementById('offBtn'); if(ob) ob.onclick=()=>saveOffline(st.mushaf); };
   mNote();
   segH('mushaf',v=>{ st.mushaf=v; mNote(); sizeLbl(); });
-  segH('lang',v=>st.lang=v); segH('sname',v=>st.sname=v); segH('fn',v=>st.fn=(v==='true')); segH('blocks',v=>{ if(v!=='off') store.set('lastBlocks',v); st.blocks=v; note(); });
+  segH('lang',v=>st.lang=v); segH('tl',v=>{ st.tl=v; if(v!=='off') tlLoad(v); }); segH('sname',v=>st.sname=v); segH('fn',v=>st.fn=(v==='true')); segH('blocks',v=>{ if(v!=='off') store.set('lastBlocks',v); st.blocks=v; note(); });
   const sizeLbl=()=>{ document.getElementById('sizeL').textContent = `${st.size} px`;
     document.getElementById('flowWrap').style.display = st.mushaf==='text'?'':'none';
     document.getElementById('sizeN').textContent = 'Used for translation, Hafazan'+(st.mushaf==='text'?' and Larger text.':'.')+' A fitted page always uses the largest size that fits your screen; turn the phone sideways for bigger letters.'; }; sizeLbl();
@@ -925,6 +929,19 @@ function copySheet(g,gEnd){
   upd();
 }
 
+
+/* ---- Transliteration (Quran.com), loaded when switched on, kept on the phone ---- */
+const TL={}; const TL_BASES=(()=>{ const b=[]; if(/github\.io$/.test(location.hostname)) b.push('translit/');
+  b.push('https://azali69.github.io/my-personal/translit/','https://cdn.jsdelivr.net/gh/azali69/my-personal@main/translit/'); return b; })();
+let tlBusy={};
+async function tlLoad(kind){ if(TL[kind] || tlBusy[kind]) return; tlBusy[kind]=true;
+  const id='https://mpq.local/translit/'+kind+'.json'; let c=null;
+  try{ c=await caches.open('mpq-tafsir'); const r=await c.match(id); if(r){ TL[kind]=await r.json(); tlBusy[kind]=false; rerender(); return; } }catch(e){}
+  for(const b of TL_BASES){ try{ const r=await fetch(b+kind+'.json',{cache:'no-cache'}); if(!r.ok) continue; const j=await r.clone().json();
+      if(!Array.isArray(j) || j.length!==114) continue; try{ c && await c.put(id,r); }catch(e){}
+      TL[kind]=j; tlBusy[kind]=false; rerender(); return; }catch(e){} }
+  tlBusy[kind]=false; toast('Could not load the transliteration. It needs the internet the first time.'); }
+function tlText(g){ const a=A[g], d=TL[st.tl]; if(!d){ tlLoad(st.tl); return '…'; } return (d[a[0]-1]||[])[a[1]-1]||''; }
 /* ---- Tafsir ----
    Texts from QuranEnc.com, shown unchanged (their terms: no changes, name the publisher and source).
    Kept in this app's GitHub repository by a monthly job (tools/fetch_tafsir.py) and saved on the phone after first use. */
@@ -951,6 +968,7 @@ function tafsirSheet(g){
     openSheet(`Tafsir · ${S[s-1][1]} ${s}:${a[1]}`, `
      <div class="seg" id="tfK" style="margin-top:0">${TAFSIRS.map(t=>`<button data-k="${t[0]}" aria-pressed="${t[0]===key}">${t[1]} · ${t[2]==='English'?'English':'Indonesia'}</button>`).join('')}</div>
      <div class="arl" dir="rtl" style="margin:14px 0 6px;font-size:24px;line-height:1.9">${a[2]}<span class="num">${arNum(a[1])}</span></div>
+     ${st.tl!=='off'&&TL[st.tl]?`<div class="note" style="font-style:italic;color:var(--accent);margin:-2px 0 10px">${esc(tlText(g))}</div>`:''}
      <div id="tfT" class="note" dir="auto" style="font-family:var(--ui),var(--ar);font-size:16px;line-height:1.7;color:var(--ink);white-space:pre-wrap">Loading…</div>
      <div id="tfA" dir="rtl" lang="ar" style="display:${showAr?'block':'none'};white-space:pre-wrap;font-family:var(--ar),serif;font-size:19px;line-height:1.9;margin-top:10px;padding-top:10px;border-top:1px solid var(--line)"></div>
      <div class="row2" style="margin-top:14px;flex-wrap:wrap;gap:8px">
