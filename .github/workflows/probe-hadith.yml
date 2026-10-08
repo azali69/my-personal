@@ -1,0 +1,22 @@
+name: Probe hadith
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/probe-hadith.yml']
+permissions:
+  contents: write
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          mkdir o && cd o
+          A="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/124 Safari/537.36"
+          curl -sL -A "$A" https://sunnah.com/bukhari/65 -o sunnah-bukhari-65.html
+          curl -sL -A "$A" https://sunnah.com/muslim/56 -o sunnah-muslim-56.html
+          curl -sL -A "$A" https://sunnah.com/robots.txt -o robots.txt
+          B=https://cdn.jsdelivr.net/gh/fawazahmed0/hadith-api@1/editions
+          for e in ara-bukhari eng-bukhari ind-bukhari ara-muslim eng-muslim ind-muslim; do curl -sL $B/$e.min.json -o $e.json; done
+          curl -sL $B/../info.min.json -o info.json
+          ls -la
+          git init -q -b probe && git config user.name a && git config user.email a@b && git add -A && git commit -qm probe && git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" probe
