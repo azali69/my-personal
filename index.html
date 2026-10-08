@@ -1375,9 +1375,25 @@ function plSurahEnded(){ if(pl.loop===true){ plCur.currentTime=0; plPlay(); retu
 
 function playStop(quiet){ pl=null; cancelAnimationFrame(plRaf);
   plEls.forEach(a=>{ try{ a.pause(); a.removeAttribute('src'); delete a.dataset.u; a.load(); a.volume=1; }catch(e){} });
-  document.getElementById('pbar').hidden=true; document.body.classList.remove('playing'); keepOn(false);
+  document.getElementById('pbar').hidden=true; document.body.classList.remove('playing'); keepOn(false); plMedia('stopped');
   main.querySelectorAll('.playing,.said,.now').forEach(x=>x.classList.remove('playing','said','now')); }
+/* Tell the phone what is playing, so headset / Bluetooth / lock-screen buttons control the reciter (and other music apps pause). */
+let plMediaKey='';
+function plMedia(state){ let title='', sub='';
+  if(pl){ const R=RECITERS[pl.rc]; sub=R.name; title = pl.mode==='surah' ? `Surah ${S[pl.s-1][1]}` : `${S[A[pl.g][0]-1][1]} ${A[pl.g][0]}:${A[pl.g][1]}`; }
+  const key=state+'|'+title; if(key===plMediaKey) return; plMediaKey=key;
+  try{ window.AndroidSpeech?.mediaState?.(state, title, sub); }catch(e){}
+  try{ if('mediaSession' in navigator){ navigator.mediaSession.playbackState = state==='stopped'?'none':state;
+      if(state!=='stopped') navigator.mediaSession.metadata = new MediaMetadata({title, artist:sub, album:'My Personal Quran'}); } }catch(e){} }
+window.__media=c=>{ if(!pl) return;
+  if(c==='play'){ if(pl.paused) document.getElementById('pbPlay').click(); }
+  else if(c==='pause'){ if(!pl.paused) document.getElementById('pbPlay').click(); }
+  else if(c==='next') document.getElementById('pbNext').click();
+  else if(c==='prev') document.getElementById('pbPrev').click();
+  else if(c==='stop') playStop(); };
+try{ if('mediaSession' in navigator){ [['play','play'],['pause','pause'],['nexttrack','next'],['previoustrack','prev'],['stop','stop']].forEach(([a,c])=>{ try{ navigator.mediaSession.setActionHandler(a,()=>window.__media(c)); }catch(e){} }); } }catch(e){}
 function plUI(){ if(!pl) return; const bar=document.getElementById('pbar'); bar.hidden=false; document.body.classList.add('playing'); keepOn(true);
+  plMedia(pl.paused?'paused':'playing');
   const R=RECITERS[pl.rc];
   if(pl.mode==='surah'){ const t=plCur.currentTime||0, d=plCur.duration||0, f=v=>`${Math.floor(v/60)}:${String(Math.floor(v%60)).padStart(2,'0')}`;
     pbT.textContent=`${R.short} · ${S[pl.s-1][1]}`; pbS.textContent=`Whole surah ${pl.s}${d?` · ${f(t)} / ${f(d)}`:''}`; }
