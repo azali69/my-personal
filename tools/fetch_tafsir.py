@@ -1,6 +1,6 @@
 """Download tafsir texts from QuranEnc.com (unchanged) into tafsir/<key>/NNN.json.
 QuranEnc terms: no modification, cite QuranEnc.com and the publisher, give the version, keep it updated."""
-import json, os, sys, time, urllib.request
+import json, os, sys, time, urllib.request, urllib.error
 KEYS = ['english_mokhtasar', 'indonesian_mokhtasar', 'indonesian_saadi', 'arabic_mokhtasar', 'arabic_saadi']
 API = 'https://quranenc.com/api/v1'
 def get(u, tries=5):
@@ -8,9 +8,12 @@ def get(u, tries=5):
         try:
             with urllib.request.urlopen(urllib.request.Request(u, headers={'User-Agent': 'MyPersonalQuran/1.0 (+https://github.com/azali69/my-personal)'}), timeout=60) as r:
                 return json.load(r)
+        except urllib.error.HTTPError as e:
+            if e.code == 404: raise
+            print('retry', u, e, file=sys.stderr); time.sleep(3 * (i + 1))
         except Exception as e:
             print('retry', u, e, file=sys.stderr); time.sleep(3 * (i + 1))
-    raise SystemExit('failed ' + u)
+    raise RuntimeError('failed ' + u)
 # QuranEnc's translations list does not include its tafsir keys, so there is no version number to record:
 # the retrieval date is recorded instead, and each file can be compared with the next monthly fetch.
 TITLES = {'english_mokhtasar': ('Al-Mukhtasar in Interpreting the Noble Quran', 'en', 'Tafsir Center for Quranic Studies'),
@@ -19,8 +22,8 @@ TITLES = {'english_mokhtasar': ('Al-Mukhtasar in Interpreting the Noble Quran', 
           'arabic_mokhtasar': ('المختصر في تفسير القرآن الكريم', 'ar', 'مركز تفسير للدراسات القرآنية'),
           'arabic_saadi': ('تيسير الكريم الرحمن (تفسير السعدي)', 'ar', 'عبد الرحمن بن ناصر السعدي')}
 import hashlib, datetime
-index = {}
-for k in KEYS:
+LOG = []; os.makedirs('tafsir', exist_ok=True)
+def fetch_key(k):
     os.makedirs(f'tafsir/{k}', exist_ok=True); n = 0
     for s in range(1, 115):
         rows = get(f'{API}/translation/sura/{k}/{s}')['result']
@@ -37,5 +40,11 @@ for k in KEYS:
     index[k] = {'title': t, 'by': by, 'language': lang, 'ayat': n, 'hash': h,
                 'retrieved': old.get('retrieved') if old.get('hash') == h else datetime.date.today().isoformat(),
                 'source': f'https://quranenc.com/en/browse/{k}'}
-    print(k, n, h)
+    print(k, n, h); LOG.append(f'{k}: ok, {n} ayat, {h}')
+try: index = json.load(open('tafsir/index.json'))
+except Exception: index = {}
+for k in KEYS:
+    try: fetch_key(k)
+    except Exception as e: LOG.append(f'{k}: FAILED {e!r}'); print(k, 'FAILED', e, file=sys.stderr)
 json.dump(index, open('tafsir/index.json', 'w'), ensure_ascii=False, indent=1)
+open('tafsir/fetch-log.txt', 'w').write('\n'.join(LOG) + '\n')
