@@ -1,0 +1,5 @@
+english_mokhtasar: ok, 6236 ayat, 0ebc00de31601f4f
+indonesian_mokhtasar: ok, 6236 ayat, 819b94d8aacd9b46
+indonesian_saadi: FAILED RuntimeError('failed https://quranenc.com/api/v1/translation/sura/indonesian_saadi/1')
+arabic_mokhtasar: ok, 6236 ayat, 003de1b8fbc4dffa
+arabic_saadi: FAILED RuntimeError('failed https://quranenc.com/api/v1/translation/sura/arabic_saadi/1')

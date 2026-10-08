@@ -1,0 +1,29 @@
+{
+ "english_mokhtasar": {
+  "title": "Al-Mukhtasar in Interpreting the Noble Quran",
+  "by": "Tafsir Center for Quranic Studies",
+  "language": "en",
+  "ayat": 6236,
+  "hash": "0ebc00de31601f4f",
+  "retrieved": "2026-10-08",
+  "source": "https://quranenc.com/en/browse/english_mokhtasar"
+ },
+ "indonesian_mokhtasar": {
+  "title": "Al-Mukhtasar fi Tafsir al-Quran (Indonesian)",
+  "by": "Tafsir Center for Quranic Studies",
+  "language": "id",
+  "ayat": 6236,
+  "hash": "819b94d8aacd9b46",
+  "retrieved": "2026-10-08",
+  "source": "https://quranenc.com/en/browse/indonesian_mokhtasar"
+ },
+ "arabic_mokhtasar": {
+  "title": "المختصر في تفسير القرآن الكريم",
+  "by": "مركز تفسير للدراسات القرآنية",
+  "language": "ar",
+  "ayat": 6236,
+  "hash": "003de1b8fbc4dffa",
+  "retrieved": "2026-10-08",
+  "source": "https://quranenc.com/en/browse/arabic_mokhtasar"
+ }
+}
