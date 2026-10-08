@@ -1,0 +1,12 @@
+BUKHARI [4549, 4549, 4551, 4552] no English ref; Arabic heading matched (3, 77) (run 12): باب {إِنَّ الَّذِينَ يَشْتَرُونَ بِعَهْدِ اللَّهِ وَأَيْمَانِهِمْ ثَمَنًا قَلِيلاً أُولَئِ
+BUKHARI [4639] no English ref; Arabic heading matched (7, 160) (run 2): الْمَنَّ وَالسَّلْوَى
+BUKHARI [4874] no English ref; Arabic heading matched (54, 51) (run 6): باب {وَلَقَدْ أَهْلَكْنَا أَشْيَاعَكُمْ فَهَلْ مِنْ مُدَّكِرٍ}
+BUKHARI [4933] heading ref 77:33-33 not confirmed by Arabic quote (best (77, 33), run 1): The Statement of Allah the Most High: "As if they were yellow camels or bundles of ropes." | باب قَوْلِهِ {كَأَنَّهُ جِمَالاَتٌ صُفْرٌ}
+MUSLIM 3016 LEFT OUT, no quoted ayah: Anas b. Malik reported that Allah, the Exalted and Glorious, sent revelation to Allah's Messenger (ﷺ
+MUSLIM 3018b LEFT OUT, no quoted ayah: Urwa reported that he asked 'A'isha about the words of Allah:" If you fear that you will not be able
+MUSLIM 3022a LEFT OUT, no quoted ayah: Urwa reported on the authority of his father that 'A'isha said to him:O, the son of my sister, the M
+MUSLIM 3030d LEFT OUT, no quoted ayah: 
+MUSLIM 3031 LEFT OUT, no quoted ayah: Sa'id b. Jubair reported:I said to Ibn 'Abbas about Sura Tauba, whereupon he said: As for Sura Tauba
+MUSLIM 3032a LEFT OUT, no quoted ayah: Ibn 'Umar reported that Umar delivered a sermon on the pulpit of Allah's Messenger (ﷺ) and he praise
+MUSLIM 3032b LEFT OUT, no quoted ayah: Ibn 'Umar reported:I heard 'Umar b. Khattab delivering sermon on the pulpit ol Allah's messenger (ﷺ)
+MUSLIM 3032c LEFT OUT, no quoted ayah: This hadith has been transmitted on the same authority but with a slight variation of wording
