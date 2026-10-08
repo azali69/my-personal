@@ -12,5 +12,5 @@ jobs:
       - run: |
           mkdir o && cd o
           for u in https://audio.qurancdn.com/wbw/001_002_001.mp3 https://verses.quran.com/wbw/001_002_001.mp3 https://download.quranicaudio.com/wbw/001_002_001.mp3; do echo "== $u" >> h.txt; curl -sI -H "Origin: https://example.com" "$u" >> h.txt; done
-          curl -s https://audio.qurancdn.com/wbw/001_002_001.mp3 -o a.mp3; ls -la a.mp3 >> h.txt; (sudo apt-get -qq install -y ffmpeg >/dev/null 2>&1; ffprobe -hide_banner a.mp3 2>> h.txt)
+          curl -s https://audio.qurancdn.com/wbw/001_002_001.mp3 -o a.mp3; ls -la a.mp3 >> h.txt
           git init -q -b probe && git config user.name a && git config user.email a@b && git add -A && git commit -qm probe && git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" probe
