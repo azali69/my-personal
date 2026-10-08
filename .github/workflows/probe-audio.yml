@@ -11,21 +11,11 @@ jobs:
     timeout-minutes: 120
     steps:
       - uses: actions/checkout@v4
-      - name: Align timings with the audio (all surahs)
+      - name: Drift check
         run: |
           set +e
           sudo apt-get -qq install -y ffmpeg >/dev/null 2>&1; pip -q install numpy
-          mkdir -p o; for rid in 7 173 97 3; do seq 1 114 | xargs -P 6 -I{} python3 tools/align_timings.py $rid {} > o/log_$rid.txt 2>&1; done
-          python3 - <<'PY'
-          import json,glob
-          out={}
-          for f in glob.glob('o/al/*.json'):
-              r=json.load(open(f)); out.setdefault(r['rid'],{})[r['s']]=r
-          json.dump(out,open('o/align.json','w'))
-          for rid in out:
-              rs=out[rid].values(); import statistics as st
-              print(rid, len(out[rid]), 'surahs | median good-before', st.median(r['good_before'] for r in rs), 'good-after', st.median(r['good_after'] for r in rs))
-          PY
+          mkdir -p o; for spec in "7 78" "173 78" "97 78" "3 78" "7 67" "7 36" "3 36" "7 1" "97 67" "3 67" "7 2" "3 112" "7 82" "97 92"; do python3 tools/drift_check.py $spec; done 2>&1 | tee o/drift.txt
       - name: Save results
         run: |
           cd o && rm -rf al && git init -q -b probe && git config user.name a && git config user.email a@b
