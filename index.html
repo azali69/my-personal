@@ -273,6 +273,38 @@ body.immersive .pbar .pbar-t,body.immersive #pbPrev,body.immersive #pbNext,body.
 .mline .said{color:var(--said)!important}
 .mline .now{background:color-mix(in srgb,var(--said) 16%,transparent)!important;border-radius:4px}
 :root{--said:color-mix(in srgb,#d32f2f 78%,var(--fg))}
+/* Listen & repeat */
+.tq{position:fixed;inset:0;z-index:45;background:var(--bg);overflow:auto;padding:calc(var(--sat,0px) + 8px) 16px calc(var(--sab,0px) + 24px)}
+.tq-in{max-width:46rem;margin:0 auto}
+.tq-top{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.tq-top h2{flex:1;font-size:17px;margin:0}
+.tq-where{color:var(--muted);font-size:13.5px}
+.tq-ayah{direction:rtl;text-align:right;font-family:var(--ar);font-size:var(--arsize);line-height:2.3;margin:10px 0 4px}
+.tq-ayah .o{opacity:.32}
+.tq-ayah .cur{background:color-mix(in srgb,var(--accent) 10%,transparent);border-radius:8px}
+.tq-ayah .w{background:none}
+.tq-ayah .w.c{color:var(--ok)}
+.tq-tr{color:var(--muted);font-size:14.5px;line-height:1.6;margin:0 0 8px}
+.tq-row{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.tq-row .pill{flex:1;justify-content:center;min-width:120px}
+.tq-big{width:72px;height:72px;border-radius:50%;border:0;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center;margin:8px auto;box-shadow:0 2px 10px rgba(0,0,0,.18)}
+.tq-big.live{background:var(--bad);animation:tqp 1.2s ease-in-out infinite}
+.tq-big svg{width:30px;height:30px}
+@keyframes tqp{50%{transform:scale(1.07)}}
+.tq-st{text-align:center;color:var(--muted);font-size:14px;min-height:1.4em}
+.tq-heard{direction:rtl;font-family:var(--ar);font-size:18px;color:var(--muted);text-align:center;min-height:1.6em}
+.wbw{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.wbw-w{display:flex;flex-direction:column;align-items:center;gap:2px;border:1px solid var(--line);background:var(--bg);border-radius:12px;padding:6px 10px;min-width:64px;color:var(--fg)}
+.wbw-w .ar{font-family:var(--ar);font-size:24px;line-height:1.6}
+.wbw-w small{font-size:12.5px;color:var(--muted);max-width:9em;text-align:center;line-height:1.3}
+.wbw-w.on{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,var(--bg))}
+.hd{border-top:1px solid var(--line);padding:10px 0}
+.hd-ref{display:flex;flex-wrap:wrap;gap:6px;align-items:baseline}
+.hd-g{font-size:12px;font-weight:700;color:var(--ok);border:1px solid var(--ok);border-radius:999px;padding:0 8px}
+.hd-ar{font-family:var(--ar);font-size:19px;line-height:1.9;margin:6px 0}
+.hd-tr{font-size:15px;line-height:1.65;margin:6px 0;white-space:pre-wrap}
+.hd-bab{margin-top:14px;padding:8px 10px;border-radius:10px;background:color-mix(in srgb,var(--accent) 7%,transparent)}
+.hd-bab-ar{font-family:var(--ar);font-size:18px;line-height:1.8}
 .hz-sname{font-family:var(--ar);text-align:center;color:var(--accent);font-size:calc(var(--arsize)*.9);margin:14px 0 2px}
 .hz-bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:4px 0 12px}
 /* Hafazan bottom bar: Close, Show text, Type and the microphone at the right end */
@@ -849,6 +881,8 @@ function setSheet(){
   <div id="offWrap"></div>
   <div class="label">Surah name</div>${seg('sname',[['lat','Latin (At-Takwīr)'],['ar','Arabic (سورة التكوير)']],st.sname)}
   <div class="label">Translation language</div>${seg('lang',[['ms','Bahasa Melayu'],['en','English']],st.lang)}
+  <div class="label">Tap a word</div>${seg('wtap',[[false,'Show or hide the bars'],[true,'Meaning and sound']],store.get('wordTap',false))}
+  <p class="note">With Meaning and sound, tapping a word on the page shows its meaning word by word and plays it; tapping the empty margin still shows or hides the bars. In the text and translation views, tapping an ayah lists its words.</p>
   <div class="label">Transliteration (in the translation view)</div>${seg('tl',[['off','Off'],['simple','Show']],st.tl)}
   <p class="note">Shown under the Arabic, never in place of it: a help while learning, not a replacement for reading the Arabic letters. It is approximate. Its key: <b>AA</b> = ع, <b>/</b> = hamzah (ء), <b>th</b> = ث or ذ, <b>kh</b> = خ, <b>sh</b> = ش, <b>gh</b> = غ, doubled letters = shaddah (e.g. arrahmani), <b>oo</b>/<b>ee</b> = long u/i. Check pronunciation with a teacher. From Quran.com; needs the internet once.</p>
   <div class="label">English footnotes</div>${seg('fn',[[false,'Hide'],[true,'Show']],st.fn)}
@@ -876,7 +910,7 @@ function setSheet(){
     const ob=document.getElementById('offBtn'); if(ob) ob.onclick=()=>saveOffline(st.mushaf); };
   mNote();
   segH('mushaf',v=>{ st.mushaf=v; mNote(); sizeLbl(); });
-  segH('lang',v=>st.lang=v); segH('tl',v=>{ st.tl=v; if(v!=='off') tlLoad(v); }); segH('sname',v=>st.sname=v); segH('fn',v=>st.fn=(v==='true')); segH('blocks',v=>{ if(v!=='off') store.set('lastBlocks',v); st.blocks=v; note(); });
+  segH('lang',v=>st.lang=v); segH('tl',v=>{ st.tl=v; if(v!=='off') tlLoad(v); }); segH('wtap',v=>store.set('wordTap',v==='true')); segH('sname',v=>st.sname=v); segH('fn',v=>st.fn=(v==='true')); segH('blocks',v=>{ if(v!=='off') store.set('lastBlocks',v); st.blocks=v; note(); });
   const sizeLbl=()=>{ document.getElementById('sizeL').textContent = `${st.size} px`;
     document.getElementById('flowWrap').style.display = st.mushaf==='text'?'':'none';
     document.getElementById('sizeN').textContent = 'Used for translation, Hafazan'+(st.mushaf==='text'?' and Larger text.':'.')+' A fitted page always uses the largest size that fits your screen; turn the phone sideways for bigger letters.'; }; sizeLbl();
@@ -942,6 +976,106 @@ async function tlLoad(kind){ if(TL[kind] || tlBusy[kind]) return; tlBusy[kind]=t
       TL[kind]=j; tlBusy[kind]=false; rerender(); return; }catch(e){} }
   tlBusy[kind]=false; toast('Could not load the transliteration. It needs the internet the first time.'); }
 function tlText(g){ const a=A[g], d=TL[st.tl]; if(!d){ tlLoad(st.tl); return '…'; } return (d[a[0]-1]||[])[a[1]-1]||''; }
+/* ---- Word by word: meaning (Quran.com, English / Indonesian) and sound ----
+   Meanings: Quran.com word-by-word translation, unchanged, loaded per surah and kept on the phone.
+   Sound: the word as recited by the chosen reciter, cut from his recording with the word timings (Alafasy, as-Sudais,
+   Yasser ad-Dussary); otherwise Quran.com's single-word recording. */
+const WBW_BASES=(()=>{ const b=[]; if(/github\.io$/.test(location.hostname)) b.push('wbw/');
+  b.push('https://azali69.github.io/my-personal/wbw/','https://cdn.jsdelivr.net/gh/azali69/my-personal@main/wbw/'); return b; })();
+const wbwMem=new Map();
+async function wbwLoad(s){ if(wbwMem.has(s)) return wbwMem.get(s); const id='https://mpq.local/wbw/'+p3(s)+'.json'; let c=null;
+  try{ c=await caches.open('mpq-tafsir'); const r=await c.match(id); if(r){ const j=await r.json(); wbwMem.set(s,j); return j; } }catch(e){}
+  for(const b of WBW_BASES){ try{ const r=await fetch(b+p3(s)+'.json',{cache:'no-cache'}); if(!r.ok) continue; const j=await r.clone().json(); if(!j.en) continue;
+      try{ c && await c.put(id,r); }catch(e){} wbwMem.set(s,j); return j; }catch(e){} }
+  throw new Error('offline'); }
+/* the meaning list of an ayah, one entry per word of our text (Quran.com splits 7 ayat differently: matched by the Arabic) */
+function wbwFor(j,g){ const x=A[g], toks=x[2].split(' ').filter(t=>!MK.has(t)), i=x[1]-1, en=j.en[i]||[], id=j.id[i]||[], ar=j.ar[i]||[], au=j.audio[i]||[];
+  if(en.length===toks.length) return toks.map((t,k)=>({t,en:en[k],id:id[k],au:au[k]}));
+  const out=[]; let q=0; const nn=w=>normAr(w).replace(/ /g,'');
+  for(const t of toks){ let hit=null; for(let d=0; d<3 && q+d<ar.length; d++){ if(nn(ar[q+d])===nn(t)){ hit=q+d; break; } }
+    if(hit!=null){ out.push({t,en:en[hit],id:id[hit],au:au[hit]}); q=hit+1; } else out.push({t,en:'',id:'',au:''}); }
+  return out; }
+const wbA=new Audio(); wbA.preload='auto'; let wbStopAt=null, wbRaf=0;
+function wbStop(){ cancelAnimationFrame(wbRaf); wbStopAt=null; try{ wbA.pause(); }catch(e){} }
+/* play words lo..hi (positions P_(g,w)) of one surah with the chosen reciter's timings; returns false if not possible */
+async function playWords(lo,hi,fallbackUrl){ if(pl) playStop(); wbStop();
+  const g0=Pg(lo), g1=Pg(hi), s=A[g0][0]; let rc=store.get('plRec','afasy'); if(!RECITERS[rc]||!RECITERS[rc].qdc) rc='afasy';
+  try{ if(A[g1][0]!==s) throw new Error('two surahs');
+    const tm=await plTimings(qdcFor(rc,s),s), v0=tm.v.get(g0), v1=tm.v.get(g1);
+    const a=v0&&v0.seg.find(z=>z[0]===Pw(lo)+1), b=v1&&[...v1.seg].reverse().find(z=>z[0]===Pw(hi)+1); if(!a||!b) throw new Error('no timing');
+    const nx=v1.seg.find(z=>z[0]===Pw(hi)+2), end=(nx?Math.min(nx[1],b[2]+200):b[2]+200)/1000;
+    if(wbA.dataset.u!==tm.url){ wbA.src=tm.url; wbA.dataset.u=tm.url; }
+    const go=()=>{ try{ wbA.currentTime=Math.max(0,a[1]-80)/1000; }catch(e){} wbStopAt=end; wbA.playbackRate=1; wbA.play().catch(()=>{});
+      const step=()=>{ if(wbStopAt!=null && wbA.currentTime>=wbStopAt){ wbStop(); return; } if(!wbA.paused||wbA.readyState<3) wbRaf=requestAnimationFrame(step); }; wbRaf=requestAnimationFrame(step); };
+    if(wbA.readyState>=1) go(); else wbA.addEventListener('loadedmetadata',go,{once:true});
+    return true; }
+  catch(e){ if(fallbackUrl){ wbA.src=fallbackUrl; wbA.dataset.u=fallbackUrl; wbStopAt=null; wbA.play().catch(()=>toast('Could not play the word. Check the internet connection.')); return true; }
+    toast(e.message==='two surahs'?'Choose words within one surah to listen.':'Word timing is not available now. Check the internet connection.'); return false; } }
+function wordSheet(g,w){ wbStop();
+  let lang=store.get('wbwLang', st.lang==='en'?'en':'id'), sel=w;
+  const draw=async()=>{ const x=A[g];
+    openSheet(`Word by word · ${S[x[0]-1][1]} ${x[0]}:${x[1]}`, `
+     <div class="seg" id="wbL" style="margin-top:0"><button data-v="id" aria-pressed="${lang==='id'}">Bahasa Indonesia</button><button data-v="en" aria-pressed="${lang==='en'}">English</button></div>
+     <div id="wbBox"><p class="note">Loading…</p></div>
+     <div class="row2" style="margin-top:12px;flex-wrap:wrap;gap:8px"><button class="pill" id="wbP" ${g<=0?'disabled':''}>‹ Previous ayah</button><button class="pill" id="wbAy">${ic('play')}Whole ayah</button><button class="pill" id="wbN" ${g>=N-1?'disabled':''}>Next ayah ›</button></div>
+     <p class="note" style="font-size:12px;margin-top:12px">Meanings: Quran.com word by word (${lang==='id'?'Indonesian':'English'}), shown without changes. Malay is not published word by word; Indonesian is the closest. Sound: ${RECITERS[store.get('plRec','afasy')]?.qdc?RECITERS[store.get('plRec','afasy')].short:'Alafasy'}, cut from the recitation, so a word can sound joined to the next.</p>`);
+    sheetB.querySelector('#wbL').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; lang=b.dataset.v; store.set('wbwLang',lang); draw(); };
+    sheetB.querySelector('#wbP').onclick=()=>{ if(g>0){ g--; sel=null; draw(); } };
+    sheetB.querySelector('#wbN').onclick=()=>{ if(g<N-1){ g++; sel=null; draw(); } };
+    sheetB.querySelector('#wbAy').onclick=()=>playWords(P_(g,0),P_(g,ords(g).n-1));
+    let j; try{ j=await wbwLoad(x[0]); }catch(e){ const b=document.getElementById('wbBox'); if(b) b.innerHTML='<p class="note">Could not load the meanings. They need the internet the first time; after that this surah is saved on the phone.</p>'; return; }
+    const ws=wbwFor(j,g), box=document.getElementById('wbBox'); if(!box||!sheetB.contains(box)) return;
+    const big = sel!=null && ws[sel] ? `<div style="text-align:center;margin:10px 0 6px"><div class="arl" style="font-size:40px;line-height:1.7">${ws[sel].t}</div>
+        <div style="font-size:18px;font-weight:600">${esc(ws[sel][lang]||'(no meaning given for this word)')}</div></div>` : '';
+    box.innerHTML = big + `<div class="wbw" dir="rtl">${ws.map((o,k)=>`<button class="wbw-w${k===sel?' on':''}" data-k="${k}"><span class="ar">${o.t}</span><small dir="auto">${esc(o[lang]||'–')}</small></button>`).join('')}</div>`;
+    box.onclick=e=>{ const b=e.target.closest('.wbw-w'); if(!b) return; sel=+b.dataset.k; const o=ws[sel];
+      box.querySelectorAll('.wbw-w').forEach(z=>z.classList.toggle('on',z===b));
+      playWords(P_(g,sel),P_(g,sel), o.au?'https://audio.qurancdn.com/'+o.au:null); draw(); };
+    if(w!=null && sel===w){ w=null; playWords(P_(g,sel),P_(g,sel), ws[sel]&&ws[sel].au?'https://audio.qurancdn.com/'+ws[sel].au:null); }
+  };
+  draw(); }
+/* ---- Hadith linked to an ayah ----
+   Only where the hadith books make the link themselves: the chapters of Kitab at-Tafsir in Sahih al-Bukhari (al-Bukhari's own
+   chapter headings name the ayah) and the narrations of Kitab at-Tafsir in Sahih Muslim that quote the ayah. Built by
+   tools/build_hadith.py; links it could not confirm both ways are listed in hadith/review.txt. */
+const HD_BASES=(()=>{ const b=[]; if(/github\.io$/.test(location.hostname)) b.push('hadith/');
+  b.push('https://azali69.github.io/my-personal/hadith/','https://cdn.jsdelivr.net/gh/azali69/my-personal@main/hadith/'); return b; })();
+const hdMem=new Map(); let hdIdx=null;
+async function hdGet(name){ if(hdMem.has(name)) return hdMem.get(name); const id='https://mpq.local/hadith/'+name; let c=null;
+  try{ c=await caches.open('mpq-tafsir'); const r=await c.match(id); if(r && name!=='index.json'){ const j=await r.json(); hdMem.set(name,j); return j; } }catch(e){}
+  for(const b of HD_BASES){ try{ const r=await fetch(b+name,{cache:'no-cache'}); if(r.status===404) return null; if(!r.ok) continue; const j=await r.clone().json();
+      try{ c && await c.put(id,r); }catch(e){} hdMem.set(name,j); return j; }catch(e){} }
+  try{ const r=c&&await c.match(id); if(r) return await r.json(); }catch(e){}
+  throw new Error('offline'); }
+function hdItem(h,lang){ const book=h.c==='bukhari'?'Sahih al-Bukhari':'Sahih Muslim';
+  const tr = lang==='id' ? (h.id||'') : h.en; const trNote = lang==='id' && !h.id ? '<p class="note">No Indonesian translation in the source for this narration; English shown.</p>' : '';
+  return `<div class="hd">
+   <div class="hd-ref"><b>${book} ${esc(h.ref)}</b> <span class="note">${esc(h.inbook||'')}</span> <span class="hd-g">${esc(h.grade)}</span></div>
+   <details><summary>Arabic text</summary><div class="hd-ar" dir="rtl" lang="ar">${esc(h.ar)}</div></details>
+   ${trNote}<div class="hd-tr" dir="auto">${esc(tr||h.en)}</div>
+   <a class="note" href="${esc(h.url)}" target="_blank" rel="noopener">Open on Sunnah.com</a></div>`; }
+function hdGroups(items,lang){ let h='', last=null;
+  for(const it of items){ const key=it.c+'|'+it.bab_ar+'|'+it.bab_en;
+    if(key!==last){ if(it.c==='bukhari') h+=`<div class="hd-bab"><div dir="rtl" lang="ar" class="hd-bab-ar">${esc(it.bab_ar||'باب')}</div>${it.bab_en?`<div class="note">${esc(it.bab_en)}</div>`:''}${it.how==='untitled'?'<div class="note">An untitled chapter; al-Bukhari places it under the chapter before it.</div>':''}${it.range&&it.range[1]>it.range[0]?`<div class="note">Chapter on ayat ${it.range[0]}–${it.range[1]}</div>`:''}</div>`;
+      else h+=`<div class="hd-bab"><div class="note">Sahih Muslim, Kitab at-Tafsir: the narration quotes this ayah.</div></div>`; last=key; }
+    h+=hdItem(it,lang); }
+  return h; }
+function hadithSheet(g){ let lang=store.get('hdLang', st.lang==='en'?'en':'id');
+  const draw=async()=>{ const x=A[g], s=x[0];
+    openSheet(`Hadith · ${S[s-1][1]} ${s}:${x[1]}`, `
+     <div class="seg" id="hdL" style="margin-top:0"><button data-v="id" aria-pressed="${lang==='id'}">Bahasa Indonesia</button><button data-v="en" aria-pressed="${lang==='en'}">English</button></div>
+     <div id="hdBox"><p class="note">Loading…</p></div>
+     <div class="row2" style="margin-top:12px;gap:8px"><button class="pill" id="hdP" ${g<=0?'disabled':''}>‹ Previous ayah</button><button class="pill" id="hdN" ${g>=N-1?'disabled':''}>Next ayah ›</button></div>
+     <p class="note" style="font-size:12px;margin-top:12px">Only hadith that the books themselves link to an ayah: the chapters of Kitab at-Tafsir in Sahih al-Bukhari, whose headings name the ayah, and the narrations of Kitab at-Tafsir in Sahih Muslim that quote it. Both books are sahih by the agreement of the scholars. Some narrations are the words of a Companion explaining the ayah, not of the Prophet ﷺ; the text says who is speaking. Arabic and English: Sunnah.com. Indonesian: from tafsirq.com via an open dataset; its translator is not named, so check it against the Arabic.</p>`);
+    sheetB.querySelector('#hdL').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; lang=b.dataset.v; store.set('hdLang',lang); draw(); };
+    sheetB.querySelector('#hdP').onclick=()=>{ if(g>0){ g--; draw(); } };
+    sheetB.querySelector('#hdN').onclick=()=>{ if(g<N-1){ g++; draw(); } };
+    let d; try{ d=await hdGet(p3(s)+'.json'); }catch(e){ const b=document.getElementById('hdBox'); if(b) b.innerHTML='<p class="note">Could not load. The hadith need the internet the first time; after that this surah is saved on the phone.</p>'; return; }
+    const box=document.getElementById('hdBox'); if(!box||!sheetB.contains(box)) return;
+    const items=(d&&d.ayat&&d.ayat[String(x[1])])||[], surah=(d&&d.surah)||[];
+    box.innerHTML = (items.length? hdGroups(items,lang) : `<p class="note">No hadith in Kitab at-Tafsir of al-Bukhari or Muslim is linked to this ayah. That does not mean there is no hadith about it: other chapters of the hadith books, and the tafsir, may have some.</p>`)
+      + (surah.length? `<details style="margin-top:12px"${items.length?'':' open'}><summary>On the whole surah (${surah.length})</summary>${hdGroups(surah,lang)}</details>` : ''); };
+  draw(); }
 /* ---- Tafsir ----
    Texts from QuranEnc.com, shown unchanged (their terms: no changes, name the publisher and source).
    Kept in this app's GitHub repository by a monthly job (tools/fetch_tafsir.py) and saved on the phone after first use. */
@@ -1078,11 +1212,14 @@ function ayahSheet(g){
    <div class="label">Actions</div>
    <div class="actions">
     <button id="aPlay">${ic('play')}Listen from this ayah</button>
+    <button id="aTq">${ic('mic')}Listen &amp; repeat from this ayah</button>
     <button id="aHz">${ic('mic')}Hafazan from this ayah to the end of the page</button>
     ${bf?`<button id="aHzB">${ic('mic')}Hafazan this block (${esc(bf.label)})</button>`:''}
     <button id="aBlk">${ic('blk')}Add My ruku' or My block from here…</button>
 
+    <button id="aWbw">${ic('tr')}Word by word: meaning and sound</button>
     <button id="aTaf">${ic('book')}Tafsir of this ayah</button>
+    <button id="aHd">${ic('book')}Hadith on this ayah (al-Bukhari, Muslim)</button>
     <button id="aCopy">${ic('copy')}Copy ayat and translation…</button>
    </div>`);
   sheetB.querySelector('#aBm').onclick=e=>{ const b=e.target.closest('button'); if(!b) return;
@@ -1091,10 +1228,13 @@ function ayahSheet(g){
     store.set('bm',st.bm); closeSheet(); renderReader(); };
   sheetB.querySelector('#aHz').onclick=()=>{ closeSheet(); startHz(g, pageStart[a[4]+1]-1); };
   sheetB.querySelector('#aPlay').onclick=()=>{ closeSheet(); playSheet(g); };
+  sheetB.querySelector('#aTq').onclick=()=>startTq(g);
   const hb=sheetB.querySelector('#aHzB'); if(hb) hb.onclick=()=>{ closeSheet(); startHz(bf.g0,bf.g1,bf.b); };
   sheetB.querySelector('#aBlk').onclick=()=>blocksSheet(g);
   sheetB.querySelector('#aCopy').onclick=()=>copySheet(g);
   sheetB.querySelector('#aTaf').onclick=()=>tafsirSheet(g);
+  sheetB.querySelector('#aWbw').onclick=()=>wordSheet(g,null);
+  sheetB.querySelector('#aHd').onclick=()=>hadithSheet(g);
 }
 /* Reading gestures: tap = show/hide bars, long-press on an ayah = its menu (in every view, translation included). */
 let lpT=null, lpFired=false, lpX=0, lpY=0;
@@ -1141,7 +1281,7 @@ function hideSelBar(){ const had=document.body.classList.contains('selecting'); 
 function showSelBar(lo,hi){ if(selBar){ selBar.remove(); selBar=null; }
   selBar=document.createElement('div'); selBar.className='selbar mini';
   selBar.innerHTML=`<div class="selbar-in"><div class="selbar-t">${esc(blockLabel({s:lo,e:hi}))}</div><div class="selbar-b">
-    <button class="pri" data-a="myr">My ruku'</button><button class="pri" data-a="myb">My blocks</button>${SETK[st.blocks]?`<button data-a="erase">Erase</button>`:''}<button data-a="hz">Hafazan</button><button data-a="copy">Copy</button><button data-a="x" aria-label="Cancel">✕</button></div></div>`;
+    <button class="pri" data-a="myr">My ruku'</button><button class="pri" data-a="myb">My blocks</button>${SETK[st.blocks]?`<button data-a="erase">Erase</button>`:''}<button data-a="hz">Hafazan</button><button data-a="listen">Listen</button><button data-a="copy">Copy</button><button data-a="x" aria-label="Cancel">✕</button></div></div>`;
   // put the bar on the half of the screen away from the selection, and hide the app bars so nothing else covers the page
   const picks=[...main.querySelectorAll('.pick')]; let top=1e9,bot=-1e9; picks.forEach(p=>{ const r=p.getBoundingClientRect(); top=Math.min(top,r.top); bot=Math.max(bot,r.bottom); });
   const mid=(top+bot)/2, atTop=mid>innerHeight/2; selBar.classList.add(atTop?'at-top':'at-bottom');
@@ -1152,7 +1292,8 @@ function showSelBar(lo,hi){ if(selBar){ selBar.remove(); selBar=null; }
     if(a==='myr'||a==='myb') saveRange(lo,hi,a);
     else if(a==='erase'){ const k=SETK[st.blocks], n=eraseRange(lo,hi,k); renderReader(); toast(n?`Erased the selected words from ${SETNAME[k]}`:`Nothing of ${SETNAME[k]} there to erase`); }
     else if(a==='hz') startHz(Pg(lo),Pg(hi),{s:lo,e:hi});
-    else if(a==='copy') copySheet(Pg(lo),Pg(hi)); };
+    else if(a==='copy') copySheet(Pg(lo),Pg(hi));
+    else if(a==='listen') playWords(lo,hi); };
 }
 main.addEventListener('click',e=>{
   if(hz){ if(e.target.closest('.w.e,button,a,input,textarea,#hzR,.legend')) return; setImmersive(!document.body.classList.contains('immersive')); return; }
@@ -1160,6 +1301,8 @@ main.addEventListener('click',e=>{
   if(selBar){ hideSelBar(); return; }
   if(Math.abs(e.clientX-lpX)>10||Math.abs(e.clientY-lpY)>10) return;
   if(e.target.closest('.surah-h,.pagehead')) return;
+  if(store.get('wordTap',false)){ const w=e.target.closest('.mline [data-g][data-w]'); if(w){ wordSheet(+w.dataset.g, +w.dataset.w); return; }
+    const a=e.target.closest('.ay[data-g], .row[data-g]'); if(a){ wordSheet(+a.dataset.g, null); return; } }
   setImmersive(!document.body.classList.contains('immersive'));
   if(!store.get('tipImm',false)){ store.set('tipImm',true); toast('Tap to show or hide the bars. Long-press a word for options.'); } });
 
@@ -1520,6 +1663,7 @@ function playSheet(g){
     <p class="note">If the red words run ahead of the reciter, choose a later setting; if they lag, an earlier one.</p></div>
     <div class="label">Speed</div>${segHtml('plSpd',[[0.75,'0.75×'],[1,'1×'],[1.25,'1.25×']],store.get('plSpd',1))}
     <div class="row2" style="margin-top:12px"><button class="pill primary" id="plGo">Play these ayat</button></div>
+    <div class="actions" style="margin-top:10px"><button id="plTq">${ic('mic')}Listen &amp; repeat from ${a[0]}:${a[1]}: the reciter reads a part, you repeat it and get checked</button></div>
    </div>
    <div id="plSurahOpts" hidden>
     <div class="label">Surah</div><select class="field" id="plhs">${(RECITERS[rc].surah&&RECITERS[rc].have?[...RECITERS[rc].have]:S.map((_,i)=>i+1)).map(n=>`<option value="${n}"${n===a[0]?' selected':''}>${n}. ${esc(S[n-1][1])}</option>`).join('')}</select>
@@ -1548,7 +1692,144 @@ function playSheet(g){
   const pf=sheetB.querySelector('#plFrom'); if(pf) pf.onclick=()=>{ closeSheet(); playStart(cur, gOf(a[0],S[a[0]-1][5])); };
   sheetB.querySelector('#plGo').onclick=()=>{ const s=+pls.value, n=S[s-1][5]; const f=Math.max(1,Math.min(n,+plf.value||1)), t=Math.max(f,Math.min(n,+plt.value||n)); closeSheet(); playStart(gOf(s,f),gOf(s,t)); };
   sheetB.querySelector('#plHGo').onclick=()=>{ closeSheet(); playSurah(+plhs.value); };
+  sheetB.querySelector('#plTq').onclick=()=>startTq(cur);
 }
+
+/* ============================ LISTEN & REPEAT (talaqqi) ============================
+   The reciter recites one part (a whole ayah, or from one waqf sign to the next), then stops. The learner recites it back
+   while it is recorded; on Stop, the words are checked and both recordings can be played. Then the learner chooses: repeat or go on.
+   Word checking hears the words only; tajwid (makhraj, mad, ghunnah) is for the learner's own ear, comparing the two recordings. */
+const TQ_STOP=new Set(['ۘ','ۗ','ۚ','ۖ']);   // waqf signs where a reciter may stop: lazim, qili, jaiz, sala
+let tq=null; const tqA=new Audio(); tqA.preload='auto';
+function tqUnits(g,mode){ const toks=A[g][2].split(' '), o=ords(g), n=toks.length;
+  if(mode==='ayah') return [{g,t0:0,t1:n-1}];
+  const cut=[]; let a=0;
+  toks.forEach((t,i)=>{ if(i<n-1 && TQ_STOP.has(t[t.length-1])){ cut.push([a,i]); a=i+1; } }); cut.push([a,n-1]);
+  // very short parts (under 3 words) are joined to the next one
+  const words=([x,y])=>{ let k=0; for(let i=x;i<=y;i++) if(o[i]>=0) k++; return k; };
+  const out=[]; for(const c of cut){ if(out.length && words(out[out.length-1])<3) out[out.length-1][1]=c[1]; else out.push(c.slice()); }
+  if(out.length>1 && words(out[out.length-1])<3){ const l=out.pop(); out[out.length-1][1]=l[1]; }
+  return out.map(([t0,t1])=>({g,t0,t1})); }
+function tqWordIds(u){ const x=A[u.g], map=x[9]||x[2].split(' ').map((_,i)=>[i]), ids=[]; for(let i=u.t0;i<=u.t1;i++) (map[i]||[]).forEach(j=>ids.push(j)); return ids; }
+function tqCanWaqf(rc){ return !!RECITERS[rc].qdc; }
+function startTq(g){ if(hz){ toast('Close Hafazan first'); return; } if(pl) playStop(); closeSheet();
+  let rc=store.get('tqRec', store.get('plRec','afasy')); if(!RECITERS[rc] || !RECITERS[rc].ayah) rc='afasy';
+  let mode=store.get('tqMode','waqf'); if(mode==='waqf' && !tqCanWaqf(rc)) mode='ayah';
+  tq={g, mode, rc, i:0, units:tqUnits(g,mode), phase:'idle', res:null, H:[], recUrl:null, spd:store.get('tqSpd',1), auto:store.get('tqAuto',true)};
+  let el=document.getElementById('tq'); if(!el){ el=document.createElement('section'); el.id='tq'; el.className='tq'; el.setAttribute('role','dialog'); el.setAttribute('aria-label','Listen and repeat'); document.body.appendChild(el); }
+  el.hidden=false; document.body.style.overflow='hidden'; keepOn(true); tqRender(); tqPlay(); }
+function tqClose(){ tqMicStop(false); try{ tqA.pause(); }catch(e){} cancelAnimationFrame(tqRaf); tq=null; const el=document.getElementById('tq'); if(el){ el.hidden=true; el.innerHTML=''; }
+  document.body.style.overflow=''; keepOn(false); }
+function tqUnit(){ return tq.units[tq.i]; }
+function tqLabel(){ const u=tqUnit(), x=A[u.g]; return `${S[x[0]-1][1]} ${x[0]}:${x[1]}`+(tq.units.length>1?` · part ${tq.i+1} of ${tq.units.length}`:''); }
+function tqRender(){ const el=document.getElementById('tq'); if(!el||!tq) return; const u=tqUnit(), x=A[u.g], toks=x[2].split(' ');
+  const ids=tqWordIds(u), st8=tq.res?tq.res.states:null, map=x[9]||toks.map((_,i)=>[i]);
+  let ar=u.t0>0?'<span class="o">… </span>':''; toks.forEach((t,i)=>{ const inU=i>=u.t0&&i<=u.t1; if(!inU) return; let cls='w';
+    if(inU && st8){ let best='c'; const rank={e:4,m:3,u:2,c:1,pending:3}; (map[i]||[]).forEach(j=>{ const k=ids.indexOf(j); const s0=k>=0?(st8[k]==='pending'?'m':st8[k]):'c'; if(rank[s0]>rank[best]) best=s0; }); cls='w '+best; }
+    ar+=`<span class="${cls}">${t}</span> `; });
+  ar+= u.t1===toks.length-1 ? `<span class="num">${arNum(x[1])}</span>` : '<span class="o">…</span>';
+  const R=RECITERS[tq.rc], live=tq.phase==='listen';
+  el.innerHTML=`<div class="tq-in">
+   <div class="tq-top"><h2>Listen &amp; repeat</h2><button class="ib" id="tqX" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+   <div class="tq-where">${esc(tqLabel())} · ${esc(R.short)}</div>
+   <div class="tq-ayah">${ar}</div>
+   <details class="tq-tr"><summary>Translation of the ayah</summary>${esc(st.lang==='ms'?x[6]:x[7])}</details>
+   <button class="tq-big${live?' live':''}" id="tqMic" aria-label="${live?'Stop and check':'Recite'}">${live?'<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>':ic('mic')}</button>
+   <div class="tq-st" id="tqS">${tq.phase==='play'?'Listen to the reciter…':live?'Your turn: recite, then press Stop.':tq.res?'Press the microphone to recite it again.':'Press the microphone to recite, or Reciter to hear it again.'}</div>
+   <div class="tq-heard" id="tqH">${esc((tq.H||[]).join(' '))}</div>
+   <div id="tqR">${tq.res?tqResultHtml():''}</div>
+   <div class="tq-row"><button class="pill" id="tqPrev" ${tq.i===0&&tq.g===0?'disabled':''}>‹ Back</button>${tq.res?'':`<button class="pill" id="tqRep">${ic('play')}Reciter</button>`}<button class="pill primary" id="tqNext">Next ›</button></div>
+   <div class="label">Each part is</div>${segHtml('tqMode',[['waqf','Waqf to waqf'],['ayah','One ayah']],tq.mode)}
+   <p class="note">${tqCanWaqf(tq.rc)?'Waqf to waqf stops at the signs ◌ۚ ◌ۖ ◌ۗ ◌ۘ inside long ayat; very short parts are joined to the next.':'Waqf to waqf needs a reciter with word timings: Alafasy, as-Sudais or Yasser ad-Dussary.'}</p>
+   <div class="label">Reciter</div>${segHtml('tqRec',Object.entries(RECITERS).filter(([k,v])=>v.ayah).map(([k,v])=>[k,v.short]),tq.rc)}
+   <div class="label">Speed</div>${segHtml('tqSpd',[[0.75,'0.75×'],[1,'1×']],tq.spd)}
+   <div class="label">After the reciter</div>${segHtml('tqAuto',[[true,'Start the microphone'],[false,'Wait for me']],tq.auto)}
+   <p class="note">The check listens for the words only. It cannot judge tajwid: makhraj, length of mad, ghunnah or a wrong harakah that still sounds like the word. Compare your recording with the reciter's for those, and confirm with a teacher.</p></div>`;
+  const $=id=>document.getElementById(id);
+  $('tqX').onclick=tqClose;
+  $('tqMic').onclick=()=>{ if(tq.phase==='listen') tqMicStop(true); else { try{ tqA.pause(); }catch(e){} tqMicStart(); } };
+  if($('tqRep')) $('tqRep').onclick=()=>{ tqMicStop(false); tqPlay(); };
+  $('tqNext').onclick=()=>tqGo(+1); $('tqPrev').onclick=()=>tqGo(-1);
+  const segOn=(id,fn)=>{ $(id).onclick=e=>{ const b=e.target.closest('button'); if(!b) return; fn(b.dataset.v); }; };
+  segOn('tqMode',v=>{ if(v==='waqf' && !tqCanWaqf(tq.rc)){ toast('Choose Alafasy, as-Sudais or Yasser ad-Dussary for waqf to waqf.'); return; }
+    store.set('tqMode',v); const g=tqUnit().g; tq.mode=v; tq.units=tqUnits(g,v); tq.i=0; tqReset(); tqRender(); });
+  segOn('tqRec',v=>{ store.set('tqRec',v); tq.rc=v; if(tq.mode==='waqf' && !tqCanWaqf(v)){ tq.mode='ayah'; const g=tqUnit().g; tq.units=tqUnits(g,'ayah'); tq.i=0; toast('Waqf to waqf needs word timings, so this reciter goes ayah by ayah.'); } tqReset(); tqRender(); });
+  segOn('tqSpd',v=>{ tq.spd=+v; store.set('tqSpd',tq.spd); tqRender(); });
+  segOn('tqAuto',v=>{ tq.auto=v==='true'; store.set('tqAuto',tq.auto); tqRender(); });
+  el.querySelectorAll('.tq-res-play').forEach(b=>b.onclick=()=>{ if(b.dataset.k==='me'){ const a=document.getElementById('tqMe'); if(a){ try{ tqA.pause(); }catch(e){} a.currentTime=0; a.play(); } } else { tqPlay(true); } });
+}
+function tqReset(){ tqMicStop(false); tq.res=null; tq.H=[]; tq.recUrl=null; tq.recSec=0; tq.phase='idle'; try{ tqA.pause(); }catch(e){} }
+function tqGo(d){ tqReset();
+  if(d>0){ if(tq.i<tq.units.length-1) tq.i++; else { const g=tqUnit().g; if(g>=N-1){ toast('End of the Qur\'an'); return; } tq.units=tqUnits(g+1,tq.mode); tq.i=0; } }
+  else { if(tq.i>0) tq.i--; else { const g=tqUnit().g; if(g<=0) return; tq.units=tqUnits(g-1,tq.mode); tq.i=tq.units.length-1; } }
+  tqRender(); tqPlay(); }
+/* Reciter: a whole ayah plays its own file; a waqf part plays that stretch of the reciter's surah recording, using the word timings. */
+let tqRaf=0;
+async function tqPlay(onlyListen){ if(!tq) return; const me=tq, u=tqUnit(), x=A[u.g], R=RECITERS[tq.rc];
+  cancelAnimationFrame(tqRaf); tq.phase='play'; if(!onlyListen) tqRender(); else tqStatus('Listen to the reciter…');
+  const whole = u.t0===0 && u.t1===x[2].split(' ').length-1;
+  let from=0, to=null;
+  try{
+    if(whole || !R.qdc){ const url=R.ayah+p3(x[0])+p3(x[1])+'.mp3'; if(tqA.dataset.u!==url){ tqA.src=url; tqA.dataset.u=url; } from=0; to=null; }
+    else { const tm=await plTimings(qdcFor(tq.rc,x[0]),x[0]); if(tq!==me) return; const v=tm.v.get(u.g); const o=ords(u.g);
+      let k0=null,k1=null; for(let i=u.t0;i<=u.t1;i++){ if(o[i]>=0){ if(k0==null) k0=o[i]; k1=o[i]; } }
+      const s0=v&&v.seg.find(z=>z[0]===k0+1), s1=v&&[...v.seg].reverse().find(z=>z[0]===k1+1);
+      if(!s0||!s1) throw new Error('no timing');
+      if(tqA.dataset.u!==tm.url){ tqA.src=tm.url; tqA.dataset.u=tm.url; }
+      from=Math.max(0,s0[1]-120)/1000; const nx=v.seg.find(z=>z[0]===k1+2); to=(nx? Math.min(nx[1], s1[2]+250) : Math.max(s1[2]+250, v.to-40))/1000; }
+  }catch(e){ if(tq!==me) return; tqStatus('Word timing is not available now. Playing the whole ayah.'); const url=R.ayah+p3(x[0])+p3(x[1])+'.mp3'; tqA.src=url; tqA.dataset.u=url; from=0; to=null; }
+  const go=()=>{ if(tq!==me) return; try{ tqA.currentTime=from; }catch(e){} tqA.playbackRate=tq.spd; tqA.play().catch(err=>{ if(tq===me){ tq.phase='idle'; tqStatus(err&&err.name==='NotAllowedError'?'Tap ▶ Reciter to play.':'Could not play the recitation. Check the internet connection.'); } });
+    const step=()=>{ if(tq!==me||tq.phase!=='play') return; if(to!=null && tqA.currentTime>=to){ tqA.pause(); tqEndPlay(onlyListen); return; } if(!tqA.paused) tqRaf=requestAnimationFrame(step); };
+    tqRaf=requestAnimationFrame(step); };
+  tqA.onended=()=>{ if(tq===me && tq.phase==='play') tqEndPlay(onlyListen); };
+  if(tqA.readyState>=1) go(); else tqA.addEventListener('loadedmetadata',go,{once:true}); }
+function tqEndPlay(onlyListen){ if(!tq) return; tq.phase='idle';
+  if(!onlyListen && tq.auto && !tq.res){ setTimeout(()=>{ if(tq && tq.phase==='idle' && !tq.res) tqMicStart(); }, 250); }
+  else { tqStatus(tq.res?'':'Press the microphone to recite, or ▶ to hear it again.'); } }
+function tqStatus(t){ const s=document.getElementById('tqS'); if(s) s.textContent=t; }
+/* Learner: speech recognition + recording, like Hafazan */
+let tqRecog=null, tqWeb=null;
+function tqMicStart(){ if(!tq) return; applyMic(); if(!SR){ toast('Voice recognition is not available here.'); return; }
+  tq.res=null; tq.H=[]; tq.finals=[]; tq.last=''; tq.phase='listen'; tq.recUrl=null; tqRender();
+  // recording (Android app: WAV on the phone; browser: MediaRecorder)
+  tq.recMode=null;
+  if(IS_ANDROID_APP && window.AndroidSpeech.recStart){ try{ if(window.AndroidSpeech.recStart()) tq.recMode='android'; }catch(e){} }
+  else if(navigator.mediaDevices?.getUserMedia && window.MediaRecorder){ const me=tq; navigator.mediaDevices.getUserMedia({audio:true}).then(stream=>{ if(tq!==me||tq.phase!=='listen'){ stream.getTracks().forEach(t=>t.stop()); return; }
+      const ch=[]; const mr=new MediaRecorder(stream); mr.ondataavailable=e=>{ if(e.data.size) ch.push(e.data); };
+      mr.onstop=()=>{ stream.getTracks().forEach(t=>t.stop()); if(tq===me && ch.length){ tq.recUrl=URL.createObjectURL(new Blob(ch,{type:mr.mimeType||'audio/webm'})); if(tq.res) tqRender(); } };
+      mr.start(); tqWeb=mr; tq.recMode='web'; }).catch(()=>{}); }
+  const r=new SR(); tqRecog=r; r.lang='ar-SA'; r.continuous=true; r.interimResults=true; r.maxAlternatives=1;
+  let fin=[];
+  r.onresult=ev=>{ if(tqRecog!==r||!tq) return; let interim=''; fin=[];
+    for(let i=0;i<ev.results.length;i++){ const t=ev.results[i][0].transcript.trim(); if(ev.results[i].isFinal){ if(t) fin.push(t); } else interim+=' '+t; }
+    const all=[...fin,interim].join(' ').trim(); if(!all) return;
+    if(tq.last && !continues(tq.last,all)) tq.finals.push(tq.last);
+    tq.last=all; tq.H=normAr([...tq.finals,all].join(' ')).split(' ').filter(Boolean); const h=document.getElementById('tqH'); if(h) h.textContent=[...tq.finals,all].join(' '); };
+  r.onerror=ev=>{ if(ev.error==='not-allowed'||ev.error==='audio-capture'||ev.error==='service-not-allowed'){ tqStatus('The microphone is not available.'); tqRecog=null; } };
+  r.onend=()=>{ if(tqRecog===r){ try{ r.start(); }catch(e){} } };
+  try{ r.start(); }catch(e){ tqStatus('Could not start the microphone.'); }
+}
+function tqMicStop(check){ const r=tqRecog; tqRecog=null; if(r){ try{ r.stop(); }catch(e){} }
+  if(!tq) return;
+  if(tq.recMode==='android'){ let v=''; try{ v=window.AndroidSpeech.recStop(); }catch(e){} if(v){ const [name,sec]=v.split(','); tq.recUrl=location.origin+'/rec/'+name; tq.recSec=+sec; } }
+  else if(tq.recMode==='web'){ try{ tqWeb&&tqWeb.stop(); }catch(e){} tqWeb=null; }
+  tq.recMode=null;
+  if(!check){ if(tq.phase==='listen') tq.phase='idle'; return; }
+  tq.phase='checking'; tqStatus('Checking…');
+  const me=tq; setTimeout(()=>{ if(tq!==me) return; tqCheck(); }, IS_ANDROID_APP?900:450); }
+function tqCheck(){ const u=tqUnit(), x=A[u.g], plain=x[3].split(' '), ids=tqWordIds(u);
+  const E=ids.map(j=>normAr(plain[j]));
+  let H=tq.H.slice(); const strip=P=>{ if(H.length>=P.length && ratio(H.slice(0,P.length).join(''),P.join(''))>=0.8) H=H.slice(P.length); };
+  strip(ISTI); if(u.g!==0) strip(BASM);
+  tq.res=H.length? judge(E,H,new Set()) : {states:E.map(()=> 'm'),heardAt:[],extra:[],last:-1};
+  tq.res.states=tq.res.states.map(s0=>s0==='pending'?'m':s0); tq.Hc=H; tq.phase='done'; tqRender();
+  const r=document.getElementById('tqR'); if(r) r.scrollIntoView({behavior:RM.matches?'auto':'smooth',block:'nearest'}); }
+function tqResultHtml(){ const r=tq.res, n=r.states.length, c=r.states.filter(x=>x==='c').length, e=r.states.filter(x=>x==='e').length, m=r.states.filter(x=>x==='m').length, u=r.states.filter(x=>x==='u').length, x=r.extra.length;
+  const ok=c===n && !x;
+  return `<div class="sum"><div><b>${c}/${n}</b><small>correct</small></div><div><b>${e}</b><small>wrong</small></div><div><b>${m}</b><small>skipped</small></div><div><b>${x}</b><small>extra</small></div></div>
+   <p class="note" style="text-align:center">${ok?'All words heard correctly.':'Coloured words above: red wrong, orange skipped'+(u?', dotted unclear':'')+'.'} Choose Next to go on, or recite again.</p>
+   <div class="tq-row"><button class="pill tq-res-play" data-k="rc">${ic('play')}Reciter</button>${tq.recUrl?`<button class="pill tq-res-play" data-k="me">${ic('play')}Me${tq.recSec?` · ${tq.recSec}s`:''}</button>`:''}</div>
+   ${tq.recUrl?`<audio id="tqMe" preload="auto" src="${tq.recUrl}"></audio>`:''}`; }
 
 const HZ_OPEN_STEP=160;   // words added each time an open-ended session nears the end of what is shown
 function hzMoreTo(g,words){ let n=0; while(g<N-1 && n<words){ g++; n+=A[g][3].split(' ').length; } return g; }
