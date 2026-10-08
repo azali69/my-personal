@@ -6,7 +6,7 @@ API = 'https://quranenc.com/api/v1'
 def get(u, tries=5, raw=False):
     for i in range(tries):
         try:
-            with urllib.request.urlopen(urllib.request.Request(u, headers={'User-Agent': 'MyPersonalQuran/1.0 (+https://github.com/azali69/my-personal)'}), timeout=60) as r:
+            with urllib.request.urlopen(urllib.request.Request(u, headers={'User-Agent': 'MyPersonalQuran/1.0 (+https://github.com/azali69/my-personal)'}), timeout=30) as r:
                 return r.read().decode('utf-8') if raw else json.load(r)
         except urllib.error.HTTPError as e:
             if e.code == 404: raise
@@ -46,11 +46,13 @@ def page_blocks(src):
     return intro, blocks
 LOG = []; os.makedirs('tafsir', exist_ok=True)
 def fetch_key(k):
-    os.makedirs(f'tafsir/{k}', exist_ok=True); n = 0
+    os.makedirs(f'tafsir/{k}', exist_ok=True); n = 0; use_api = not k.endswith('_saadi')
     for s in range(1, 115):
         rows = []
-        try: rows = get(f'{API}/translation/sura/{k}/{s}', tries=2)['result']
-        except Exception: pass
+        if use_api:
+            try: rows = get(f'{API}/translation/sura/{k}/{s}', tries=2)['result']
+            except Exception: pass
+            if not rows and s == 1: use_api = False     # this key is not served by the API: read the pages instead
         if rows:
             out = {'key': k, 'sura': s, 'ayat': [[int(r['aya']), r['translation'], r.get('footnotes')] for r in rows]}
             n += len(rows)
