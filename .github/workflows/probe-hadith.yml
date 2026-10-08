@@ -11,12 +11,22 @@ jobs:
     steps:
       - run: |
           mkdir o && cd o
-          A="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/124 Safari/537.36"
-          curl -sL -A "$A" https://sunnah.com/bukhari/65 -o sunnah-bukhari-65.html
-          curl -sL -A "$A" https://sunnah.com/muslim/56 -o sunnah-muslim-56.html
-          curl -sL -A "$A" https://sunnah.com/robots.txt -o robots.txt
-          B=https://cdn.jsdelivr.net/gh/fawazahmed0/hadith-api@1/editions
-          for e in ara-bukhari eng-bukhari ind-bukhari ara-muslim eng-muslim ind-muslim; do curl -sL $B/$e.min.json -o $e.json; done
-          curl -sL $B/../info.min.json -o info.json
-          ls -la
+          pip -q install pandas pyarrow huggingface_hub
+          python3 - <<'PY'
+          import json, pandas as pd
+          from huggingface_hub import snapshot_download
+          p = snapshot_download('freococo/sunnah_dataset', repo_type='dataset', local_dir='ds')
+          import glob, os
+          files = [f for f in glob.glob('ds/**/*', recursive=True) if os.path.isfile(f)]
+          open('files.txt','w').write('\n'.join(files))
+          pq = [f for f in files if f.endswith('.parquet')] 
+          df = pd.concat([pd.read_parquet(f) for f in pq]) if pq else pd.read_csv([f for f in files if f.endswith('.csv')][0])
+          open('columns.txt','w').write(str(list(df.columns)) + '\n' + str(df['collection'].value_counts()))
+          for col, bk, name in [('Sahih al-Bukhari', 65, 'bukhari65'), ('Sahih Muslim', 56, 'muslim56'), ('Jami` at-Tirmidhi', 47, 'tirmidhi47')]:
+              d = df[(df['collection'].str.contains(col.split()[-1].replace('`',''), regex=False)) & (df['book_no'].astype(str) == str(bk))]
+              d.to_json(name + '.json', orient='records', force_ascii=False, indent=0)
+              print(name, len(d))
+          df.head(3).to_json('sample.json', orient='records', force_ascii=False, indent=1)
+          PY
+          rm -rf ds; ls -la
           git init -q -b probe && git config user.name a && git config user.email a@b && git add -A && git commit -qm probe && git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" probe
