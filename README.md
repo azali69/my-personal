@@ -27,6 +27,8 @@ Open it at **https://azali69.github.io/my-personal/** in Chrome. On Android, use
 | Surah header frames | KFGQPC surah header font (QCF_SurahHeader, v1.000, Sept 2025), via [QUL / Tarteel](https://qul.tarteel.ai/resources/font/458). © King Fahd Complex, included unmodified |
 | Printed pages | KFGQPC V4 (1441H) page fonts, plain and tajweed, via [QUL / Tarteel](https://qul.tarteel.ai), downloaded when a page is first opened |
 | Recitation audio (ayah by ayah) | Mishary Rashid Alafasy, Maher al-Muaiqly, Yasser ad-Dussary, streamed from [EveryAyah.com](https://everyayah.com/recitations_ayat.html) (128 kbps) |
+| Word timings (karaoke) | Alafasy, as-Sudais, Yasser ad-Dussary: Quran.com (api.qurancdn.com), corrected per surah where they ran ahead of the voice; measured with `tools/drift_check.py`, results in `tools/timing-corrections.json` |
+| Recitation audio (as-Sudais, Maher whole surah) | Quran.com / QuranicAudio; MP3Quran.net (Maher al-Muaiqly, all 114 surahs) |
 | Recitation audio (whole surahs) | Hazza al-Balushi, streamed from [MP3Quran.net](https://www.mp3quran.net/eng/hazza): 91 of 114 surahs are published |
 | Word-judging logic | Adapted from [Tilawi quran-asr](https://github.com/Tilawi/quran-asr), MIT licence, © 2025-2026 Muhammed Durakovic |
 
