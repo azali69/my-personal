@@ -1,0 +1,2 @@
+hisn FAILED RuntimeError('http://www.hisnmuslim.com/api/en/126.json')
+muis FAILED ValueError("invalid literal for int() with base 10: '5 44'")
