@@ -1,2 +1,3 @@
-hisn FAILED RuntimeError('http://www.hisnmuslim.com/api/en/126.json')
-muis FAILED ValueError("invalid literal for int() with base 10: '5 44'")
+hisn chapter 126 (What to say when you feel frightened) not available: RuntimeError('http://www.hisnmuslim.com/api/en/126.json')
+hisn: 131 chapters, 266 items
+muis: 1096 days, 2024-01-01 to 2026-12-31
