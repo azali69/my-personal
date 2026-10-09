@@ -2503,6 +2503,11 @@ async function hisnLoad(){ if(hisn) return hisn; const id='https://mpq.local/dua
     try{ const r=await fetch(b+'hisn.json',{cache:'no-cache'}); if(!r.ok) continue; const j=await r.clone().json(); if(!j.chapters) continue; try{ c&&await c.put(id,r); }catch(e){} hisn=j; return j; }catch(e){} }
   throw new Error('offline'); }
 const DUA_FAV=()=>store.get('duaFav',[]);
+/* Entries that are Qur'an recitations: the source gives an instruction ("Recite Ayat al-Kursi") instead of a transliteration,
+   so the app shows the Qur'an.com transliteration of those ayat (the same one as in the translation view). */
+const HISN_QURAN={75:[[2,255,255]],71:[[2,255,255]],100:[[2,255,255]],101:[[2,285,286]],76:[[112,1,4],[113,1,5],[114,1,6]],70:[[112,1,4],[113,1,5],[114,1,6]],99:[[112,1,4],[113,1,5],[114,1,6]]};
+function hisnQuranTl(id){ const refs=HISN_QURAN[id]; if(!refs) return null; const d=TL.simple; if(!d){ tlLoad('simple'); return ''; }
+  return refs.map(([su,a,b])=>`${S[su-1][1]} ${su}:${a}${b>a?'–'+b:''}: `+d[su-1].slice(a-1,b).map((t,k)=>`${t} (${a+k})`).join(' ')).join('\n\n'); }
 async function duaPanel(){ const b=openPanel('dua','Doa & zikir',`<p class="note">Loading Hisnul Muslim…</p>`);
   let H; try{ H=await hisnLoad(); }catch(e){ b.innerHTML='<p class="note">Hisnul Muslim needs the internet the first time; after that it is kept on the phone.</p>'; return; }
   const fav=new Set(DUA_FAV()), pin=[27,28,1];   // morning & evening, before sleeping, on waking
@@ -2518,6 +2523,7 @@ async function duaPanel(){ const b=openPanel('dua','Doa & zikir',`<p class="note
   draw(''); b.querySelector('#duaQ').oninput=e=>draw(e.target.value);
   list.onclick=e=>{ const t=e.target.closest('[data-c]'); if(t) duaChapter(+t.dataset.c); }; }
 function duaChapter(id){ const c=hisn.chapters.find(x=>x.id===id); if(!c) return;
+  if(c.items.some(it=>HISN_QURAN[+it.id]) && !TL.simple){ tlLoad('simple').then(()=>{ if(document.getElementById('duaC')?.hidden===false && TL.simple) duaChapter(id); }); }
   const showTl=store.get('duaTl',true), showTr=store.get('duaTr',true), fav=new Set(DUA_FAV());
   const b=openPanel('duaC',c.en[0].toUpperCase()+c.en.slice(1),`
    <div class="row2" style="gap:8px;flex-wrap:wrap;margin-bottom:6px">${segHtml('duTl',[[true,'Transliteration on'],[false,'Off']],showTl)}${segHtml('duTr',[[true,'Translation on'],[false,'Off']],showTr)}
@@ -2525,7 +2531,8 @@ function duaChapter(id){ const c=hisn.chapters.find(x=>x.id===id); if(!c) return
    <div style="font-family:var(--ar);font-size:24px;text-align:center;color:var(--gold-hi);margin:6px 0 4px">${esc(c.ar)}</div>
    ${c.items.map((it,k)=>`<div class="card" data-i="${k}">
      <div dir="rtl" lang="ar" style="font-family:var(--ar);font-size:calc(var(--arsize) * .9);line-height:2.05;white-space:pre-wrap">${esc(it.ar)}</div>
-     ${showTl&&it.tl?`<p style="font-style:italic;color:var(--gold-hi);margin:8px 0 0;line-height:1.6">${esc(it.tl)}</p>`:''}
+     ${showTl?(()=>{ const q=hisnQuranTl(+it.id); if(q!=null) return `${it.tl?`<p class="note" style="margin:8px 0 0">${esc(it.tl)}</p>`:''}<p style="font-style:italic;color:var(--gold-hi);margin:6px 0 0;line-height:1.6;white-space:pre-wrap">${q?esc(q):'Loading transliteration…'}</p><p class="note" style="font-size:12px;margin:4px 0 0">Transliteration of these ayat from Quran.com (approximate).</p>`;
+        return it.tl?`<p style="font-style:italic;color:var(--gold-hi);margin:8px 0 0;line-height:1.6">${esc(it.tl)}</p>`:`<p class="note" style="font-size:12px;margin:8px 0 0">No transliteration in the source for this entry: it tells what to do or narrates a hadith, rather than giving words to say.</p>`; })():''}
      ${showTr&&it.en?`<p style="margin:8px 0 0;line-height:1.65">${esc(it.en)}</p>`:''}
      <div class="row2" style="gap:8px;margin-top:10px;align-items:center">
       ${it.audio?`<button class="pill" data-play="${k}">${ic('play')}Listen</button>`:''}
