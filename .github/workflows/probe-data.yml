@@ -12,11 +12,13 @@ jobs:
       - run: |
           mkdir o && cd o
           A="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/124 Safari/537.36"
-          for u in https://www.hisnmuslim.com/api/husn_en.json https://www.hisnmuslim.com/api/en/husn_en.json https://www.hisnmuslim.com/api/ar/husn_ar.json https://www.hisnmuslim.com/api/husn_ar.json https://www.hisnmuslim.com/api/ms/husn_ms.json https://www.hisnmuslim.com/api/id/husn_id.json https://www.hisnmuslim.com/api/husn.json https://www.hisnmuslim.com/api/ https://www.hisnmuslim.com/; do n=$(echo $u | tr '/:' '__'); curl -sL -A "$A" -m 60 -o "h$n" -w "$u %{http_code} %{size_download} %{content_type}\n" "$u" >> hisn.txt; done
-          curl -sL -m 60 "https://data.gov.sg/api/action/datastore_search?resource_id=d_a6a206cba471fe04b62dd886ef5eaf22&limit=5" -o muis.json
-          curl -sL -m 60 "https://api-production.data.gov.sg/v2/public/api/collections/2312/metadata" -o muis-coll.json
-          curl -sL -m 60 "https://commons.wikimedia.org/w/api.php?action=query&list=search&srsearch=adhan%20filetype:audio&srnamespace=6&srlimit=50&format=json" -o commons-adhan.json
-          curl -sL -m 60 "https://commons.wikimedia.org/w/api.php?action=query&list=search&srsearch=azan%20filetype:audio&srnamespace=6&srlimit=50&format=json" -o commons-azan.json
-          curl -sL -m 60 "https://commons.wikimedia.org/w/api.php?action=query&list=search&srsearch=athan%20OR%20adzan%20OR%20ezan%20filetype:audio&srnamespace=6&srlimit=50&format=json" -o commons-athan.json
+          curl -sL -A "$A" -m 60 http://www.hisnmuslim.com/api/en/27.json -o en27.json
+          curl -sL -A "$A" -m 60 http://www.hisnmuslim.com/api/ar/27.json -o ar27.json
+          curl -sL -A "$A" -m 60 http://www.hisnmuslim.com/api/en/husn_en.json -o en_index.json
+          curl -sL -A "$A" -m 60 https://hisnmuslim.com/i/en/27 -o page_en27.html
+          curl -sL -A "$A" -m 60 "https://enc.islamhouse.com/api/books/819" -o ih_api.json
+          curl -sL -A "$A" -m 60 "https://enc.islamhouse.com/ms/books/819/1" -o ih_ms.html
+          curl -sL -A "$A" -m 60 "https://enc.islamhouse.com/id/books/819/1" -o ih_id.html
+          curl -sL -A "$A" -m 60 "https://enc.islamhouse.com/en/books/819" -o ih_en_index.html
           ls -la
           git init -q -b probe && git config user.name a && git config user.email a@b && git add -A && git commit -qm probe && git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" probe
