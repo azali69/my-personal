@@ -38,6 +38,17 @@ import android.webkit.WebViewClient;
 import androidx.webkit.WebViewAssetLoader;
 
 import org.json.JSONObject;
+import android.content.Context;
+import android.hardware.GeomagneticField;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.PowerManager;
+import android.provider.Settings;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -308,6 +319,8 @@ public class MainActivity extends Activity {
             }
         });
         web.addJavascriptInterface(new SpeechBridge(), "AndroidSpeech");
+        web.addJavascriptInterface(new ExtraBridge(), "AndroidExtra");
+        try { PrayerAlarms.schedule(this); } catch (Exception ignored) { }
         web.loadUrl("https://" + HOST + "/assets/index.html");
     }
 
@@ -527,6 +540,8 @@ public class MainActivity extends Activity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] results) {
+        if (requestCode == REQ_LOC) { boolean ok = results.length > 0 && results[0] == PackageManager.PERMISSION_GRANTED; if (ok) findLocation(); else js("window.__loc && window.__loc({error:'denied'})"); return; }
+        if (requestCode == REQ_NOTIF) { js("window.__notifPerm && window.__notifPerm()"); return; }
         if (requestCode != REQ_MIC) return;
         if (results.length > 0 && results[0] == PackageManager.PERMISSION_GRANTED && pendingLang != null) {
             startRecognizer(pendingLang);
@@ -750,6 +765,127 @@ public class MainActivity extends Activity {
         }
     }
 
+
+    /* ---------------- Prayer alerts, adhan files, location, compass ---------------- */
+    private static final int REQ_NOTIF = 21, REQ_LOC = 22, REQ_PICK = 23;
+    private String pickSlot = null;
+    private SensorManager sm; private SensorEventListener compassL; private float decl = 0f; private long lastCompass = 0;
+
+    private void js(final String code) { runOnUiThread(() -> web.evaluateJavascript(code, null)); }
+
+    private class ExtraBridge {
+        @JavascriptInterface public void setPrayerAlarms(String json) { PrayerAlarms.save(MainActivity.this, json); }
+        @JavascriptInterface public String alarmStatus() {
+            try {
+                JSONObject o = new JSONObject();
+                o.put("notif", Build.VERSION.SDK_INT < 33 || checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED);
+                o.put("exact", PrayerAlarms.canExact(MainActivity.this));
+                PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+                o.put("battery", pm != null && pm.isIgnoringBatteryOptimizations(getPackageName()));
+                File a = AdhanService.adhanFile(MainActivity.this, "makkah"), b = AdhanService.adhanFile(MainActivity.this, "madinah");
+                o.put("makkah", a == null ? "" : PrayerAlarms.prefs(MainActivity.this).getString("name_makkah", a.getName()));
+                o.put("madinah", b == null ? "" : PrayerAlarms.prefs(MainActivity.this).getString("name_madinah", b.getName()));
+                o.put("next", PrayerAlarms.prefs(MainActivity.this).getString("pending", ""));
+                return o.toString();
+            } catch (Exception e) { return "{}"; }
+        }
+        @JavascriptInterface public void askNotifications() { if (Build.VERSION.SDK_INT >= 33) runOnUiThread(() -> requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS}, REQ_NOTIF)); }
+        @JavascriptInterface public void openExactAlarm() {
+            runOnUiThread(() -> { try { if (Build.VERSION.SDK_INT >= 31) startActivity(new Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM, Uri.parse("package:" + getPackageName()))); } catch (Exception e) { openAppSettings(); } }); }
+        @JavascriptInterface public void openBattery() {
+            runOnUiThread(() -> { try { startActivity(new Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS, Uri.parse("package:" + getPackageName()))); } catch (Exception e) { openAppSettings(); } }); }
+        @JavascriptInterface public void openNotifSettings() {
+            runOnUiThread(() -> { try { startActivity(new Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).putExtra(Settings.EXTRA_APP_PACKAGE, getPackageName())); } catch (Exception e) { openAppSettings(); } }); }
+        @JavascriptInterface public void pickAdhan(String slot) {
+            if (!"makkah".equals(slot) && !"madinah".equals(slot)) return;
+            pickSlot = slot;
+            runOnUiThread(() -> { try { startActivityForResult(new Intent(Intent.ACTION_OPEN_DOCUMENT).addCategory(Intent.CATEGORY_OPENABLE).setType("audio/*"), REQ_PICK); } catch (Exception e) { js("window.__adhanPicked && window.__adhanPicked('" + slot + "','')"); } }); }
+        @JavascriptInterface public void removeAdhan(String slot) { File f = AdhanService.adhanFile(MainActivity.this, slot); if (f != null) f.delete(); }
+        @JavascriptInterface public void testSound(String sound) {
+            Intent s = new Intent(MainActivity.this, AdhanService.class).putExtra("sound", sound).putExtra("title", "Test").putExtra("text", "This is how the prayer alert will sound");
+            if (Build.VERSION.SDK_INT >= 26) startForegroundService(s); else startService(s); }
+        @JavascriptInterface public void stopSound() { startService(new Intent(MainActivity.this, AdhanService.class).setAction("stop")); }
+        @JavascriptInterface public void getLocation() {
+            runOnUiThread(() -> {
+                if (checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, REQ_LOC); return; }
+                findLocation(); }); }
+        @JavascriptInterface public void startCompass(double lat, double lng) {
+            runOnUiThread(() -> {
+                try { decl = new GeomagneticField((float) lat, (float) lng, 0f, System.currentTimeMillis()).getDeclination(); } catch (Exception e) { decl = 0f; }
+                sm = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+                Sensor rv = sm == null ? null : sm.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
+                if (rv == null) { js("window.__compass && window.__compass(null,-1)"); return; }
+                if (compassL != null) sm.unregisterListener(compassL);
+                compassL = new SensorEventListener() {
+                    final float[] R = new float[9], o = new float[3];
+                    int acc = 3;
+                    @Override public void onSensorChanged(SensorEvent e) {
+                        long now = SystemClock.uptimeMillis(); if (now - lastCompass < 50) return; lastCompass = now;
+                        SensorManager.getRotationMatrixFromVector(R, e.values); SensorManager.getOrientation(R, o);
+                        float az = (float) Math.toDegrees(o[0]) + decl; az = (az + 360f) % 360f;
+                        js("window.__compass && window.__compass(" + az + "," + acc + ")"); }
+                    @Override public void onAccuracyChanged(Sensor s, int a) { acc = a; }
+                };
+                sm.registerListener(compassL, rv, SensorManager.SENSOR_DELAY_GAME);
+                Sensor mag = sm.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);   // its accuracy says whether the compass needs calibrating
+                if (mag != null) sm.registerListener(new SensorEventListener() {
+                    @Override public void onSensorChanged(SensorEvent e) { }
+                    @Override public void onAccuracyChanged(Sensor s, int a) { if (compassL != null) compassL.onAccuracyChanged(s, a); } }, mag, SensorManager.SENSOR_DELAY_UI);
+            }); }
+        @JavascriptInterface public void stopCompass() { runOnUiThread(() -> { if (sm != null && compassL != null) sm.unregisterListener(compassL); compassL = null; }); }
+    }
+
+    private void openAppSettings() { try { startActivity(new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + getPackageName()))); } catch (Exception ignored) { } }
+
+    private void sendLoc(Location l) {
+        if (l == null) { js("window.__loc && window.__loc(null)"); return; }
+        js("window.__loc && window.__loc({lat:" + l.getLatitude() + ",lng:" + l.getLongitude() + ",acc:" + l.getAccuracy() + ",t:" + l.getTime() + "})"); }
+
+    @SuppressWarnings("MissingPermission")
+    private void findLocation() {
+        LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if (lm == null) { sendLoc(null); return; }
+        Location best = null;
+        for (String p : lm.getProviders(true)) { try { Location l = lm.getLastKnownLocation(p); if (l != null && (best == null || l.getTime() > best.getTime())) best = l; } catch (Exception ignored) { } }
+        if (best != null && System.currentTimeMillis() - best.getTime() < 30 * 60 * 1000L) { sendLoc(best); return; }
+        String prov = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER) ? LocationManager.NETWORK_PROVIDER : lm.isProviderEnabled(LocationManager.GPS_PROVIDER) ? LocationManager.GPS_PROVIDER : null;
+        if (prov == null) { sendLoc(best); return; }
+        final Location fallback = best; final boolean[] done = {false};
+        try {
+            LocationListener ll = new LocationListener() {
+                @Override public void onLocationChanged(Location l) { if (!done[0]) { done[0] = true; sendLoc(l); } lm.removeUpdates(this); }
+                @Override public void onStatusChanged(String p, int s, Bundle b) { }
+                @Override public void onProviderEnabled(String p) { }
+                @Override public void onProviderDisabled(String p) { }
+            };
+            lm.requestLocationUpdates(prov, 0, 0, ll, getMainLooper());
+            web.postDelayed(() -> { if (!done[0]) { done[0] = true; lm.removeUpdates(ll); sendLoc(fallback); } }, 20000);
+        } catch (Exception e) { sendLoc(fallback); }
+    }
+
+    @Override
+    protected void onActivityResult(int req, int res, Intent data) {
+        super.onActivityResult(req, res, data);
+        if (req != REQ_PICK) return;
+        String slot = pickSlot; pickSlot = null; String name = "";
+        if (slot != null && res == RESULT_OK && data != null && data.getData() != null) {
+            try {
+                Uri u = data.getData();
+                String disp = null;
+                try (android.database.Cursor c = getContentResolver().query(u, null, null, null, null)) { if (c != null && c.moveToFirst()) { int i = c.getColumnIndex(android.provider.OpenableColumns.DISPLAY_NAME); if (i >= 0) disp = c.getString(i); } }
+                String ext = disp != null && disp.contains(".") ? disp.substring(disp.lastIndexOf('.')).toLowerCase() : ".mp3";
+                File dir = new File(getFilesDir(), "adhan"); dir.mkdirs();
+                File old = AdhanService.adhanFile(this, slot); if (old != null) old.delete();
+                File f = new File(dir, slot + ext);
+                try (InputStream in = getContentResolver().openInputStream(u); OutputStream out = new FileOutputStream(f)) { byte[] b = new byte[16384]; int n; while ((n = in.read(b)) > 0) out.write(b, 0, n); }
+                name = disp == null ? f.getName() : disp;
+                PrayerAlarms.prefs(this).edit().putString("name_" + slot, name).apply();
+            } catch (Exception e) { name = ""; }
+        }
+        js("window.__adhanPicked && window.__adhanPicked(" + JSONObject.quote(slot == null ? "" : slot) + "," + JSONObject.quote(name) + ")");
+    }
+
     /* ---------------- Lifecycle ---------------- */
 
     @Override
@@ -777,6 +913,7 @@ public class MainActivity extends Activity {
         stopPump();
         btRouteOff();
         if (msess != null) { msess.release(); msess = null; }
+        if (sm != null && compassL != null) sm.unregisterListener(compassL);
         web.destroy();
         super.onDestroy();
     }
