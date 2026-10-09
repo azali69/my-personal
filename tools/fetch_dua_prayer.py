@@ -1,9 +1,9 @@
 """Hisn al-Muslim (hisnmuslim.com API: Arabic, English, transliteration, repeat counts, Arabic audio) and the
 MUIS prayer timetable (data.gov.sg, Open Data Licence), kept unchanged apart from the time format (12-hour -> 24-hour)."""
-import json, os, sys, time, urllib.request, datetime
+import json, os, re, sys, time, urllib.request, datetime
 UA = {'User-Agent': 'Mozilla/5.0 MyPersonalQuran/1.0 (+https://github.com/azali69/my-personal)'}
-def get(u, raw=False):
-    for i in range(5):
+def get(u, raw=False, tries=5):
+    for i in range(tries):
         try:
             with urllib.request.urlopen(urllib.request.Request(u, headers=UA), timeout=60) as r:
                 b = r.read().decode('utf-8-sig'); return b if raw else json.loads(b)
@@ -16,8 +16,11 @@ try:
     idx_ar = {c['ID']: c for c in get('http://www.hisnmuslim.com/api/ar/husn_ar.json')['العربية']}
     chapters = []
     for c in sorted(idx_en, key=lambda c: c['ID']):
-        en = get(f"http://www.hisnmuslim.com/api/en/{c['ID']}.json"); en = en[list(en)[0]]
-        ar = get(f"http://www.hisnmuslim.com/api/ar/{c['ID']}.json"); ar_title = list(ar)[0]; ar = {x['ID']: x for x in ar[ar_title]}
+        try:
+            en = get(f"http://www.hisnmuslim.com/api/en/{c['ID']}.json", tries=3); en = en[list(en)[0]]
+            ar = get(f"http://www.hisnmuslim.com/api/ar/{c['ID']}.json"); ar_title = list(ar)[0]; ar = {x['ID']: x for x in ar[ar_title]}
+        except Exception as e:
+            log.append(f"hisn chapter {c['ID']} ({c['TITLE'].strip()}) not available: {e!r}"); continue
         items = []
         for x in en:
             a = ar.get(x['ID'], {})
@@ -41,11 +44,12 @@ try:
             for x in r['records']:
                 if 'Subuh' not in x: break
                 def t24(v, pm):
-                    h, m = map(int, v.strip()[:5].split(':'))
+                    import re
+                    h, m = map(int, re.match(r'\s*(\d{1,2})\D+(\d{2})', v).groups())
                     if pm and h < 12 and not (h == 12): h += 12
                     if pm and h == 12: pass
                     return f'{h:02d}:{m:02d}'
-                z = x['Zohor']; zh = int(z[:2]); zpm = zh < 11   # Zohor is around 12:xx-13:xx; "01:10" means 13:10
+                z = x['Zohor']; zh = int(re.match(r'\s*(\d{1,2})', z).group(1)); zpm = zh < 11   # Zohor is around 12:xx-13:xx; "01:10" means 13:10
                 days[x['Date'][:10]] = [t24(x['Subuh'], False), t24(x['Syuruk'], False), t24(z, zpm), t24(x['Asar'], True), t24(x['Maghrib'], True), t24(x['Isyak'], True)]
             off += len(r['records'])
             if not r['records'] or off >= r.get('total', 0): break
