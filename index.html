@@ -373,7 +373,7 @@ body.immersive .dock.hz #mic{visibility:visible;pointer-events:auto}
 .cover-mid{position:absolute;left:50%;top:44%;transform:translate(-50%,-50%);width:min(82vw,50vh);aspect-ratio:1}
 .cover-mid svg{width:100%;height:100%;overflow:visible}
 .cover-sub{position:absolute;left:0;right:0;top:calc(44% + min(41vw,25vh) + 4px);text-align:center;font-family:var(--ar);color:#c9a14a;font-size:13px;direction:rtl}
-.cover-name{position:absolute;left:0;right:0;bottom:calc(var(--sab,0px) + 17%);display:flex;align-items:center;justify-content:center;gap:10px;font-family:"Great Vibes",cursive;font-size:34px;color:#e6c66f;text-shadow:0 1px 0 #000}
+.cover-name{position:absolute;left:0;right:0;bottom:calc(var(--sab,0px) + 19%);display:flex;align-items:center;justify-content:center;gap:10px;font-family:"Great Vibes",cursive;font-size:34px;color:#e6c66f;text-shadow:0 1px 0 #000}
 .cover-name svg{width:44px;height:44px}
 .cover-hint{position:absolute;left:0;right:0;bottom:calc(var(--sab,0px) + 12%);text-align:center;color:#a99a72;font-size:12.5px;animation:hint 2.4s ease-in-out 1.2s infinite}
 @keyframes hint{50%{opacity:.35}}
@@ -2234,15 +2234,22 @@ function cornerSvg(){ const sp=(cx,cy,r,dir)=>{ let d=''; for(let i=0;i<=28;i++)
     <path d="M30 30 C44 44 52 60 52 74" fill="none" stroke="url(#gd)" stroke-width="2.4"/><circle cx="52" cy="78" r="4" fill="url(#gd)"/><path d="M30 30 C44 44 60 52 74 52" fill="none" stroke="url(#gd)" stroke-width="2.4"/><circle cx="78" cy="52" r="4" fill="url(#gd)"/>
     <circle cx="22" cy="22" r="7" fill="none" stroke="url(#gd)" stroke-width="2.6"/><circle cx="22" cy="22" r="2.6" fill="url(#gd)"/></svg>`; }
 /* Centre: Ayat al-Kursi (the app's own verified Uthmani text) set round a circle, with القرآن الكريم in the middle. */
-function coverMedallion(){ const ak=A[gOf(2,255)][2].replace(/ ۞/g,''); const R=128, L=2*Math.PI*R;
-  return `<svg viewBox="0 0 300 300" aria-hidden="true">${GOLD_DEFS}
-    <path id="akRing" d="M150 ${150-R} a${R} ${R} 0 1 1 -0.01 0" fill="none"/>
-    <circle cx="150" cy="150" r="146" fill="none" stroke="url(#gd)" stroke-width="2"/><circle cx="150" cy="150" r="141" fill="none" stroke="url(#gd)" stroke-width=".7"/>
-    <circle cx="150" cy="150" r="114" fill="none" stroke="url(#gd)" stroke-width=".8"/><circle cx="150" cy="150" r="110" fill="none" stroke="url(#gd)" stroke-width="2"/>
-    <text font-family="KFGQPC Hafs" font-size="10.1" fill="url(#gd)"><textPath href="#akRing">${ak}</textPath></text>
-    ${[...Array(24)].map((_,i)=>{ const a=2*Math.PI*i/24; return `<circle cx="${(150+105*Math.cos(a)).toFixed(1)}" cy="${(150+105*Math.sin(a)).toFixed(1)}" r="1.3" fill="#c9a14a"/>`; }).join('')}
-    <text x="150" y="134" text-anchor="middle" font-family="KFGQPC Hafs" font-size="46" fill="url(#gd)" direction="rtl">القرآن</text>
-    <text x="150" y="190" text-anchor="middle" font-family="KFGQPC Hafs" font-size="46" fill="url(#gd)" direction="rtl">الكريم</text></svg>`; }
+/* Centre: the corner ornament repeated round a scalloped rosette, with القرآن الكريم in the middle. */
+function coverMedallion(){ const c=150, orn=cornerSvg().replace(/^<svg[^>]*>/,'').replace(/<\/svg>$/,'').replace(GOLD_DEFS,'');
+  const lobes=16, R0=96, rl=13; let sc='';   // scalloped ring: a half-circle bump between each pair of points
+  for(let i=0;i<lobes;i++){ const a0=2*Math.PI*i/lobes, a1=2*Math.PI*(i+1)/lobes, p=a=>[(c+R0*Math.cos(a)).toFixed(2),(c+R0*Math.sin(a)).toFixed(2)];
+    const [x0,y0]=p(a0),[x1,y1]=p(a1); sc+=(i?'':`M${x0} ${y0}`)+`A${rl} ${rl} 0 0 1 ${x1} ${y1}`; }
+  const knobs=[...Array(lobes)].map((_,i)=>{ const a=2*Math.PI*(i+.5)/lobes, r=R0+rl+5; return `<circle cx="${(c+r*Math.cos(a)).toFixed(1)}" cy="${(c+r*Math.sin(a)).toFixed(1)}" r="2.6" fill="url(#gd)"/><line x1="${(c+(R0+rl-1)*Math.cos(a)).toFixed(1)}" y1="${(c+(R0+rl-1)*Math.sin(a)).toFixed(1)}" x2="${(c+(r-2)*Math.cos(a)).toFixed(1)}" y2="${(c+(r-2)*Math.sin(a)).toFixed(1)}" stroke="url(#gd)" stroke-width="1.2"/>`; }).join('');
+  // four corner pieces on the diagonals, their scrolls wrapping the rosette
+  const quads=[0,90,180,270].map(r=>`<g transform="rotate(${r} ${c} ${c}) translate(${c-142} ${c-142}) scale(.78)">${orn}</g>`).join('');
+  const card=[0,90,180,270].map(r=>`<g transform="rotate(${r} ${c} ${c})"><path d="M${c} ${c-112} C${c-9} ${c-120} ${c-9} ${c-132} ${c} ${c-142} C${c+9} ${c-132} ${c+9} ${c-120} ${c} ${c-112}Z" fill="url(#gd)"/>
+    <path d="M${c-6} ${c-113} C${c-20} ${c-118} ${c-30} ${c-112} ${c-30} ${c-104} M${c+6} ${c-113} C${c+20} ${c-118} ${c+30} ${c-112} ${c+30} ${c-104}" fill="none" stroke="url(#gd)" stroke-width="1.6"/>
+    <circle cx="${c-30}" cy="${c-102}" r="2.2" fill="url(#gd)"/><circle cx="${c+30}" cy="${c-102}" r="2.2" fill="url(#gd)"/><circle cx="${c}" cy="${c-147}" r="2" fill="url(#gd)"/></g>`).join('');
+  return `<svg viewBox="0 0 300 300" aria-hidden="true">${GOLD_DEFS}${quads}${card}
+    <path d="${sc}Z" fill="#070706" stroke="url(#gd)" stroke-width="2.2"/>${knobs}
+    <circle cx="${c}" cy="${c}" r="${R0-8}" fill="none" stroke="url(#gd)" stroke-width="1"/><circle cx="${c}" cy="${c}" r="${R0-12}" fill="none" stroke="url(#gd)" stroke-width=".6" stroke-dasharray="1.5 3"/>
+    <text x="${c}" y="${c-6}" text-anchor="middle" font-family="KFGQPC Hafs" font-size="40" fill="url(#gd)" direction="rtl">القرآن</text>
+    <text x="${c}" y="${c+40}" text-anchor="middle" font-family="KFGQPC Hafs" font-size="40" fill="url(#gd)" direction="rtl">الكريم</text></svg>`; }
 const LOGO_SVG=`<svg viewBox="0 0 512 512" aria-hidden="true"><defs><linearGradient id="lor" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffb03f"/><stop offset=".55" stop-color="#f08a2c"/><stop offset="1" stop-color="#e06524"/></linearGradient><linearGradient id="lpg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f6edd2"/><stop offset="1" stop-color="#d9c99c"/></linearGradient></defs><g transform="translate(0 -6)"><path d="M128 356 V205 C128 140 196 104 238 64 C280 104 348 140 348 205 V352" fill="none" stroke="#7a828c" stroke-width="22" stroke-linejoin="round"/><path d="M236 356 V215 C236 150 304 114 346 74 C388 114 456 150 456 215 V318" fill="none" stroke="url(#lor)" stroke-width="22" stroke-linejoin="round"/><path d="M60 352 C120 334 200 340 256 392 C312 340 392 334 452 352 L452 372 C392 356 312 362 256 412 C200 362 120 356 60 372 Z" fill="url(#lpg)"/><path d="M74 336 C134 320 206 326 256 372 C306 326 378 320 438 336 L452 352 C392 334 312 340 256 392 C200 340 120 334 60 352 Z" fill="#eadfbf"/></g></svg>`;
 function applyHomeLook(){ const r=document.documentElement; let t=store.get('homeTheme','hijau'); if(t==='marun'){ t='biru-muda'; store.set('homeTheme',t); } r.setAttribute('data-home',t); r.setAttribute('data-dock',store.get('dockCol','hijau')); }
 function showCover(){ let el=document.getElementById('cover'); if(!el){ el=document.createElement('div'); el.id='cover'; el.className='cover'; el.setAttribute('role','button'); el.setAttribute('aria-label','Open'); el.tabIndex=0; document.body.appendChild(el); }
@@ -2252,8 +2259,8 @@ function showCover(){ let el=document.getElementById('cover'); if(!el){ el=docum
     <div class="cover-orn" style="right:26px;top:calc(var(--sat,0px) + 26px);transform:scaleX(-1)">${orn}</div>
     <div class="cover-orn" style="left:26px;bottom:calc(var(--sab,0px) + 26px);transform:scaleY(-1)">${orn}</div>
     <div class="cover-orn" style="right:26px;bottom:calc(var(--sab,0px) + 26px);transform:scale(-1,-1)">${orn}</div>
-    <div class="cover-mid">${coverMedallion()}</div><div class="cover-sub">آية الكرسي · سورة البقرة ٢٥٥</div>
-    <div class="cover-name">${LOGO_SVG}<span>My Personal Quran</span></div><div class="cover-hint">Tap to open</div></div>`;
+    <div class="cover-mid">${coverMedallion()}</div>
+    <div class="cover-name"><span>My Personal Quran</span></div><div class="cover-hint">Tap to open</div></div>`;
   try{ window.AndroidSpeech?.setBarColor?.('#060605', true); }catch(e){}
   const open=()=>{ if(el.classList.contains('open')) return; el.classList.add('open'); const h=document.getElementById('home'); if(h && !h.hidden) applyHomeBars(); else applyLook(); setTimeout(()=>{ el.hidden=true; },RM.matches?320:980); };
   el.onclick=open; el.onkeydown=e=>{ if(e.key==='Enter'||e.key===' ') open(); }; }
@@ -2423,21 +2430,21 @@ function prRender(){ const d=new Date(); d.setHours(0,0,0,0); d.setDate(d.getDat
     if(s==='makkah'||s==='madinah'){ const have=st8[s];
       box.innerHTML=`<p class="note">${have?`Using your file: <b>${esc(have)}</b>.`:'No adhan file chosen yet, so the short tone plays instead.'} I could not find a recording of the ${s==='makkah'?'Makkah':'Madinah'} adhan that may be shared freely, so choose your own copy from the phone (any audio file).</p>
         <div class="row2" style="gap:8px"><button class="pill" id="prPick">Choose ${s==='makkah'?'Makkah':'Madinah'} adhan file</button>${have?'<button class="pill" id="prRm">Remove</button>':''}</div>`;
-      $('prPick').onclick=()=>{ window.__picking=true; window.__adhanPicked=(slot,name)=>{ window.__picking=false; toast(name?`Adhan set: ${name}`:'No file chosen'); prRender(); }; window.AndroidExtra.pickAdhan(s); };
+      $('prPick').onclick=()=>{ window.__picking=true; window.__adhanPicked=(slot,name)=>{ window.__picking=false; toast(name?`Adhan set: ${name}`:'No file chosen'); prRender(); }; goingAway(); window.AndroidExtra.pickAdhan(s); };
       if($('prRm')) $('prRm').onclick=()=>{ window.AndroidExtra.removeAdhan(s); prRender(); }; } }
   prPermCheck(false); }
 function prPermCheck(ask){ const box=document.getElementById('prPerm'), s=prStatus(); if(!window.AndroidExtra) return;
-  if(ask && s.notif===false){ window.__notifPerm=()=>prRender(); window.AndroidExtra.askNotifications(); }
+  if(ask && s.notif===false){ goingAway(); window.__notifPerm=()=>prRender(); window.AndroidExtra.askNotifications(); }
   if(!box) return; const items=[];
   if(s.notif===false) items.push(`<p class="note">Notifications are off for this app, so alerts cannot show. <button class="pill" id="pp1" style="height:34px">Allow notifications</button></p>`);
   if(s.exact===false) items.push(`<p class="note">"Alarms &amp; reminders" is not allowed, so alerts may come a few minutes late. <button class="pill" id="pp2" style="height:34px">Allow</button></p>`);
   if(s.battery===false) items.push(`<p class="note">Some phones stop alerts to save battery. If an alert is missed, let this app run without battery limits. <button class="pill" id="pp3" style="height:34px">Battery setting</button></p>`);
   box.innerHTML=items.join('');
   const on=(id,f)=>{ const e=document.getElementById(id); if(e) e.onclick=f; };
-  on('pp1',()=>{ window.__notifPerm=()=>prRender(); window.AndroidExtra.askNotifications(); setTimeout(()=>{ if(prStatus().notif===false) window.AndroidExtra.openNotifSettings(); },1500); });
-  on('pp2',()=>window.AndroidExtra.openExactAlarm()); on('pp3',()=>window.AndroidExtra.openBattery()); }
+  on('pp1',()=>{ goingAway(); window.__notifPerm=()=>prRender(); window.AndroidExtra.askNotifications(); setTimeout(()=>{ if(prStatus().notif===false){ goingAway(); window.AndroidExtra.openNotifSettings(); } },1500); });
+  on('pp2',()=>{ goingAway(); window.AndroidExtra.openExactAlarm(); }); on('pp3',()=>{ goingAway(); window.AndroidExtra.openBattery(); }); }
 function prLocate(){ if(!window.AndroidExtra?.getLocation){ if(navigator.geolocation){ navigator.geolocation.getCurrentPosition(p=>window.__loc({lat:p.coords.latitude,lng:p.coords.longitude,acc:p.coords.accuracy}),()=>window.__loc({error:'denied'}),{timeout:20000}); } return; }
-  toast('Finding your location…'); window.AndroidExtra.getLocation(); }
+  toast('Finding your location…'); goingAway(); window.AndroidExtra.getLocation(); }
 window.__loc=o=>{ if(!o||o.error){ toast(o&&o.error==='denied'?'Location permission was not given.':'Could not find your location. Turn on location, or choose a city.'); return; }
   const g={lat:o.lat,lng:o.lng,acc:o.acc,name:'My location'}; store.set('prGps',g);
   if(prLoc().mode==='gps'){ store.set('prLoc',Object.assign({mode:'gps'},g)); prSchedule(); if(!document.getElementById('prayer')?.hidden) prRender(); }
@@ -2452,7 +2459,7 @@ function qiblaBearing(lat,lng){ const r=Math.PI/180, f1=lat*r, f2=KAABA[0]*r, dl
   const y=Math.sin(dl)*Math.cos(f2), x=Math.cos(f1)*Math.sin(f2)-Math.sin(f1)*Math.cos(f2)*Math.cos(dl); return (Math.atan2(y,x)/r+360)%360; }
 function qiblaDistance(lat,lng){ const r=Math.PI/180, a=Math.sin((KAABA[0]-lat)*r/2)**2+Math.cos(lat*r)*Math.cos(KAABA[0]*r)*Math.sin((KAABA[1]-lng)*r/2)**2; return 2*6371*Math.asin(Math.sqrt(a)); }
 let qbLoc=null, qbHead=null, qbAcc=3;
-function qiblaPanel(){ const g=store.get('prGps',null); qbLoc = g&&g.lat!=null ? g : {lat:1.3521,lng:103.8198,name:'Singapore'}; qbRender(); if(window.AndroidExtra?.getLocation) window.AndroidExtra.getLocation(); qbStart(); }
+function qiblaPanel(){ const g=store.get('prGps',null); qbLoc = g&&g.lat!=null ? g : {lat:1.3521,lng:103.8198,name:'Singapore'}; qbRender(); if(window.AndroidExtra?.getLocation){ goingAway(); window.AndroidExtra.getLocation(); } qbStart(); }
 function qiblaOnLoc(g){ if(document.getElementById('qibla')?.hidden!==false) return; qbLoc=g; qbRender(); qbStart(); }
 function qbStart(){ qbHead=null; try{ window.AndroidExtra?.startCompass?.(qbLoc.lat,qbLoc.lng); }catch(e){}
   if(!window.AndroidExtra && 'ondeviceorientationabsolute' in window){ window.addEventListener('deviceorientationabsolute',qbWebOri); } }
@@ -2476,7 +2483,7 @@ function qbRender(){ const B=qiblaBearing(qbLoc.lat,qbLoc.lng), km=qiblaDistance
    <p class="note">Hold the phone flat, away from metal, magnets and speakers; a magnetic phone case also pulls the compass. Phone compasses are usually within 5–10°, so for a masjid or a permanent sajadah direction, check with a fixed reference (the masjid's qibla, or the sun's position at a known time).</p>
    <div class="row2" style="gap:8px"><button class="pill" id="qbLoc">Update location</button></div>`);
   const pe=document.getElementById('qibla'); pe.addEventListener('closed',qbStop,{once:true});
-  b.querySelector('#qbLoc').onclick=()=>{ if(window.AndroidExtra?.getLocation){ toast('Finding your location…'); window.AndroidExtra.getLocation(); } };
+  b.querySelector('#qbLoc').onclick=()=>{ if(window.AndroidExtra?.getLocation){ toast('Finding your location…'); goingAway(); window.AndroidExtra.getLocation(); } };
   if(!window.AndroidExtra && !('ondeviceorientationabsolute' in window)) document.getElementById('qbMsg').textContent='No compass here: face '+B.toFixed(0)+'° from north.'; }
 window.__compass=(h,acc)=>{ const dial=document.getElementById('qbDial'); if(!dial) return; const msg=document.getElementById('qbMsg');
   if(h==null){ msg.textContent='This phone has no compass sensor. Face '+qiblaBearing(qbLoc.lat,qbLoc.lng).toFixed(0)+'° from north.'; return; }
@@ -2551,7 +2558,11 @@ window.__back=()=>{ if(sheet.classList.contains('open')){ closeSheet(); return t
   if(tq){ tqClose(); return true; } { const p=topPanel(); if(p){ closePanel(p.id); return true; } }
   { const c=document.getElementById('cover'); if(c && !c.hidden) return false; } if(rkDraft){ rkEditEnd(); toast('No changes saved'); return true; } if(document.body.classList.contains('immersive')){ setImmersive(false); return true; } if(hz){ if(rec) stopListen(false); hz=null; renderReader(); return true; }
   { const h=document.getElementById('home'); if(!h || h.hidden){ showHome(); return true; } } return false; };
-window.__pause=()=>{ if(rec) stopListen(false); };
+/* The app goes to the background: close the book, so it opens with the cover next time. Not when the app itself sent the
+   person to another screen a moment ago (a file picker, a permission or settings page). */
+window.__away=0; const goingAway=()=>{ window.__away=Date.now(); };
+function coverOnLeave(){ if(store.get('cover',true) && !hz && !tq && Date.now()-window.__away>5000){ const c=document.getElementById('cover'); if(!c||c.hidden||c.classList.contains('open')) showCover(); } }
+window.__pause=()=>{ if(rec) stopListen(false); coverOnLeave(); };
 applyLook();
 if(store.get('imm',false)) setImmersive(true);
 if('serviceWorker' in navigator && /github\.io$/.test(location.hostname)){ navigator.serviceWorker.register('sw.js').catch(()=>{}); }
@@ -2559,6 +2570,5 @@ if('serviceWorker' in navigator && /github\.io$/.test(location.hostname)){ navig
   if(h){ r=parseRef(h.replace('.',':')) || parseRef(h); }
   if(r){ r.page? goPage(r.page) : goAyah(r.g); } else { renderReader(); applyHomeLook(); showHome(); if(store.get('cover',true)) showCover(); } })();
 applyHomeLook();
-let hiddenAt=0; document.addEventListener('visibilitychange',()=>{ if(document.hidden){ hiddenAt=Date.now(); return; }
-  if(hiddenAt && Date.now()-hiddenAt>60000 && store.get('cover',true) && !window.__picking && !hz && !tq) showCover(); hiddenAt=0; });
+document.addEventListener('visibilitychange',()=>{ if(document.hidden) coverOnLeave(); });
 </script>
