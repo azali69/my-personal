@@ -41,6 +41,8 @@ Kembali ke Home dari mana-mana dengan **butang rumah** (atas kiri skrin bacaan) 
 | Listen & repeat | Qari membaca, anda mengulang dan disemak (bahagian 6) |
 | Bookmarks | Penanda buku, My ruku' dan My blocks |
 | Doa & zikir | Hisnul Muslim (bahagian 8) |
+| Hadith | Enam kitab hadis (Kutub as-Sittah) dengan hukum hadis (bahagian 8) |
+| Notes | Buku nota anda: nota pada ayat, pada hadis, dan nota bebas (bahagian 8) |
 | Prayer times | Waktu solat MUIS, peringatan (bahagian 8) |
 | Qibla | Kompas arah Kaabah (bahagian 8) |
 | Settings | Semua tetapan (bahagian 9) |
@@ -186,6 +188,24 @@ Semuanya dibuka dari **menu ayat**; memerlukan internet sekali bagi setiap surah
 2. Setiap doa memaparkan teks Arab, transliterasi dan terjemahan Inggeris. **Listen** memperdengarkannya; pembilang **0 / 3** mengira ulangan.
 3. Hidupkan atau matikan transliterasi dan terjemahan; **Save chapter** menyimpan bab di bahagian atas.
 
+**Hadis (Kutub as-Sittah)**
+
+1. Home → **Hadith**. Tandakan apa yang hendak dipaparkan, **Arabic**, **Bahasa Indonesia** dan/atau **English** (sekurang-kurangnya satu; kotak yang sama ada di atas setiap kitab), kemudian sebuah kitab: Sahih al-Bukhari, Sahih Muslim, Sunan Abi Dawud, Jami' at-Tirmidhi, Sunan an-Nasa'i atau Sunan Ibn Majah.
+2. Buka satu kitab (bab besar) untuk membaca hadisnya: teks Arab berbaris, kemudian terjemahan. Hadis seterusnya dimuat apabila anda menatal ke bawah.
+3. **Hadith number** + **Go** terus ke nombor hadis. **Search** mencari dalam seluruh kitab dalam bahasa Arab, Inggeris atau Indonesia (carian pertama memuat turun kitab itu).
+4. Hukum hadis dipaparkan di atas setiap hadis dalam empat kitab Sunan: al-Albani, Shu'ayb al-Arna'ut, Zubair 'Ali Za'i, dan bagi at-Tirmidhi hukum beliau sendiri dalam bahasa Arab. Hijau sahih, biru hasan, jingga da'if, merah sangat lemah atau palsu. Bukhari dan Muslim sahih dengan kesepakatan ulama, jadi tiada hukum bagi setiap hadis.
+5. Butang salin menyalin teks Arab, terjemahan, rujukan dan hukum hadis.
+6. Setiap kitab memerlukan internet kali pertama; selepas itu ia disimpan dalam telefon.
+7. Tajuk kitab dan kotak **AR · BI · ENG** kekal di atas semasa anda menatal. Ketik tajuk untuk beralih ke kitab lain dalam buku yang sama.
+8. Setiap hadis ada butang **penanda buku** (lima warna, seperti al-Quran) dan butang **nota**. Penanda buku anda dan **Continue reading** (tempat anda berhenti) berada di bahagian atas halaman Hadith.
+
+**Nota (Notes)**
+
+1. Home → **Notes**: semua nota anda, yang terbaru dahulu. Tapis mengikut **Qur'an**, **Hadith** atau **Free notes**, atau cari.
+2. **New note** untuk nota bebas. Untuk ayat, tekan lama ayat itu → **Write a note**; untuk hadis, ketik butang notanya. Nota disimpan semasa anda menaip.
+3. Ketik nota untuk menyuntingnya; **Open the ayah / Open the hadith** membawa anda ke sana.
+4. Nota disimpan dalam telefon sahaja. **Copy all notes** menyalin semuanya supaya anda boleh simpan salinan di tempat lain.
+
 **Waktu solat**
 
 - **‹ ›** untuk hari sebelum atau selepas; solat seterusnya berwarna emas.
@@ -224,6 +244,13 @@ Semuanya dibuka dari **menu ayat**; memerlukan internet sekali bagi setiap surah
 | Waqaf & ibtida' blocks | Warna blok (bahagian 4) |
 | Hafazan history | Sesi lalu dan rakaman |
 | Sources & verification | Sumber setiap kandungan; semakan teks al-Quran |
+
+**Sandaran dan pemulihan (Backup)**
+
+1. Settings → **Back up or restore settings, bookmarks and notes** (juga ada pautan dalam Notes).
+2. **Save a backup file** menyimpan satu fail .json berisi semua tetapan, penanda buku al-Quran dan hadis, My ruku' dan My blocks, nota, keputusan Hafazan dan tempat terakhir dibaca. Pilih tempat simpanan, contohnya Google Drive, atau hantar kepada diri sendiri.
+3. **Restore from a backup file** di telefon ini atau telefon baharu menggantikan isi aplikasi dengan sandaran itu, kemudian membuka semula aplikasi.
+4. Tidak termasuk: rakaman suara Hafazan dan fail azan yang anda pilih (pilih semula), serta teks yang dimuat turun (akan dimuat turun semula).
 
 ## 10. Penyelesaian masalah
 
