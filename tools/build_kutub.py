@@ -41,6 +41,9 @@ def tirmidhi_verdict(ar):
 
 
 info = json.load(open(os.path.join(SRC, 'info.json')))
+# 75 Arabic texts have a damaged letter (U+FFFD) in the source. 59 were repaired word by word from the same hadith in
+# the Sunnah.com copy (tools/fffd_repair.py -> tools/fffd_fix.json). The rest show "…" there and a note in the app.
+FIX = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'fffd_fix.json')))
 index = []
 for bid, ar_name, en_name in BOOKS:
     A, E, I = edition('ara-' + bid), edition('eng-' + bid), edition('ind-' + bid)
@@ -79,7 +82,12 @@ for bid, ar_name, en_name in BOOKS:
                 g.insert(0, ['tir', v])
         ref = a.get('reference') or e.get('reference') or {}
         sec = kitab(k, n)
-        secs.setdefault(sec, []).append([n, ref.get('hadith') if ref.get('book') else None, a['text'].strip(), e['text'].strip(), i['text'].strip(), g])
+        ar = FIX.get(f'{bid}:{n}', a['text']).strip()
+        damaged = '\ufffd' in ar
+        if damaged: ar = re.sub('\ufffd+', '…', ar)
+        row = [n, ref.get('hadith') if ref.get('book') else None, ar, e['text'].strip().replace('\ufffd', ''), i['text'].strip().replace('\ufffd', ''), g]
+        if damaged: row.append(1)
+        secs.setdefault(sec, []).append(row)
     names = E['metadata']['sections']
     os.makedirs(os.path.join(OUT, bid), exist_ok=True)
     sl = []
