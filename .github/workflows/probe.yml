@@ -1,0 +1,15 @@
+name: probe
+on: workflow_dispatch
+permissions: { contents: write }
+jobs:
+  p:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - run: pip -q install pandas pyarrow huggingface_hub
+      - run: mkdir -p out && python3 tools/fffd_probe.py > out/log.txt 2>&1 || true
+      - run: |
+          cd out; git init -q; git checkout -q -b probe; git add -A
+          git -c user.name=probe -c user.email=probe@x commit -qm probe
+          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" probe
