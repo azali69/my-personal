@@ -436,6 +436,8 @@ body.immersive .dock.hz #mic{visibility:visible;pointer-events:auto}
 .kt-g.weak{border-color:#c98a2e;background:color-mix(in srgb,#c98a2e 20%,transparent)}
 .kt-g.bad{border-color:#c0473a;background:color-mix(in srgb,#c0473a 22%,transparent)}
 .kt-card.kt-hit{box-shadow:0 0 0 2px var(--gold)}
+mark.kt-q{background:color-mix(in srgb,#e0352b 22%,transparent);color:#ff6b5e;border-radius:3px;padding:0 1px}
+:root:is([data-home="gading"],[data-home="biru-muda"],[data-home="pastel"]) mark.kt-q{color:#c0261c}
 .kt-head{position:sticky;top:-14px;z-index:6;margin:0 -16px 6px;padding:2px 16px 8px;background:var(--h-bg,var(--bg));box-shadow:0 calc(-1px - var(--sat,0px)) 0 var(--h-bg,var(--bg));border-bottom:1px solid color-mix(in srgb,var(--gold) 35%,transparent)}
 .kt-head .panel-top{margin-bottom:8px}
 .kt-head .kt-show{position:static;margin:0;padding:0;border:0;box-shadow:none;background:none}
@@ -1313,7 +1315,27 @@ function ktPinHead(pnl){ const top=pnl.querySelector('.panel-top'), box=pnl.quer
 function ktKitabSheet(k,curSn){ openSheet(k.en, `<ul class="list">${k.sections.map(s=>`<li><button class="go" data-s="${s.n}"${s.n===curSn?' style="font-weight:700"':''}><span class="t"><b>${ktSecName(s)}</b><small>${s.first===s.last?s.first:s.first+'–'+s.last} · ${s.count} hadith</small></span></button></li>`).join('')}</ul>`);
   sheetB.onclick=e=>{ const b=e.target.closest('[data-s]'); if(!b) return; closeSheet(); ktKitab(k.id,+b.dataset.s); };
   setTimeout(()=>sheetB.querySelector(`[data-s="${curSn}"]`)?.scrollIntoView({block:'center'}),50); }
-function ktCard(k,h,show,extra,sn){ const [n,ref,ar,en,idn,gr]=h;
+/* ---- Highlight the searched words (red) inside a hadith ----
+   Arabic: matched as the search does, ignoring harakat, spaces and punctuation, and the alif/ya/ta marbuta forms that
+   normAr unifies; the red covers the matching letters with their harakat. Latin: case-insensitive. */
+function ktMarkRanges(text,q){ if(!text||!q) return [];
+  const out=[];
+  if(/[؀-ۿ]/.test(q)){ const qa=normAr(q).replace(/ /g,''); if(!qa) return [];
+    let norm='', pos=[];
+    for(let i=0;i<text.length;i++){ const ch=text[i], c=ch.charCodeAt(0);
+      if((c>=0x610&&c<=0x61A)||(c>=0x64B&&c<=0x65F)||c===0x670||(c>=0x6D6&&c<=0x6ED)) continue;
+      const u=UNIFY[ch], x=u!==undefined?u:ch; if(!x || /\s/.test(x)) continue;
+      for(const xc of x){ const cc=xc.charCodeAt(0); if(cc>=0x600&&cc<=0x6FF){ norm+=xc; pos.push(i); } } }
+    let j=norm.indexOf(qa);
+    while(j>=0){ let s=pos[j], e=pos[j+qa.length-1]+1;
+      while(e<text.length){ const c=text.charCodeAt(e); if((c>=0x610&&c<=0x61A)||(c>=0x64B&&c<=0x65F)||c===0x670||(c>=0x6D6&&c<=0x6ED)) e++; else break; }
+      out.push([s,e]); j=norm.indexOf(qa,j+qa.length); }
+  } else { const tl=text.toLowerCase(), ql=q.toLowerCase().trim(); if(!ql) return [];
+    let j=tl.indexOf(ql); while(j>=0){ out.push([j,j+ql.length]); j=tl.indexOf(ql,j+ql.length); } }
+  return out; }
+function ktMarked(text,q){ const r=ktMarkRanges(text,q); if(!r.length) return esc(text||'');
+  let h='', at=0; for(const [s,e] of r){ h+=esc(text.slice(at,s))+'<mark class="kt-q">'+esc(text.slice(s,e))+'</mark>'; at=e; } return h+esc(text.slice(at)); }
+function ktCard(k,h,show,extra,sn,q){ const [n,ref,ar,en,idn,gr]=h;
   // translations ticked; Indonesian missing in the source -> English instead (said in a note), unless English is ticked anyway
   const noId = show.has('id') && !idn, many = (show.has('id')?1:0)+(show.has('en')?1:0) > 1;
   const tr = []; if(show.has('id')) tr.push([many?'Bahasa Indonesia':'', idn || (show.has('en')? '' : en)]); if(show.has('en')) tr.push([many?'English':'', en]);
@@ -1322,16 +1344,16 @@ function ktCard(k,h,show,extra,sn){ const [n,ref,ar,en,idn,gr]=h;
   return `<div class="card kt-card" id="kt-${n}" data-n="${n}">
    <div class="kt-ref"><span class="kt-name"><b>${esc(k.en)} ${n}</b>${ref&&sn!=null?`<small>kitab ${sn}, no. ${ref}</small>`:''}</span>${(()=>{ const bm=ktBmGet(k.id,n), nt=noteGet(`h:${k.id}:${n}`); return `<button class="ib kt-btn" data-bm="${n}" aria-label="Bookmark"${bm?` style="color:var(--bm${bm.c})"`:''}><svg viewBox="0 0 24 24" fill="${bm?'currentColor':'none'}" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M7 4h10v16l-5-3.5L7 20z"/></svg></button><button class="ib kt-btn${nt?' on':''}" data-note="${n}" aria-label="Note">${ic('note')}</button>`; })()}<button class="ib kt-copy" data-copy="${n}" aria-label="Copy">${ic('copy')}</button></div>
    ${extra||''}${grades}
-   ${show.has('ar')?`<div class="kt-ar" dir="rtl" lang="ar">${esc(ar||'')}</div>${h[6]?'<p class="note" style="margin:2px 0 6px">One letter of this Arabic text is damaged in the source and could not be confirmed from a second copy; it is shown as …</p>':''}`:''}
+   ${show.has('ar')?`<div class="kt-ar" dir="rtl" lang="ar">${ktMarked(ar,q)}</div>${h[6]?'<p class="note" style="margin:2px 0 6px">One letter of this Arabic text is damaged in the source and could not be confirmed from a second copy; it is shown as …</p>':''}`:''}
    ${noId?`<p class="note" style="margin:4px 0">No Indonesian translation in the source for this hadith${show.has('en')?'.':'; English shown.'}</p>`:''}
-   ${tr.filter(([,v])=>v).map(([l,v])=>`${l?`<div class="label" style="margin:8px 0 2px">${l}</div>`:''}<div class="kt-tr" dir="auto">${esc(v)}</div>`).join('')}
+   ${tr.filter(([,v])=>v).map(([l,v])=>`${l?`<div class="label" style="margin:8px 0 2px">${l}</div>`:''}<div class="kt-tr" dir="auto">${ktMarked(v,q)}</div>`).join('')}
    ${(()=>{ const nt=noteGet(`h:${k.id}:${n}`); return nt?`<div class="kt-note" data-note="${n}" dir="auto">${esc(nt.t)}</div>`:''; })()}
   </div>`; }
 function ktCopy(k,h){ const [n,ref,ar,en,idn,gr]=h, show=ktShow();
   const tr=[show.has('ar')?ar:'', show.has('id')?(idn||(show.has('en')?'':en)):'', show.has('en')?en:''].filter(Boolean).join('\n\n');
   const g = gr.map(([w,v])=>`${KT_GR[w]||w}: ${w==='tir'?v:ktGradeTxt(v)}`).join('; ');
   putClipboard(`${tr}\n\n(${k.en} ${n}${g?' · '+g:''})`).then(ok=>toast(ok?'Copied':'Could not copy')); }
-async function ktKitab(id,sn,focus){ const k=ktBooks.find(x=>x.id===id), s=k.sections.find(x=>x.n===sn);
+async function ktKitab(id,sn,focus,q){ const k=ktBooks.find(x=>x.id===id), s=k.sections.find(x=>x.n===sn);
   const b=openPanel('ktS',ktSecName(s,true),`<p class="note">Loading…</p>`);
   let d; try{ d=await ktGet(`${id}/${sn}.json`); }catch(e){ b.innerHTML='<p class="note">This kitab needs the internet the first time; after that it is kept on the phone.</p>'; return; }
   if(document.getElementById('ktS')?.hidden!==false) return;
@@ -1340,14 +1362,16 @@ async function ktKitab(id,sn,focus){ const k=ktBooks.find(x=>x.id===id), s=k.sec
   const pnlS=document.getElementById('ktS'); ktPinHead(pnlS);
   const h2=pnlS.querySelector('.panel-top h2'); h2.innerHTML=esc(ktSecName(s,true))+' <span style="font-size:.7em;opacity:.8">▾</span>'; h2.style.cursor='pointer'; h2.onclick=()=>ktKitabSheet(k,sn);
   const list=b.querySelector('#ktList'), more=b.querySelector('#ktMore');
-  const add=m=>{ const end=Math.min(hs.length, shown+m); list.insertAdjacentHTML('beforeend', hs.slice(shown,end).map(h=>ktCard(k,h,show,'',sn)).join('')); shown=end; if(shown>=hs.length) more.remove(); };
+  const add=m=>{ const end=Math.min(hs.length, shown+m); list.insertAdjacentHTML('beforeend', hs.slice(shown,end).map(h=>ktCard(k,h,show,'',sn,h[0]===focus?q:null)).join('')); shown=end; if(shown>=hs.length) more.remove(); };
   ktBindShow(pnlS,()=>{ show=ktShow();   // redraw, keeping the hadith being read at the same place under the boxes
     const bar=pnlS.querySelector('.kt-head').getBoundingClientRect().bottom, cur=[...list.children].find(c=>c.getBoundingClientRect().bottom>bar+4), off=cur?Math.max(0,cur.getBoundingClientRect().top-bar):0;
-    list.innerHTML=hs.slice(0,shown).map(h=>ktCard(k,h,show,'',sn)).join('');
+    list.innerHTML=hs.slice(0,shown).map(h=>ktCard(k,h,show,'',sn,h[0]===focus?q:null)).join('');
     const el=cur&&list.querySelector(`[data-n="${cur.dataset.n}"]`); if(el){ const pnl=document.getElementById('ktS'); pnl.scrollTop+= el.getBoundingClientRect().top-bar-off; } });
   let fi = focus? hs.findIndex(h=>h[0]>=focus) : -1;
   add(Math.max(20, fi+6));
-  if(focus){ const el=list.querySelector(`[data-n="${hs[Math.max(0,fi)]?.[0]}"]`); if(el){ el.classList.add('kt-hit'); requestAnimationFrame(()=>el.scrollIntoView({block:'start'})); }
+  if(focus){ const el=list.querySelector(`[data-n="${hs[Math.max(0,fi)]?.[0]}"]`); if(el){ el.classList.add('kt-hit'); requestAnimationFrame(()=>{ const pn=document.getElementById('ktS'), mk=el.querySelector('mark.kt-q');
+      if(mk) mk.scrollIntoView({block:'center'});   // the searched words in the middle of the screen
+      else { const hb=pn.querySelector('.kt-head')?.getBoundingClientRect().bottom||0; pn.scrollTop+=el.getBoundingClientRect().top-hb-8; } }); }
     if(fi<0 || hs[fi][0]!==focus) toast('No hadith '+focus+' in the source; showing the nearest'); }
   const pnl=document.getElementById('ktS');   // load the next hadith as the reader nears the end of the list
   let lrT=0; const lastRead=()=>{ const bar=pnl.querySelector('.kt-head')?.getBoundingClientRect().bottom||0, c=[...list.children].find(x=>x.getBoundingClientRect().bottom>bar+40);
@@ -1355,13 +1379,13 @@ async function ktKitab(id,sn,focus){ const k=ktBooks.find(x=>x.id===id), s=k.sec
   const near=()=>{ if(shown<hs.length && pnl.scrollTop+pnl.clientHeight > pnl.scrollHeight-900) add(20); clearTimeout(lrT); lrT=setTimeout(lastRead,500); };
   pnl.onscroll=near; near(); setTimeout(lastRead,300);
   const find=n=>{ const h=hs.find(x=>x[0]===n); return h&&{h,sn}; };
-  const redraw=r=>{ const el=list.querySelector(`[data-n="${r.h[0]}"]`); if(el) el.outerHTML=ktCard(k,r.h,show,'',sn); };
+  const redraw=r=>{ const el=list.querySelector(`[data-n="${r.h[0]}"]`); if(el) el.outerHTML=ktCard(k,r.h,show,'',sn,r.h[0]===focus?q:null); };
   list.onclick=e=>{ ktCardClick(e,k,find,redraw); }; }
 async function ktSearch(id,q){ const k=ktBooks.find(x=>x.id===id); let lang=ktShow();
   const b=openPanel('ktR',`Search · ${k.en}`,`${ktShowHtml()}<p class="note" id="ktProg">Searching…</p><div id="ktRes"></div>`);
   const ql=q.toLowerCase(), qa=normAr(q).replace(/ /g,''), isAr=/[؀-ۿ]/.test(q), res=[]; let done=0, fail=0;
   const prog=b.querySelector('#ktProg'), out=b.querySelector('#ktRes');
-  const card=([s,h])=>ktCard(k,h,lang,`<button class="pill" data-open="${s.n}|${h[0]}" style="margin:0 0 6px">${ktSecName(s)} ›</button>`,s.n);
+  const card=([s,h])=>ktCard(k,h,lang,`<button class="pill" data-open="${s.n}|${h[0]}" style="margin:0 0 6px">${ktSecName(s)} ›</button>`,s.n,q);
   const pnlR=document.getElementById('ktR'); ktPinHead(pnlR);
   ktBindShow(pnlR,()=>{ lang=ktShow(); out.innerHTML=res.slice(0,60).map(card).join(''); });
   for(const s of k.sections){ if(document.getElementById('ktR')?.hidden!==false) return;
@@ -1371,7 +1395,7 @@ async function ktSearch(id,q){ const k=ktBooks.find(x=>x.id===id); let lang=ktSh
     for(const h of d.h){ const hit = isAr? normAr(h[2]).replace(/ /g,'').includes(qa) : ((h[3]||'').toLowerCase().includes(ql) || (h[4]||'').toLowerCase().includes(ql));
       if(hit){ res.push([s,h]); if(res.length<=60) out.insertAdjacentHTML('beforeend', card([s,h])); } } }
   prog.textContent = `${res.length} found`+(res.length>60?' (first 60 shown; type more words to narrow it)':'')+(fail?` · ${fail} kitab could not load (no internet)`:'');
-  out.onclick=e=>{ const o=e.target.closest('[data-open]'); if(o){ const [sn,n]=o.dataset.open.split('|').map(Number); ktKitab(id,sn,n); return; }
+  out.onclick=e=>{ const o=e.target.closest('[data-open]'); if(o){ const [sn,n]=o.dataset.open.split('|').map(Number); ktKitab(id,sn,n,q); return; }
     ktCardClick(e,k,n=>{ const r=res.find(([,h])=>h[0]===n); return r&&{h:r[1],sn:r[0].n}; }, r=>{ const el=out.querySelector(`[data-n="${r.h[0]}"]`); const sec=k.sections.find(x=>x.n===r.sn); if(el) el.outerHTML=card([sec,r.h]); }); }; }
 /* ============================ NOTES ============================
    A notepad kept on the phone: a note on an ayah (key q:<ayah index>), on a hadith (h:<book>:<number>), or a free note
