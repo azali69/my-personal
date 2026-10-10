@@ -41,7 +41,7 @@ Return to Home from anywhere with the **house button** (top left of the reading 
 | Listen & repeat | The reciter reads, you repeat and get checked (section 6) |
 | Bookmarks | Bookmarks, My ruku' and My blocks |
 | Doa & zikir | Hisnul Muslim (section 8) |
-| Hadith | The six books (Kutub as-Sittah) with gradings (section 8) |
+| Hadith | The six books (Kutub as-Sittah) and the Muwatta of Imam Malik, with gradings (section 8) |
 | Notes | Your notepad: notes on ayat, on hadith, and free notes (section 8) |
 | Prayer times | MUIS times, alerts and reminders (section 8) |
 | Qibla | Compass to the Ka'bah (section 8) |
@@ -188,12 +188,12 @@ All open from the **ayah menu**; they need the internet once per surah.
 2. Each doa shows Arabic, transliteration and English. **Listen** plays it; the **0 / 3** counter counts repetitions.
 3. Turn transliteration and translation on or off; **Save chapter** keeps it near the top.
 
-**Hadith (Kutub as-Sittah)**
+**Hadith (Kutub as-Sittah and al-Muwatta)**
 
-1. Home → **Hadith**. Tick what to show, **Arabic**, **Bahasa Indonesia** and/or **English** (at least one; the same boxes are at the top of each kitab), then a book: Sahih al-Bukhari, Sahih Muslim, Sunan Abi Dawud, Jami' at-Tirmidhi, Sunan an-Nasa'i or Sunan Ibn Majah.
+1. Home → **Hadith**. Tick what to show, **Arabic**, **Bahasa Indonesia** and/or **English** (at least one; the same boxes are at the top of each kitab), then a book: Sahih al-Bukhari, Sahih Muslim, Sunan Abi Dawud, Jami' at-Tirmidhi, Sunan an-Nasa'i, Sunan Ibn Majah or Muwatta Malik.
 2. Open a kitab to read its hadith: Arabic with harakat, then the translation. More hadith load as you scroll.
 3. **Hadith number** + **Go** jumps to a hadith. **Search** looks through the whole book in Arabic, English or Indonesian (the first search downloads the book).
-4. Gradings appear above each hadith of the four Sunan: al-Albani, Shu'ayb al-Arna'ut, Zubair 'Ali Za'i, and for at-Tirmidhi his own verdict in Arabic. Green is sahih, blue hasan, orange da'if, red very weak or fabricated. Bukhari and Muslim are sahih by the agreement of the scholars, so they have no per-hadith grade.
+4. Gradings appear above each hadith of the four Sunan: al-Albani, Shu'ayb al-Arna'ut, Zubair 'Ali Za'i, and for at-Tirmidhi his own verdict in Arabic. Green is sahih, blue hasan, orange da'if, red very weak or fabricated. Bukhari and Muslim are sahih by the agreement of the scholars, so they have no per-hadith grade. The Muwatta has one grading, Salim al-Hilali's; Mawquf means the words of a Companion and Maqtu' the words of a Successor, not of the Prophet ﷺ. The Muwatta is always shown in full (with its chain).
 5. The copy button copies the Arabic, the translation, the reference and the gradings.
 6. Each kitab needs the internet the first time; after that it is kept on the phone.
 7. Hadith show the **text only** at first, with "Narrated by …" (the Companion) above it. Tick **SANAD** to see the full chain of narrators; the chain is then shown in a softer colour so the text stands out. Where the chain could not be separated with certainty, the hadith is shown in full.

@@ -41,7 +41,7 @@ Kembali ke Home dari mana-mana dengan **butang rumah** (atas kiri skrin bacaan) 
 | Listen & repeat | Qari membaca, anda mengulang dan disemak (bahagian 6) |
 | Bookmarks | Penanda buku, My ruku' dan My blocks |
 | Doa & zikir | Hisnul Muslim (bahagian 8) |
-| Hadith | Enam kitab hadis (Kutub as-Sittah) dengan hukum hadis (bahagian 8) |
+| Hadith | Enam kitab hadis (Kutub as-Sittah) dan al-Muwatta Imam Malik, dengan hukum hadis (bahagian 8) |
 | Notes | Buku nota anda: nota pada ayat, pada hadis, dan nota bebas (bahagian 8) |
 | Prayer times | Waktu solat MUIS, peringatan (bahagian 8) |
 | Qibla | Kompas arah Kaabah (bahagian 8) |
@@ -188,12 +188,12 @@ Semuanya dibuka dari **menu ayat**; memerlukan internet sekali bagi setiap surah
 2. Setiap doa memaparkan teks Arab, transliterasi dan terjemahan Inggeris. **Listen** memperdengarkannya; pembilang **0 / 3** mengira ulangan.
 3. Hidupkan atau matikan transliterasi dan terjemahan; **Save chapter** menyimpan bab di bahagian atas.
 
-**Hadis (Kutub as-Sittah)**
+**Hadis (Kutub as-Sittah dan al-Muwatta)**
 
-1. Home → **Hadith**. Tandakan apa yang hendak dipaparkan, **Arabic**, **Bahasa Indonesia** dan/atau **English** (sekurang-kurangnya satu; kotak yang sama ada di atas setiap kitab), kemudian sebuah kitab: Sahih al-Bukhari, Sahih Muslim, Sunan Abi Dawud, Jami' at-Tirmidhi, Sunan an-Nasa'i atau Sunan Ibn Majah.
+1. Home → **Hadith**. Tandakan apa yang hendak dipaparkan, **Arabic**, **Bahasa Indonesia** dan/atau **English** (sekurang-kurangnya satu; kotak yang sama ada di atas setiap kitab), kemudian sebuah kitab: Sahih al-Bukhari, Sahih Muslim, Sunan Abi Dawud, Jami' at-Tirmidhi, Sunan an-Nasa'i, Sunan Ibn Majah atau Muwatta Malik.
 2. Buka satu kitab (bab besar) untuk membaca hadisnya: teks Arab berbaris, kemudian terjemahan. Hadis seterusnya dimuat apabila anda menatal ke bawah.
 3. **Hadith number** + **Go** terus ke nombor hadis. **Search** mencari dalam seluruh kitab dalam bahasa Arab, Inggeris atau Indonesia (carian pertama memuat turun kitab itu).
-4. Hukum hadis dipaparkan di atas setiap hadis dalam empat kitab Sunan: al-Albani, Shu'ayb al-Arna'ut, Zubair 'Ali Za'i, dan bagi at-Tirmidhi hukum beliau sendiri dalam bahasa Arab. Hijau sahih, biru hasan, jingga da'if, merah sangat lemah atau palsu. Bukhari dan Muslim sahih dengan kesepakatan ulama, jadi tiada hukum bagi setiap hadis.
+4. Hukum hadis dipaparkan di atas setiap hadis dalam empat kitab Sunan: al-Albani, Shu'ayb al-Arna'ut, Zubair 'Ali Za'i, dan bagi at-Tirmidhi hukum beliau sendiri dalam bahasa Arab. Hijau sahih, biru hasan, jingga da'if, merah sangat lemah atau palsu. Bukhari dan Muslim sahih dengan kesepakatan ulama, jadi tiada hukum bagi setiap hadis. Al-Muwatta mempunyai satu hukum sahaja, oleh Salim al-Hilali; Mawquf bermaksud kata-kata Sahabat dan Maqtu' kata-kata Tabi'in, bukan sabda Nabi ﷺ. Al-Muwatta sentiasa dipaparkan penuh (bersama sanad).
 5. Butang salin menyalin teks Arab, terjemahan, rujukan dan hukum hadis.
 6. Setiap kitab memerlukan internet kali pertama; selepas itu ia disimpan dalam telefon.
 7. Hadis dipaparkan **matan sahaja** pada mulanya, dengan "Narrated by …" (Sahabat perawi) di atasnya. Tandakan **SANAD** untuk melihat rantaian perawi penuh; sanad itu dipaparkan dalam warna lebih pudar supaya matan lebih jelas. Jika sanad tidak dapat dipisahkan dengan pasti, hadis dipaparkan penuh.
