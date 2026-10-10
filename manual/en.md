@@ -41,6 +41,8 @@ Return to Home from anywhere with the **house button** (top left of the reading 
 | Listen & repeat | The reciter reads, you repeat and get checked (section 6) |
 | Bookmarks | Bookmarks, My ruku' and My blocks |
 | Doa & zikir | Hisnul Muslim (section 8) |
+| Hadith | The six books (Kutub as-Sittah) with gradings (section 8) |
+| Notes | Your notepad: notes on ayat, on hadith, and free notes (section 8) |
 | Prayer times | MUIS times, alerts and reminders (section 8) |
 | Qibla | Compass to the Ka'bah (section 8) |
 | Settings | All settings (section 9) |
@@ -186,6 +188,24 @@ All open from the **ayah menu**; they need the internet once per surah.
 2. Each doa shows Arabic, transliteration and English. **Listen** plays it; the **0 / 3** counter counts repetitions.
 3. Turn transliteration and translation on or off; **Save chapter** keeps it near the top.
 
+**Hadith (Kutub as-Sittah)**
+
+1. Home → **Hadith**. Tick what to show, **Arabic**, **Bahasa Indonesia** and/or **English** (at least one; the same boxes are at the top of each kitab), then a book: Sahih al-Bukhari, Sahih Muslim, Sunan Abi Dawud, Jami' at-Tirmidhi, Sunan an-Nasa'i or Sunan Ibn Majah.
+2. Open a kitab to read its hadith: Arabic with harakat, then the translation. More hadith load as you scroll.
+3. **Hadith number** + **Go** jumps to a hadith. **Search** looks through the whole book in Arabic, English or Indonesian (the first search downloads the book).
+4. Gradings appear above each hadith of the four Sunan: al-Albani, Shu'ayb al-Arna'ut, Zubair 'Ali Za'i, and for at-Tirmidhi his own verdict in Arabic. Green is sahih, blue hasan, orange da'if, red very weak or fabricated. Bukhari and Muslim are sahih by the agreement of the scholars, so they have no per-hadith grade.
+5. The copy button copies the Arabic, the translation, the reference and the gradings.
+6. Each kitab needs the internet the first time; after that it is kept on the phone.
+7. The kitab title and the **AR · BI · ENG** boxes stay at the top while you scroll. Tap the title to jump to another kitab of the same book.
+8. Each hadith has a **bookmark** button (five colours, as for the Qur'an) and a **note** button. Your bookmarks and **Continue reading** (where you last stopped) are at the top of the Hadith page.
+
+**Notes**
+
+1. Home → **Notes**: all your notes, newest first. Filter by **Qur'an**, **Hadith** or **Free notes**, or search.
+2. **New note** writes a free note. For an ayah, long-press it → **Write a note**; for a hadith, tap its note button. Notes save as you type.
+3. Tap a note to edit it; **Open the ayah / Open the hadith** takes you there.
+4. Notes are kept on the phone only. **Copy all notes** copies them all, so you can keep a copy elsewhere.
+
 **Prayer times**
 
 - **‹ ›** move by day; the next prayer is in gold.
@@ -224,6 +244,13 @@ All open from the **ayah menu**; they need the internet once per surah.
 | Waqaf & ibtida' blocks | Block shading (section 4) |
 | Hafazan history | Past sessions and recordings |
 | Sources & verification | Where everything comes from; Qur'an text check |
+
+**Backup and restore**
+
+1. Settings → **Back up or restore settings, bookmarks and notes** (also linked from Notes).
+2. **Save a backup file** saves one .json file with all your settings, Qur'an and hadith bookmarks, My ruku' and My blocks, notes, Hafazan results and last-read places. Choose where it goes, e.g. Google Drive, or send it to yourself.
+3. **Restore from a backup file** on this or a new phone replaces what is in the app with the backup, then reopens the app.
+4. Not included: Hafazan voice recordings and the adhan files you picked (choose those again), and downloaded texts (they download again).
 
 ## 10. Troubleshooting
 

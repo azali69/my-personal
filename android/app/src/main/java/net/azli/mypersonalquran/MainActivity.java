@@ -770,7 +770,8 @@ public class MainActivity extends Activity {
 
 
     /* ---------------- Prayer alerts, adhan files, location, compass ---------------- */
-    private static final int REQ_NOTIF = 21, REQ_LOC = 22, REQ_PICK = 23;
+    private static final int REQ_NOTIF = 21, REQ_LOC = 22, REQ_PICK = 23, REQ_SAVE = 24, REQ_OPEN = 25;
+    private String pendingBackup = null, openedBackup = null;   // backup file text: to be written / just read
     private String pickSlot = null;
     private SensorManager sm; private SensorEventListener compassL; private float decl = 0f; private long lastCompass = 0;
 
@@ -803,6 +804,14 @@ public class MainActivity extends Activity {
             if (!"makkah".equals(slot) && !"madinah".equals(slot)) return;
             pickSlot = slot;
             runOnUiThread(() -> { try { startActivityForResult(new Intent(Intent.ACTION_OPEN_DOCUMENT).addCategory(Intent.CATEGORY_OPENABLE).setType("audio/*"), REQ_PICK); } catch (Exception e) { js("window.__adhanPicked && window.__adhanPicked('" + slot + "','')"); } }); }
+        /* Backup of the app's settings, bookmarks and notes: the person chooses where the file goes and where it comes from. */
+        @JavascriptInterface public void saveBackup(String name, String json) { pendingBackup = json;
+            runOnUiThread(() -> { try { startActivityForResult(new Intent(Intent.ACTION_CREATE_DOCUMENT).addCategory(Intent.CATEGORY_OPENABLE).setType("application/json").putExtra(Intent.EXTRA_TITLE, name), REQ_SAVE); }
+                catch (Exception e) { pendingBackup = null; js("window.__backupSaved && window.__backupSaved(false)"); } }); }
+        @JavascriptInterface public void openBackup() {
+            runOnUiThread(() -> { try { startActivityForResult(new Intent(Intent.ACTION_OPEN_DOCUMENT).addCategory(Intent.CATEGORY_OPENABLE).setType("*/*"), REQ_OPEN); }
+                catch (Exception e) { js("window.__backupOpened && window.__backupOpened(false)"); } }); }
+        @JavascriptInterface public String takeBackup() { String s = openedBackup; openedBackup = null; return s == null ? "" : s; }
         @JavascriptInterface public void removeAdhan(String slot) { File f = AdhanService.adhanFile(MainActivity.this, slot); if (f != null) f.delete(); }
         @JavascriptInterface public void testSound(String sound) {
             Intent s = new Intent(MainActivity.this, AdhanService.class).putExtra("sound", sound).putExtra("title", "Test").putExtra("text", "This is how the prayer alert will sound");
@@ -870,6 +879,24 @@ public class MainActivity extends Activity {
     @Override
     protected void onActivityResult(int req, int res, Intent data) {
         super.onActivityResult(req, res, data);
+        if (req == REQ_SAVE) {
+            boolean ok = false; String text = pendingBackup; pendingBackup = null;
+            if (res == RESULT_OK && data != null && data.getData() != null && text != null) {
+                try (OutputStream out = getContentResolver().openOutputStream(data.getData(), "wt")) { out.write(text.getBytes(java.nio.charset.StandardCharsets.UTF_8)); ok = true; } catch (Exception e) { ok = false; }
+            }
+            js("window.__backupSaved && window.__backupSaved(" + ok + ")"); return;
+        }
+        if (req == REQ_OPEN) {
+            boolean ok = false; openedBackup = null;
+            if (res == RESULT_OK && data != null && data.getData() != null) {
+                try (InputStream in = getContentResolver().openInputStream(data.getData())) {
+                    java.io.ByteArrayOutputStream bo = new java.io.ByteArrayOutputStream(); byte[] b = new byte[16384]; int n; long total = 0;
+                    while ((n = in.read(b)) > 0) { bo.write(b, 0, n); total += n; if (total > 20_000_000) throw new Exception("too big"); }
+                    openedBackup = new String(bo.toByteArray(), java.nio.charset.StandardCharsets.UTF_8); ok = true;
+                } catch (Exception e) { ok = false; }
+            }
+            js("window.__backupOpened && window.__backupOpened(" + ok + ")"); return;
+        }
         if (req != REQ_PICK) return;
         String slot = pickSlot; pickSlot = null; String name = "";
         if (slot != null && res == RESULT_OK && data != null && data.getData() != null) {
