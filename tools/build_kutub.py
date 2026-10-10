@@ -21,8 +21,9 @@ BOOKS = [
     ('tirmidhi', 'جامع الترمذي', "Jami' at-Tirmidhi"),
     ('nasai', 'سنن النسائي', "Sunan an-Nasa'i"),
     ('ibnmajah', 'سنن ابن ماجه', 'Sunan Ibn Majah'),
+    ('malik', 'موطأ الإمام مالك', 'Muwatta Malik'),   # added 11 Oct 2026 at Azli's request; one grader only (al-Hilali)
 ]
-KEEP = {'Al-Albani': 'alb', 'Shuaib Al Arnaut': 'arn', 'Zubair Ali Zai': 'zub'}
+KEEP = {'Al-Albani': 'alb', 'Shuaib Al Arnaut': 'arn', 'Zubair Ali Zai': 'zub', 'Salim al-Hilali': 'hil'}
 # Unreferenced hadith on a kitab boundary that open the next kitab (checked by content):
 # Bukhari 521 Mawaqit as-Salat, 2711 ash-Shurut, 3156 al-Jizyah, 4978 Fada'il al-Qur'an; Muslim 5885-5886 ash-Shi'r.
 OPENS_NEXT = {('bukhari', 521), ('bukhari', 2711), ('bukhari', 3156), ('bukhari', 4978), ('muslim', 5885), ('muslim', 5886)}
@@ -55,7 +56,7 @@ def sk(s):
     return s.replace('أ', 'ا').replace('إ', 'ا').replace('آ', 'ا').replace('ى', 'ي').replace('ة', 'ه')
 LKBOOK = {'bukhari': 'Bukhari', 'muslim': 'Muslim', 'abudawud': 'AbuDaud', 'tirmidhi': 'Tirmizi', 'nasai': 'Nesai', 'ibnmajah': 'IbnMaja'}
 def lk_rows(bid):
-    if not LKDIR: return {}
+    if not LKDIR or bid not in LKBOOK: return {}   # the corpus has no Muwatta: shown in full
     out = {}
     for f in glob.glob(os.path.join(LKDIR, LKBOOK[bid], '*.csv')):
         for r in csv.DictReader(open(f, encoding='utf-8-sig')):
@@ -141,6 +142,13 @@ for bid, ar_name, en_name in BOOKS:
     grades = {h['hadithnumber']: h['grades'] for h in info[bid]['hadiths']}
     LK = lk_rows(bid); stats = {'ar': 0, 'en': 0, 'id': 0}
     ah, eh, ih = A['hadiths'], E['hadiths'], I['hadiths']
+    if bid == 'malik':
+        # Indonesian has one extra entry (774.5, no Arabic): pair by number. English: entries re-paired with the Arabic by
+        # tools/malik_en_fix.py (Malik's rulings moved back to the entry they close; 5 unmatched left without English).
+        byn = {x['hadithnumber']: x for x in ih}
+        ih = [byn.get(a['hadithnumber'], {'hadithnumber': a['hadithnumber'], 'text': ''}) for a in ah]
+        MEN = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'malik_en_fix.json')))['en']
+        eh = [dict(x, text=MEN.get(str(x['hadithnumber']), x['text'])) for x in eh]
     assert len(ah) == len(eh) == len(ih), bid
     # kitab of each hadith: its own reference; 306 in Bukhari, 148 in Muslim and 266 in Ibn Majah have none (book 0)
     # hadith without a kitab reference: the kitab of the referenced hadith on both sides (they agree for all but 17)
@@ -191,7 +199,7 @@ for bid, ar_name, en_name in BOOKS:
             if e_i: cut['e'] = e_i; stats['en'] += 1
             nm = by_name(r.get('English_Isnad'))
             if nm and (a_i or e_i): cut['by'] = nm
-        if row[4]:
+        if row[4] and bid in LKBOOK:   # Muwatta: no split in Arabic or English, so none in Indonesian either (same view)
             i_i = id_cut(row[4])
             if i_i: cut['i'] = i_i; stats['id'] += 1
         row.append(cut or 0)
