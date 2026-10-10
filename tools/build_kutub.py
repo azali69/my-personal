@@ -9,6 +9,7 @@ Left out: the columns named Abu Ghuddah, Fuad Abd al-Baqi, Muhyi al-Din Abdul Ha
 (95-97% identical to al-Albani: his rulings as printed in those editions), and "Bashar Awad Maarouf"
 (91% identical to at-Tirmidhi's own wording).
 """
+import hashlib
 import json, os, re, subprocess, sys
 
 SRC, OUT = sys.argv[1], sys.argv[2]
@@ -87,6 +88,11 @@ def ar_ok(hidden):
     if k < 0: return False
     tail = w[k + 1:]
     return len(tail) <= 9 and not any(x in NARR for x in tail)
+def ar_tail_ok(hidden):
+    # lighter check for Bukhari: after the last "haddathana/'an/..." no narrative word (kana, inna, jaa'a ...) may be hidden.
+    # The corpus split is hand-checked there, but 174 of its boundaries still hide words of the story (e.g. 5443, 4824).
+    w = _w(hidden); k = max([i for i, x in enumerate(w) if x in LINKS] or [-1])
+    return k >= 0 and len(w) - k - 1 <= 14 and not any(x in NARR for x in w[k + 1:])
 def en_ok(hidden):
     h = hidden.strip()
     return len(h) <= 140 and h.endswith((':', 'that', 'said', 'that:', 'said:')) and not re.search(r'Messenger|Prophet|\bAllah\b|"|“', h)
@@ -118,8 +124,10 @@ def id_cut(t):
         if '"' in gap or '“' in gap or len(gap) > 120 or any(w and w not in CHAIN_WORDS for w in words): break
         end = m.end()
     rest = t[end:]
-    mm = re.match(r"^[\s,;:]*(?:radliallahu\s+'anhu(?:ma)?|radhiyallahu\s+'anhu(?:ma)?|radliallahu\s+'anha)?[\s,;:]*(?:dia|ia|beliau)?\s*(?:berkata|mengatakan|menuturkan|bahwasanya|bahwa)?[\s,;:]*", rest, re.I)
+    # whole words only ("dia" must not take the start of "diatas")
+    mm = re.match(r"^[\s,;:]*(?:(?:radliallahu|radhiyallahu)\s+'anh(?:u|uma|a)\b)?[\s,;:]*(?:(?:dia|ia|beliau)\b)?\s*(?:(?:berkata|mengatakan|menuturkan|bahwasanya|bahwa)\b)?[\s,;:]*", rest, re.I)
     j = end + (mm.end() if mm else 0)
+    if 0 < j < len(t) and t[j - 1].isalnum() and t[j].isalnum(): return None   # never cut inside a word
     if '"' in t[:j] or '“' in t[:j]: return None
     return j if j < len(t) - 15 else None
 
@@ -175,8 +183,8 @@ for bid, ar_name, en_name in BOOKS:
         cand = LK.get(sk(ar)) or []
         if len(cand) == 1:
             r = cand[0]; a_i = ar_cut(ar, sk(r['Arabic_Isnad']), sk(r['Arabic_Matn']))
-            # never hide quoted words; outside Bukhari (hand-checked in the corpus) the boundary must also pass the checks
-            if a_i and ('"' in ar[:a_i] or (bid != 'bukhari' and not ar_ok(ar[:a_i]))): a_i = None
+            # never hide quoted words; the boundary must also pass the checks (a lighter one for Bukhari, hand-checked in the corpus)
+            if a_i and ('"' in ar[:a_i] or not (ar_tail_ok if bid == 'bukhari' else ar_ok)(ar[:a_i])): a_i = None
             if a_i: cut['a'] = a_i; stats['ar'] += 1
             e_i = en_cut(row[3], r.get('English_Isnad'), r.get('English_Matn'))
             if e_i and not en_ok(row[3][:e_i]): e_i = None
@@ -193,12 +201,14 @@ for bid, ar_name, en_name in BOOKS:
     sl = []
     for sec in sorted(secs, key=int):
         hs = secs[sec]
+        body = json.dumps({'h': hs}, ensure_ascii=False, separators=(',', ':'))
         with open(os.path.join(OUT, bid, f'{sec}.json'), 'w', encoding='utf8') as f:
-            json.dump({'h': hs}, f, ensure_ascii=False, separators=(',', ':'))
+            f.write(body)
         nm = (names.get(sec) or ('Introduction' if sec == '0' else f'Book {sec}')).strip()
         if nm.count('(') > nm.count(')'): nm += ')'
         sl.append({'n': int(sec), 'en': nm,
-                   'first': hs[0][0], 'last': hs[-1][0], 'count': len(hs)})
+                   'first': hs[0][0], 'last': hs[-1][0], 'count': len(hs),
+                   'v': hashlib.sha1(body.encode('utf8')).hexdigest()[:8]})  # the app re-downloads a kept kitab when this changes
     total = sum(s['count'] for s in sl)
     index.append({'id': bid, 'ar': ar_name, 'en': en_name, 'count': total, 'sections': sl})
     print(bid, total, 'hadith in', len(sl), 'kitab; text-only split: Arabic', stats['ar'], 'English', stats['en'], 'Indonesian', stats['id'])
