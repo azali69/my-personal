@@ -12,6 +12,7 @@ My Personal Quran is a Madinah mushaf for reading, memorising (hafazan), listeni
 
 - The **book cover** appears. Tap anywhere on it to open the book; it swings open to the **Home** screen.
 - The cover closes again whenever you leave the app. To skip it: Home → settings button (top right) → **Book cover when the app opens → Skip**.
+- The cover comes in **Green**, **Black** or **Navy blue**, all with gold: same settings button → **Book cover colour**. **Preview the cover** shows it straight away.
 
 **Permissions** (each asked only when you first use the feature)
 

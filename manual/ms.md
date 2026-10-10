@@ -12,6 +12,7 @@ My Personal Quran ialah mushaf Madinah untuk membaca, menghafaz, mendengar bacaa
 
 - **Kulit buku** akan muncul. Ketik di mana-mana untuk membukanya; ia terbuka ke skrin **Home** (Laman Utama).
 - Kulit buku tertutup semula setiap kali anda keluar dari aplikasi. Untuk melangkaunya: Home → butang tetapan (atas kanan) → **Book cover when the app opens → Skip**.
+- Kulit buku ada tiga warna, **Green** (hijau), **Black** (hitam) dan **Navy blue** (biru tua), semuanya dengan emas: butang tetapan yang sama → **Book cover colour**. **Preview the cover** menunjukkannya serta-merta.
 
 **Kebenaran** (diminta hanya ketika ciri itu digunakan kali pertama)
 
