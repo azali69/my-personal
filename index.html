@@ -109,7 +109,7 @@ main.fit{padding-block:8px 76px}
 .mpage.short .mline>.sp{flex:0 0 .32em;min-width:.32em}
 .pagehead.tight{margin:0 2px 4px}
 .arname{font-family:var(--ar);font-weight:400;direction:rtl;unicode-bidi:isolate}
-.pagehead .arname{font-size:1.15em;line-height:1}
+.pagehead .arname{font-size:1.3em;line-height:1}
 .where b.arname{text-align:left;font-size:18px;line-height:1.25}
 .pagefoot.tight{margin-top:6px}
 .mline .sh2,.sh2{background:color-mix(in srgb,var(--accent) 17%,var(--bg))}
@@ -179,7 +179,7 @@ body.fitmode.immersive .top{transform:translateY(-110%);opacity:0;pointer-events
 body.immersive:not(.fitmode) .top{display:none}
 body.immersive .dock{transform:translateY(110%);opacity:0;pointer-events:none}
 
-main.fit{position:fixed;left:0;right:0;top:var(--sat);bottom:var(--sab);max-width:none;margin:0;padding:6px 10px 6px;
+main.fit{position:fixed;left:0;right:0;top:var(--pt,var(--sat));bottom:var(--pb,var(--sab));max-width:none;margin:0;padding:6px 10px 6px;
   display:flex;flex-direction:column;justify-content:center;overflow:hidden}
 main.fit>*{width:100%;max-width:46rem;margin-inline:auto}
 main.fit .pagefoot.tight{margin-top:4px}
@@ -301,7 +301,7 @@ body.immersive .pbar .pbar-t,body.immersive #pbPrev,body.immersive #pbNext,body.
 .wbw-w .ar{font-family:var(--ar);font-size:24px;line-height:1.6}
 .wbw-w small{font-size:12.5px;color:var(--muted);max-width:9em;text-align:center;line-height:1.3}
 .wbw-w.on{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,var(--bg))}
-.hd{border-top:1px solid var(--line);padding:10px 0}
+.hd-item{border-top:1px solid var(--line);padding:10px 0}
 .hd-ref{display:flex;flex-wrap:wrap;gap:6px;align-items:baseline}
 .hd-g{font-size:12px;font-weight:700;color:var(--ok);border:1px solid var(--ok);border-radius:999px;padding:0 8px}
 .hd-ar{font-family:var(--ar);font-size:19px;line-height:1.9;margin:6px 0}
@@ -625,15 +625,18 @@ function surahHeader(s){
 function setFitMode(on){ document.body.classList.toggle('fitmode',on); }
 /* The page is named after the surah that begins on it (as in the printed mushaf); otherwise the surah it continues. */
 function pageSurah(p){ for(let g=pageStart[p]; g<pageStart[p+1]; g++) if(A[g][1]===1) return A[g][0]; return A[pageStart[p]][0]; }
+/* Juz and page labels follow the "Surah name" setting: Latin, or Arabic (الجزء ٣٠, page number in Arabic digits). */
+const juzLabel=j=> st.sname==='ar'? `<span class="arname">الجزء ${arNum(j)}</span>` : `<span>Juz ${j}</span>`;
+const pageNoTxt=p=> st.sname==='ar'? arNum(p) : String(p);
 function headName(p){ const s=S[pageSurah(p)-1]; return st.sname==='ar'? `<span class="arname">سورة ${esc(s[0])}</span>` : `<span>${esc(s[1])}</span>`; }
 function renderReader(){
   hz=null; document.getElementById('dock').classList.remove('hz');
   const p=st.page, g0=pageStart[p], g1=pageStart[p+1]-1;
   const first=A[g0];
   { const ps=S[pageSurah(p)-1], w=document.getElementById('whereT'); w.textContent = st.sname==='ar'? `سورة ${ps[0]}` : ps[1]; w.classList.toggle('arname', st.sname==='ar'); }
-  document.getElementById('whereS').textContent = `Juz ${first[5]} · Page ${p}`;
+  { const ws=document.getElementById('whereS'); ws.textContent = st.sname==='ar'? `الجزء ${arNum(first[5])} · صفحة ${arNum(p)}` : `Juz ${first[5]} · Page ${p}`; ws.dir='auto'; }
   let parity = blockIndex(g0)%2, h='';
-  h+=`<div class="pagehead">${headName(p)}<span>Juz ${first[5]}</span></div>`;
+  h+=`<div class="pagehead">${headName(p)}${juzLabel(first[5])}</div>`;
   main.classList.remove('fit'); setFitMode(false);
   if(!st.tr && st.mushaf!=='text' && !glyphOff){
     renderGlyph(p);
@@ -654,7 +657,7 @@ function renderReader(){
 }
 function buildRows(p){
   const g0=pageStart[p], g1=pageStart[p+1]-1, first=A[g0];
-  let h=`<div class="pagehead">${headName(p)}<span>Juz ${first[5]}</span></div><div class="rows">`;
+  let h=`<div class="pagehead">${headName(p)}${juzLabel(first[5])}</div><div class="rows">`;
   for(let g=g0; g<=g1; g++){
     const a=A[g];
     if(a[1]===1){ h+=surahHeader(a[0]); }
@@ -669,7 +672,7 @@ function buildRows(p){
 }
 function buildMushaf(g0,g1){
   const first=A[g0];
-  let h=`<div class="pagehead">${headName(first[4])}<span>Juz ${first[5]}</span></div>`;
+  let h=`<div class="pagehead">${headName(first[4])}${juzLabel(first[5])}</div>`;
   let parity = blockIndex(g0)%2, inP=false;
   for(let g=g0; g<=g1; g++){
     const a=A[g];
@@ -689,7 +692,7 @@ function buildPage(p){
   const lines=D.L[p-1], first=A[pageStart[p]];
   const shade=new Map(); for(let g=pageStart[p]; g<pageStart[p+1]; g++) shade.set(g, shadeOf(g));
   const toks=new Map(); const tok=(g,t)=>{ if(!toks.has(g)) toks.set(g,A[g][2].split(' ')); return toks.get(g)[t]; };
-  let h=`<div class="pagehead tight">${headName(p)}<span>Juz ${first[5]}</span></div><div class="mpage${p<=2?' short':''}" id="mpage">`;
+  let h=`<div class="pagehead tight">${headName(p)}${juzLabel(first[5])}</div><div class="mpage${p<=2?' short':''}" id="mpage">`;
   for(const items of lines){
     const f=items[0];
     if(Array.isArray(f)){
@@ -710,7 +713,7 @@ function buildPage(p){
     });
     h+='</div>';
   }
-  return h+`</div><div class="pagefoot tight"><span class="pageno">${p}</span></div>`;
+  return h+`</div><div class="pagefoot tight"><span class="pageno">${pageNoTxt(p)}</span></div>`;
 }
 function fitPage(){
   const pg=document.getElementById('mpage'); if(!pg) return;
@@ -757,7 +760,7 @@ const G_EM=17.0;   // printed line width in em (QUL metrics: 42501 / 2500 units)
 function buildGlyph(p,set){
   const lines=D.G.P[p-1], first=A[pageStart[p]];
   const shade=new Map(); for(let g=pageStart[p]; g<pageStart[p+1]; g++) shade.set(g, shadeOf(g));
-  let h=`<div class="pagehead tight">${headName(p)}<span>Juz ${first[5]}</span></div><div class="mpage gpage${p<=2?' short':''}" id="mpage" style="font-family:'${set}p${p}'">`;
+  let h=`<div class="pagehead tight">${headName(p)}${juzLabel(first[5])}</div><div class="mpage gpage${p<=2?' short':''}" id="mpage" style="font-family:'${set}p${p}'">`;
   for(const ln of lines){
     if(ln[0]==='h'){ h+=surahFrame(ln[1],set); continue; }
     if(ln[0]==='b'){ h+=`<div class="mline bl" style="font-family:'${set}p1'">${D.G.bas.map(w=>`<span>${w}</span>`).join('')}</div>`; continue; }
@@ -771,7 +774,7 @@ function buildGlyph(p,set){
       pg_=g; pw_=w; pc=sc; });
     h+='</div>';
   }
-  return h+`</div><div class="pagefoot tight"><span class="pageno">${p}</span></div>`;
+  return h+`</div><div class="pagefoot tight"><span class="pageno">${pageNoTxt(p)}</span></div>`;
 }
 function fitGlyph(){
   const pg=document.getElementById('mpage'); if(!pg) return;
@@ -808,7 +811,7 @@ let rT; window.addEventListener('resize',()=>{ clearTimeout(rT); rT=setTimeout(r
 try{ new ResizeObserver(()=>{ if(main.classList.contains('fit')){ clearTimeout(rT); rT=setTimeout(refit,60); } }).observe(main); }catch(e){}
 
 
-function pageFoot(p){ return `<div class="pagefoot"><span class="pageno">${p}</span></div>`; }
+function pageFoot(p){ return `<div class="pagefoot"><span class="pageno">${pageNoTxt(p)}</span></div>`; }
 function goPage(p, sel){ st.page=Math.min(604,Math.max(1,p)); st.sel = sel ?? null; renderReader();
   if(sel!=null){ const el=main.querySelector(`[data-g="${sel}"]`); if(el) el.scrollIntoView({block:'center'}); } else window.scrollTo(0,0); }
 function goAyah(g){ goPage(A[g][4], g); }
@@ -977,7 +980,7 @@ function setSheet(){
   <div class="label">Mushaf</div>${seg('mushaf',[['v4','Madinah 1441H'],['v4t','Madinah tajweed'],['text','Uthmani text']],st.mushaf)}
   <p class="note" id="mNote"></p>
   <div id="offWrap"></div>
-  <div class="label">Surah name</div>${seg('sname',[['lat','Latin (At-Takwīr)'],['ar','Arabic (سورة التكوير)']],st.sname)}
+  <div class="label">Surah name, juz and page</div>${seg('sname',[['lat','Latin (At-Takwīr · Juz 30)'],['ar','Arabic (سورة التكوير · الجزء ٣٠)']],st.sname)}
   <div class="label">Translation language</div>${seg('lang',[['ms','Bahasa Melayu'],['en','English']],st.lang)}
   <div class="label">Home and colours</div><div class="actions"><button id="openHomeSet">${ic('blk')}Home background, bottom bar colour, book cover</button></div>
   <div class="label">Help</div><div class="actions"><button id="openManual">${ic('info')}User manual / Panduan pengguna</button></div>
@@ -1149,7 +1152,7 @@ async function hdGet(name){ if(hdMem.has(name)) return hdMem.get(name); const id
   throw new Error('offline'); }
 function hdItem(h,lang){ const book=h.c==='bukhari'?'Sahih al-Bukhari':'Sahih Muslim';
   const tr = lang==='id' ? (h.id||'') : h.en; const trNote = lang==='id' && !h.id ? '<p class="note">No Indonesian translation in the source for this narration; English shown.</p>' : '';
-  return `<div class="hd">
+  return `<div class="hd-item">
    <div class="hd-ref"><b>${book} ${esc(h.ref)}</b> <span class="note">${esc(h.inbook||'')}</span> <span class="hd-g">${esc(h.grade)}</span></div>
    <details><summary>Arabic text</summary><div class="hd-ar" dir="rtl" lang="ar">${esc(h.ar)}</div></details>
    ${trNote}<div class="hd-tr" dir="auto">${esc(tr||h.en)}</div>
@@ -1340,10 +1343,13 @@ function ayahSheet(g){
 let lpT=null, lpFired=false, lpX=0, lpY=0;
 /* In the Android app the window is edge to edge and never resizes; it tells us the fixed margins of the system bars. */
 let lastBars='';
-window.__insets=()=>{ try{ const v=window.AndroidSpeech?.getInsets?.(); if(!v) return; const [t,r,b,l,k]=v.split(',').map(Number), R=document.documentElement.style;
+window.__insets=()=>{ try{ const v=window.AndroidSpeech?.getInsets?.(); if(!v) return; const [t,r,b,l,k,ct,cb]=v.split(',').map(Number), R=document.documentElement.style;
   R.setProperty('--kb',(k||0)+'px');   // keyboard: sheets sit above it so the field you type in stays visible
   if(k>0){ const f=document.activeElement; if(f && f.matches('input,textarea,select')) setTimeout(()=>f.scrollIntoView({block:'center',behavior:'smooth'}),60); }
-  const bars=[t,r,b,l].join(); if(bars===lastBars) return; lastBars=bars;
+  const bars=[t,r,b,l,ct,cb].join(); if(bars===lastBars) return; lastBars=bars;
+  // The mushaf page uses the whole screen, keeping clear only of the camera cut-out: the system bars are hidden while
+  // reading, and when they show, the app's own bars cover the same strips anyway. (Older app builds send no cut-out.)
+  if(ct!=null && !isNaN(ct)){ R.setProperty('--pt',ct+'px'); R.setProperty('--pb',(cb||0)+'px'); }
   R.setProperty('--sat',t+'px'); R.setProperty('--sar',r+'px'); R.setProperty('--sab',b+'px'); R.setProperty('--sal',l+'px'); maxH.p=maxH.l=0; setTimeout(refit,0); }catch(e){} };
 window.__insets();
 function setImmersive(on){ document.body.classList.toggle('immersive',on); try{ window.AndroidSpeech?.setImmersive?.(on); }catch(e){} store.set('imm',on); }

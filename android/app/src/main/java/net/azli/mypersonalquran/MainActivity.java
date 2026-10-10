@@ -267,10 +267,12 @@ public class MainActivity extends Activity {
         else getWindow().getDecorView().setSystemUiVisibility(BASE_UI);
         web.setOnApplyWindowInsetsListener((v, ins) -> {
             float d = getResources().getDisplayMetrics().density;
-            int t, r, b, l, k;
+            int t, r, b, l, k, ct = 0, cb = 0;   // ct/cb: the camera cut-out only (the page may use the space of hidden bars)
             if (Build.VERSION.SDK_INT >= 30) {
                 android.graphics.Insets i = ins.getInsetsIgnoringVisibility(WindowInsets.Type.systemBars() | WindowInsets.Type.displayCutout());
                 t = i.top; r = i.right; b = i.bottom; l = i.left;
+                android.graphics.Insets cu = ins.getInsetsIgnoringVisibility(WindowInsets.Type.displayCutout());
+                ct = cu.top; cb = cu.bottom;
                 k = ins.getInsets(WindowInsets.Type.ime()).bottom;   // the on-screen keyboard (0 when hidden)
             } else {
                 k = Math.max(0, ins.getSystemWindowInsetBottom() - ins.getStableInsetBottom());
@@ -279,9 +281,10 @@ public class MainActivity extends Activity {
                     android.view.DisplayCutout c = ins.getDisplayCutout();
                     t = Math.max(t, c.getSafeInsetTop()); r = Math.max(r, c.getSafeInsetRight());
                     b = Math.max(b, c.getSafeInsetBottom()); l = Math.max(l, c.getSafeInsetLeft());
+                    ct = c.getSafeInsetTop(); cb = c.getSafeInsetBottom();
                 }
             }
-            String now = Math.round(t / d) + "," + Math.round(r / d) + "," + Math.round(b / d) + "," + Math.round(l / d) + "," + Math.round(k / d);
+            String now = Math.round(t / d) + "," + Math.round(r / d) + "," + Math.round(b / d) + "," + Math.round(l / d) + "," + Math.round(k / d) + "," + Math.round(ct / d) + "," + Math.round(cb / d);
             if (!now.equals(insets)) { insets = now; web.evaluateJavascript("window.__insets && window.__insets()", null); }
             return ins;
         });
