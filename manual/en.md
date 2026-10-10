@@ -196,8 +196,9 @@ All open from the **ayah menu**; they need the internet once per surah.
 4. Gradings appear above each hadith of the four Sunan: al-Albani, Shu'ayb al-Arna'ut, Zubair 'Ali Za'i, and for at-Tirmidhi his own verdict in Arabic. Green is sahih, blue hasan, orange da'if, red very weak or fabricated. Bukhari and Muslim are sahih by the agreement of the scholars, so they have no per-hadith grade.
 5. The copy button copies the Arabic, the translation, the reference and the gradings.
 6. Each kitab needs the internet the first time; after that it is kept on the phone.
-7. The kitab title and the **AR · BI · ENG** boxes stay at the top while you scroll. Tap the title to jump to another kitab of the same book.
-8. Each hadith has a **bookmark** button (five colours, as for the Qur'an) and a **note** button. Your bookmarks and **Continue reading** (where you last stopped) are at the top of the Hadith page.
+7. Hadith show the **text only** at first, with "Narrated by …" (the Companion) above it. Tick **SANAD** to see the full chain of narrators. Where the chain could not be separated with certainty, the hadith is shown in full.
+8. The kitab title and the **AR · BI · ENG · SANAD** boxes stay at the top while you scroll. Tap the title to jump to another kitab of the same book.
+9. Each hadith has a **bookmark** button (five colours, as for the Qur'an) and a **note** button. Your bookmarks and **Continue reading** (where you last stopped) are at the top of the Hadith page.
 
 **Notes**
 

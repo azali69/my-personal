@@ -196,8 +196,9 @@ Semuanya dibuka dari **menu ayat**; memerlukan internet sekali bagi setiap surah
 4. Hukum hadis dipaparkan di atas setiap hadis dalam empat kitab Sunan: al-Albani, Shu'ayb al-Arna'ut, Zubair 'Ali Za'i, dan bagi at-Tirmidhi hukum beliau sendiri dalam bahasa Arab. Hijau sahih, biru hasan, jingga da'if, merah sangat lemah atau palsu. Bukhari dan Muslim sahih dengan kesepakatan ulama, jadi tiada hukum bagi setiap hadis.
 5. Butang salin menyalin teks Arab, terjemahan, rujukan dan hukum hadis.
 6. Setiap kitab memerlukan internet kali pertama; selepas itu ia disimpan dalam telefon.
-7. Tajuk kitab dan kotak **AR · BI · ENG** kekal di atas semasa anda menatal. Ketik tajuk untuk beralih ke kitab lain dalam buku yang sama.
-8. Setiap hadis ada butang **penanda buku** (lima warna, seperti al-Quran) dan butang **nota**. Penanda buku anda dan **Continue reading** (tempat anda berhenti) berada di bahagian atas halaman Hadith.
+7. Hadis dipaparkan **matan sahaja** pada mulanya, dengan "Narrated by …" (Sahabat perawi) di atasnya. Tandakan **SANAD** untuk melihat rantaian perawi penuh. Jika sanad tidak dapat dipisahkan dengan pasti, hadis dipaparkan penuh.
+8. Tajuk kitab dan kotak **AR · BI · ENG · SANAD** kekal di atas semasa anda menatal. Ketik tajuk untuk beralih ke kitab lain dalam buku yang sama.
+9. Setiap hadis ada butang **penanda buku** (lima warna, seperti al-Quran) dan butang **nota**. Penanda buku anda dan **Continue reading** (tempat anda berhenti) berada di bahagian atas halaman Hadith.
 
 **Nota (Notes)**
 
