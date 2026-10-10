@@ -1,0 +1,15 @@
+Fetching 3 files:   0%|          | 0/3 [00:00<?, ?it/s]Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Fetching 3 files:  33%|███▎      | 1/3 [00:00<00:00,  9.17it/s]Fetching 3 files:  67%|██████▋   | 2/3 [00:00<00:00,  5.93it/s]Fetching 3 files: 100%|██████████| 3/3 [00:02<00:00,  1.00s/it]Fetching 3 files: 100%|██████████| 3/3 [00:02<00:00,  1.30it/s]
+collection
+Sahih al-Bukhari                7558
+Sunan an-Nasa'i                 5756
+Mishkat al-Masabih              5527
+Sunan Abi Dawud                 5274
+Sunan Ibn Majah                 4335
+Jami` at-Tirmidhi               3951
+Sahih Muslim                    2922
+Riyad as-Salihin                1896
+Al-Adab Al-Mufrad               1181
+Bulugh al-Maram                  501
+Ash-Shama'il Al-Muhammadiyah     417
+found 71 of 75
