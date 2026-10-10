@@ -216,6 +216,8 @@ main.fit .pagefoot.tight{margin-top:4px}
 .scrim.open{opacity:1;pointer-events:auto}
 .sheet{position:fixed;left:0;right:0;bottom:var(--kb,0px);z-index:50;max-height:calc(88% - var(--kb,0px));display:flex;flex-direction:column;background:var(--surface);border-radius:20px 20px 0 0;border-top:1px solid var(--line);transform:translateY(105%);transition:transform .25s ease;padding-bottom:var(--sab)}
 .sheet.open{transform:none;visibility:visible}
+.sheet{will-change:transform;backface-visibility:hidden;contain:layout paint}
+.panel::before{transform:translateZ(0)}
 .sheet:not(.open){visibility:hidden;transition:transform .25s ease,visibility 0s .25s}
 .sheet-in{max-width:46rem;width:100%;margin:0 auto;display:flex;flex-direction:column;min-height:0;flex:1}
 .sheet-h{display:flex;align-items:center;gap:8px;padding:12px 16px 8px}
@@ -419,7 +421,11 @@ body.immersive .dock.hz #mic{visibility:visible;pointer-events:auto}
 .panel .field{background:color-mix(in srgb,var(--h-bg2) 80%,transparent);color:var(--h-ink);border-color:color-mix(in srgb,var(--gold) 45%,transparent)}
 .panel .label{color:var(--gold)}
 .kt-ref{display:flex;align-items:center;gap:6px;color:var(--gold-hi)}
-.kt-ref b{flex:1}.kt-ref .ib{width:34px;height:34px}
+.kt-name{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.3}
+.kt-name b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kt-name small{font-weight:400;opacity:.8;font-size:12.5px}
+.kt-ref .ib{width:36px!important;height:36px!important;flex:none;border:1.5px solid color-mix(in srgb,var(--gold) 75%,transparent);border-radius:50%;color:var(--gold-hi);display:grid;place-items:center}
+.kt-ref .ib svg{width:18px;height:18px}
 .kt-ar{font-family:var(--ar);font-size:calc(var(--arsize) * .82);line-height:2.05;text-align:right;margin:8px 0 4px}
 .kt-tr{font-size:15px;line-height:1.65;white-space:pre-wrap}
 .kt-gs{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 2px}
@@ -437,7 +443,9 @@ body.immersive .dock.hz #mic{visibility:visible;pointer-events:auto}
 .kt-note{margin:10px 0 2px;padding:8px 10px;border-left:3px solid var(--gold);background:color-mix(in srgb,var(--gold) 10%,transparent);border-radius:6px;white-space:pre-wrap;font-size:14.5px;line-height:1.55}
 .kt-show{position:sticky;top:-14px;box-shadow:0 calc(-1px - var(--sat,0px)) 0 var(--h-bg,var(--bg));z-index:6;display:flex;gap:6px;justify-content:space-between;margin:0 -16px 6px;padding:8px 16px;background:var(--h-bg,var(--bg));border-bottom:1px solid color-mix(in srgb,var(--gold) 35%,transparent)}
 .kt-show button{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;font:inherit;font-weight:600;font-size:15px;letter-spacing:.04em;color:var(--h-ink,var(--fg));background:transparent;border:1.5px solid color-mix(in srgb,var(--gold) 55%,transparent);border-radius:999px;padding:7px 6px;min-width:0}
-.kt-show button[aria-pressed="true"]{border-color:var(--gold);background:color-mix(in srgb,var(--gold) 16%,transparent)}
+.kt-show button{color:var(--gold-hi)}
+.kt-show button .kt-box{border-color:var(--gold-hi);color:#e0352b;font-size:16px;font-weight:900}
+.kt-show button[aria-pressed="true"]{border-color:var(--gold);background:color-mix(in srgb,#000 38%,var(--h-bg,#0c3a2b));box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--gold) 40%,transparent)}
 .kt-box{display:inline-grid;place-items:center;width:18px;height:18px;border:1.5px solid currentColor;border-radius:4px;font-size:13px;line-height:1;font-weight:700}
 .man{line-height:1.6;font-size:15.5px}
 .man h3{font-family:var(--read);font-weight:600;color:var(--gold-hi);font-size:19px;margin:26px 0 8px;scroll-margin-top:12px;border-bottom:1px solid color-mix(in srgb,var(--gold) 40%,transparent);padding-bottom:4px}
@@ -839,8 +847,10 @@ function goAyah(g){ goPage(A[g][4], g); }
 
 /* ============================ SHEETS ============================ */
 const sheet=document.getElementById('sheet'), scrim=document.getElementById('scrim'), sheetB=document.getElementById('sheetB');
-function openSheet(title, html){ sheetB.onclick=null; document.getElementById('sheetT').textContent=title; sheetB.innerHTML=html; sheetB.scrollTop=0; sheet.classList.add('open'); scrim.classList.add('open'); sheetAt=performance.now(); }
-function closeSheet(){ try{ stopVoiceSearch(); }catch(e){} sheet.classList.remove('open'); scrim.classList.remove('open'); if(st.sel!=null && !hz){ st.sel=null; main.querySelectorAll('.sel').forEach(x=>x.classList.remove('sel')); } }
+function openSheet(title, html){ sheetB.onclick=null; document.getElementById('sheetT').textContent=title; sheetB.innerHTML=html; sheetB.scrollTop=0; sheetAt=performance.now();
+  const my=++sheetSeq; requestAnimationFrame(()=>{ if(my!==sheetSeq) return; sheet.classList.add('open'); scrim.classList.add('open'); }); }
+let sheetSeq=0;
+function closeSheet(){ sheetSeq++; try{ stopVoiceSearch(); }catch(e){} sheet.classList.remove('open'); scrim.classList.remove('open'); if(st.sel!=null && !hz){ st.sel=null; main.querySelectorAll('.sel').forEach(x=>x.classList.remove('sel')); } }
 let sheetAt=0; scrim.onclick=()=>{ if(performance.now()-sheetAt<500) return; closeSheet(); };  // the tap that ends a long-press must not close the box it opened
 document.getElementById('sheetX').onclick=closeSheet;
 document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeSheet();
@@ -1310,7 +1320,7 @@ function ktCard(k,h,show,extra,sn){ const [n,ref,ar,en,idn,gr]=h;
   const grades = gr.length? `<div class="kt-gs">${gr.map(([w,v])=>`<span class="kt-g ${ktGradeCls(v)}"><small>${esc(KT_GR[w]||w)}</small> <b${w==='tir'?' dir="rtl" lang="ar" style="font-family:var(--ar);font-weight:400"':''}>${esc(w==='tir'?v:ktGradeTxt(v))}</b></span>`).join('')}</div>`
     : (k.id==='bukhari'||k.id==='muslim')? '' : '<div class="kt-gs"><span class="kt-g"><small>No grading in the source for this hadith</small></span></div>';
   return `<div class="card kt-card" id="kt-${n}" data-n="${n}">
-   <div class="kt-ref"><b>${esc(k.en)} ${n}</b>${ref&&sn!=null?` <small style="font-weight:400;opacity:.8">· kitab ${sn}, no. ${ref}</small>`:''}${(()=>{ const bm=ktBmGet(k.id,n), nt=noteGet(`h:${k.id}:${n}`); return `<button class="ib kt-btn" data-bm="${n}" aria-label="Bookmark"${bm?` style="color:var(--bm${bm.c})"`:''}><svg viewBox="0 0 24 24" fill="${bm?'currentColor':'none'}" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M7 4h10v16l-5-3.5L7 20z"/></svg></button><button class="ib kt-btn${nt?' on':''}" data-note="${n}" aria-label="Note">${ic('note')}</button>`; })()}<button class="ib kt-copy" data-copy="${n}" aria-label="Copy">${ic('copy')}</button></div>
+   <div class="kt-ref"><span class="kt-name"><b>${esc(k.en)} ${n}</b>${ref&&sn!=null?`<small>kitab ${sn}, no. ${ref}</small>`:''}</span>${(()=>{ const bm=ktBmGet(k.id,n), nt=noteGet(`h:${k.id}:${n}`); return `<button class="ib kt-btn" data-bm="${n}" aria-label="Bookmark"${bm?` style="color:var(--bm${bm.c})"`:''}><svg viewBox="0 0 24 24" fill="${bm?'currentColor':'none'}" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M7 4h10v16l-5-3.5L7 20z"/></svg></button><button class="ib kt-btn${nt?' on':''}" data-note="${n}" aria-label="Note">${ic('note')}</button>`; })()}<button class="ib kt-copy" data-copy="${n}" aria-label="Copy">${ic('copy')}</button></div>
    ${extra||''}${grades}
    ${show.has('ar')?`<div class="kt-ar" dir="rtl" lang="ar">${esc(ar||'')}</div>${h[6]?'<p class="note" style="margin:2px 0 6px">One letter of this Arabic text is damaged in the source and could not be confirmed from a second copy; it is shown as …</p>':''}`:''}
    ${noId?`<p class="note" style="margin:4px 0">No Indonesian translation in the source for this hadith${show.has('en')?'.':'; English shown.'}</p>`:''}
@@ -1386,7 +1396,7 @@ function noteSheet(k,extra,onDone){ const n=noteGet(k);
   sheetB.querySelector('#noteOk').onclick=()=>{ clearTimeout(tm); save(); closeSheet(); onDone&&onDone(); };
   const go=sheetB.querySelector('#noteGo'); if(go) go.onclick=()=>{ clearTimeout(tm); save(); closeSheet(); extra.open(); };
   const del=sheetB.querySelector('#noteDel'); if(del) del.onclick=()=>{ if(!confirm('Delete this note?')) return; clearTimeout(tm); noteSet(k,''); closeSheet(); toast('Note deleted'); onDone&&onDone(); };
-  if(!n) setTimeout(()=>ta.focus(),250); }
+  }   // no automatic keyboard: it pushed the page about while the window was still sliding in; tap the box to write
 function noteOpenTarget(k){ const [ty,a,b]=k.split(':');
   if(ty==='q'){ document.querySelectorAll('.panel').forEach(p=>p.hidden=true); hideHome(); goAyah(+a); return; }
   if(ty==='h'){ ktOpenHadith(a,+b); } }
