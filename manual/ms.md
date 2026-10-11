@@ -198,7 +198,8 @@ Semuanya dibuka dari **menu ayat**; memerlukan internet sekali bagi setiap surah
 6. Setiap kitab memerlukan internet kali pertama; selepas itu ia disimpan dalam telefon.
 7. Hadis dipaparkan **matan sahaja** pada mulanya, dengan "Narrated by …" (Sahabat perawi) di atasnya. Jika Sahabat hanya berkata "aku mendengar" atau "bahawa" sebelum Nabi ﷺ, matan bermula pada "Rasulullah ﷺ" / "Nabi ﷺ". Tandakan **SANAD** untuk melihat rantaian perawi penuh; sanad itu dipaparkan dalam warna lebih pudar supaya matan lebih jelas. Jika sanad tidak dapat dipisahkan dengan pasti, hadis dipaparkan penuh.
 8. Tajuk kitab dan kotak **AR · BI · ENG · SANAD** kekal di atas semasa anda menatal. Ketik tajuk untuk beralih ke kitab lain dalam buku yang sama.
-9. Setiap hadis ada butang **penanda buku** (lima warna, seperti al-Quran) dan butang **nota**. **Continue reading** (tempat anda berhenti) berada di bahagian atas halaman Hadith. Senarai penanda buku dipaparkan di bawahnya apabila **Show** (di sebelah **All**) ditanda; ia tidak ditanda pada mulanya.
+9. Hadis yang dihuraikan oleh HadeethEnc.com mempunyai butang **Syarah · HadeethEnc** di bawah teksnya. Ia membuka huraian, pengajaran hadis dan makna perkataan dalam **BM** (Bahasa Melayu, kira-kira 100 hadis setakat ini), **BI**, **ENG** atau **AR**, tanpa sebarang perubahan daripada HadeethEnc. Ia dipadankan dengan hadis melalui teksnya, jadi ia mungkin memetik riwayat lain bagi hadis yang sama.
+10. Setiap hadis ada butang **penanda buku** (lima warna, seperti al-Quran) dan butang **nota**. **Continue reading** (tempat anda berhenti) berada di bahagian atas halaman Hadith. Senarai penanda buku dipaparkan di bawahnya apabila **Show** (di sebelah **All**) ditanda; ia tidak ditanda pada mulanya.
 
 **Nota (Notes)**
 
