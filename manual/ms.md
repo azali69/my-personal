@@ -160,7 +160,7 @@ Ketik **fon kepala** atau tekan lama pada ayat → **Listen from this ayah**.
 - **Repeat each ayah**: 1× hingga 10×. **When the range ends**: berhenti, ulang, atau terus ke surah berikutnya.
 - **Red words follow the voice**: pilih lebih lewat jika merah mendahului suara, lebih awal jika ketinggalan.
 - **Speed**: 0.75×, 1×, 1.25×.
-- Bar pemain kecil: main/jeda, sebelum, seterusnya, berhenti. Butang fon kepala dan Bluetooth juga berfungsi.
+- Bar pemain kecil: main/jeda, sebelum, seterusnya, berhenti. Butang fon kepala dan Bluetooth juga berfungsi. Apabila bar disembunyikan semasa bacaan dimainkan, **nombor muka surat** di bawah menunjukkan ▶ / ❚❚: ketik untuk jeda atau main; ketik di tempat lain pada halaman untuk memaparkan semula bar.
 - Di telefon, bacaan terus dimainkan walaupun skrin padam atau anda membuka aplikasi lain, dan **Carry on to the next surah** bersambung sendiri; notifikasi **Recitation playing** (dengan Pause, Next, Stop) dipaparkan semasa ia dimainkan. Bagi qari surah penuh yang tidak lengkap (Hazza al-Balushi), ia bersambung ke surah berikutnya yang ada.
 
 **Listen & repeat (dengar dan ulang)**

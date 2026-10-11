@@ -160,7 +160,7 @@ Tap the **headphones** or long-press an ayah → **Listen from this ayah**.
 - **Repeat each ayah**: 1× to 10×. **When the range ends**: Stop, Play again, or Carry on to the next surahs.
 - **Red words follow the voice**: a later setting if the red runs ahead, an earlier one if it lags.
 - **Speed**: 0.75×, 1×, 1.25×.
-- The small player bar: play/pause, previous, next, stop. Headset and Bluetooth buttons work too.
+- The small player bar: play/pause, previous, next, stop. Headset and Bluetooth buttons work too. When the bars are hidden while it plays, the **page number** at the bottom shows ▶ / ❚❚: tap it to pause or play; tap the page anywhere else to bring the bars back.
 - On the phone the recitation keeps playing with the screen off or in another app, and **Carry on to the next surah** goes on by itself; a **Recitation playing** notification (with Pause, Next, Stop) shows while it plays. For whole-surah reciters with missing surahs (Hazza al-Balushi), it goes on to the next surah that is available.
 
 **Listen & repeat**
