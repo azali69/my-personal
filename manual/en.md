@@ -198,7 +198,8 @@ All open from the **ayah menu**; they need the internet once per surah.
 6. Each kitab needs the internet the first time; after that it is kept on the phone.
 7. Hadith show the **text only** at first, with "Narrated by …" (the Companion) above it. Where the Companion only says "I heard" or "that" before the Prophet ﷺ, the text starts at "the Messenger of Allah ﷺ" / "the Prophet ﷺ". Tick **SANAD** to see the full chain of narrators; the chain is then shown in a softer colour so the text stands out. Where the chain could not be separated with certainty, the hadith is shown in full.
 8. The kitab title and the **AR · BI · ENG · SANAD** boxes stay at the top while you scroll. Tap the title to jump to another kitab of the same book.
-9. Each hadith has a **bookmark** button (five colours, as for the Qur'an) and a **note** button. **Continue reading** (where you last stopped) is at the top of the Hadith page. Your bookmarks are listed below it when **Show** (beside **All**) is ticked; it is off at first.
+9. Hadith that HadeethEnc.com explains have a **Syarah · HadeethEnc** button under the text. It opens their explanation, lessons from the hadith and word meanings, in **BM** (Bahasa Melayu, for about 100 hadith so far), **BI**, **ENG** or **AR**, unchanged from HadeethEnc. It is linked to the hadith by matching the text, so it may quote another narration of the same hadith.
+10. Each hadith has a **bookmark** button (five colours, as for the Qur'an) and a **note** button. **Continue reading** (where you last stopped) is at the top of the Hadith page. Your bookmarks are listed below it when **Show** (beside **All**) is ticked; it is off at first.
 
 **Notes**
 
