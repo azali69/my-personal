@@ -172,6 +172,8 @@ info = json.load(open(os.path.join(SRC, 'info.json')))
 # 75 Arabic texts have a damaged letter (U+FFFD) in the source. 59 were repaired word by word from the same hadith in
 # the Sunnah.com copy (tools/fffd_repair.py -> tools/fffd_fix.json). The rest show "…" there and a note in the app.
 FIX = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'fffd_fix.json')))
+_hm = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'hadeethenc_map.json')
+HEMAP = json.load(open(_hm)) if os.path.exists(_hm) else {}
 index = []
 for bid, ar_name, en_name in BOOKS:
     A, E, I = edition('ara-' + bid), edition('eng-' + bid), edition('ind-' + bid)
@@ -250,6 +252,7 @@ for bid, ar_name, en_name in BOOKS:
                     p_i = id_prophet(row[4], cut['i'])
                     if p_i: cut['i'] = p_i; stats['pi'] = stats.get('pi', 0) + 1
         row.append(cut or 0)
+        if HEMAP.get(f'{bid}:{n}'): row.append(HEMAP[f'{bid}:{n}'])   # HadeethEnc explanation(s) for this hadith (tools/build_hadeethenc.py)
         secs.setdefault(sec, []).append(row)
     names = E['metadata']['sections']
     os.makedirs(os.path.join(OUT, bid), exist_ok=True)
@@ -268,4 +271,8 @@ for bid, ar_name, en_name in BOOKS:
     index.append({'id': bid, 'ar': ar_name, 'en': en_name, 'count': total, 'sections': sl})
     print(bid, total, 'hadith in', len(sl), 'kitab; text-only split: Arabic', stats['ar'], 'English', stats['en'], 'Indonesian', stats['id'], '| starts at the Prophet:', stats.get('pa', 0), stats.get('pe', 0), stats.get('pi', 0))
 with open(os.path.join(OUT, 'books.json'), 'w', encoding='utf8') as f:
-    json.dump({'source': 'fawazahmed0/hadith-api (public domain)', 'books': index}, f, ensure_ascii=False, separators=(',', ':'))
+    # versions of the HadeethEnc files (kutub/he/<k>.json), so a kept copy is replaced when they change
+    hev = {}
+    for fn in sorted(glob.glob(os.path.join(OUT, 'he', '*.json'))):
+        hev[os.path.basename(fn)[:-5]] = hashlib.sha1(open(fn, 'rb').read()).hexdigest()[:8]
+    json.dump({'source': 'fawazahmed0/hadith-api (public domain)', 'books': index, 'he': hev}, f, ensure_ascii=False, separators=(',', ':'))
