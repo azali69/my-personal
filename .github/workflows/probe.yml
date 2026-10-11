@@ -4,12 +4,12 @@ permissions: { contents: write }
 jobs:
   p:
     runs-on: ubuntu-latest
-    timeout-minutes: 120
     steps:
-      - uses: actions/checkout@v4
       - run: |
-          python3 tools/fetch_hadeethenc.py out 2>&1 | tee out-log.txt; mv out-log.txt out/log.txt; ls -la out
+          mkdir out; cd out; H='https://hadeethenc.com/api/v1'
+          curl -sS -m 60 "$H/languages" -o languages.json || true
+          curl -sS -m 60 "$H/hadeeths/one/?language=my&id=2758" -o my.json || true
       - run: |
-          cd out; git init -q; git checkout -q -b probe; git add -A
+          cd out; git init -q; git checkout -q -b probe2; git add -A
           git -c user.name=probe -c user.email=probe@x commit -qm probe
-          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" probe
+          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" probe2
