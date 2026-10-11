@@ -39,7 +39,7 @@ Kembali ke Home dari mana-mana dengan **butang rumah** (atas kiri skrin bacaan) 
 | Open Qur'an | Senarai surah, juzuk dan halaman |
 | Hafazan | Kotak hafazan (bahagian 5) |
 | Listen & repeat | Qari membaca, anda mengulang dan disemak (bahagian 6) |
-| Bookmarks | Penanda buku, My ruku' dan My blocks |
+| Bookmarks | Penanda buku dalam dua tab, Qur'an dan Hadith; My ruku' dan My blocks |
 | Doa & zikir | Hisnul Muslim (bahagian 8) |
 | Hadith | Enam kitab hadis (Kutub as-Sittah) dan al-Muwatta Imam Malik, dengan hukum hadis (bahagian 8) |
 | Notes | Buku nota anda: nota pada ayat, pada hadis, dan nota bebas (bahagian 8) |
@@ -196,15 +196,15 @@ Semuanya dibuka dari **menu ayat**; memerlukan internet sekali bagi setiap surah
 4. Hukum hadis dipaparkan di atas setiap hadis dalam empat kitab Sunan: al-Albani, Shu'ayb al-Arna'ut, Zubair 'Ali Za'i, dan bagi at-Tirmidhi hukum beliau sendiri dalam bahasa Arab. Hijau sahih, biru hasan, jingga da'if, merah sangat lemah atau palsu. Bukhari dan Muslim sahih dengan kesepakatan ulama, jadi tiada hukum bagi setiap hadis. Al-Muwatta mempunyai satu hukum sahaja, oleh Salim al-Hilali; Mawquf bermaksud kata-kata Sahabat dan Maqtu' kata-kata Tabi'in, bukan sabda Nabi ﷺ. Al-Muwatta sentiasa dipaparkan penuh (bersama sanad).
 5. Butang salin menyalin teks Arab, terjemahan, rujukan dan hukum hadis.
 6. Setiap kitab memerlukan internet kali pertama; selepas itu ia disimpan dalam telefon.
-7. Hadis dipaparkan **matan sahaja** pada mulanya, dengan "Narrated by …" (Sahabat perawi) di atasnya. Tandakan **SANAD** untuk melihat rantaian perawi penuh; sanad itu dipaparkan dalam warna lebih pudar supaya matan lebih jelas. Jika sanad tidak dapat dipisahkan dengan pasti, hadis dipaparkan penuh.
+7. Hadis dipaparkan **matan sahaja** pada mulanya, dengan "Narrated by …" (Sahabat perawi) di atasnya. Jika Sahabat hanya berkata "aku mendengar" atau "bahawa" sebelum Nabi ﷺ, matan bermula pada "Rasulullah ﷺ" / "Nabi ﷺ". Tandakan **SANAD** untuk melihat rantaian perawi penuh; sanad itu dipaparkan dalam warna lebih pudar supaya matan lebih jelas. Jika sanad tidak dapat dipisahkan dengan pasti, hadis dipaparkan penuh.
 8. Tajuk kitab dan kotak **AR · BI · ENG · SANAD** kekal di atas semasa anda menatal. Ketik tajuk untuk beralih ke kitab lain dalam buku yang sama.
-9. Setiap hadis ada butang **penanda buku** (lima warna, seperti al-Quran) dan butang **nota**. Penanda buku anda dan **Continue reading** (tempat anda berhenti) berada di bahagian atas halaman Hadith.
+9. Setiap hadis ada butang **penanda buku** (lima warna, seperti al-Quran) dan butang **nota**. **Continue reading** (tempat anda berhenti) berada di bahagian atas halaman Hadith. Senarai penanda buku dipaparkan di bawahnya apabila **Show** (di sebelah **All**) ditanda; ia tidak ditanda pada mulanya.
 
 **Nota (Notes)**
 
 1. Home → **Notes**: semua nota anda, yang terbaru dahulu. Tapis mengikut **Qur'an**, **Hadith** atau **Free notes**, atau cari.
 2. **New note** untuk nota bebas. Untuk ayat, tekan lama ayat itu → **Write a note**; untuk hadis, ketik butang notanya. Nota disimpan semasa anda menaip.
-3. Ketik nota untuk menyuntingnya; **Open the ayah / Open the hadith** membawa anda ke sana.
+3. Ketik nota untuk menyuntingnya; **Delete** memadamnya (selepas anda sahkan); **Open the ayah / Open the hadith** membawa anda ke sana.
 4. Nota disimpan dalam telefon sahaja. **Copy all notes** menyalin semuanya supaya anda boleh simpan salinan di tempat lain.
 
 **Waktu solat**
