@@ -78,7 +78,7 @@ Return to Home from anywhere with the **house button** (top left of the reading 
 - **Tap** the page: hide or show the bars.
 - **Long-press an ayah** and let go: the **ayah menu**.
 - **Long-press a word, keep holding and drag** to the last word: select words. A bar appears with **My ruku'**, **My blocks**, **Erase**, **Hafazan**, **Listen** and **Copy**.
-- With Settings → **Tap a word → Meaning and sound**, tapping a word shows its meaning and plays it (section 7).
+- **Tap once** anywhere on the page: show or hide the bars. With Settings → **Tap a word twice: meaning and sound → On**, **tap a word twice** quickly to see its meaning and hear it (section 7); tap twice again, or tap outside, to close it.
 
 **The ayah menu** (long-press an ayah)
 
@@ -161,6 +161,7 @@ Tap the **headphones** or long-press an ayah → **Listen from this ayah**.
 - **Red words follow the voice**: a later setting if the red runs ahead, an earlier one if it lags.
 - **Speed**: 0.75×, 1×, 1.25×.
 - The small player bar: play/pause, previous, next, stop. Headset and Bluetooth buttons work too.
+- On the phone the recitation keeps playing with the screen off or in another app, and **Carry on to the next surah** goes on by itself; a **Recitation playing** notification (with Pause, Next, Stop) shows while it plays. For whole-surah reciters with missing surahs (Hazza al-Balushi), it goes on to the next surah that is available.
 
 **Listen & repeat**
 
@@ -175,7 +176,7 @@ Tap the **headphones** or long-press an ayah → **Listen from this ayah**.
 
 All open from the **ayah menu**; they need the internet once per surah.
 
-- **Word by word**: each word's meaning (Indonesian or English); tap a word to hear it. Settings → **Tap a word → Meaning and sound** opens it by tapping words on the page.
+- **Word by word**: each word's meaning (Indonesian or English); tap a word to hear it. Settings → **Tap a word twice: meaning and sound** opens it by tapping a word twice on the page.
 - **Tafsir**: Al-Mukhtasar (Indonesian or English) or As-Sa'di (Indonesian); **Show Arabic original** adds the Arabic. From QuranEnc.com, unchanged.
 - **Hadith**: only hadith linked by the books themselves (Kitab at-Tafsir of Sahih al-Bukhari and Sahih Muslim), with the chapter heading, number, Arabic, translation and a link to Sunnah.com.
 - **Copy**: choose the ayat and what to include, then **Copy**.
@@ -220,6 +221,7 @@ All open from the **ayah menu**; they need the internet once per surah.
 2. **Sound**: Makkah adhan, Madinah adhan, Short tone, or Notification only. For an adhan, tap **Choose … adhan file** and pick a recording on your phone.
 3. **Reminder before each prayer**: Off to 30 minutes.
 4. **Test the sound** / **Stop**. If alerts do not come, allow notifications and alarms, and remove battery limits.
+5. Alerts are **on by default** for the five prayers, and the app asks once to allow notifications. They follow the phone's sound mode: **ring** = the adhan or tone plays; **vibrate** = the phone vibrates with the notification, no sound; **silent or Do Not Disturb** = a silent notification only.
 
 **Qibla**
 
@@ -237,7 +239,7 @@ All open from the **ayah menu**; they need the internet once per surah.
 | Surah name | Latin or Arabic in the top bar |
 | Translation language | Bahasa Melayu or English |
 | Home and colours | Home background, bar colour, book cover |
-| Tap a word | Show/hide bars, or meaning and sound |
+| Tap a word twice: meaning and sound | On: two quick taps on a word show its meaning and play it (one tap always shows/hides the bars) |
 | Transliteration | Under the Arabic in the translation view |
 | English footnotes | Saheeh International's notes |
 | Uthmani text page | Fit page or Larger text |

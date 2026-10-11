@@ -78,7 +78,7 @@ Kembali ke Home dari mana-mana dengan **butang rumah** (atas kiri skrin bacaan) 
 - **Ketik** halaman: sembunyi atau papar bar.
 - **Tekan lama pada ayat** lalu lepaskan: **menu ayat**.
 - **Tekan lama pada perkataan, tahan dan seret** ke perkataan terakhir: pilih perkataan. Bar muncul dengan **My ruku'**, **My blocks**, **Erase**, **Hafazan**, **Listen** dan **Copy**.
-- Dengan Settings → **Tap a word → Meaning and sound**, mengetik perkataan memaparkan maknanya dan memperdengarkannya (bahagian 7).
+- **Ketik sekali** di mana-mana pada halaman: papar atau sembunyi bar. Dengan Settings → **Tap a word twice: meaning and sound → On**, **ketik dua kali** pada perkataan dengan cepat untuk melihat maknanya dan mendengarnya (bahagian 7); ketik dua kali lagi, atau ketik di luar, untuk menutupnya.
 
 **Menu ayat** (tekan lama pada ayat)
 
@@ -161,6 +161,7 @@ Ketik **fon kepala** atau tekan lama pada ayat → **Listen from this ayah**.
 - **Red words follow the voice**: pilih lebih lewat jika merah mendahului suara, lebih awal jika ketinggalan.
 - **Speed**: 0.75×, 1×, 1.25×.
 - Bar pemain kecil: main/jeda, sebelum, seterusnya, berhenti. Butang fon kepala dan Bluetooth juga berfungsi.
+- Di telefon, bacaan terus dimainkan walaupun skrin padam atau anda membuka aplikasi lain, dan **Carry on to the next surah** bersambung sendiri; notifikasi **Recitation playing** (dengan Pause, Next, Stop) dipaparkan semasa ia dimainkan. Bagi qari surah penuh yang tidak lengkap (Hazza al-Balushi), ia bersambung ke surah berikutnya yang ada.
 
 **Listen & repeat (dengar dan ulang)**
 
@@ -175,7 +176,7 @@ Ketik **fon kepala** atau tekan lama pada ayat → **Listen from this ayah**.
 
 Semuanya dibuka dari **menu ayat**; memerlukan internet sekali bagi setiap surah.
 
-- **Word by word**: makna setiap perkataan (Indonesia atau Inggeris); ketik perkataan untuk mendengarnya. Settings → **Tap a word → Meaning and sound** membukanya terus dengan mengetik perkataan pada halaman.
+- **Word by word**: makna setiap perkataan (Indonesia atau Inggeris); ketik perkataan untuk mendengarnya. Settings → **Tap a word twice: meaning and sound** membukanya dengan mengetik perkataan dua kali pada halaman.
 - **Tafsir**: Al-Mukhtasar (Indonesia atau Inggeris) atau As-Sa'di (Indonesia); **Show Arabic original** memaparkan teks Arab. Daripada QuranEnc.com, tanpa sebarang perubahan.
 - **Hadith**: hanya hadis yang dikaitkan oleh kitab itu sendiri (Kitab at-Tafsir dalam Sahih al-Bukhari dan Sahih Muslim), bersama tajuk bab, nombor, teks Arab, terjemahan dan pautan ke Sunnah.com.
 - **Copy**: pilih ayat dan kandungan yang hendak disalin, kemudian **Copy**.
@@ -220,6 +221,7 @@ Semuanya dibuka dari **menu ayat**; memerlukan internet sekali bagi setiap surah
 2. **Sound**: azan Makkah, azan Madinah, nada pendek, atau notifikasi sahaja. Untuk azan, ketik **Choose … adhan file** dan pilih rakaman azan dari telefon anda.
 3. **Reminder before each prayer**: tiada hingga 30 minit sebelum waktu.
 4. **Test the sound** / **Stop**. Jika peringatan tidak berbunyi, benarkan notifikasi dan penggera, dan buang had bateri.
+5. Peringatan **dihidupkan secara lalai** untuk lima waktu solat, dan aplikasi meminta kebenaran notifikasi sekali. Ia mengikut mod bunyi telefon: **dering** = azan atau nada dimainkan; **getar** = telefon bergetar bersama notifikasi, tanpa bunyi; **senyap atau Jangan Ganggu** = notifikasi senyap sahaja.
 
 **Kiblat**
 
@@ -237,7 +239,7 @@ Semuanya dibuka dari **menu ayat**; memerlukan internet sekali bagi setiap surah
 | Surah name | Nama surah Latin atau Arab di bar atas |
 | Translation language | Bahasa Melayu atau Inggeris |
 | Home and colours | Latar Home, warna bar, kulit buku |
-| Tap a word | Sembunyi/papar bar, atau makna dan bunyi |
+| Tap a word twice: meaning and sound | On: ketik dua kali pada perkataan untuk makna dan bunyi (ketik sekali sentiasa papar/sembunyi bar) |
 | Transliteration | Di bawah teks Arab dalam paparan terjemahan |
 | English footnotes | Nota kaki Saheeh International |
 | Uthmani text page | Fit page atau Larger text |

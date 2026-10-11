@@ -113,6 +113,8 @@ public class MainActivity extends Activity {
     private void mediaCmd(String c) { runOnUiThread(() -> web.evaluateJavascript("window.__media && window.__media('" + c + "')", null)); }
 
     private void ensureSession() {
+        PlaybackService.onPauseCmd = () -> mediaCmd("pause"); PlaybackService.onPlayCmd = () -> mediaCmd("play");
+        PlaybackService.onNextCmd = () -> mediaCmd("next"); PlaybackService.onStopCmd = () -> mediaCmd("stop");
         if (msess != null) return;
         msess = new MediaSession(this, "MyPersonalQuran");
         msess.setCallback(new MediaSession.Callback() {
@@ -520,6 +522,7 @@ public class MainActivity extends Activity {
                 if ("stopped".equals(state)) {
                     msess.setPlaybackState(new PlaybackState.Builder().setActions(actions).setState(PlaybackState.STATE_STOPPED, 0, 0).build());
                     msess.setActive(false);
+                    PlaybackService.hide();
                     return;
                 }
                 msess.setMetadata(new MediaMetadata.Builder()
@@ -529,6 +532,9 @@ public class MainActivity extends Activity {
                 msess.setPlaybackState(new PlaybackState.Builder().setActions(actions)
                         .setState("playing".equals(state) ? PlaybackState.STATE_PLAYING : PlaybackState.STATE_PAUSED, PlaybackState.PLAYBACK_POSITION_UNKNOWN, 1f).build());
                 msess.setActive(true);
+                // keep playing with the screen off: a foreground "now playing" service (see PlaybackService)
+                PlaybackService.token = msess.getSessionToken();
+                PlaybackService.show(MainActivity.this, title, subtitle, "playing".equals(state));
             });
         }
 
@@ -942,6 +948,7 @@ public class MainActivity extends Activity {
         if (recognizer != null) { recognizer.destroy(); recognizer = null; }
         stopPump();
         btRouteOff();
+        PlaybackService.hide();
         if (msess != null) { msess.release(); msess = null; }
         if (sm != null && compassL != null) sm.unregisterListener(compassL);
         web.destroy();
