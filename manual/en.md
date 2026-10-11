@@ -196,15 +196,15 @@ All open from the **ayah menu**; they need the internet once per surah.
 4. Gradings appear above each hadith of the four Sunan: al-Albani, Shu'ayb al-Arna'ut, Zubair 'Ali Za'i, and for at-Tirmidhi his own verdict in Arabic. Green is sahih, blue hasan, orange da'if, red very weak or fabricated. Bukhari and Muslim are sahih by the agreement of the scholars, so they have no per-hadith grade. The Muwatta has one grading, Salim al-Hilali's; Mawquf means the words of a Companion and Maqtu' the words of a Successor, not of the Prophet ﷺ. The Muwatta is always shown in full (with its chain).
 5. The copy button copies the Arabic, the translation, the reference and the gradings.
 6. Each kitab needs the internet the first time; after that it is kept on the phone.
-7. Hadith show the **text only** at first, with "Narrated by …" (the Companion) above it. Tick **SANAD** to see the full chain of narrators; the chain is then shown in a softer colour so the text stands out. Where the chain could not be separated with certainty, the hadith is shown in full.
+7. Hadith show the **text only** at first, with "Narrated by …" (the Companion) above it. Where the Companion only says "I heard" or "that" before the Prophet ﷺ, the text starts at "the Messenger of Allah ﷺ" / "the Prophet ﷺ". Tick **SANAD** to see the full chain of narrators; the chain is then shown in a softer colour so the text stands out. Where the chain could not be separated with certainty, the hadith is shown in full.
 8. The kitab title and the **AR · BI · ENG · SANAD** boxes stay at the top while you scroll. Tap the title to jump to another kitab of the same book.
-9. Each hadith has a **bookmark** button (five colours, as for the Qur'an) and a **note** button. Your bookmarks and **Continue reading** (where you last stopped) are at the top of the Hadith page.
+9. Each hadith has a **bookmark** button (five colours, as for the Qur'an) and a **note** button. **Continue reading** (where you last stopped) is at the top of the Hadith page. Your bookmarks are listed below it when **Show** (beside **All**) is ticked; it is off at first.
 
 **Notes**
 
 1. Home → **Notes**: all your notes, newest first. Filter by **Qur'an**, **Hadith** or **Free notes**, or search.
 2. **New note** writes a free note. For an ayah, long-press it → **Write a note**; for a hadith, tap its note button. Notes save as you type.
-3. Tap a note to edit it; **Open the ayah / Open the hadith** takes you there.
+3. Tap a note to edit it; **Delete** removes it (after you confirm); **Open the ayah / Open the hadith** takes you there.
 4. Notes are kept on the phone only. **Copy all notes** copies them all, so you can keep a copy elsewhere.
 
 **Prayer times**

@@ -94,6 +94,42 @@ def ar_tail_ok(hidden):
     # The corpus split is hand-checked there, but 174 of its boundaries still hide words of the story (e.g. 5443, 4824).
     w = _w(hidden); k = max([i for i, x in enumerate(w) if x in LINKS] or [-1])
     return k >= 0 and len(w) - k - 1 <= 14 and not any(x in NARR for x in w[k + 1:])
+# ---- Start the text at the Prophet ﷺ (Azli, 11 Oct 2026) ----
+# "سمعت رسول الله ﷺ يقول ..." -> "رسول الله ﷺ يقول ...": after the chain, only words of transmission (heard / said / that /
+# from) may be dropped before "رسول الله" or "النبي", at most 3 of them; never a narrative word (كان، رأيت، جاء ...).
+LEAD_AR = {'سمعت', 'سمعنا', 'سمع', 'قال', 'قالت', 'قالا', 'عن', 'ان', 'انه', 'انها', 'يقول', 'تقول', 'يحدث', 'حدثنا', 'اخبرنا'}
+def ar_prophet(ar, a):
+    """offset of "رسول الله" / "النبي" / "نبي الله" in ar[a:] if only transmission words come before it, else None"""
+    words = [(m.start() + a, m.group()) for m in re.finditer(r'\S+', ar[a:])]
+    lead = 0
+    for k, (pos, w) in enumerate(words[:6]):
+        x = sk(w)
+        if not x: continue
+        nxt = sk(words[k + 1][1]) if k + 1 < len(words) else ''
+        if (x == 'رسول' and nxt == 'الله') or x == 'النبي' or (x == 'نبي' and nxt == 'الله'):
+            return pos
+        if x not in LEAD_AR: return None
+        lead += 1
+        if lead > 3: return None
+    return None
+EN_PROPHET = re.compile(r"Allah's (?:Messenger|Apostle)|[Tt]he Prophet|(?:the )?Messenger of Allah|Allah's Prophet")
+def en_prophet(en, e):
+    m = EN_PROPHET.search(en, e, e + 60)
+    if not m: return None
+    lead = en[e:m.start()]
+    words = re.findall(r"[A-Za-z']+", lead)
+    return m.start() if len(words) <= 4 and all(w.lower() in {'i', 'we', 'heard', 'that', 'said', 'say', 'he', 'she', 'narrated'} for w in words) and not re.search('["“(]', lead) else None
+def id_prophet(t, i):
+    m = re.compile(r"\b(?:Rasulullah|Nabi)\b").search(t, i, i + 120)
+    if not m: return None
+    lead = t[i:m.start()]
+    # only words of transmission may go (never "ketika", "apabila", "isteri", ... which belong to the text itself)
+    ws = [w for w in re.split(r"[\s,;:.\-–—']+", lead.lower()) if w]
+    ok = all(w in ID_LEAD or w.startswith(('radl', 'radh', 'anhu', 'anha')) for w in ws)
+    return m.start() if ok and len(ws) <= 10 and not re.search(r'["“\[]', lead) else None
+ID_LEAD = set("""telah menceritakan mengabarkan memberitakan menuturkan mengatakan mengabarinya menceritakannya kepada kepadanya kami
+kepadaku kepada mereka berdua aku saya dari dan berkata katanya keduanya ia dia beliau bahwa bahwasanya bahwasannya bawasanya
+sesungguhnya mendengar mendengarnya pernah diatas atas di mimbar""".split())
 def en_ok(hidden):
     h = hidden.strip()
     return len(h) <= 140 and h.endswith((':', 'that', 'said', 'that:', 'said:')) and not re.search(r'Messenger|Prophet|\bAllah\b|"|“', h)
@@ -202,6 +238,17 @@ for bid, ar_name, en_name in BOOKS:
         if row[4] and bid in LKBOOK:   # Muwatta: no split in Arabic or English, so none in Indonesian either (same view)
             i_i = id_cut(row[4])
             if i_i: cut['i'] = i_i; stats['id'] += 1
+        # the shown Arabic starts with the Prophet ﷺ after transmission words only: start there, and the translations too
+        if cut.get('a'):
+            p_a = ar_prophet(ar, cut['a'])
+            if p_a is not None:
+                cut['a'] = p_a; stats['pa'] = stats.get('pa', 0) + 1
+                if cut.get('e'):
+                    p_e = en_prophet(row[3], cut['e'])
+                    if p_e: cut['e'] = p_e; stats['pe'] = stats.get('pe', 0) + 1
+                if cut.get('i'):
+                    p_i = id_prophet(row[4], cut['i'])
+                    if p_i: cut['i'] = p_i; stats['pi'] = stats.get('pi', 0) + 1
         row.append(cut or 0)
         secs.setdefault(sec, []).append(row)
     names = E['metadata']['sections']
@@ -219,6 +266,6 @@ for bid, ar_name, en_name in BOOKS:
                    'v': hashlib.sha1(body.encode('utf8')).hexdigest()[:8]})  # the app re-downloads a kept kitab when this changes
     total = sum(s['count'] for s in sl)
     index.append({'id': bid, 'ar': ar_name, 'en': en_name, 'count': total, 'sections': sl})
-    print(bid, total, 'hadith in', len(sl), 'kitab; text-only split: Arabic', stats['ar'], 'English', stats['en'], 'Indonesian', stats['id'])
+    print(bid, total, 'hadith in', len(sl), 'kitab; text-only split: Arabic', stats['ar'], 'English', stats['en'], 'Indonesian', stats['id'], '| starts at the Prophet:', stats.get('pa', 0), stats.get('pe', 0), stats.get('pi', 0))
 with open(os.path.join(OUT, 'books.json'), 'w', encoding='utf8') as f:
     json.dump({'source': 'fawazahmed0/hadith-api (public domain)', 'books': index}, f, ensure_ascii=False, separators=(',', ':'))
