@@ -39,7 +39,7 @@ Return to Home from anywhere with the **house button** (top left of the reading 
 | Open Qur'an | The surah, juz and page list |
 | Hafazan | The Hafazan box (section 5) |
 | Listen & repeat | The reciter reads, you repeat and get checked (section 6) |
-| Bookmarks | Bookmarks, My ruku' and My blocks |
+| Bookmarks | Bookmarks in two tabs, Qur'an and Hadith; My ruku' and My blocks |
 | Doa & zikir | Hisnul Muslim (section 8) |
 | Hadith | The six books (Kutub as-Sittah) and the Muwatta of Imam Malik, with gradings (section 8) |
 | Notes | Your notepad: notes on ayat, on hadith, and free notes (section 8) |

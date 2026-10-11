@@ -39,7 +39,7 @@ Kembali ke Home dari mana-mana dengan **butang rumah** (atas kiri skrin bacaan) 
 | Open Qur'an | Senarai surah, juzuk dan halaman |
 | Hafazan | Kotak hafazan (bahagian 5) |
 | Listen & repeat | Qari membaca, anda mengulang dan disemak (bahagian 6) |
-| Bookmarks | Penanda buku, My ruku' dan My blocks |
+| Bookmarks | Penanda buku dalam dua tab, Qur'an dan Hadith; My ruku' dan My blocks |
 | Doa & zikir | Hisnul Muslim (bahagian 8) |
 | Hadith | Enam kitab hadis (Kutub as-Sittah) dan al-Muwatta Imam Malik, dengan hukum hadis (bahagian 8) |
 | Notes | Buku nota anda: nota pada ayat, pada hadis, dan nota bebas (bahagian 8) |
