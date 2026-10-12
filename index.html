@@ -385,6 +385,11 @@ body.immersive .dock.hz #mic{visibility:visible;pointer-events:auto}
 .cover-orn svg{width:100%;height:100%}
 .cover-mid{position:absolute;left:50%;top:41%;transform:translate(-50%,-50%);width:min(76vw,44vh);aspect-ratio:1}
 .cover-mid img{width:100%;height:100%;display:block;filter:drop-shadow(0 6px 14px rgba(0,0,0,.55))}
+/* "My Personal Quran" along the top of the medallion (Azli, 12 Oct 2026); the old line under it overlapped in landscape */
+.cover-mid svg.cover-arc{position:absolute;inset:-20%;width:140%;height:140%;pointer-events:none;overflow:visible}
+.cover-arc text{font-family:"Great Vibes",cursive;font-size:13.5px;fill:url(#cvGold);letter-spacing:.3px;filter:drop-shadow(0 .6px 0 #000) drop-shadow(0 0 3px rgba(0,0,0,.6))}
+/* shorter portrait screens: smaller corner ornaments and the medallion a little lower, so the arc clears them */
+@media (orientation:portrait) and (min-aspect-ratio:1/2){ .cover-orn{width:min(32vw,120px);height:min(32vw,120px)} .cover-mid{top:44%} .cover-title{top:calc(44% + min(38vw,22vh) + 10px)} }
 .cover-title{position:absolute;left:0;right:0;top:calc(41% + min(38vw,22vh) + 10px);text-align:center;font-family:"KFGQPC Hafs",var(--ar);font-size:min(10vw,40px);line-height:1.5;direction:rtl;color:#e6c66f;text-shadow:0 1px 0 #000,0 0 10px rgba(201,161,74,.35)}
 .cover-mid svg{width:100%;height:100%;overflow:visible}
 .cover-sub{position:absolute;left:0;right:0;top:calc(44% + min(41vw,25vh) + 4px);text-align:center;font-family:var(--ar);color:#c9a14a;font-size:13px;direction:rtl}
@@ -2716,8 +2721,8 @@ function showCover(){ let el=document.getElementById('cover'); if(!el){ el=docum
     <div class="cover-orn" style="right:26px;top:calc(var(--sat,0px) + 26px);transform:scaleX(-1)">${orn}</div>
     <div class="cover-orn" style="left:26px;bottom:calc(var(--sab,0px) + 26px);transform:scaleY(-1)">${orn}</div>
     <div class="cover-orn" style="right:26px;bottom:calc(var(--sab,0px) + 26px);transform:scale(-1,-1)">${orn}</div>
-    <div class="cover-mid"><img src="${COVER_MED[cc]}" alt=""></div><div class="cover-title">القرآن الكريم</div>
-    <div class="cover-name"><span>My Personal Quran</span></div><div class="cover-hint">Tap to open</div></div>`;
+    <div class="cover-mid"><img src="${COVER_MED[cc]}" alt=""><svg class="cover-arc" viewBox="-20 -20 140 140" aria-label="My Personal Quran"><defs><path id="cvArc" d="M -6.15 26.17 A 61 61 0 0 1 106.15 26.17"/><linearGradient id="cvGold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f6dc8e"/><stop offset=".55" stop-color="#e2b95a"/><stop offset="1" stop-color="#b58a35"/></linearGradient></defs><text><textPath href="#cvArc" startOffset="50%" text-anchor="middle">My Personal Quran</textPath></text></svg></div><div class="cover-title">القرآن الكريم</div>
+    <div class="cover-hint">Tap to open</div></div>`;
   try{ window.AndroidSpeech?.setBarColor?.(COVER_BG[cc], true); }catch(e){}
   const open=()=>{ if(el.classList.contains('open')) return; el.classList.add('open'); const h=document.getElementById('home'); if(h && !h.hidden) applyHomeBars(); else applyLook(); setTimeout(()=>{ el.hidden=true; },RM.matches?320:980); };
   el.onclick=open; el.onkeydown=e=>{ if(e.key==='Enter'||e.key===' ') open(); }; }
