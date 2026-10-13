@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en">
+<head>
+  <title>Error : 404</title>
+<base href="/en/">
+<meta charset="UTF-8" />
+
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="title" content="Error : 404" />
+<meta name="keywords"
+  content="islam,English,quran,books,articles,categories,pdf,doc,docx,mp3,mp4" />
+<meta name="headline" content="Error : 404" />
+<meta name="description" content="Islamhouse is the biggest website for Islamic dawah in world languages. It contains free items in more than 100 languages, items like: books, audios,videos, posters, Islamic apps and others." />
+<meta name="author" content="">
+<meta name='HandheldFriendly' content='true'>
+<meta name="robots" content="index,follow" />
+<meta name="googlebot" content="index, follow" />
+<meta name='identifier-URL' content='https://islamhouse.com'>
+<meta name='url' content='https://islamhouse.com'>
+
+<meta property="og:title" content="Error : 404" />
+<meta property="og:type" content="article" />
+<meta property="og:url"
+  content="https://islamhouse.com/en/" />
+<meta property="og:description" content="Islamhouse is the biggest website for Islamic dawah in world languages. It contains free items in more than 100 languages, items like: books, audios,videos, posters, Islamic apps and others." />
+<meta property="og:site_name" content="IslamHouse.com" />
+<meta property="og:image" content="https://islamhouse.com/logo_IslamHouse.png" />
+
+
+
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="IslamHouse.com" />
+<meta name="twitter:title" content="Error : 404" />
+<meta name="twitter:description" content="Islamhouse is the biggest website for Islamic dawah in world languages. It contains free items in more than 100 languages, items like: books, audios,videos, posters, Islamic apps and others." />
+<meta name="twitter:image" content="https://islamhouse.com/logo_IslamHouse.png" />
+<meta name="twitter:url"
+  content="https://islamhouse.com/en/" />
+
+
+
+<link rel="canonical"
+  href="https://islamhouse.com/en/">
+<link rel="alternate"
+  href="https://islamhouse.com/RSS/IslamHouse-all-EN-EN.xml"
+  type="application/rss+xml"
+  title="All items - English">
+
+
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="robots" content="index, follow">
+<meta name="googlebot" content="index, follow">
+<meta name="bingbot" content="index, follow">
+
+<meta name="csrf-token" content="vYjyFLNLCv6DdcylZGv58PoADeH4VRtJo4Xf7hDB">
+
+<link rel="apple-touch-icon-precomposed" sizes="144x144"
+  href="https://islamhouse.com/assets/images/apple-touch-icon-114-precomposed.png" />
+<link rel="apple-touch-icon-precomposed" sizes="114x114"
+  href="https://islamhouse.com/assets/images/apple-touch-icon-144-precomposed.png" />
+<link rel="apple-touch-icon-precomposed" sizes="72x72"
+  href="https://islamhouse.com/assets/images/apple-touch-icon-72-precomposed.png" />
+<link rel="apple-touch-icon-precomposed" href="https://islamhouse.com/assets/images/apple-touch-icon-57-precomposed.png" />
+<link rel="shortcut icon" href="https://islamhouse.com/assets/images/favicon.png" />
+
+<!-- Vendor CSS Files -->
+<link href="https://islamhouse.com/assets_v2/vendor/bootstrap/css/bootstrap.css" rel="stylesheet">
+<link href="https://islamhouse.com/assets_v2/vendor/aos/aos.css" rel="stylesheet">
+<link href="https://islamhouse.com/assets_v2/css/style.css?v=1791810878" rel="stylesheet">
+<link href="https://islamhouse.com/assets_v2/css/book-content.css?v=1789980121" rel="stylesheet">
+<link href="https://islamhouse.com/assets_v2/css/ltr.css?v=1789980121" rel="stylesheet">
+
+
+
+
+
+
+
+
+<script type="text/javascript">
+  var CSRF = "vYjyFLNLCv6DdcylZGv58PoADeH4VRtJo4Xf7hDB";
+  var FLANG = "en";
+
+</script>
+
+  <meta name="robots" content="noindex, nofollow">
+  <link href="https://islamhouse.com/assets_v2/css/error.css" rel="stylesheet">
+</head>
+<body class="ltr en-lang-font error_body">
+  <div class="error_shell">
+    <header class="error_header">
+      <div class="container-lg error_header_inner">
+        <a class="error_logo" href="https://islamhouse.com/en"
+          aria-label="Home Page">
+          <img src="https://islamhouse.com/assets_v2/img/logo.svg" alt="IslamHouse">
+        </a>
+
+        <a class="error_home_link" href="https://islamhouse.com/en">
+          <img src="https://islamhouse.com/assets_v2/img/nav/home.svg" alt="">
+          <span>Home Page</span>
+        </a>
+      </div>
+    </header>
+
+    <main id="content" class="error_main">
+        <section class="error_section">
+  <div class="container">
+    <article class="error_card error_card_primary">
+      <div class="error_visual" aria-hidden="true">
+        <span class="error_visual_ring"></span>
+        <span class="error_status_code">404</span>
+      </div>
+
+      <div class="error_content">
+        <span class="error_label">IslamHouse</span>
+        <h1>The page you requested was not found on our server, we are very sorry because of that, because it is our fault not yours and we are working hard in order to return to work in the near future</h1>
+
+                  <p class="error_description">
+            You May wish to refer back
+            <a href="https://islamhouse.com/en">Home Page</a>.
+          </p>
+        
+                  <form class="error_search" action="https://islamhouse.com/en/search"
+            method="GET" role="search">
+            <img src="https://islamhouse.com/assets_v2/img/search-3.svg" alt="">
+            <input type="search" name="query" required placeholder="Search in Islamhouse.com"
+              aria-label="Search">
+            <button type="submit">Search</button>
+          </form>
+        
+        <a class="error_primary_action" href="https://islamhouse.com/en">
+          <img src="https://islamhouse.com/assets_v2/img/home-white.svg" alt="">
+          <span>Home Page</span>
+        </a>
+      </div>
+    </article>
+  </div>
+</section>
+    </main>
+
+    <footer class="error_footer">
+      <div class="container-lg">
+        &copy; Islamhouse Website
+      </div>
+    </footer>
+  </div>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a49e1f0dbb7e7320',t:'MTc5MTg5MjE2OQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
