@@ -7,10 +7,25 @@ jobs:
     steps:
       - run: |
           mkdir out; cd out
-          for c in 1 27 28 37; do curl -sS -m 60 -A "Mozilla/5.0" "https://sunnah.com/hisn/$c" -o hisn_$c.html || true; sleep 2; done
-          curl -sS -m 60 -A "Mozilla/5.0" "https://sunnah.com/hisn" -o hisn_index.html || true
-          ls -la
+          for u in https://d1.islamhouse.com/data/en/ih_books/single/en_Fortress_of_the_Muslim.pdf https://d1.islamhouse.com/data/en/ih_books/single2/en_Fortress_of_the_Muslim.pdf https://d1.islamhouse.com/data/en/ih_books/single/en_hisnul_muslim.pdf; do
+            curl -sSL -m 90 -A "Mozilla/5.0" -o "$(basename $u)" -w "$u %{http_code}\n" "$u" >> codes.txt || true; done
+          pip install -q playwright
+          cat > g.py <<'PY'
+          import asyncio
+          from playwright.async_api import async_playwright
+          async def main():
+              async with async_playwright() as p:
+                  b = await p.chromium.launch(channel="chrome", headless=False)
+                  pg = await b.new_page()
+                  await pg.goto("https://sunnah.com/hisn", timeout=90000)
+                  await pg.wait_for_timeout(15000)
+                  open("hisn_full.html","w").write(await pg.content())
+                  await b.close()
+          asyncio.run(main())
+          PY
+          xvfb-run -a python3 g.py || true
+          ls -la; cat codes.txt
       - run: |
-          cd out; git init -q; git checkout -q -b probe4; git add -A
+          cd out; git init -q; git checkout -q -b probe5; git add -A
           git -c user.name=probe -c user.email=probe@x commit -qm probe
-          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" probe4
+          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" probe5
