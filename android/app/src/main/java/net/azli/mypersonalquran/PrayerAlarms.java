@@ -21,7 +21,20 @@ import org.json.JSONObject;
  */
 public final class PrayerAlarms {
     static final String PREFS = "prayer";
-    static final String CH_ADHAN = "adhan2", CH_REMIND = "reminder", CH_SILENT = "silent";
+    static final String CH_ADHAN = "adhan2", CH_REMIND = "reminder", CH_SILENT = "silent", CH_VIBRATE = "vibrate";
+    static final long[] VIBRATE = {0, 700, 400, 700, 400, 700};
+
+    /** The phone's sound mode: 2 = ring, 1 = vibrate, 0 = silent (Do Not Disturb counts as silent). */
+    static int soundMode(Context c) {
+        try {
+            NotificationManager nm = (NotificationManager) c.getSystemService(Context.NOTIFICATION_SERVICE);
+            if (Build.VERSION.SDK_INT >= 23 && nm != null && nm.getCurrentInterruptionFilter() > NotificationManager.INTERRUPTION_FILTER_ALL) return 0;
+            android.media.AudioManager am = (android.media.AudioManager) c.getSystemService(Context.AUDIO_SERVICE);
+            if (am == null) return 2;
+            int m = am.getRingerMode();
+            return m == android.media.AudioManager.RINGER_MODE_NORMAL ? 2 : m == android.media.AudioManager.RINGER_MODE_VIBRATE ? 1 : 0;
+        } catch (Exception e) { return 2; }
+    }
 
     static SharedPreferences prefs(Context c) { return c.getSharedPreferences(PREFS, Context.MODE_PRIVATE); }
 
@@ -37,7 +50,10 @@ public final class PrayerAlarms {
         r.setDescription("A short alert some minutes before each prayer");
         NotificationChannel s = new NotificationChannel(CH_SILENT, "Silent prayer alert", NotificationManager.IMPORTANCE_DEFAULT);
         s.setSound(null, null);
-        nm.createNotificationChannel(a); nm.createNotificationChannel(r); nm.createNotificationChannel(s);
+        NotificationChannel v = new NotificationChannel(CH_VIBRATE, "Prayer alert (phone on vibrate)", NotificationManager.IMPORTANCE_HIGH);
+        v.setDescription("Prayer time while the phone is on vibrate: vibrates, no sound");
+        v.setSound(null, null); v.enableVibration(true); v.setVibrationPattern(VIBRATE);
+        nm.createNotificationChannel(a); nm.createNotificationChannel(r); nm.createNotificationChannel(s); nm.createNotificationChannel(v);
     }
 
     /** The next alert after now, or null. */
@@ -73,7 +89,7 @@ public final class PrayerAlarms {
         long at = n.optLong("at");
         if (canExact(c)) {
             // shown as an alarm clock to Android, so it is on time even in Doze, and the adhan may start from the background
-            Intent open = new Intent(c, MainActivity.class);
+            Intent open = new Intent(c, MainActivity.class).putExtra("open", "prayer");
             PendingIntent show = PendingIntent.getActivity(c, 2, open, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
             am.setAlarmClock(new AlarmManager.AlarmClockInfo(at, show), pi);
         } else {

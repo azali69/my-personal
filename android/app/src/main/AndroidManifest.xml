@@ -26,7 +26,8 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:configChanges="orientation|screenSize|keyboardHidden|uiMode"
+            android:launchMode="singleTask"
+            android:configChanges="orientation|screenSize|keyboardHidden|uiMode|screenLayout|smallestScreenSize"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -34,6 +35,7 @@
             </intent-filter>
         </activity>
         <receiver android:name=".AlarmReceiver" android:exported="false" />
+        <receiver android:name=".PrayerStatus" android:exported="false" />
         <receiver android:name=".BootReceiver" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
@@ -44,5 +46,6 @@
             </intent-filter>
         </receiver>
         <service android:name=".AdhanService" android:exported="false" android:foregroundServiceType="mediaPlayback" />
+        <service android:name=".PlaybackService" android:exported="false" android:foregroundServiceType="mediaPlayback" />
     </application>
 </manifest>

@@ -12,7 +12,8 @@ My Personal Quran ialah mushaf Madinah untuk membaca, menghafaz, mendengar bacaa
 
 - **Kulit buku** akan muncul. Ketik di mana-mana untuk membukanya; ia terbuka ke skrin **Home** (Laman Utama).
 - Kulit buku tertutup semula setiap kali anda keluar dari aplikasi. Untuk melangkaunya: Home → butang tetapan (atas kanan) → **Book cover when the app opens → Skip**.
-- Kulit buku ada tiga warna, **Green** (hijau), **Black** (hitam) dan **Navy blue** (biru tua), semuanya dengan emas: butang tetapan yang sama → **Book cover colour**. **Preview the cover** menunjukkannya serta-merta.
+- Kulit buku berbingkai emas, dengan bunga di setiap penjuru dan medalion bertulis القرآن الكريم, serta "My Personal Quran" di bawahnya. Warnanya: butang tetapan yang sama → **Book cover colour**: **Same as home** (ikut latar Home), **Madinah green** (hijau), **Black** (hitam), **Night blue** (biru malam), **Light blue** (biru muda), **Pastel green** (hijau pastel) atau **Ivory** (gading). **Preview the cover** menunjukkannya serta-merta.
+- Jika aplikasi dibuka daripada notifikasi waktu solat, kulit buku dilangkau dan terus ke **Prayer times**.
 
 **Kebenaran** (diminta hanya ketika ciri itu digunakan kali pertama)
 
@@ -78,7 +79,7 @@ Kembali ke Home dari mana-mana dengan **butang rumah** (atas kiri skrin bacaan) 
 - **Ketik** halaman: sembunyi atau papar bar.
 - **Tekan lama pada ayat** lalu lepaskan: **menu ayat**.
 - **Tekan lama pada perkataan, tahan dan seret** ke perkataan terakhir: pilih perkataan. Bar muncul dengan **My ruku'**, **My blocks**, **Erase**, **Hafazan**, **Listen** dan **Copy**.
-- Dengan Settings → **Tap a word → Meaning and sound**, mengetik perkataan memaparkan maknanya dan memperdengarkannya (bahagian 7).
+- **Ketik sekali** di mana-mana pada halaman: papar atau sembunyi bar. Dengan Settings → **Tap a word twice: meaning and sound → On**, **ketik dua kali** pada perkataan dengan cepat untuk melihat maknanya dan mendengarnya (bahagian 7); ketik dua kali lagi, atau ketik di luar, untuk menutupnya.
 
 **Menu ayat** (tekan lama pada ayat)
 
@@ -160,7 +161,8 @@ Ketik **fon kepala** atau tekan lama pada ayat → **Listen from this ayah**.
 - **Repeat each ayah**: 1× hingga 10×. **When the range ends**: berhenti, ulang, atau terus ke surah berikutnya.
 - **Red words follow the voice**: pilih lebih lewat jika merah mendahului suara, lebih awal jika ketinggalan.
 - **Speed**: 0.75×, 1×, 1.25×.
-- Bar pemain kecil: main/jeda, sebelum, seterusnya, berhenti. Butang fon kepala dan Bluetooth juga berfungsi.
+- Bar pemain kecil: main/jeda, sebelum, seterusnya, berhenti. Butang fon kepala dan Bluetooth juga berfungsi. Apabila bar disembunyikan semasa bacaan dimainkan, **nombor muka surat** di bawah menunjukkan ▶ / ❚❚: ketik untuk jeda atau main; ketik di tempat lain pada halaman untuk memaparkan semula bar.
+- Di telefon, bacaan terus dimainkan walaupun skrin padam atau anda membuka aplikasi lain, dan **Carry on to the next surah** bersambung sendiri; notifikasi **Recitation playing** (dengan Pause, Next, Stop) dipaparkan semasa ia dimainkan. Bagi qari surah penuh yang tidak lengkap (Hazza al-Balushi), ia bersambung ke surah berikutnya yang ada.
 
 **Listen & repeat (dengar dan ulang)**
 
@@ -175,18 +177,21 @@ Ketik **fon kepala** atau tekan lama pada ayat → **Listen from this ayah**.
 
 Semuanya dibuka dari **menu ayat**; memerlukan internet sekali bagi setiap surah.
 
-- **Word by word**: makna setiap perkataan (Indonesia atau Inggeris); ketik perkataan untuk mendengarnya. Settings → **Tap a word → Meaning and sound** membukanya terus dengan mengetik perkataan pada halaman.
+- **Word by word**: makna setiap perkataan (Indonesia atau Inggeris); ketik perkataan untuk mendengarnya. Settings → **Tap a word twice: meaning and sound** membukanya dengan mengetik perkataan dua kali pada halaman.
 - **Tafsir**: Al-Mukhtasar (Indonesia atau Inggeris) atau As-Sa'di (Indonesia); **Show Arabic original** memaparkan teks Arab. Daripada QuranEnc.com, tanpa sebarang perubahan.
 - **Hadith**: hanya hadis yang dikaitkan oleh kitab itu sendiri (Kitab at-Tafsir dalam Sahih al-Bukhari dan Sahih Muslim), bersama tajuk bab, nombor, teks Arab, terjemahan dan pautan ke Sunnah.com.
 - **Copy**: pilih ayat dan kandungan yang hendak disalin, kemudian **Copy**.
+- **Ayat with similar wording**: ayat lain yang berkongsi sekurang-kurangnya 5 perkataan berturut-turut dengan ayat ini (ayat mutasyabihat lafaz yang dibandingkan oleh huffaz semasa menghafal), yang paling panjang dahulu. Ketik untuk pergi ke ayat itu. Ia dicari dengan memadankan perkataan Arab; ungkapan lazim sahaja tidak dikira. Ia bukan rujukan silang tafsir.
 
 ## 8. Doa & zikir, waktu solat, kiblat
 
 **Doa & zikir (Hisnul Muslim)**
 
-1. Home → **Doa & zikir**. Zikir pagi dan petang, sebelum tidur dan bangun tidur berada di atas; cari mengikut topik.
-2. Setiap doa memaparkan teks Arab, transliterasi dan terjemahan Inggeris. **Listen** memperdengarkannya; pembilang **0 / 3** mengira ulangan.
-3. Hidupkan atau matikan transliterasi dan terjemahan; **Save chapter** menyimpan bab di bahagian atas.
+1. Home → **Doa & zikir**. **Morning zikir** (zikir pagi), **Evening zikir** (zikir petang), sebelum tidur dan bangun tidur berada di atas di bawah **Daily**; bab yang anda simpan di bawah **Saved**; kemudian **All chapters**, dikumpulkan mengikut topik (contohnya **Prayer (solat)** mengandungi semua bahagian solat, **After prayer** zikir selepas solat). Ketik topik untuk membuka atau menutupnya. Carian mencari bab mengikut topik.
+2. **Morning zikir** dan **Evening zikir** ialah bab zikir pagi dan petang dalam kitab itu, dijadikan dua set: yang kitab berikan untuk pagi sahaja ada dalam set pagi sahaja, yang untuk petang sahaja dalam set petang sahaja, dan set petang menggunakan lafaz petang (أمسينا، أمسيت…) di mana kitab memberikannya. Doa dengan lafaz petang tiada butang Listen kerana rakamannya dengan lafaz pagi.
+3. Setiap doa memaparkan teks Arab, transliterasi dan terjemahan Inggeris. **Listen** memperdengarkannya; pembilang **0 / 3** mengira ulangan.
+4. **Source** di bawah setiap doa: ketik untuk melihat rujukan yang diberikan dalam kitab (contohnya "Al-Bukhari …; Muslim …") bersama pautan ke doa itu di sunnah.com. Baris pertamanya meringkaskan hukum daripada rujukan itu: dipetik daripada Sahih al-Bukhari / Muslim; dinilai sahih atau hasan oleh ulama yang disebut; sahih sebagai kata-kata Sahabat; atau tiada hukum dalam kitab.
+5. Tajuk, butang on/off dan **Save chapter** kekal di atas semasa anda menatal. **Save chapter** terus bertukar kepada **Saved ✓**, dan bab itu terus muncul di bawah **Saved**; ketik sekali lagi untuk membuangnya.
 
 **Hadis (Kutub as-Sittah dan al-Muwatta)**
 
@@ -199,7 +204,8 @@ Semuanya dibuka dari **menu ayat**; memerlukan internet sekali bagi setiap surah
 7. Hadis dipaparkan **matan sahaja** pada mulanya, dengan "Narrated by …" (Sahabat perawi) di atasnya. Jika Sahabat hanya berkata "aku mendengar" atau "bahawa" sebelum Nabi ﷺ, matan bermula pada "Rasulullah ﷺ" / "Nabi ﷺ". Tandakan **SANAD** untuk melihat rantaian perawi penuh; sanad itu dipaparkan dalam warna lebih pudar supaya matan lebih jelas. Jika sanad tidak dapat dipisahkan dengan pasti, hadis dipaparkan penuh.
 8. Tajuk kitab dan kotak **AR · BI · ENG · SANAD** kekal di atas semasa anda menatal. Ketik tajuk untuk beralih ke kitab lain dalam buku yang sama.
 9. Hadis yang dihuraikan oleh HadeethEnc.com mempunyai butang **Syarah · HadeethEnc** di bawah teksnya. Ia membuka huraian, pengajaran hadis dan makna perkataan dalam **BM** (Bahasa Melayu, kira-kira 100 hadis setakat ini), **BI**, **ENG** atau **AR**, tanpa sebarang perubahan daripada HadeethEnc. Ia dipadankan dengan hadis melalui teksnya, jadi ia mungkin memetik riwayat lain bagi hadis yang sama.
-10. Setiap hadis ada butang **penanda buku** (lima warna, seperti al-Quran) dan butang **nota**. **Continue reading** (tempat anda berhenti) berada di bahagian atas halaman Hadith. Senarai penanda buku dipaparkan di bawahnya apabila **Show** (di sebelah **All**) ditanda; ia tidak ditanda pada mulanya.
+10. **Also in** di bawah hadis menyenaraikan hadis yang sama dalam kitab lain (contohnya "Muslim 113", "Abu Dawud 3692"). "(close wording)" bermaksud kebanyakan lafaznya sama tetapi tidak semua, atau hanya sebahagian daripada hadis yang lebih panjang. Ketik untuk membacanya bersama hukum daripada kitab itu sendiri, kemudian **Open in …** untuk pergi ke sana. Ia dicari dengan membandingkan teks Arab, jadi ia membantu mencari riwayat lain; ia tidak bermaksud sanad atau hukumnya sama.
+11. Setiap hadis ada butang **penanda buku** (lima warna, seperti al-Quran) dan butang **nota**. **Continue reading** (tempat anda berhenti) berada di bahagian atas halaman Hadith. Senarai penanda buku dipaparkan di bawahnya apabila **Show** (di sebelah **All**) ditanda; ia tidak ditanda pada mulanya.
 
 **Nota (Notes)**
 
@@ -211,15 +217,18 @@ Semuanya dibuka dari **menu ayat**; memerlukan internet sekali bagi setiap surah
 **Waktu solat**
 
 - **‹ ›** untuk hari sebelum atau selepas; solat seterusnya berwarna emas.
-- **Location**: jadual rasmi **Singapore (MUIS)**, atau **My location / Choose a city** (dikira dengan kaedah MUIS; di dalam Singapura ia menggunakan jadual MUIS).
+- Tarikh Hijrah di bawah tarikh membuka **Hijri calendar** (takwim Hijrah): setiap bulan dengan hari Masihi dan Hijrah dalam setiap kotak, hari-hari kebesaran Islam ditanda (Awal Muharram, Asyura, Maulidur Rasul, Israk Mikraj, Nisfu Syaaban, 1 Ramadan, Nuzul al-Quran, sepuluh malam terakhir, Hari Raya Aidilfitri, Arafah, Hari Raya Aidiladha, hari Tasyrik) dan disenaraikan di bawah **This month**. Tarikh dikira untuk Singapura dengan kriteria MABIMS yang digunakan MUIS. Jika MUIS mengumumkan tarikh lain (anak bulan kelihatan atau tidak), gunakan **Adjust the Hijri date** (−2 hingga +2 hari); ia mengubah tarikh Hijrah di seluruh aplikasi.
+- **Location**: jadual rasmi **Singapore (MUIS)**, atau **My location / Choose a city**. Bandar dikumpulkan mengikut negara (Asia Tenggara dan Asia Timur termasuk Jepun, Korea, China, Hong Kong dan Taiwan; Asia Selatan; Timur Tengah; Eropah; Amerika Utara; Australia dan New Zealand). Setiap bandar menggunakan kaedah negaranya sendiri (contohnya JAKIM untuk Malaysia, Kemenag untuk Indonesia, Umm al-Qura untuk Arab Saudi, Diyanet untuk Turki; yang lain Muslim World League), dinyatakan di bawah waktu, dan waktunya mengikut jam bandar itu.
 - **Adjust (minutes)**: tambah atau tolak minit bagi setiap waktu.
 
 **Peringatan** (Android)
 
 1. Ketik **loceng** di sebelah setiap waktu untuk menghidupkan atau mematikan peringatannya.
-2. **Sound**: azan Makkah, azan Madinah, nada pendek, atau notifikasi sahaja. Untuk azan, ketik **Choose … adhan file** dan pilih rakaman azan dari telefon anda.
+2. **Sound**: azan Makkah, azan Madinah, nada pendek, notifikasi sahaja, atau **None** (tiada peringatan azan langsung; peringatan sebelum waktu dan bar notifikasi masih berfungsi jika dihidupkan). Untuk azan, ketik **Choose … adhan file** dan pilih rakaman azan dari telefon anda.
 3. **Reminder before each prayer**: tiada hingga 30 minit sebelum waktu.
 4. **Test the sound** / **Stop**. Jika peringatan tidak berbunyi, benarkan notifikasi dan penggera, dan buang had bateri.
+5. Peringatan **dihidupkan secara lalai** untuk lima waktu solat, dan aplikasi meminta kebenaran notifikasi sekali. Ia mengikut mod bunyi telefon: **dering** = azan atau nada dimainkan; **getar** = telefon bergetar bersama notifikasi, tanpa bunyi; **senyap atau Jangan Ganggu** = notifikasi senyap sahaja. **Test the sound** mengikut peraturan yang sama (dalam mod getar ia hanya bergetar). Jika fon telinga atau earpiece Bluetooth disambung, azan dimainkan dalam fon telinga sahaja.
+6. **Prayer times in the notification bar** (waktu solat di bar notifikasi): **Always** (lalai) memaparkan waktu hari ini dan baki masa ke waktu seterusnya di bar tarik-turun; **30 min before each prayer** memaparkannya hanya dalam setengah jam sebelum setiap waktu; **Off** mematikannya. Ketik untuk membuka Prayer times.
 
 **Kiblat**
 
@@ -237,13 +246,15 @@ Semuanya dibuka dari **menu ayat**; memerlukan internet sekali bagi setiap surah
 | Surah name | Nama surah Latin atau Arab di bar atas |
 | Translation language | Bahasa Melayu atau Inggeris |
 | Home and colours | Latar Home, warna bar, kulit buku |
-| Tap a word | Sembunyi/papar bar, atau makna dan bunyi |
+| Tap a word twice: meaning and sound | On: ketik dua kali pada perkataan untuk makna dan bunyi (ketik sekali sentiasa papar/sembunyi bar) |
 | Transliteration | Di bawah teks Arab dalam paparan terjemahan |
 | English footnotes | Nota kaki Saheeh International |
 | Uthmani text page | Fit page atau Larger text |
 | Arabic size | Saiz teks Arab untuk paparan terjemahan, hafazan dan Larger text |
 | Microphone (3 tetapan) | Suara perlahan, persekitaran, fon kepala Bluetooth |
 | Waqaf & ibtida' blocks | Warna blok (bahagian 4) |
+| Back up or restore | Fail sandaran tetapan, penanda buku dan nota (di bawah) |
+| User manual | Panduan ini |
 | Hafazan history | Sesi lalu dan rakaman |
 | Sources & verification | Sumber setiap kandungan; semakan teks al-Quran |
 

@@ -12,7 +12,8 @@ My Personal Quran is a Madinah mushaf for reading, memorising (hafazan), listeni
 
 - The **book cover** appears. Tap anywhere on it to open the book; it swings open to the **Home** screen.
 - The cover closes again whenever you leave the app. To skip it: Home → settings button (top right) → **Book cover when the app opens → Skip**.
-- The cover comes in **Green**, **Black** or **Navy blue**, all with gold: same settings button → **Book cover colour**. **Preview the cover** shows it straight away.
+- The cover has a gold frame, corner flowers and the medallion with القرآن الكريم, and "My Personal Quran" below. Its colour: same settings button → **Book cover colour**: **Same as home** (follows the Home background), **Madinah green**, **Black**, **Night blue**, **Light blue**, **Pastel green** or **Ivory**. **Preview the cover** shows it straight away.
+- Opening the app from a prayer notification skips the cover and goes straight to **Prayer times**.
 
 **Permissions** (each asked only when you first use the feature)
 
@@ -78,7 +79,7 @@ Return to Home from anywhere with the **house button** (top left of the reading 
 - **Tap** the page: hide or show the bars.
 - **Long-press an ayah** and let go: the **ayah menu**.
 - **Long-press a word, keep holding and drag** to the last word: select words. A bar appears with **My ruku'**, **My blocks**, **Erase**, **Hafazan**, **Listen** and **Copy**.
-- With Settings → **Tap a word → Meaning and sound**, tapping a word shows its meaning and plays it (section 7).
+- **Tap once** anywhere on the page: show or hide the bars. With Settings → **Tap a word twice: meaning and sound → On**, **tap a word twice** quickly to see its meaning and hear it (section 7); tap twice again, or tap outside, to close it.
 
 **The ayah menu** (long-press an ayah)
 
@@ -160,7 +161,8 @@ Tap the **headphones** or long-press an ayah → **Listen from this ayah**.
 - **Repeat each ayah**: 1× to 10×. **When the range ends**: Stop, Play again, or Carry on to the next surahs.
 - **Red words follow the voice**: a later setting if the red runs ahead, an earlier one if it lags.
 - **Speed**: 0.75×, 1×, 1.25×.
-- The small player bar: play/pause, previous, next, stop. Headset and Bluetooth buttons work too.
+- The small player bar: play/pause, previous, next, stop. Headset and Bluetooth buttons work too. When the bars are hidden while it plays, the **page number** at the bottom shows ▶ / ❚❚: tap it to pause or play; tap the page anywhere else to bring the bars back.
+- On the phone the recitation keeps playing with the screen off or in another app, and **Carry on to the next surah** goes on by itself; a **Recitation playing** notification (with Pause, Next, Stop) shows while it plays. For whole-surah reciters with missing surahs (Hazza al-Balushi), it goes on to the next surah that is available.
 
 **Listen & repeat**
 
@@ -175,18 +177,21 @@ Tap the **headphones** or long-press an ayah → **Listen from this ayah**.
 
 All open from the **ayah menu**; they need the internet once per surah.
 
-- **Word by word**: each word's meaning (Indonesian or English); tap a word to hear it. Settings → **Tap a word → Meaning and sound** opens it by tapping words on the page.
+- **Word by word**: each word's meaning (Indonesian or English); tap a word to hear it. Settings → **Tap a word twice: meaning and sound** opens it by tapping a word twice on the page.
 - **Tafsir**: Al-Mukhtasar (Indonesian or English) or As-Sa'di (Indonesian); **Show Arabic original** adds the Arabic. From QuranEnc.com, unchanged.
 - **Hadith**: only hadith linked by the books themselves (Kitab at-Tafsir of Sahih al-Bukhari and Sahih Muslim), with the chapter heading, number, Arabic, translation and a link to Sunnah.com.
 - **Copy**: choose the ayat and what to include, then **Copy**.
+- **Ayat with similar wording**: other ayat that share at least 5 words in a row with this ayah (the similar wording huffaz compare when memorising), longest first. Tap one to go to it. Found by matching the Arabic words; common set phrases alone are not counted. It is not a tafsir cross-reference.
 
 ## 8. Doa & zikir, prayer times, Qibla
 
 **Doa & zikir (Hisnul Muslim)**
 
-1. Home → **Doa & zikir**. Morning and evening, sleeping and waking are at the top; search by topic.
-2. Each doa shows Arabic, transliteration and English. **Listen** plays it; the **0 / 3** counter counts repetitions.
-3. Turn transliteration and translation on or off; **Save chapter** keeps it near the top.
+1. Home → **Doa & zikir**. **Morning zikir**, **Evening zikir**, before sleeping and on waking are at the top under **Daily**; your saved chapters are under **Saved**; then **All chapters**, grouped by topic (e.g. **Prayer (solat)** holds every part of the prayer, **After prayer** the zikir after it). Tap a topic to open or close it. Search finds a chapter by topic.
+2. **Morning zikir** and **Evening zikir** are the book's chapter of morning and evening remembrance as two sets: what the book gives for the morning only is only in the morning set, what it gives for the evening only is only in the evening set, and the evening set uses the evening wording (أمسينا، أمسيت…) where the book gives one. Entries with the evening wording have no Listen button, as the recording is of the morning wording.
+3. Each doa shows Arabic, transliteration and English. **Listen** plays it; the **0 / 3** counter counts repetitions.
+4. **Source** under each doa: tap it for the reference given in the book (e.g. "Al-Bukhari …; Muslim …") with a link to that entry on sunnah.com. Its first line sums up the grading from that reference: cited from Sahih al-Bukhari / Muslim; graded sahih or hasan by the scholars named; authentic as the words of a Companion; or no grading given in the book.
+5. The title, the on/off buttons and **Save chapter** stay at the top while you scroll. **Save chapter** shows **Saved ✓** at once, and the chapter appears under **Saved** straight away; tap again to remove it.
 
 **Hadith (Kutub as-Sittah and al-Muwatta)**
 
@@ -199,7 +204,8 @@ All open from the **ayah menu**; they need the internet once per surah.
 7. Hadith show the **text only** at first, with "Narrated by …" (the Companion) above it. Where the Companion only says "I heard" or "that" before the Prophet ﷺ, the text starts at "the Messenger of Allah ﷺ" / "the Prophet ﷺ". Tick **SANAD** to see the full chain of narrators; the chain is then shown in a softer colour so the text stands out. Where the chain could not be separated with certainty, the hadith is shown in full.
 8. The kitab title and the **AR · BI · ENG · SANAD** boxes stay at the top while you scroll. Tap the title to jump to another kitab of the same book.
 9. Hadith that HadeethEnc.com explains have a **Syarah · HadeethEnc** button under the text. It opens their explanation, lessons from the hadith and word meanings, in **BM** (Bahasa Melayu, for about 100 hadith so far), **BI**, **ENG** or **AR**, unchanged from HadeethEnc. It is linked to the hadith by matching the text, so it may quote another narration of the same hadith.
-10. Each hadith has a **bookmark** button (five colours, as for the Qur'an) and a **note** button. **Continue reading** (where you last stopped) is at the top of the Hadith page. Your bookmarks are listed below it when **Show** (beside **All**) is ticked; it is off at first.
+10. **Also in** under a hadith lists the same hadith in the other books (e.g. "Muslim 113", "Abu Dawud 3692"). "(close wording)" means most, not all, of the wording matches, or only part of a longer hadith. Tap one to read it with that book's own grading, then **Open in …** to go there. They are found by comparing the Arabic text, so they help you find other narrations; they do not mean the chains or gradings are the same.
+11. Each hadith has a **bookmark** button (five colours, as for the Qur'an) and a **note** button. **Continue reading** (where you last stopped) is at the top of the Hadith page. Your bookmarks are listed below it when **Show** (beside **All**) is ticked; it is off at first.
 
 **Notes**
 
@@ -211,15 +217,18 @@ All open from the **ayah menu**; they need the internet once per surah.
 **Prayer times**
 
 - **‹ ›** move by day; the next prayer is in gold.
-- **Location**: **Singapore (MUIS)** official timetable, or **My location / Choose a city** (calculated with MUIS's method; inside Singapore it uses MUIS).
+- The Hijri date under the date opens the **Hijri calendar**: each month with the Gregorian and Hijri day in every box, Islamic days marked (Awal Muharram, Asyura, Maulidur Rasul, Israk Mikraj, Nisfu Syaaban, 1 Ramadan, Nuzul al-Quran, the last ten nights, Hari Raya Aidilfitri, Arafah, Hari Raya Aidiladha, the days of Tasyrik) and listed under **This month**. The dates are calculated for Singapore with the MABIMS criteria that MUIS uses. If MUIS announces a different date (the moon is sighted or not), use **Adjust the Hijri date** (−2 to +2 days); it changes the Hijri date everywhere in the app.
+- **Location**: **Singapore (MUIS)** official timetable, or **My location / Choose a city**. Cities are grouped by country (Southeast and East Asia including Japan, Korea, China, Hong Kong and Taiwan; South Asia; the Middle East; Europe; North America; Australia and New Zealand). Each city uses its own country's method (e.g. JAKIM for Malaysia, Kemenag for Indonesia, Umm al-Qura for Saudi Arabia, Diyanet for Turkey; others the Muslim World League), named under the times, and the times are in that city's own clock.
 - **Adjust (minutes)** for each prayer.
 
 **Alerts** (Android)
 
 1. Tap the **bell** beside each prayer to turn its alert on or off.
-2. **Sound**: Makkah adhan, Madinah adhan, Short tone, or Notification only. For an adhan, tap **Choose … adhan file** and pick a recording on your phone.
+2. **Sound**: Makkah adhan, Madinah adhan, Short tone, Notification only, or **None** (no adhan alert at all; the reminder before the prayer and the notification bar still work if they are on). For an adhan, tap **Choose … adhan file** and pick a recording on your phone.
 3. **Reminder before each prayer**: Off to 30 minutes.
 4. **Test the sound** / **Stop**. If alerts do not come, allow notifications and alarms, and remove battery limits.
+5. Alerts are **on by default** for the five prayers, and the app asks once to allow notifications. They follow the phone's sound mode: **ring** = the adhan or tone plays; **vibrate** = the phone vibrates with the notification, no sound; **silent or Do Not Disturb** = a silent notification only. **Test the sound** follows the same rule (on vibrate it only vibrates). With earphones or a Bluetooth earpiece connected, the adhan plays in the earphones only.
+6. **Prayer times in the notification bar**: **Always** (default) keeps today's times and the time left to the next prayer in the pull-down bar; **30 min before each prayer** shows it only in the half hour before each prayer; **Off**. Tap it to open Prayer times.
 
 **Qibla**
 
@@ -237,13 +246,15 @@ All open from the **ayah menu**; they need the internet once per surah.
 | Surah name | Latin or Arabic in the top bar |
 | Translation language | Bahasa Melayu or English |
 | Home and colours | Home background, bar colour, book cover |
-| Tap a word | Show/hide bars, or meaning and sound |
+| Tap a word twice: meaning and sound | On: two quick taps on a word show its meaning and play it (one tap always shows/hides the bars) |
 | Transliteration | Under the Arabic in the translation view |
 | English footnotes | Saheeh International's notes |
 | Uthmani text page | Fit page or Larger text |
 | Arabic size | Size for translation view, Hafazan and Larger text |
 | Microphone (3 settings) | Quiet voice, surroundings, Bluetooth headset |
 | Waqaf & ibtida' blocks | Block shading (section 4) |
+| Back up or restore | Backup file of settings, bookmarks and notes (below) |
+| User manual | This manual |
 | Hafazan history | Past sessions and recordings |
 | Sources & verification | Where everything comes from; Qur'an text check |
 

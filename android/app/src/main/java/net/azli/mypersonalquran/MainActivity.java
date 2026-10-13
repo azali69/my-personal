@@ -113,6 +113,8 @@ public class MainActivity extends Activity {
     private void mediaCmd(String c) { runOnUiThread(() -> web.evaluateJavascript("window.__media && window.__media('" + c + "')", null)); }
 
     private void ensureSession() {
+        PlaybackService.onPauseCmd = () -> mediaCmd("pause"); PlaybackService.onPlayCmd = () -> mediaCmd("play");
+        PlaybackService.onNextCmd = () -> mediaCmd("next"); PlaybackService.onStopCmd = () -> mediaCmd("stop");
         if (msess != null) return;
         msess = new MediaSession(this, "MyPersonalQuran");
         msess.setCallback(new MediaSession.Callback() {
@@ -252,6 +254,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        openTarget = getIntent() == null ? null : getIntent().getStringExtra("open");
         if (Build.VERSION.SDK_INT >= 28) {
             WindowManager.LayoutParams lp = getWindow().getAttributes();
             lp.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
@@ -520,6 +523,7 @@ public class MainActivity extends Activity {
                 if ("stopped".equals(state)) {
                     msess.setPlaybackState(new PlaybackState.Builder().setActions(actions).setState(PlaybackState.STATE_STOPPED, 0, 0).build());
                     msess.setActive(false);
+                    PlaybackService.hide();
                     return;
                 }
                 msess.setMetadata(new MediaMetadata.Builder()
@@ -529,6 +533,9 @@ public class MainActivity extends Activity {
                 msess.setPlaybackState(new PlaybackState.Builder().setActions(actions)
                         .setState("playing".equals(state) ? PlaybackState.STATE_PLAYING : PlaybackState.STATE_PAUSED, PlaybackState.PLAYBACK_POSITION_UNKNOWN, 1f).build());
                 msess.setActive(true);
+                // keep playing with the screen off: a foreground "now playing" service (see PlaybackService)
+                PlaybackService.token = msess.getSessionToken();
+                PlaybackService.show(MainActivity.this, title, subtitle, "playing".equals(state));
             });
         }
 
@@ -777,7 +784,16 @@ public class MainActivity extends Activity {
 
     private void js(final String code) { runOnUiThread(() -> web.evaluateJavascript(code, null)); }
 
+    /* Opened from a prayer notification: the page goes straight to the prayer times. */
+    private volatile String openTarget = null;
+    @Override protected void onNewIntent(Intent i) {
+        super.onNewIntent(i); setIntent(i);
+        String o = i == null ? null : i.getStringExtra("open");
+        if (o != null && web != null) { final String w = o.replaceAll("[^a-z]", ""); js("window.__openFrom && window.__openFrom('" + w + "')"); }
+    }
     private class ExtraBridge {
+        @JavascriptInterface public String takeOpen() { String o = openTarget; openTarget = null; return o == null ? "" : o; }
+        @JavascriptInterface public void setPrayerStatus(String json, String mode) { PrayerStatus.save(MainActivity.this, json, mode); }
         @JavascriptInterface public void setPrayerAlarms(String json) { PrayerAlarms.save(MainActivity.this, json); }
         @JavascriptInterface public String alarmStatus() {
             try {
@@ -813,9 +829,17 @@ public class MainActivity extends Activity {
                 catch (Exception e) { js("window.__backupOpened && window.__backupOpened(false)"); } }); }
         @JavascriptInterface public String takeBackup() { String s = openedBackup; openedBackup = null; return s == null ? "" : s; }
         @JavascriptInterface public void removeAdhan(String slot) { File f = AdhanService.adhanFile(MainActivity.this, slot); if (f != null) f.delete(); }
-        @JavascriptInterface public void testSound(String sound) {
+        /** Test the alert as it will really be: it follows the phone's sound mode (returns "ring", "vibrate" or "silent"). */
+        @JavascriptInterface public String testSound(String sound) {
+            int mode = PrayerAlarms.soundMode(MainActivity.this);
+            if (mode == 1) {
+                try { android.os.Vibrator v = (android.os.Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+                    if (v != null) { if (Build.VERSION.SDK_INT >= 26) v.vibrate(android.os.VibrationEffect.createWaveform(PrayerAlarms.VIBRATE, -1)); else v.vibrate(PrayerAlarms.VIBRATE, -1); } } catch (Exception ignored) { }
+                return "vibrate"; }
+            if (mode == 0) return "silent";
             Intent s = new Intent(MainActivity.this, AdhanService.class).putExtra("sound", sound).putExtra("title", "Test").putExtra("text", "This is how the prayer alert will sound");
-            if (Build.VERSION.SDK_INT >= 26) startForegroundService(s); else startService(s); }
+            if (Build.VERSION.SDK_INT >= 26) startForegroundService(s); else startService(s);
+            return "ring"; }
         @JavascriptInterface public void stopSound() { startService(new Intent(MainActivity.this, AdhanService.class).setAction("stop")); }
         @JavascriptInterface public void getLocation() {
             runOnUiThread(() -> {
@@ -942,6 +966,7 @@ public class MainActivity extends Activity {
         if (recognizer != null) { recognizer.destroy(); recognizer = null; }
         stopPump();
         btRouteOff();
+        PlaybackService.hide();
         if (msess != null) { msess.release(); msess = null; }
         if (sm != null && compassL != null) sm.unregisterListener(compassL);
         web.destroy();
