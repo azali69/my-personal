@@ -7,13 +7,10 @@ jobs:
     steps:
       - run: |
           mkdir out; cd out
-          curl -sS -m 60 "https://data.gov.sg/api/action/datastore_search?resource_id=d_a6a206cba471fe04b62dd886ef5eaf22&limit=3" -o rec.json || true
-          curl -sS -m 60 "https://api-production.data.gov.sg/v2/public/api/datasets?query=hijri" -o q_hijri.json || true
-          curl -sS -m 60 "https://api-production.data.gov.sg/v2/public/api/datasets?query=muis" -o q_muis.json || true
-          curl -sS -m 60 -L "https://www.muis.gov.sg/api/pagecontentapi/GetPrayerTime?v=1" -o muis_api.json || true
-          curl -sS -m 60 -L "https://www.muis.gov.sg/" -o muis_home.html || true
+          for c in 1 27 28 37; do curl -sS -m 60 -A "Mozilla/5.0" "https://sunnah.com/hisn/$c" -o hisn_$c.html || true; sleep 2; done
+          curl -sS -m 60 -A "Mozilla/5.0" "https://sunnah.com/hisn" -o hisn_index.html || true
           ls -la
       - run: |
-          cd out; git init -q; git checkout -q -b probe3; git add -A
+          cd out; git init -q; git checkout -q -b probe4; git add -A
           git -c user.name=probe -c user.email=probe@x commit -qm probe
-          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" probe3
+          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" probe4
