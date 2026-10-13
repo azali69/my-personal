@@ -34,7 +34,7 @@ public class AdhanService extends Service {
         String text = intent == null ? "" : intent.getStringExtra("text");
         PrayerAlarms.channels(this);
         PendingIntent stop = PendingIntent.getService(this, 4, new Intent(this, AdhanService.class).setAction("stop"), PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-        PendingIntent open = PendingIntent.getActivity(this, 5, new Intent(this, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+        PendingIntent open = PendingIntent.getActivity(this, 5, new Intent(this, MainActivity.class).putExtra("open", "prayer"), PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
         Notification.Builder b = Build.VERSION.SDK_INT >= 26 ? new Notification.Builder(this, PrayerAlarms.CH_ADHAN) : new Notification.Builder(this);
         b.setSmallIcon(R.drawable.ic_stat_prayer).setContentTitle(title == null ? "" : title).setContentText(text == null ? "" : text)
          .setContentIntent(open).setDeleteIntent(stop).setCategory(Notification.CATEGORY_ALARM)
@@ -44,7 +44,8 @@ public class AdhanService extends Service {
         try {
             if (mp != null) { mp.release(); mp = null; }
             mp = new MediaPlayer();
-            mp.setAudioAttributes(new AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_ALARM).setContentType(AudioAttributes.CONTENT_TYPE_MUSIC).build());
+            // earphones or Bluetooth connected: play there only (as media); otherwise as an alarm on the phone's speaker
+            mp.setAudioAttributes(new AudioAttributes.Builder().setUsage(headset() ? AudioAttributes.USAGE_MEDIA : AudioAttributes.USAGE_ALARM).setContentType(AudioAttributes.CONTENT_TYPE_MUSIC).build());
             File f = ("makkah".equals(sound) || "madinah".equals(sound)) ? adhanFile(this, sound) : null;
             if (f != null) mp.setDataSource(f.getPath());
             else mp.setDataSource(this, Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.tone));
@@ -54,6 +55,21 @@ public class AdhanService extends Service {
             mp.start();
         } catch (Exception e) { stopAll(); }
         return START_NOT_STICKY;
+    }
+
+    private boolean headset() {
+        try {
+            android.media.AudioManager am = (android.media.AudioManager) getSystemService(Context.AUDIO_SERVICE);
+            if (am == null || Build.VERSION.SDK_INT < 23) return false;
+            for (android.media.AudioDeviceInfo d : am.getDevices(android.media.AudioManager.GET_DEVICES_OUTPUTS)) {
+                int t = d.getType();
+                if (t == android.media.AudioDeviceInfo.TYPE_BLUETOOTH_A2DP || t == android.media.AudioDeviceInfo.TYPE_BLUETOOTH_SCO
+                    || t == android.media.AudioDeviceInfo.TYPE_WIRED_HEADSET || t == android.media.AudioDeviceInfo.TYPE_WIRED_HEADPHONES
+                    || (Build.VERSION.SDK_INT >= 26 && t == android.media.AudioDeviceInfo.TYPE_USB_HEADSET)
+                    || (Build.VERSION.SDK_INT >= 31 && (t == android.media.AudioDeviceInfo.TYPE_BLE_HEADSET || t == android.media.AudioDeviceInfo.TYPE_BLE_SPEAKER))) return true;
+            }
+        } catch (Exception ignored) { }
+        return false;
     }
 
     private void stopAll() {

@@ -29,7 +29,7 @@ public class AlarmReceiver extends BroadcastReceiver {
                 } else {
                     PrayerAlarms.channels(c);
                     String ch = "adhan".equals(kind) ? (mode == 1 && !"silent".equals(sound) ? PrayerAlarms.CH_VIBRATE : PrayerAlarms.CH_SILENT) : PrayerAlarms.CH_REMIND;
-                    PendingIntent open = PendingIntent.getActivity(c, 3, new Intent(c, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+                    PendingIntent open = PendingIntent.getActivity(c, 3, new Intent(c, MainActivity.class).putExtra("open", "prayer"), PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
                     Notification.Builder b = Build.VERSION.SDK_INT >= 26 ? new Notification.Builder(c, ch) : new Notification.Builder(c);
                     b.setSmallIcon(R.drawable.ic_stat_prayer).setContentTitle(o.optString("title")).setContentText(o.optString("text"))
                      .setContentIntent(open).setAutoCancel(true).setCategory(Notification.CATEGORY_REMINDER);
@@ -40,5 +40,6 @@ public class AlarmReceiver extends BroadcastReceiver {
             }
         } catch (Exception ignored) { }
         PrayerAlarms.schedule(c);
+        PrayerStatus.update(c);
     }
 }

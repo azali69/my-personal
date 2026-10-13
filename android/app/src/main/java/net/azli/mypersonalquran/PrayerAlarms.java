@@ -89,7 +89,7 @@ public final class PrayerAlarms {
         long at = n.optLong("at");
         if (canExact(c)) {
             // shown as an alarm clock to Android, so it is on time even in Doze, and the adhan may start from the background
-            Intent open = new Intent(c, MainActivity.class);
+            Intent open = new Intent(c, MainActivity.class).putExtra("open", "prayer");
             PendingIntent show = PendingIntent.getActivity(c, 2, open, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
             am.setAlarmClock(new AlarmManager.AlarmClockInfo(at, show), pi);
         } else {
