@@ -1,0 +1,19 @@
+name: probe
+on: workflow_dispatch
+permissions: { contents: write }
+jobs:
+  p:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          mkdir out; cd out
+          curl -sS -m 60 "https://data.gov.sg/api/action/datastore_search?resource_id=d_a6a206cba471fe04b62dd886ef5eaf22&limit=3" -o rec.json || true
+          curl -sS -m 60 "https://api-production.data.gov.sg/v2/public/api/datasets?query=hijri" -o q_hijri.json || true
+          curl -sS -m 60 "https://api-production.data.gov.sg/v2/public/api/datasets?query=muis" -o q_muis.json || true
+          curl -sS -m 60 -L "https://www.muis.gov.sg/api/pagecontentapi/GetPrayerTime?v=1" -o muis_api.json || true
+          curl -sS -m 60 -L "https://www.muis.gov.sg/" -o muis_home.html || true
+          ls -la
+      - run: |
+          cd out; git init -q; git checkout -q -b probe3; git add -A
+          git -c user.name=probe -c user.email=probe@x commit -qm probe
+          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" probe3
