@@ -1,6 +1,9 @@
 import easyocr, torch, json, os
 r = easyocr.Reader(['ar','en'], gpu=False, quantize=False, verbose=False)
 m = r.recognizer; m.eval()
+class MeanH(torch.nn.Module):
+    def forward(s, x): return x.mean(dim=3, keepdim=True)   # same as AdaptiveAvgPool2d((None,1)) here, but exportable
+m.AdaptiveAvgPool = MeanH()
 class W(torch.nn.Module):
     def __init__(s, m): super().__init__(); s.m = m
     def forward(s, x): return s.m(x, None)
