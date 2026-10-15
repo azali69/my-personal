@@ -7,13 +7,19 @@ jobs:
     steps:
       - run: |
           mkdir out && cd out
-          Q1='[out:json][timeout:180];area["ISO3166-1"="SG"][admin_level=2]->.sg;(nwr["amenity"="place_of_worship"]["religion"="muslim"](area.sg););out center tags;'
-          Q2='[out:json][timeout:180];area["ISO3166-1"="SG"][admin_level=2]->.sg;(nwr["name"~"[Mm]us[s]?[ao]l+ah|[Ss]urau|[Pp]rayer [Rr]oom|[Mm]asjid|[Mm]osque"](area.sg);nwr["religion"="muslim"](area.sg););out center tags;'
-          for u in https://overpass-api.de/api/interpreter https://overpass.kumi.systems/api/interpreter; do
-            curl -fsS --retry 2 -m 200 --data-urlencode "data=$Q1" $u -o osm1.json && curl -fsS --retry 2 -m 200 --data-urlencode "data=$Q2" $u -o osm2.json && break
-          done
-          curl -fsS -A "MyPersonalQuran/1.0 (azali69 github)" "https://en.wikipedia.org/w/api.php?action=parse&page=List_of_mosques_in_Singapore&prop=wikitext&format=json" -o wiki.json || true
-          curl -fsS -A "MyPersonalQuran/1.0 (azali69 github)" "https://ms.wikipedia.org/w/api.php?action=parse&page=Senarai_masjid_di_Singapura&prop=wikitext&format=json" -o wikims.json || true
+          UA="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126 Safari/537.36"
+          curl -sSL -A "$UA" "https://www.muis.gov.sg/mosque/Our-Mosques/Mosque-Directory" -o muis_dir.html -w "%{http_code}\n" || true
+          curl -sSL -A "$UA" "https://www.muis.gov.sg/mosque" -o muis_mosque.html -w "%{http_code}\n" || true
+          curl -sSL -A "$UA" "https://www.ourmosques.sg/" -o ourmosques.html -w "%{http_code}\n" || true
+          npm i playwright@1.47.2 >/dev/null 2>&1 && npx playwright install chromium >/dev/null 2>&1
+          cat > p.js <<'JS'
+          const { chromium } = require('playwright');
+          (async()=>{ const b=await chromium.launch(); const p=await b.newPage();
+            for(const [u,f] of [['https://www.muis.gov.sg/mosque/Our-Mosques/Mosque-Directory','muis_dir_pw.html'],['https://www.muis.gov.sg/mosque','muis_mosque_pw.html']]){
+              try{ await p.goto(u,{waitUntil:'networkidle',timeout:60000}); await p.waitForTimeout(4000); require('fs').writeFileSync(f, await p.content()); }catch(e){ console.log(u,e.message); } }
+            await b.close(); })();
+          JS
+          node p.js || true
           ls -l
-          git init -q && git checkout -q -b probe-mosque && git add -A && git -c user.name=probe -c user.email=p@x commit -qm probe
-          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" probe-mosque
+          cd .. && git -C out init -q && git -C out checkout -q -b probe-mosque2 && git -C out add -A && git -C out -c user.name=probe -c user.email=p@x commit -qm probe
+          git -C out push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" probe-mosque2
