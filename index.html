@@ -3535,7 +3535,7 @@ function ckQuranTri(text){ const {sets,inv}=ckTriIndex(); const q=ckTri(ckSk(nor
   const cnt=new Map(); for(const t of q){ const l=inv.get(t); if(l && l.length<900) for(const g of l) cnt.set(g,(cnt.get(g)||0)+1); }
   const cand=[...cnt.entries()].sort((a,b)=>b[1]-a[1]).slice(0,150).map(x=>x[0]), wins=[];
   for(const g of cand){ let W=new Set(), best=null, last=0;
-    for(let k=0;k<3 && g+k<N && A[g+k][0]===A[g][0];k++){ for(const t of sets[g+k]) W.add(t); let inter=0; for(const t of q) if(W.has(t)) inter++;
+    for(let k=0;k<6 && g+k<N && A[g+k][0]===A[g][0] && (k<3||W.size<160);k++){ for(const t of sets[g+k]) W.add(t); let inter=0; for(const t of q) if(W.has(t)) inter++;
       if(k && inter<=last) break; last=inter; const cov=inter/W.size, qc=inter/q.size;
       if(inter>=6 && (cov>=0.45||qc>=0.5) && (!best || inter>best.L+2)) best={g,e:g+k,L:inter,cov,qc}; }
     if(best) wins.push(best); }
@@ -3554,7 +3554,7 @@ function ckQuranWords(text){ const {sets,df,inv,idf}=ckQwIndex();
   const sc=new Map(); for(const w of q){ const l=inv.get(w); if(l.length<1200) for(const g of l) sc.set(g,(sc.get(g)||0)+idf(w)); }
   const cand=[...sc.entries()].sort((a,b)=>b[1]-a[1]).slice(0,120).map(x=>x[0]), out=[];
   for(const g of cand){ let W=new Set(), best=null, last=0;
-    for(let k=0;k<3 && g+k<N && A[g+k][0]===A[g][0];k++){ for(const w of sets[g+k]) W.add(w); let m=0,n=0; for(const w of q) if(W.has(w)){ m+=idf(w); n++; }
+    for(let k=0;k<6 && g+k<N && A[g+k][0]===A[g][0] && (k<3||W.size<40);k++){ for(const w of sets[g+k]) W.add(w); let m=0,n=0; for(const w of q) if(W.has(w)){ m+=idf(w); n++; }
       if(k && m<=last) break; last=m; let aw=0; for(const w of W) aw+=idf(w); const cov=m/aw, qc=m/qW;
       if(n>=3 && qc>=0.6 && cov>=0.3 && (!best||m>best.m+0.5)) best={g,e:g+k,L:n,m,cov,qc}; }
     if(best) out.push(best); }
@@ -3662,8 +3662,8 @@ async function checkRun(text){ const run=++ckRunId, ms=sL()==='ms'; text=(text||
   const isAr=ckIsAr(text); msg.textContent=ms?'Menyemak Al-Quran…':'Checking the Qur\'an…';
   await new Promise(r=>setTimeout(r,30));
   const qw=isAr?ckArWords(text):null;
-  const qr= isAr? (()=>{ const a=ckQuranTri(text), b=ckQuranWords(text), all=a.concat(b).sort((x,y)=>(y.cov+y.qc)-(x.cov+x.qc)), out=[];
-    for(const w of all){ if(out.length>=6) break; if(out.some(o=>!(w.e<o.g||w.g>o.e))) continue; out.push(w); } return out; })() : ckQuranLat(text);
+  const qr= isAr? (()=>{ const a=ckQuranTri(text), b=ckQuranWords(text), all=a.concat(b).sort((x,y)=>(y.cov+2*y.qc)-(x.cov+2*x.qc)) /* the ayah holding most of the text first */, out=[];
+    for(const w of all){ if(out.length>=6) break; if(out.length && w.cov<0.15) continue; if(out.some(o=>!(w.e<o.g||w.g>o.e))) continue; out.push(w); } return out; })() : ckQuranLat(text);
   if(run!==ckRunId) return;
   const res={isAr, q:qr.map(w=>({g:w.g,e:w.e,p:w.cov,qc:w.qc||0,n:w.L||w.n})), h:[], hDone:false, fail:0};
   ckSt.res=res; checkShow(res);
