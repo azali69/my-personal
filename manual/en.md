@@ -217,11 +217,11 @@ All open from the **ayah menu**; they need the internet once per surah.
    - **Popular stories: check their status**: stories often told about the event, each with a coloured label: **No authentic basis** (red), **Weak** (orange), **Scholars differ** (amber), or **Historians' report: no checked chain** (grey: told by Ibn Ishaq and other historians, not authenticated in the hadith books).
 3. An orange **!** in the timeline means the event has marked popular stories.
 4. **‹ ›** at the bottom move to the previous or next event.
-6. The three parts open and close when you tap them. **Search** (it stays at the top) finds events in Malay or English, e.g. "Badar", "Hijrah", "Ramadan". **Continue reading** at the top opens the last event you read.
-7. On an event: **Bookmark** (listed under Bookmarked in the Sirah and in the Bookmarks button's **Sirah** tab), **Note** (also in Notes, under **Sirah**) and **Copy** (the summary, references and story statuses).
-8. Tapping an ayah or **Open in …** on a hadith takes you there; the phone's **back** button (or the **‹ Back** button over the mushaf) returns to the same event.
-9. **Meaning of a word:** long-press a word in the Sirah (also in Hadith and Doa pages) to select it, then tap **Meaning**: Kamus Dewan (DBP) or English dictionaries, or Almaany for Arabic, open in the browser. Your phone's own selection menu may also offer Translate.
-5. The summaries are written for this app from the hadith and the named historians; dates the hadith do not fix (e.g. 12 Rabi' al-Awwal, 27 Rajab) are marked as such.
+5. The three parts open and close when you tap them. **Search** (it stays at the top) finds events in Malay or English, e.g. "Badar", "Hijrah", "Ramadan". **Continue reading** at the top opens the last event you read.
+6. On an event: **Bookmark** (listed under Bookmarked in the Sirah and in the Bookmarks button's **Sirah** tab), **Note** (also in Notes, under **Sirah**) and **Copy** (the summary, references and story statuses).
+7. Tapping an ayah or **Open in …** on a hadith takes you there; the phone's **back** button (or the **‹ Back** button over the mushaf) returns to the same event.
+8. **Meaning of a word:** long-press a word in the Sirah (also in Hadith and Doa pages) to select it, then tap **Meaning**: Kamus Dewan (DBP) or English dictionaries, or Almaany for Arabic, open in the browser. Your phone's own selection menu may also offer Translate.
+9. The summaries are written for this app from the hadith and the named historians; dates the hadith do not fix (e.g. 12 Rabi' al-Awwal, 27 Rajab) are marked as such.
 
 **Notes**
 
