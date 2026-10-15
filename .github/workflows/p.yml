@@ -9,10 +9,11 @@ jobs:
       - uses: actions/setup-python@v5
         with: { python-version: '3.11' }
       - run: |
+          set +e
           mkdir -p out
-          pip install -q easyocr onnx onnxscript onnxruntime rapidocr_onnxruntime scipy > out/pip.txt 2>&1
-          python export.py > out/export.txt 2>&1 || true
-          python pipe.py out/ar_rec.onnx > out/pipe_fp32.txt 2>&1 || true
-          python pipe.py out/ar_rec_q.onnx > out/pipe_q.txt 2>&1 || true
+          pip install easyocr onnx onnxscript onnxruntime rapidocr_onnxruntime scipy > out/pip.txt 2>&1; echo "pip $?" >> out/pip.txt
+          python export.py > out/export.txt 2>&1
+          python pipe.py out/ar_rec.onnx > out/pipe_fp32.txt 2>&1
+          python pipe.py out/ar_rec_q.onnx > out/pipe_q.txt 2>&1
           cp $(python -c "import rapidocr_onnxruntime as R,glob,os;print(glob.glob(os.path.join(os.path.dirname(R.__file__),'models','*det*.onnx'))[0])") out/det.onnx
           git config user.name probe; git config user.email p@x; git add -f out; git commit -qm out; git push -q origin HEAD:probe-ocr2-out -f
