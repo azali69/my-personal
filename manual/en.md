@@ -43,7 +43,7 @@ Return to Home from anywhere with the **house button** (top left of the reading 
 | Bookmarks | Bookmarks in two tabs, Qur'an and Hadith; My ruku' and My blocks |
 | Doa & zikir | Hisnul Muslim (section 8) |
 | Hadith | The six books (Kutub as-Sittah) and the Muwatta of Imam Malik, with gradings (section 8) |
-| Shama'il | Opens Ash-Shama'il al-Muhammadiyyah, the eighth hadith book (section 8) |
+| Syama'il | Asy-Syama'il al-Muhammadiyyah of at-Tirmidhi, on its own tile (also the eighth book in Hadith) (section 8) |
 | Sifat Solat Nabi ﷺ | The Prophet's prayer step by step, with hadith and where scholars differ (section 8) |
 | Scan & check | Check whether a posted ayah or hadith is in the Qur'an or the hadith books (section 8) |
 | Masjid & musollah | Mosques and musollahs, nearest first, with directions; add your own (section 8) |
@@ -211,13 +211,13 @@ All open from the **ayah menu**; they need the internet once per surah.
 10. **Also in** under a hadith lists the same hadith in the other books (e.g. "Muslim 113", "Abu Dawud 3692"). "(close wording)" means most, not all, of the wording matches, or only part of a longer hadith. Tap one to read it with that book's own grading, then **Open in …** to go there. They are found by comparing the Arabic text, so they help you find other narrations; they do not mean the chains or gradings are the same.
 11. Each hadith has a **bookmark** button (five colours, as for the Qur'an) and a **note** button. **Continue reading** (where you last stopped) is at the top of the Hadith page. Your bookmarks are listed below it when **Show** (beside **All**) is ticked; it is off at first.
 
-12. **Ash-Shama'il al-Muhammadiyyah** (at-Tirmidhi) is the eighth book: the Prophet's appearance, manners and daily life ﷺ, 400 hadith in 56 chapters, in Arabic and English (Sunnah.com). Each hadith shows the grading of **Zubair 'Ali Za'i** and, where the hadith is in al-Albani's *Mukhtasar ash-Shama'il*, **al-Albani**'s grading with his number. He left out repeated chains, so a missing grading of his does not mean weak. **Also in** shows the same hadith in the six books, with their own gradings (al-Albani, Shu'ayb al-Arna'ut, Zubair 'Ali Za'i). There is no open Malay translation of this book, so BI shows the English.
+12. **Asy-Syama'il al-Muhammadiyyah** (at-Tirmidhi) has its own **Syama'il** tile on Home, and is also the eighth book in the Hadith list: the Prophet's appearance, manners and daily life ﷺ, 400 hadith in 56 chapters, in Arabic and English (Sunnah.com). Each hadith shows the grading of **Zubair 'Ali Za'i** and, where the hadith is in al-Albani's *Mukhtasar asy-Syama'il*, **al-Albani**'s grading with his number. He left out repeated chains, so a missing grading of his does not mean weak. **Also in** shows the same hadith in the six books, with their own gradings (al-Albani, Shu'ayb al-Arna'ut, Zubair 'Ali Za'i). There is no open Malay translation of this book, so BI shows the English.
 
 **Sifat Solat Nabi ﷺ**
 
 1. Home → **Sifat Solat Nabi ﷺ**: the prayer in 16 steps, from the intention to the salam, and qunut in Subuh.
 2. Each step has a short description and its **hadith** from the seven books with their gradings; tap one to read it (the phone's back button returns to the step).
-3. **Where scholars differ** (marked "scholars differ" in the list) sets the four schools, **Shafi'i**, **Hanafi**, **Maliki** and **Hanbali**, side by side; below them, **Other scholars' views** opens a separate box with **al-Albani**, **Ibn Baz** and **Ibn 'Uthaymin** where they spoke on the point. The evidence discussed is listed with its grading, without choosing between them: e.g. where to place the hands, the basmalah aloud, al-Fatihah behind the imam, knees or hands first, the short sitting, the finger in tashahhud, qunut in Subuh.
+3. **Where scholars differ** (marked "scholars differ" in the list) sets the four schools, **Shafi'i**, **Hanafi**, **Maliki** and **Hanbali**, side by side; below them, **Other scholars' views** opens a separate box with **al-Albani**, **Ibn Baz** and **Ibn 'Uthaymin** where they spoke on the point, each marked \*; where their own fatwa is online (Ibn Baz on four points), **Source ›** opens it. The evidence discussed is listed with its grading, without choosing between them: e.g. where to place the hands, the basmalah aloud, al-Fatihah behind the imam, knees or hands first, the short sitting, the finger in tashahhud, qunut in Subuh.
 4. Sources for the schools: al-Nawawi (*al-Majmu'*, *Minhaj at-Talibin*), Ibn Qudamah (*al-Mughni*), Ibn Rushd (*Bidayat al-Mujtahid*); other scholars: al-Albani (*Sifat Salat an-Nabi*), Ibn Baz (*Majmu' Fatawa*), Ibn 'Uthaymin (*al-Sharh al-Mumti'*). Written for this app; for your own practice, follow your teacher.
 
 **Sirah**
