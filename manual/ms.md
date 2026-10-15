@@ -217,6 +217,10 @@ Semuanya dibuka dari **menu ayat**; memerlukan internet sekali bagi setiap surah
    - **Kisah popular: semak statusnya**: kisah yang sering diceritakan tentang peristiwa itu, setiap satu dengan label berwarna: **Tiada asas yang sahih** (merah), **Lemah** (jingga), **Ulama berbeza pendapat** (kuning tua), atau **Riwayat ahli sejarah: sanad tidak disemak** (kelabu: diriwayatkan oleh Ibn Ishaq dan ahli sejarah lain, tidak disahkan dalam kitab hadis).
 3. Tanda **!** jingga pada garis masa bermaksud peristiwa itu ada kisah popular yang ditanda.
 4. **‹ ›** di bawah untuk ke peristiwa sebelum atau selepasnya.
+6. Tiga bahagian itu terbuka dan tertutup apabila diketik. **Carian** (kekal di atas) mencari peristiwa dalam bahasa Melayu atau Inggeris, contohnya "Badar", "Hijrah", "Ramadan". **Sambung bacaan** di atas membuka peristiwa terakhir yang anda baca.
+7. Pada sesuatu peristiwa: **Penanda** (disenaraikan di bawah Penanda dalam Sirah dan dalam tab **Sirah** pada butang Bookmarks), **Nota** (juga dalam Notes, di bawah **Sirah**) dan **Salin** (ringkasan, rujukan dan status kisah).
+8. Mengetik ayat atau **Open in …** pada hadis membawa anda ke sana; butang **kembali** telefon (atau butang **‹ Kembali** di atas mushaf) membawa anda semula ke peristiwa yang sama.
+9. **Makna perkataan:** tekan lama sesuatu perkataan dalam Sirah (juga dalam halaman Hadis dan Doa) untuk memilihnya, kemudian ketik **Cari makna**: Kamus Dewan (DBP) atau kamus Inggeris, atau Almaany untuk bahasa Arab, dibuka dalam pelayar. Menu pilihan teks telefon anda juga mungkin ada pilihan Terjemah.
 5. Ringkasan ditulis untuk aplikasi ini berdasarkan hadis dan ahli sejarah yang dinamakan; tarikh yang tidak ditetapkan oleh hadis (contohnya 12 Rabiulawal, 27 Rejab) ditanda sedemikian.
 
 **Nota (Notes)**
