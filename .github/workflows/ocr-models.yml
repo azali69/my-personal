@@ -1,0 +1,25 @@
+name: Arabic reader models
+# Exports EasyOCR's Arabic recogniser (Apache-2.0) to ONNX (int8 weights) and publishes it with PaddleOCR's text-line
+# detector (PP-OCRv4 det, Apache-2.0, as shipped in RapidOCR) as release "ocr-models-1". The APK build downloads them.
+on: workflow_dispatch
+permissions: { contents: write }
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.11' }
+      - run: |
+          pip install -q easyocr==1.7.2 onnx onnxscript onnxruntime rapidocr_onnxruntime scipy
+          mkdir -p out && python tools/ocr/export_arabic_reader.py
+          cp $(python -c "import rapidocr_onnxruntime as R,glob,os;print(glob.glob(os.path.join(os.path.dirname(R.__file__),'models','*det*.onnx'))[0])") out/det.onnx
+          mkdir rel && cp out/det.onnx rel/det.onnx && cp out/ar_rec_q.onnx rel/ar_rec.onnx && cp out/ar_rec.json rel/ar_rec.json
+          sha256sum rel/*
+      - uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ocr-models-1
+          name: Arabic reader models (for the APK build)
+          make_latest: false
+          files: rel/*
+          body: Models packed into the APK for reading Arabic text on the phone. Not an app release.
