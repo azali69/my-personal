@@ -29,11 +29,6 @@ jobs:
           mkdir -p android/app/src/main/assets
           cp index.html android/app/src/main/assets/index.html
 
-      - name: Arabic text model for the scanner (Tesseract tessdata_best)
-        run: |
-          mkdir -p android/app/src/main/assets/tessdata
-          curl -fsSL --retry 3 -o android/app/src/main/assets/tessdata/ara.traineddata https://github.com/tesseract-ocr/tessdata_best/raw/main/ara.traineddata
-          ls -l android/app/src/main/assets/tessdata; test $(stat -c%s android/app/src/main/assets/tessdata/ara.traineddata) -gt 1000000
 
       - name: Build
         env:

@@ -43,6 +43,7 @@ Kembali ke Home dari mana-mana dengan **butang rumah** (atas kiri skrin bacaan) 
 | Bookmarks | Penanda buku dalam dua tab, Qur'an dan Hadith; My ruku' dan My blocks |
 | Doa & zikir | Hisnul Muslim (bahagian 8) |
 | Hadith | Enam kitab hadis (Kutub as-Sittah) dan al-Muwatta Imam Malik, dengan hukum hadis (bahagian 8) |
+| Sifat Solat Nabi ﷺ | Solat Nabi langkah demi langkah, dengan hadis dan perbezaan pendapat ulama (bahagian 8) |
 | Scan & check | Semak sama ada ayat atau hadis yang dikongsi orang ada dalam Al-Quran atau kitab hadis (bahagian 8) |
 | Masjid & musollah | Masjid dan musolla, yang paling dekat dahulu, dengan arah jalan; tambah tempat sendiri (bahagian 8) |
 | Notes | Buku nota anda: nota pada ayat, pada hadis, dan nota bebas (bahagian 8) |
@@ -199,15 +200,24 @@ Semuanya dibuka dari **menu ayat**; memerlukan internet sekali bagi setiap surah
 
 1. Home → **Hadith**. Tandakan apa yang hendak dipaparkan, **Arabic**, **Bahasa Indonesia** dan/atau **English** (sekurang-kurangnya satu; kotak yang sama ada di atas setiap kitab), kemudian sebuah kitab: Sahih al-Bukhari, Sahih Muslim, Sunan Abi Dawud, Jami' at-Tirmidhi, Sunan an-Nasa'i, Sunan Ibn Majah atau Muwatta Malik.
 2. Buka satu kitab (bab besar) untuk membaca hadisnya: teks Arab berbaris, kemudian terjemahan. Hadis seterusnya dimuat apabila anda menatal ke bawah.
-3. **Search all seven books** (di atas halaman Hadith) mencari dalam semua kitab sekali gus, dalam bahasa Arab, Inggeris atau Indonesia; kali pertama ia memuat turun setiap kitab (kira-kira 80 MB semuanya, disyorkan guna Wi-Fi). **Hadith number** + **Go** terus ke nombor hadis. **Search** mencari dalam seluruh kitab dalam bahasa Arab, Inggeris atau Indonesia (carian pertama memuat turun kitab itu).
+3. **Search all eight books** (di atas halaman Hadith) mencari dalam semua kitab sekali gus, dalam bahasa Arab, Inggeris atau Indonesia; kali pertama ia memuat turun setiap kitab (kira-kira 80 MB semuanya, disyorkan guna Wi-Fi). **Hadith number** + **Go** terus ke nombor hadis. **Search** mencari dalam seluruh kitab dalam bahasa Arab, Inggeris atau Indonesia (carian pertama memuat turun kitab itu).
 4. Hukum hadis dipaparkan di atas setiap hadis dalam empat kitab Sunan: al-Albani, Shu'ayb al-Arna'ut, Zubair 'Ali Za'i, dan bagi at-Tirmidhi hukum beliau sendiri dalam bahasa Arab. Hijau sahih, biru hasan, jingga da'if, merah sangat lemah atau palsu. Bukhari dan Muslim sahih dengan kesepakatan ulama, jadi tiada hukum bagi setiap hadis. Al-Muwatta mempunyai satu hukum sahaja, oleh Salim al-Hilali; Mawquf bermaksud kata-kata Sahabat dan Maqtu' kata-kata Tabi'in, bukan sabda Nabi ﷺ. Al-Muwatta sentiasa dipaparkan penuh (bersama sanad).
 5. Butang salin menyalin teks Arab, terjemahan, rujukan dan hukum hadis.
 6. Setiap kitab memerlukan internet kali pertama; selepas itu ia disimpan dalam telefon.
 7. Hadis dipaparkan **matan sahaja** pada mulanya, dengan "Narrated by …" (Sahabat perawi) di atasnya. Jika Sahabat hanya berkata "aku mendengar" atau "bahawa" sebelum Nabi ﷺ, matan bermula pada "Rasulullah ﷺ" / "Nabi ﷺ". Tandakan **SANAD** untuk melihat rantaian perawi penuh; sanad itu dipaparkan dalam warna lebih pudar supaya matan lebih jelas. Jika sanad tidak dapat dipisahkan dengan pasti, hadis dipaparkan penuh.
-8. Tajuk kitab dan kotak **AR · BI · ENG · SANAD** kekal di atas semasa anda menatal; ketik sekali pada teks untuk menyembunyikannya, dan sekali lagi untuk memaparkannya (begitu juga dalam Doa & zikir dan Sirah). Ketik tajuk untuk beralih ke kitab lain dalam buku yang sama.
+8. Pada halaman sesuatu kitab, tajuknya, **Hadith number** dan **Search this book** juga kekal di atas. Tajuk kitab dan kotak **AR · BI · ENG · SANAD** kekal di atas semasa anda menatal; ketik sekali pada teks untuk menyembunyikannya, dan sekali lagi untuk memaparkannya (begitu juga dalam Doa & zikir dan Sirah). Ketik tajuk untuk beralih ke kitab lain dalam buku yang sama.
 9. Hadis yang dihuraikan oleh HadeethEnc.com mempunyai butang **Syarah · HadeethEnc** di bawah teksnya. Ia membuka huraian, pengajaran hadis dan makna perkataan dalam **BM** (Bahasa Melayu, kira-kira 100 hadis setakat ini), **BI**, **ENG** atau **AR**, tanpa sebarang perubahan daripada HadeethEnc. Ia dipadankan dengan hadis melalui teksnya, jadi ia mungkin memetik riwayat lain bagi hadis yang sama.
 10. **Also in** di bawah hadis menyenaraikan hadis yang sama dalam kitab lain (contohnya "Muslim 113", "Abu Dawud 3692"). "(close wording)" bermaksud kebanyakan lafaznya sama tetapi tidak semua, atau hanya sebahagian daripada hadis yang lebih panjang. Ketik untuk membacanya bersama hukum daripada kitab itu sendiri, kemudian **Open in …** untuk pergi ke sana. Ia dicari dengan membandingkan teks Arab, jadi ia membantu mencari riwayat lain; ia tidak bermaksud sanad atau hukumnya sama.
 11. Setiap hadis ada butang **penanda buku** (lima warna, seperti al-Quran) dan butang **nota**. **Continue reading** (tempat anda berhenti) berada di bahagian atas halaman Hadith. Senarai penanda buku dipaparkan di bawahnya apabila **Show** (di sebelah **All**) ditanda; ia tidak ditanda pada mulanya.
+
+12. **Asy-Syama'il al-Muhammadiyyah** (at-Tirmizi) ialah kitab kelapan: rupa, akhlak dan kehidupan harian Nabi ﷺ, 400 hadis dalam 56 bab, dalam bahasa Arab dan Inggeris (Sunnah.com). Setiap hadis menunjukkan penilaian **Zubair 'Ali Za'i** dan, jika hadis itu ada dalam *Mukhtasar asy-Syama'il* al-Albani, penilaian **al-Albani** dengan nombornya. Beliau membuang sanad yang berulang, jadi tiada penilaian beliau tidak bermakna hadis itu lemah. **Also in** menunjukkan hadis yang sama dalam enam kitab, dengan penilaian masing-masing (al-Albani, Syu'aib al-Arna'ut, Zubair 'Ali Za'i). Tiada terjemahan Melayu terbuka untuk kitab ini, jadi BI memaparkan bahasa Inggeris.
+
+**Sifat Solat Nabi ﷺ**
+
+1. Home → **Sifat Solat Nabi ﷺ**: solat dalam 16 langkah, daripada niat hingga salam, dan qunut Subuh.
+2. Setiap langkah ada huraian ringkas dan **hadis**nya daripada tujuh kitab dengan darjatnya; ketik untuk membacanya (butang kembali telefon membawa anda semula ke langkah itu).
+3. **Perbezaan pendapat ulama** (ditanda "ada perbezaan" dalam senarai) meletakkan pendapat mazhab **Syafi'i**, **Hanafi**, **Maliki** dan **Hanbali** serta **al-Albani** bersebelahan, setiap satu dengan dalil yang dibincangkan dan darjatnya, tanpa memilih antara mereka: cth. tempat meletak tangan, basmalah dikuatkan, Al-Fatihah di belakang imam, lutut atau tangan dahulu, duduk istirahat, jari ketika tasyahhud, qunut Subuh.
+4. Sumber pendapat mazhab: al-Nawawi (*al-Majmu'*, *Minhaj at-Talibin*), Ibn Qudamah (*al-Mughni*), Ibn Rushd (*Bidayat al-Mujtahid*); al-Albani: *Sifat Solat an-Nabi*. Ditulis untuk aplikasi ini; untuk amalan anda, ikut guru anda.
 
 **Sirah**
 
@@ -228,14 +238,16 @@ Semuanya dibuka dari **menu ayat**; memerlukan internet sekali bagi setiap surah
 **Imbas & semak (Scan & check)**
 
 1. Seseorang berkongsi "ayat" atau "hadis" dan anda mahu menyemaknya. Home → **Scan & check**, kemudian:
-   - **Kamera** (aplikasi Android): pilih dahulu bahasa teks itu (**Arabic** atau **Melayu / English**), ambil gambar teks itu, dan aplikasi membacanya dalam telefon (tidak perlu internet untuk membaca).
+   - **Kamera** (aplikasi Android): pilih dahulu bahasa teks itu (**Arabic** atau **Melayu / English**), ambil gambar teks itu, dan aplikasi membacanya dalam telefon (tidak perlu internet untuk membaca). Bahasa Arab dibaca oleh pembaca khas tulisan Arab (daripada EasyOCR), yang boleh membaca baris dan tulisan mushaf; kali pertama anda mengimbas tulisan Arab, aplikasi meminta untuk memuat turunnya sekali (kira-kira 59 MB, guna Wi-Fi); Melayu dan Inggeris oleh Google ML Kit.
+   - **Baca dengan Google Lens**: jika bacaan kurang tepat, Lens (dalam aplikasi Google) membaca gambar terakhir, atau membuka kameranya sendiri. Pilih teks, ketik **Kongsi → My Personal Quran**, dan ia disemak di sini. Lens memerlukan internet.
    - **Gambar / tangkap layar**: pilih tangkapan layar atau gambar yang sudah ada.
    - **Kongsi**: dalam WhatsApp, Telegram, pelayar atau galeri, ketik **Share → My Personal Quran** ("Check in My Quran"). Teks yang dikongsi terus disemak; untuk gambar, pilih bahasanya.
    - **Tampal**: tampal teks dalam kotak. Ini juga boleh dalam pelayar.
+   - Bahasa halaman ini, Sirah dan Masjid & musollah mengikut Settings → **Language of the Sirah, Scan & check and Masjid pages** (Same as translation, Bahasa Melayu atau English).
 2. Semak teks dalam kotak (kamera boleh tersilap membaca huruf, terutama Arab berbaris atau tulisan berhias), betulkan jika perlu, dan ketik **Semak**.
 3. **Al-Quran**: hijau **Dijumpai dalam Al-Quran**, **Dijumpai: sebahagian daripada ayat**, kuning **Hampir dengan ayat Al-Quran: ada perbezaan**, atau merah **Tiada ayat Al-Quran yang sepadan**. Setiap padanan menunjukkan ayat, terjemahannya dan berapa banyak yang sepadan; ketik untuk membuka ayat itu (butang **kembali** telefon membawa anda semula ke semakan).
-4. **Hadis**: tujuh kitab dalam aplikasi ini disemak (kali pertama, setiap kitab dimuat turun, jadi guna Wi-Fi). Setiap padanan menunjukkan kitab, nombor dan darjatnya, dan sama ada seluruh teks itu ada dalam hadis tersebut atau **hanya sebahagian**. Merah **Tidak dijumpai** bukan bukti hadis itu palsu: ia mungkin ada dalam kitab lain (seperti Musnad Ahmad) atau dengan lafaz lain. Tanya guru yang berkelayakan.
-5. Cara padanan: Arab, perkataan yang sama mengikut susunan (baris diabaikan); Melayu dan Inggeris, perkataan penting yang sama. Penterjemah memilih perkataan berbeza, jadi peratus rendah tidak bermakna tiada. Teks hadis Bahasa Melayu dibandingkan dengan terjemahan Indonesia.
+4. **Hadis**: lapan kitab dalam aplikasi ini disemak (kali pertama, setiap kitab dimuat turun, jadi guna Wi-Fi). Setiap padanan menunjukkan kitab, nombor dan darjatnya, dan sama ada seluruh teks itu ada dalam hadis tersebut atau **hanya sebahagian**. Merah **Tidak dijumpai** bukan bukti hadis itu palsu: ia mungkin ada dalam kitab lain (seperti Musnad Ahmad) atau dengan lafaz lain. Tanya guru yang berkelayakan.
+5. Cara padanan: Arab, huruf dan perkataan yang sama (baris, alif dan hamzah diabaikan, jadi ejaan Uthmani mushaf dan ejaan biasa dikira sama, dan beberapa perkataan yang tersilap baca tidak menghalang padanan); Melayu dan Inggeris, perkataan penting yang sama. Penterjemah memilih perkataan berbeza, jadi peratus rendah tidak bermakna tiada. Teks hadis Bahasa Melayu dibandingkan dengan terjemahan Indonesia.
 
 **Masjid & musolla (Masjid & musollah)**
 

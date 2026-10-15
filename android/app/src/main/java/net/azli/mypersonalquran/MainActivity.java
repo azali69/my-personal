@@ -823,13 +823,49 @@ public class MainActivity extends Activity {
         }
         return false;
     }
+    private File lastScan = null;   // the last picture read, kept so it can be sent to Google Lens
     private void runScan(Uri u, String lang) {
         if (u == null) { js("window.__scanned && window.__scanned({cancel:1})"); return; }
         js("window.__scanBusy && window.__scanBusy()");
-        ScanOcr.run(this, u, lang, json -> js("window.__scanned && window.__scanned(" + json + ")"));
+        final Uri src = u;
+        new Thread(() -> {
+            Uri use = src;
+            try {
+                File dir = new File(getCacheDir(), "scan"); dir.mkdirs(); File f = new File(dir, "last.img");
+                try (InputStream in = getContentResolver().openInputStream(src); OutputStream out = new FileOutputStream(f)) {
+                    byte[] b = new byte[65536]; int n; while ((n = in.read(b)) > 0) out.write(b, 0, n); }
+                lastScan = f; use = Uri.fromFile(f);
+            } catch (Exception ignored) { }
+            ScanOcr.run(this, use, lang, json -> js("window.__scanned && window.__scanned(" + json + ")"));
+        }, "scan-copy").start();
+    }
+    /** Google Lens reads Arabic very well: send it the last picture, or open its camera. The text is then shared back. */
+    private boolean tryStart(Intent i) { try { startActivity(i); return true; } catch (Exception e) { return false; } }
+    private void openLens() {
+        if (lastScan != null && lastScan.exists()) {
+            Uri u = androidx.core.content.FileProvider.getUriForFile(this, getPackageName() + ".files", lastScan);
+            Intent send = new Intent(Intent.ACTION_SEND).setType("image/jpeg").putExtra(Intent.EXTRA_STREAM, u).addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            if (tryStart(new Intent(send).setClassName("com.google.android.googlequicksearchbox", "com.google.android.apps.search.lens.LensShareEntryPointActivity"))) return;
+            if (tryStart(new Intent(send).setPackage("com.google.ar.lens"))) return;
+            if (tryStart(Intent.createChooser(send, "Read the text with…"))) return;
+        }
+        if (tryStart(new Intent(Intent.ACTION_VIEW, Uri.parse("googleapp://lens")))) return;
+        Intent l = getPackageManager().getLaunchIntentForPackage("com.google.ar.lens");
+        if (l != null && tryStart(l)) return;
+        js("window.__scanned && window.__scanned(" + ScanOcr.err("Google Lens is not on this phone. Install the Google app or Google Lens from the Play Store.") + ")");
     }
     private class ExtraBridge {
         @JavascriptInterface public String scanAvailable() { return "1"; }
+        @JavascriptInterface public void lens() { runOnUiThread(MainActivity.this::openLens); }
+        @JavascriptInterface public String ocrReady() { return ArabicOcr.ready(MainActivity.this) ? "1" : "0"; }
+        @JavascriptInterface public void ocrDownload() {
+            new Thread(() -> {
+                boolean ok = false;
+                try { ArabicOcr.download(MainActivity.this, pct -> js("window.__ocrProg && window.__ocrProg(" + pct + ")")); ok = ArabicOcr.ready(MainActivity.this); }
+                catch (Exception e) { ok = false; }
+                final boolean r = ok; js("window.__ocrDone && window.__ocrDone(" + r + ")");
+            }, "ocr-download").start();
+        }
         @JavascriptInterface public String takeShared() {
             try {
                 JSONObject o = new JSONObject();

@@ -17,6 +17,8 @@
     <queries>
         <intent><action android:name="android.speech.RecognitionService" /></intent>
         <intent><action android:name="android.media.action.IMAGE_CAPTURE" /></intent>
+        <package android:name="com.google.android.googlequicksearchbox" />
+        <package android:name="com.google.ar.lens" />
     </queries>
     <application
         android:label="@string/app_name"

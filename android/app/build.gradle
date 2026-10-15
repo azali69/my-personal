@@ -25,7 +25,7 @@ android {
         }
     }
     compileOptions { sourceCompatibility JavaVersion.VERSION_17; targetCompatibility JavaVersion.VERSION_17 }
-    androidResources { noCompress 'html', 'traineddata' }
+    androidResources { noCompress 'html', 'onnx' }
     packaging { jniLibs { pickFirsts += ['**/libc++_shared.so']; useLegacyPackaging true } }
 }
 dependencies {
@@ -33,5 +33,5 @@ dependencies {
     implementation 'androidx.core:core:1.13.1'
     implementation platform('org.jetbrains.kotlin:kotlin-bom:1.8.22')
     implementation 'com.google.mlkit:text-recognition:16.0.1'
-    implementation 'cz.adaptech.tesseract4android:tesseract4android-openmp:4.9.0'
+    implementation 'com.microsoft.onnxruntime:onnxruntime-android:1.20.0'
 }
