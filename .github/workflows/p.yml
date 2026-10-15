@@ -1,0 +1,17 @@
+name: probe-ocr
+on: { push: { branches: [probe-ocr] } }
+permissions: { contents: write }
+jobs:
+  p:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.11' }
+      - run: |
+          mkdir -p out
+          pip install -q paddlepaddle==3.1.1 paddleocr==3.1.1 > out/pip.txt 2>&1 || pip install -q paddlepaddle paddleocr >> out/pip.txt 2>&1
+          python run.py > out/log.txt 2>&1 || true
+          ls -la ~/.paddlex/official_models >> out/log.txt 2>&1 || true
+          du -sh ~/.paddlex/official_models/* >> out/log.txt 2>&1 || true
+          git config user.name probe; git config user.email p@x; git add out; git commit -qm out; git push -q origin HEAD:probe-ocr-out -f
