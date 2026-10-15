@@ -19,7 +19,9 @@ E = [
   h=[['bukhari',1,dict(en="Actions are only by intentions",ms="Setiap amalan hanya dengan niat")]],
   d=[dict(topic=dict(en="Saying the intention aloud (e.g. 'usolli')", ms="Melafazkan niat (cth. 'usolli')"),
      p=[dict(w='shafii',en="Later Shafi'i scholars consider saying it with the tongue recommended, to help the heart; the intention itself stays in the heart.",ms="Ulama Syafi'i terkemudian menganggap melafazkannya sunat, untuk membantu hati; niat itu sendiri tetap di dalam hati."),
-        dict(w='albani',en="Not reported from the Prophet ﷺ or the Companions; he held that it should not be done (also the view of Ibn Taymiyyah).",ms="Tidak diriwayatkan daripada Nabi ﷺ atau para Sahabat; beliau berpendapat ia tidak patut dilakukan (juga pendapat Ibn Taimiyyah).")],
+        dict(w='albani',en="Not reported from the Prophet ﷺ or the Companions; he held that it should not be done (also the view of Ibn Taymiyyah).",ms="Tidak diriwayatkan daripada Nabi ﷺ atau para Sahabat; beliau berpendapat ia tidak patut dilakukan (juga pendapat Ibn Taimiyyah)."),
+        dict(w='ibnbaz',en="Not prescribed: saying it aloud is an innovation; the intention is in the heart.",ms="Tidak disyariatkan: melafazkannya adalah bid'ah; niat di dalam hati."),
+        dict(w='uthaymin',en="Not prescribed; the intention is in the heart.",ms="Tidak disyariatkan; niat di dalam hati.")],
      note=dict(en="No hadith reports the Prophet ﷺ saying an intention for prayer aloud; the difference is whether doing so is a helpful practice.",ms="Tiada hadis yang meriwayatkan Nabi ﷺ melafazkan niat solat; perbezaannya ialah sama ada melakukannya amalan yang membantu."))]),
 
  dict(id='takbir', t=dict(en="Opening takbir and raising the hands", ms="Takbiratul ihram dan mengangkat tangan"),
@@ -36,7 +38,9 @@ E = [
         dict(w='hanafi',en="Below the navel (for men).",ms="Di bawah pusat (bagi lelaki)."),
         dict(w='hanbali',en="Below the navel, in the best-known report from Ahmad; he also allowed above it.",ms="Di bawah pusat, menurut riwayat yang masyhur daripada Ahmad; beliau juga membenarkan di atasnya."),
         dict(w='maliki',en="The best-known view in the school is to let the hands hang down in obligatory prayers; others in the school hold them as the majority do.",ms="Pendapat masyhur mazhab ialah melepaskan tangan di sisi dalam solat fardu; sebahagian ulama mazhab bersedekap seperti jumhur."),
-        dict(w='albani',en="On the chest.",ms="Di atas dada.")],
+        dict(w='albani',en="On the chest.",ms="Di atas dada."),
+        dict(w='ibnbaz',en="On the chest.",ms="Di atas dada."),
+        dict(w='uthaymin',en="On the chest.",ms="Di atas dada.")],
      h=[['abudawud',756,dict(en="'Ali: below the navel",ms="'Ali: di bawah pusat")],['abudawud',758,dict(en="Abu Hurairah: below the navel",ms="Abu Hurairah: di bawah pusat")],['abudawud',759,dict(en="Tawus (a Successor, mursal): on the chest",ms="Tawus (Tabi'in, mursal): di atas dada")]],
      note=dict(en="The reports naming a place are all disputed: see the gradings on each. 'On the chest' from Wa'il ibn Hujr is in Sahih Ibn Khuzaymah, and from Hulb at-Ta'i in Musnad Ahmad (not in this app's books).",ms="Riwayat yang menyebut tempatnya semuanya dipertikaikan: lihat penilaian setiap satu. 'Di atas dada' daripada Wa'il bin Hujr ada dalam Sahih Ibn Khuzaimah, dan daripada Hulb at-Ta'i dalam Musnad Ahmad (bukan dalam kitab aplikasi ini)."))]),
 
@@ -49,7 +53,8 @@ E = [
         dict(w='hanafi',en="'Subhanakallahumma…'.",ms="'Subhanakallahumma…'."),
         dict(w='hanbali',en="'Subhanakallahumma…'.",ms="'Subhanakallahumma…'."),
         dict(w='maliki',en="No opening supplication in obligatory prayers, in the best-known view.",ms="Tiada doa iftitah dalam solat fardu, menurut pendapat masyhur."),
-        dict(w='albani',en="Any of the authentic wordings, varying between them.",ms="Mana-mana lafaz yang sahih, berselang-seli.")])]),
+        dict(w='albani',en="Any of the authentic wordings, varying between them.",ms="Mana-mana lafaz yang sahih, berselang-seli."),
+        dict(w='uthaymin',en="Any of the authentic wordings, varying between them.",ms="Mana-mana lafaz yang sahih, berselang-seli.")])]),
 
  dict(id='basmalah', t=dict(en="Seeking refuge and the basmalah", ms="Ta'awwuz dan basmalah"),
   s=dict(en="He sought refuge in Allah before reciting (Abu Dawud 775). Anas said the Prophet ﷺ, Abu Bakr and 'Umar began the recitation with 'Al-hamdu lillahi Rabbil-'alamin' (Bukhari 743); in Muslim's wording they did not mention (aloud) 'Bismillah…' (Muslim 892). Whether it is said aloud is where scholars differ.",
@@ -60,7 +65,9 @@ E = [
         dict(w='hanafi',en="Said quietly.",ms="Dibaca perlahan."),
         dict(w='hanbali',en="Said quietly.",ms="Dibaca perlahan."),
         dict(w='maliki',en="Not said in obligatory prayers, in the best-known view.",ms="Tidak dibaca dalam solat fardu, menurut pendapat masyhur."),
-        dict(w='albani',en="Said quietly, as a rule.",ms="Dibaca perlahan, pada kebiasaannya.")],
+        dict(w='albani',en="Said quietly, as a rule.",ms="Dibaca perlahan, pada kebiasaannya."),
+        dict(w='ibnbaz',en="Said quietly; saying it aloud sometimes is allowed.",ms="Dibaca perlahan; kadang-kadang menguatkannya dibolehkan."),
+        dict(w='uthaymin',en="Said quietly.",ms="Dibaca perlahan.")],
      h=[['nasai',905,dict(en="Nu'aym al-Mujmir: Abu Hurairah recited it (aloud) and said his prayer was most like the Prophet's",ms="Nu'aim al-Mujmir: Abu Hurairah membacanya (kuat) dan berkata solatnya paling menyerupai solat Nabi")]])]),
 
  dict(id='fatihah', t=dict(en="Al-Fatihah and amin", ms="Al-Fatihah dan amin"),
@@ -72,14 +79,18 @@ E = [
         dict(w='hanafi',en="The follower does not recite; the imam's recitation counts for him.",ms="Makmum tidak membaca; bacaan imam memadai baginya."),
         dict(w='maliki',en="The follower recites in quiet prayers and listens in loud ones.",ms="Makmum membaca dalam solat sirr dan mendengar dalam solat jahar."),
         dict(w='hanbali',en="The follower recites in quiet prayers and listens in loud ones.",ms="Makmum membaca dalam solat sirr dan mendengar dalam solat jahar."),
-        dict(w='albani',en="The follower listens in loud prayers and recites in quiet ones.",ms="Makmum mendengar dalam solat jahar dan membaca dalam solat sirr.")],
+        dict(w='albani',en="The follower listens in loud prayers and recites in quiet ones.",ms="Makmum mendengar dalam solat jahar dan membaca dalam solat sirr."),
+        dict(w='ibnbaz',en="Obligatory for the follower too, in loud prayers as well (in the imam's pauses or quietly while he recites).",ms="Wajib juga bagi makmum, termasuk dalam solat jahar (ketika imam berhenti atau perlahan semasa imam membaca)."),
+        dict(w='uthaymin',en="Obligatory for the follower too, in loud prayers as well.",ms="Wajib juga bagi makmum, termasuk dalam solat jahar.")],
      h=[['tirmidhi',312,dict(en="'Has any of you recited with me?' (after a loud prayer)",ms="'Adakah sesiapa antara kamu membaca bersamaku?' (selepas solat jahar)")],['tirmidhi',247,None]]),
      dict(topic=dict(en="Saying amin aloud",ms="Menyaringkan amin"),
      p=[dict(w='shafii',en="Aloud in loud prayers, by the imam and those behind him.",ms="Dikuatkan dalam solat jahar, oleh imam dan makmum."),
         dict(w='hanbali',en="Aloud in loud prayers.",ms="Dikuatkan dalam solat jahar."),
         dict(w='hanafi',en="Quietly.",ms="Perlahan."),
         dict(w='maliki',en="Quietly; the imam does not say it in loud prayers in the best-known view.",ms="Perlahan; imam tidak menyebutnya dalam solat jahar menurut pendapat masyhur."),
-        dict(w='albani',en="Aloud, by the imam and those behind him.",ms="Dikuatkan, oleh imam dan makmum.")])]),
+        dict(w='albani',en="Aloud, by the imam and those behind him.",ms="Dikuatkan, oleh imam dan makmum."),
+        dict(w='ibnbaz',en="Aloud, by the imam and those behind him.",ms="Dikuatkan, oleh imam dan makmum."),
+        dict(w='uthaymin',en="Aloud.",ms="Dikuatkan.")])]),
 
  dict(id='ruku', t=dict(en="Bowing (ruku')", ms="Rukuk"),
   s=dict(en="He said the takbir and bowed, with his back level, head neither raised nor lowered (Muslim 1110, Bukhari 828). In bowing he said 'Subhana Rabbiyal-'Azim' (Muslim 1814) and also 'Subhanakallahumma Rabbana wa bihamdika, Allahummaghfir li' (Muslim 1085).",
@@ -90,7 +101,9 @@ E = [
         dict(w='hanbali',en="Recommended when bowing and rising from it.",ms="Sunat ketika rukuk dan bangkit daripadanya."),
         dict(w='hanafi',en="Only at the opening takbir.",ms="Hanya pada takbiratul ihram."),
         dict(w='maliki',en="Only at the opening takbir, in the best-known view.",ms="Hanya pada takbiratul ihram, menurut pendapat masyhur."),
-        dict(w='albani',en="At all three, and sometimes when prostrating (Nasa'i 1085).",ms="Pada ketiga-tiganya, dan kadang-kadang ketika sujud (Nasa'i 1085).")],
+        dict(w='albani',en="At all three, and sometimes when prostrating (Nasa'i 1085).",ms="Pada ketiga-tiganya, dan kadang-kadang ketika sujud (Nasa'i 1085)."),
+        dict(w='ibnbaz',en="At the opening, bowing, rising, and standing from the first tashahhud.",ms="Pada takbiratul ihram, rukuk, bangkit, dan bangun daripada tasyahhud awal."),
+        dict(w='uthaymin',en="At the opening, bowing, rising, and standing from the first tashahhud.",ms="Pada takbiratul ihram, rukuk, bangkit, dan bangun daripada tasyahhud awal.")],
      h=[['bukhari',735,None],['bukhari',739,None],['nasai',1085,None]])]),
 
  dict(id='itidal', t=dict(en="Rising from bowing (i'tidal)", ms="I'tidal"),
@@ -99,8 +112,10 @@ E = [
   h=[['bukhari',734,None],['bukhari',828,None]],
   d=[dict(topic=dict(en="The hands after rising from bowing",ms="Tangan selepas bangkit daripada rukuk"),
      p=[dict(w='shafii',en="Let them hang at the sides.",ms="Dilepaskan di sisi."),
-        dict(w='hanbali',en="Either is allowed; some Hanbali scholars (and Ibn Baz) place the right on the left again.",ms="Kedua-duanya dibolehkan; sebahagian ulama Hanbali (dan Ibn Baz) bersedekap semula."),
-        dict(w='albani',en="Placing them again is not reported and should not be done.",ms="Bersedekap semula tidak diriwayatkan dan tidak patut dilakukan.")],
+        dict(w='hanbali',en="Either is allowed; some Hanbali scholars place the right on the left again.",ms="Kedua-duanya dibolehkan; sebahagian ulama Hanbali bersedekap semula."),
+        dict(w='albani',en="Placing them again is not reported and should not be done.",ms="Bersedekap semula tidak diriwayatkan dan tidak patut dilakukan."),
+        dict(w='ibnbaz',en="Place the right on the left again: that is the sunnah.",ms="Bersedekap semula: itulah sunnahnya."),
+        dict(w='uthaymin',en="Place the right on the left again.",ms="Bersedekap semula.")],
      note=dict(en="No hadith speaks of this directly; both sides argue from the general wording of the hadith on placing the hands.",ms="Tiada hadis yang menyebutnya secara langsung; kedua-dua pihak berhujah dengan lafaz umum hadis meletakkan tangan."))]),
 
  dict(id='sujud', t=dict(en="Prostration (sujud)", ms="Sujud"),
@@ -112,7 +127,9 @@ E = [
         dict(w='hanafi',en="Knees first.",ms="Lutut dahulu."),
         dict(w='hanbali',en="Knees first, in the best-known report.",ms="Lutut dahulu, menurut riwayat yang masyhur."),
         dict(w='maliki',en="Hands first.",ms="Tangan dahulu."),
-        dict(w='albani',en="Hands first.",ms="Tangan dahulu.")],
+        dict(w='albani',en="Hands first.",ms="Tangan dahulu."),
+        dict(w='ibnbaz',en="Knees first.",ms="Lutut dahulu."),
+        dict(w='uthaymin',en="Knees first.",ms="Lutut dahulu.")],
      h=[['abudawud',838,dict(en="Wa'il: knees before hands",ms="Wa'il: lutut sebelum tangan")],['abudawud',840,dict(en="Abu Hurairah: 'do not kneel as a camel kneels; put the hands before the knees'",ms="Abu Hurairah: 'jangan turun seperti unta turun; letakkan tangan sebelum lutut'")]],
      note=dict(en="Each side judges the other's hadith weak: see the gradings on each. Ibn al-Qayyim argued that the wording of Abu Hurairah's hadith was reversed by a narrator.",ms="Setiap pihak menilai hadis pihak lain lemah: lihat penilaian setiap satu. Ibn al-Qayyim berhujah lafaz hadis Abu Hurairah terbalik oleh seorang perawi."))]),
 
@@ -128,6 +145,8 @@ E = [
   d=[dict(topic=dict(en="Is it a sunnah?",ms="Adakah ia sunat?"),
      p=[dict(w='shafii',en="Yes, a sunnah.",ms="Ya, sunat."),
         dict(w='albani',en="Yes, a sunnah.",ms="Ya, sunat."),
+        dict(w='ibnbaz',en="Recommended.",ms="Sunat."),
+        dict(w='uthaymin',en="Only for one who needs it (age, weakness).",ms="Hanya bagi yang memerlukannya (usia, lemah)."),
         dict(w='hanafi',en="Not a sunnah; he did it when he had grown heavy.",ms="Bukan sunat; Baginda melakukannya ketika badan sudah berat."),
         dict(w='maliki',en="Not a sunnah.",ms="Bukan sunat."),
         dict(w='hanbali',en="Not a sunnah in the best-known report, except for one who needs it; another report from Ahmad makes it a sunnah.",ms="Bukan sunat menurut riwayat yang masyhur, kecuali bagi yang memerlukannya; satu riwayat lain daripada Ahmad menjadikannya sunat.")])]),
@@ -141,7 +160,8 @@ E = [
         dict(w='hanafi',en="Raised at 'la ilaha' and lowered at 'illallah'.",ms="Diangkat pada 'la ilaha' dan diturunkan pada 'illallah'."),
         dict(w='maliki',en="Moved to and fro throughout the tashahhud.",ms="Digerakkan sepanjang tasyahhud."),
         dict(w='hanbali',en="Pointed each time Allah is mentioned, without moving it.",ms="Ditunjukkan setiap kali nama Allah disebut, tanpa digerakkan."),
-        dict(w='albani',en="Pointed and moved throughout the tashahhud.",ms="Ditunjukkan dan digerakkan sepanjang tasyahhud.")],
+        dict(w='albani',en="Pointed and moved throughout the tashahhud.",ms="Ditunjukkan dan digerakkan sepanjang tasyahhud."),
+        dict(w='uthaymin',en="Pointed, and moved each time one supplicates in the tashahhud.",ms="Ditunjukkan, dan digerakkan setiap kali berdoa dalam tasyahhud.")],
      h=[['nasai',889,dict(en="Wa'il: 'I saw him moving it, supplicating with it'",ms="Wa'il: 'Aku melihat Baginda menggerakkannya, berdoa dengannya'")],['abudawud',989,dict(en="Ibn az-Zubayr: 'and he did not move it'",ms="Ibn az-Zubair: 'dan Baginda tidak menggerakkannya'")]],
      note=dict(en="Many scholars consider the word 'moving it' in Wa'il's hadith a wording only one narrator added (shadhdh); al-Albani accepted it. 'And he did not move it' is graded weak.",ms="Ramai ulama menganggap perkataan 'menggerakkannya' dalam hadis Wa'il sebagai tambahan seorang perawi sahaja (syaz); al-Albani menerimanya. 'Dan tidak menggerakkannya' dinilai lemah."))]),
 
@@ -174,10 +194,16 @@ E = [
         dict(w='maliki',en="Recommended, said quietly, before bowing.",ms="Sunat, dibaca perlahan, sebelum rukuk."),
         dict(w='hanafi',en="Not in Subuh, except at times of calamity in some views; qunut is in witr.",ms="Tidak dalam Subuh, kecuali ketika musibah menurut sebahagian pendapat; qunut dalam witir."),
         dict(w='hanbali',en="Not in Subuh, except at times of calamity.",ms="Tidak dalam Subuh, kecuali ketika musibah."),
-        dict(w='albani',en="Only at times of calamity.",ms="Hanya ketika musibah.")],
+        dict(w='albani',en="Only at times of calamity.",ms="Hanya ketika musibah."),
+        dict(w='ibnbaz',en="Only at times of calamity.",ms="Hanya ketika musibah."),
+        dict(w='uthaymin',en="Only at times of calamity.",ms="Hanya ketika musibah.")],
      h=[['tirmidhi',402,dict(en="Abu Malik al-Ashja'i's father: 'My son, it is something newly begun'",ms="Bapa Abu Malik al-Asyja'i: 'Wahai anakku, ia perkara baharu'")]],
      note=dict(en="The Shafi'is also cite Anas: 'He kept making qunut in Fajr until he left this world', in Musnad Ahmad and al-Bayhaqi (not in this app's books). Al-Hakim, al-Bayhaqi and al-Nawawi held it authentic; others, including Ibn al-Qayyim and al-Albani, judged it weak.",ms="Mazhab Syafi'i juga berhujah dengan riwayat Anas: 'Baginda sentiasa berqunut dalam Subuh hingga Baginda meninggalkan dunia', dalam Musnad Ahmad dan al-Baihaqi (bukan dalam kitab aplikasi ini). Al-Hakim, al-Baihaqi dan al-Nawawi menilainya sahih; yang lain, termasuk Ibn al-Qayyim dan al-Albani, menilainya lemah."))]),
 ]
 
 WHO = dict(shafii=dict(en="Shafi'i", ms="Syafi'i"), hanafi=dict(en="Hanafi", ms="Hanafi"), maliki=dict(en="Maliki", ms="Maliki"),
-           hanbali=dict(en="Hanbali", ms="Hanbali"), albani=dict(en="Al-Albani", ms="Al-Albani"))
+           hanbali=dict(en="Hanbali", ms="Hanbali"), albani=dict(en="Al-Albani", ms="Al-Albani"),
+           ibnbaz=dict(en="Ibn Baz", ms="Ibn Baz"), uthaymin=dict(en="Ibn 'Uthaymin", ms="Ibn 'Uthaimin"))
+# Commentators, shown apart from the four schools in their own box: al-Albani (Sifat Salat an-Nabi), 'Abd al-'Aziz ibn Baz
+# (Majmu' Fatawa), Muhammad ibn Salih al-'Uthaymin (al-Sharh al-Mumti').
+COMMENTATORS = ['albani', 'ibnbaz', 'uthaymin']
