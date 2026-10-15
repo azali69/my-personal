@@ -34,8 +34,35 @@ final class ArabicOcr {
 
     private ArabicOcr() { }
 
+    static final String BASE = "https://github.com/azali69/my-personal/releases/download/ocr-models-1/";
+    static final String[] FILES = {"det.onnx", "ar_rec.onnx", "ar_rec.json"};
+    static final long[] SIZES = {4745517L, 54000956L, 374L};
+    static java.io.File dir(Context c) { return new java.io.File(c.getFilesDir(), "ocr"); }
+    /** The reader is downloaded once on first use (about 59 MB) and kept in the app's own storage. */
+    static boolean ready(Context c) {
+        for (int i = 0; i < FILES.length; i++) { java.io.File f = new java.io.File(dir(c), FILES[i]); if (!f.exists() || f.length() != SIZES[i]) return false; }
+        return true;
+    }
+    interface Progress { void at(int pct); }
+    static void download(Context c, Progress p) throws Exception {
+        java.io.File d = dir(c); d.mkdirs(); long total = 0, done = 0; for (long s : SIZES) total += s;
+        for (int i = 0; i < FILES.length; i++) {
+            java.io.File f = new java.io.File(d, FILES[i]);
+            if (f.exists() && f.length() == SIZES[i]) { done += SIZES[i]; continue; }
+            java.io.File tmp = new java.io.File(d, FILES[i] + ".part");
+            java.net.HttpURLConnection h = (java.net.HttpURLConnection) new java.net.URL(BASE + FILES[i]).openConnection();
+            h.setInstanceFollowRedirects(true); h.setConnectTimeout(20000); h.setReadTimeout(30000);
+            int code = h.getResponseCode(); if (code != 200) throw new Exception("HTTP " + code);
+            try (InputStream in = h.getInputStream(); java.io.OutputStream out = new java.io.FileOutputStream(tmp)) {
+                byte[] b = new byte[1 << 16]; int n; int last = -1;
+                while ((n = in.read(b)) > 0) { out.write(b, 0, n); done += n; int pct = (int) (done * 100 / total); if (pct != last) { last = pct; p.at(pct); } }
+            } finally { h.disconnect(); }
+            if (tmp.length() != SIZES[i] || !tmp.renameTo(f)) { tmp.delete(); throw new Exception("incomplete " + FILES[i]); }
+        }
+    }
+
     private static byte[] asset(Context c, String name) throws Exception {
-        try (InputStream in = c.getAssets().open(name)) {
+        try (InputStream in = new java.io.FileInputStream(new java.io.File(dir(c), name.replace("ocr/", "")))) {
             ByteArrayOutputStream bo = new ByteArrayOutputStream(); byte[] b = new byte[1 << 16]; int n;
             while ((n = in.read(b)) > 0) bo.write(b, 0, n); return bo.toByteArray();
         }

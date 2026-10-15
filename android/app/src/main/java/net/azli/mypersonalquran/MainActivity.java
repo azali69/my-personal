@@ -857,6 +857,15 @@ public class MainActivity extends Activity {
     private class ExtraBridge {
         @JavascriptInterface public String scanAvailable() { return "1"; }
         @JavascriptInterface public void lens() { runOnUiThread(MainActivity.this::openLens); }
+        @JavascriptInterface public String ocrReady() { return ArabicOcr.ready(MainActivity.this) ? "1" : "0"; }
+        @JavascriptInterface public void ocrDownload() {
+            new Thread(() -> {
+                boolean ok = false;
+                try { ArabicOcr.download(MainActivity.this, pct -> js("window.__ocrProg && window.__ocrProg(" + pct + ")")); ok = ArabicOcr.ready(MainActivity.this); }
+                catch (Exception e) { ok = false; }
+                final boolean r = ok; js("window.__ocrDone && window.__ocrDone(" + r + ")");
+            }, "ocr-download").start();
+        }
         @JavascriptInterface public String takeShared() {
             try {
                 JSONObject o = new JSONObject();

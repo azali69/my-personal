@@ -238,7 +238,7 @@ All open from the **ayah menu**; they need the internet once per surah.
 **Scan & check**
 
 1. Someone posts an "ayah" or a "hadith" and you want to check it. Home → **Scan & check**, then:
-   - **Camera** (Android app): choose the language of the text first (**Arabic** or **Melayu / English**), take a photo of the text, and the app reads it on the phone (no internet needed for reading). Arabic is read by a reader made for Arabic script (from EasyOCR), which handles harakat and Qur'an script; Malay and English by Google ML Kit.
+   - **Camera** (Android app): choose the language of the text first (**Arabic** or **Melayu / English**), take a photo of the text, and the app reads it on the phone (no internet needed for reading). Arabic is read by a reader made for Arabic script (from EasyOCR), which handles harakat and Qur'an script; the first time you scan Arabic, the app asks to download it once (about 59 MB, Wi-Fi recommended); Malay and English by Google ML Kit.
    - **Read with Google Lens**: if a reading is not right, Lens (in the Google app) reads the last picture, or opens its own camera. Select the text, tap **Share → My Personal Quran**, and it is checked here. Lens needs the internet.
    - **Picture / screenshot**: pick a screenshot or photo you already have.
    - **Share**: in WhatsApp, Telegram, the browser or the gallery, tap **Share → My Personal Quran** ("Check in My Quran"). Shared text is checked at once; for a shared picture, choose its language.

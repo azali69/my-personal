@@ -238,7 +238,7 @@ Semuanya dibuka dari **menu ayat**; memerlukan internet sekali bagi setiap surah
 **Imbas & semak (Scan & check)**
 
 1. Seseorang berkongsi "ayat" atau "hadis" dan anda mahu menyemaknya. Home → **Scan & check**, kemudian:
-   - **Kamera** (aplikasi Android): pilih dahulu bahasa teks itu (**Arabic** atau **Melayu / English**), ambil gambar teks itu, dan aplikasi membacanya dalam telefon (tidak perlu internet untuk membaca). Bahasa Arab dibaca oleh pembaca khas tulisan Arab (daripada EasyOCR), yang boleh membaca baris dan tulisan mushaf; Melayu dan Inggeris oleh Google ML Kit.
+   - **Kamera** (aplikasi Android): pilih dahulu bahasa teks itu (**Arabic** atau **Melayu / English**), ambil gambar teks itu, dan aplikasi membacanya dalam telefon (tidak perlu internet untuk membaca). Bahasa Arab dibaca oleh pembaca khas tulisan Arab (daripada EasyOCR), yang boleh membaca baris dan tulisan mushaf; kali pertama anda mengimbas tulisan Arab, aplikasi meminta untuk memuat turunnya sekali (kira-kira 59 MB, guna Wi-Fi); Melayu dan Inggeris oleh Google ML Kit.
    - **Baca dengan Google Lens**: jika bacaan kurang tepat, Lens (dalam aplikasi Google) membaca gambar terakhir, atau membuka kameranya sendiri. Pilih teks, ketik **Kongsi → My Personal Quran**, dan ia disemak di sini. Lens memerlukan internet.
    - **Gambar / tangkap layar**: pilih tangkapan layar atau gambar yang sudah ada.
    - **Kongsi**: dalam WhatsApp, Telegram, pelayar atau galeri, ketik **Share → My Personal Quran** ("Check in My Quran"). Teks yang dikongsi terus disemak; untuk gambar, pilih bahasanya.

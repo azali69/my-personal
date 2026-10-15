@@ -29,11 +29,6 @@ jobs:
           mkdir -p android/app/src/main/assets
           cp index.html android/app/src/main/assets/index.html
 
-      - name: Arabic reader models (release ocr-models-1, made by the 'Arabic reader models' workflow)
-        run: |
-          mkdir -p android/app/src/main/assets/ocr
-          for f in det.onnx ar_rec.onnx ar_rec.json; do curl -fsSL --retry 3 -o android/app/src/main/assets/ocr/$f https://github.com/azali69/my-personal/releases/download/ocr-models-1/$f; done
-          ls -l android/app/src/main/assets/ocr; test $(stat -c%s android/app/src/main/assets/ocr/ar_rec.onnx) -gt 1000000
 
       - name: Build
         env:

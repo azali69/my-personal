@@ -48,6 +48,7 @@ final class ScanOcr {
     }
 
     private static String arabic(Context ctx, Bitmap bmp) {
+        if (!ArabicOcr.ready(ctx)) return "{\"needReader\":true}";
         try { return ok(ArabicOcr.read(ctx, bmp), "ar"); }
         catch (Throwable e) { return err("Arabic reading failed. Try \"Read with Google Lens\"."); }
     }
