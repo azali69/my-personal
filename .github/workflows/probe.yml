@@ -7,19 +7,11 @@ jobs:
     steps:
       - run: |
           mkdir out && cd out
-          UA="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126 Safari/537.36"
-          curl -sSL -A "$UA" "https://www.muis.gov.sg/mosque/Our-Mosques/Mosque-Directory" -o muis_dir.html -w "%{http_code}\n" || true
-          curl -sSL -A "$UA" "https://www.muis.gov.sg/mosque" -o muis_mosque.html -w "%{http_code}\n" || true
-          curl -sSL -A "$UA" "https://www.ourmosques.sg/" -o ourmosques.html -w "%{http_code}\n" || true
-          npm i playwright@1.47.2 >/dev/null 2>&1 && npx playwright install chromium >/dev/null 2>&1
-          cat > p.js <<'JS'
-          const { chromium } = require('playwright');
-          (async()=>{ const b=await chromium.launch(); const p=await b.newPage();
-            for(const [u,f] of [['https://www.muis.gov.sg/mosque/Our-Mosques/Mosque-Directory','muis_dir_pw.html'],['https://www.muis.gov.sg/mosque','muis_mosque_pw.html']]){
-              try{ await p.goto(u,{waitUntil:'networkidle',timeout:60000}); await p.waitForTimeout(4000); require('fs').writeFileSync(f, await p.content()); }catch(e){ console.log(u,e.message); } }
-            await b.close(); })();
-          JS
-          node p.js || true
-          ls -l
-          cd .. && git -C out init -q && git -C out checkout -q -b probe-mosque2 && git -C out add -A && git -C out -c user.name=probe -c user.email=p@x commit -qm probe
-          git -C out push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" probe-mosque2
+          for pc in 425723 209369 309194 119173 769227 419285 068635 098801 469751 229923 698955 268534 679943 828812 518239 555876 479221 348261 688847 544997 609603 569844 468862 218099 579786 739983 659919 757620 618617 258590 189630 179364 419493 529651 769099 129579 535136 389304 079424 548920 199584 328835 139533 608878 118730 058767 149309 158787 169831 449283 419877 389522 427727 648125 198370 048624 579704 148952 419007 059607 299173 759055 921095 719452 387725 198833 219852 129797 409004 737740; do
+            curl -fsS "https://www.onemap.gov.sg/api/common/elastic/search?searchVal=$pc&returnGeom=Y&getAddrDetails=Y&pageNum=1" -o om_$pc.json || echo "fail $pc"
+            sleep 0.3
+          done
+          curl -fsS -A "MyPersonalQuran/1.0 (azali69 github)" "https://en.wikipedia.org/w/api.php?action=query&prop=coordinates&format=json&titles=Surau_Al-Firdaus|Surau_Ghim_Moh|Masjid_Temenggong_Daeng_Ibrahim|Masjid_Pulau_Bukom|Masjid_Taha|Masjid_Burhani|Islamic_Centre_Jamiyah" -o wcoords.json || true
+          ls | wc -l
+          git init -q && git checkout -q -b probe-mosque3 && git add -A && git -c user.name=probe -c user.email=p@x commit -qm probe
+          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" probe-mosque3
