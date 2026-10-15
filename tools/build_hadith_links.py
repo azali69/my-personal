@@ -8,7 +8,8 @@ Output kutub/rel/<book>.json: {"n": [[book index in books.json, n, percent, kita
 import json,re,os,collections
 import sys
 K,DF,MINS,TH=3,60,4,0.45
-B=json.load(open('kutub/books.json'))['books']; ids=[b['id'] for b in B]
+BF=sys.argv[1] if len(sys.argv)>1 else 'kutub/books.json'; OUT=sys.argv[2] if len(sys.argv)>2 else 'kutub/rel'   # rel2 = with the Shama'il (books2.json)
+B=json.load(open(BF))['books']; ids=[b['id'] for b in B]
 def norm(t):
     t=re.sub(r'[ً-ْٰـ]','',t); t=re.sub('[إأآٱ]','ا',t).replace('ى','ي').replace('ة','ه')
     t=re.sub(r'[^ء-ي ]',' ',t); return t.split()
@@ -46,6 +47,6 @@ for k,v in rare.items():
     if res: out[k[0]][str(k[1])]=[[ids.index(o[0]),o[1],p,secOf[o]] for o,p in res[:8]]
 os.makedirs('kutub/rel',exist_ok=True)
 for i in ids:
-    json.dump(out[i],open(f'kutub/rel/{i}.json','w'),separators=(',',':'))
-    print(i,len(out[i]),'linked', os.path.getsize(f'kutub/rel/{i}.json'))
-json.dump({'books':ids},open('kutub/rel/index.json','w'))
+    json.dump(out[i],open(f'{OUT}/{i}.json','w'),separators=(',',':'))
+    print(i,len(out[i]),'linked', os.path.getsize(f'{OUT}/{i}.json'))
+json.dump({'books':ids},open(f'{OUT}/index.json','w'))
