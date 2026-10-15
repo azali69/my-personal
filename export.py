@@ -1,5 +1,5 @@
 import easyocr, torch, json, os
-r = easyocr.Reader(['ar','en'], gpu=False, quantize=False)
+r = easyocr.Reader(['ar','en'], gpu=False, quantize=False, verbose=False)
 m = r.recognizer; m.eval()
 class W(torch.nn.Module):
     def __init__(s, m): super().__init__(); s.m = m
@@ -7,7 +7,7 @@ class W(torch.nn.Module):
 w = W(m)
 x = torch.randn(1, 1, 64, 320)
 os.makedirs('out', exist_ok=True)
-torch.onnx.export(w, x, 'out/ar_rec.onnx', input_names=['x'], output_names=['y'], dynamic_axes={'x': {3: 'w'}, 'y': {1: 't'}}, opset_version=17)
+torch.onnx.export(w, x, 'out/ar_rec.onnx', input_names=['x'], output_names=['y'], dynamic_axes={'x': {3: 'w'}, 'y': {1: 't'}}, opset_version=17, dynamo=False)
 ignore = ''.join(sorted(set(r.character) - set(r.lang_char)))
 json.dump({'chars': r.character, 'ignore': ignore}, open('out/ar_rec.json', 'w'), ensure_ascii=False)
 from onnxruntime.quantization import quantize_dynamic, QuantType

@@ -10,7 +10,7 @@ jobs:
         with: { python-version: '3.11' }
       - run: |
           mkdir -p out
-          pip install -q easyocr onnx onnxruntime rapidocr_onnxruntime scipy > out/pip.txt 2>&1
+          pip install -q easyocr onnx onnxscript onnxruntime rapidocr_onnxruntime scipy > out/pip.txt 2>&1
           python export.py > out/export.txt 2>&1 || true
           python pipe.py out/ar_rec.onnx > out/pipe_fp32.txt 2>&1 || true
           python pipe.py out/ar_rec_q.onnx > out/pipe_q.txt 2>&1 || true
