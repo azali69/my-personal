@@ -207,3 +207,65 @@ WHO = dict(shafii=dict(en="Shafi'i", ms="Syafi'i"), hanafi=dict(en="Hanafi", ms=
 # Commentators, shown apart from the four schools in their own box: al-Albani (Sifat Salat an-Nabi), 'Abd al-'Aziz ibn Baz
 # (Majmu' Fatawa), Muhammad ibn Salih al-'Uthaymin (al-Sharh al-Mumti').
 COMMENTATORS = ['albani', 'ibnbaz', 'uthaymin']
+
+# ---- Sources for the commentators (Azli, 15 Oct 2026: include other scholars' views only with a reliable source) ----
+# Each line: (step id, topic number, scholar) -> (reference, link or None[, new English, new Malay]).
+# References as cited in al-Mawsu'ah al-Fiqhiyyah of Dorar.net (dorar.net/feqhia) or on the scholar's own site / IslamQA,
+# checked 15 Oct 2026. Lines with no source found were removed rather than shown unsourced.
+A_ASL = "al-Albani, Asl Sifat Salat an-Nabi"
+BZ_MF, BZ_NUR = "Ibn Baz, Majmu' Fatawa", "Ibn Baz, Fatawa Nur 'ala ad-Darb"
+UT_MF, UT_SM = "Ibn 'Uthaymin, Majmu' Fatawa wa Rasa'il", "Ibn 'Uthaymin, al-Sharh al-Mumti'"
+REFS = {
+ ('niat',0,'ibnbaz'): (BZ_NUR+" 5/79", "https://binbaz.org.sa/fatwas/6205"),
+ ('niat',0,'uthaymin'): (UT_SM+" 1/195", "https://dorar.net/feqhia/247"),
+ ('qiyam',0,'albani'): (A_ASL+" 1/215", "https://dorar.net/feqhia/914"),
+ ('qiyam',0,'ibnbaz'): (BZ_NUR+" 8/148", "https://binbaz.org.sa/fatwas/16879"),
+ ('qiyam',0,'uthaymin'): (UT_MF+" 13/392", "https://dorar.net/feqhia/914"),
+ ('iftitah',0,'albani'): ("al-Albani, Sifat Salat an-Nabi p. 91", "https://dorar.net/feqhia/919"),
+ ('iftitah',0,'ibnbaz'): (BZ_MF+" 11/9", "https://dorar.net/feqhia/919", "Any authentic wording; best to alternate between them.", "Mana-mana lafaz yang sahih; lebih baik berselang-seli."),
+ ('iftitah',0,'uthaymin'): (UT_SM+" 3/48", "https://dorar.net/feqhia/919"),
+ ('basmalah',0,'ibnbaz'): (BZ_MF+" 29/244", "https://binbaz.org.sa/fatwas/6110"),
+ ('basmalah',0,'uthaymin'): (UT_MF+" 13/109", "https://dorar.net/feqhia/925", "Said quietly; saying it aloud now and then is no blame.", "Dibaca perlahan; sesekali menguatkannya tidak mengapa."),
+ ('fatihah',0,'albani'): ("al-Albani, Sifat Salat an-Nabi p. 97 (loud prayers); "+A_ASL+" 3/1055 (quiet prayers)", "https://islamqa.info/ar/answers/231217"),
+ ('fatihah',0,'ibnbaz'): (BZ_NUR+" 8/72-73", "https://binbaz.org.sa/fatwas/12708"),
+ ('fatihah',0,'uthaymin'): ("Ibn 'Uthaymin, Fath Dhi al-Jalal wa al-Ikram 2/70", "https://dorar.net/feqhia/923", "Obligatory on the imam, the follower and one praying alone in quiet prayers, except a latecomer who catches the bowing.", "Wajib bagi imam, makmum dan orang yang solat bersendirian dalam solat sirr, kecuali makmum masbuq yang sempat rukuk."),
+ ('fatihah',1,'albani'): ("al-Albani, Silsilat al-Ahadith ad-Da'ifah 2/369", "https://islamqa.info/ar/answers/234769", "Aloud, by the imam and those behind him (his later view).", "Dikuatkan, oleh imam dan makmum (pendapat terakhirnya)."),
+ ('fatihah',1,'ibnbaz'): ("Ibn Baz, fatwa", "https://binbaz.org.sa/fatwas/15815"),
+ ('fatihah',1,'uthaymin'): (UT_MF+" 13/140", "https://islamqa.info/ar/answers/234769"),
+ ('ruku',0,'albani'): ("al-Albani graded the hadith sahih (Sahih an-Nasa'i 1084)", "https://dorar.net/hadith/sharh/32554", "Graded sahih the hadith of raising the hands at prostration and rising from it (Nasa'i 1085 in this app).", "Menilai sahih hadis mengangkat tangan ketika sujud dan bangkit daripadanya (Nasa'i 1085 dalam aplikasi ini)."),
+ ('ruku',0,'ibnbaz'): (BZ_MF+" 11/156", "https://binbaz.org.sa/fatwas/12609"),
+ ('ruku',0,'uthaymin'): (UT_MF+" 13/66, 13/70", "https://dorar.net/feqhia/907", "At the opening, bowing, rising, and standing from the first tashahhud; not at prostration, as no authentic report establishes it.", "Pada takbiratul ihram, rukuk, bangkit, dan bangun daripada tasyahhud awal; tidak ketika sujud, kerana tiada riwayat sahih."),
+ ('itidal',0,'albani'): (A_ASL+" 2/701", "https://dorar.net/feqhia/958"),
+ ('itidal',0,'ibnbaz'): (BZ_MF+" 11/30", "https://binbaz.org.sa/fatwas/5128"),
+ ('itidal',0,'uthaymin'): (UT_MF+" 13/160-161", "https://dorar.net/feqhia/958"),
+ ('sujud',0,'albani'): (A_ASL+" 2/719", "https://dorar.net/feqhia/969"),
+ ('sujud',0,'ibnbaz'): (BZ_MF+" 11/61-62", "https://binbaz.org.sa/fatwas/18683"),
+ ('sujud',0,'uthaymin'): (UT_MF+" 13/173-174", "https://dorar.net/feqhia/969"),
+ ('istirahah',0,'albani'): (A_ASL+" 3/816", "https://dorar.net/feqhia/989"),
+ ('istirahah',0,'ibnbaz'): (BZ_MF+" 11/38-39", "https://binbaz.org.sa/fatwas/10375"),
+ ('istirahah',0,'uthaymin'): (UT_MF+" 13/218", "https://dorar.net/feqhia/989", "Not a sunnah except for one who needs it (his later view).", "Bukan sunat kecuali bagi yang memerlukannya (pendapat terakhirnya)."),
+ ('tasyahhud1',0,'albani'): ("al-Albani graded Wa'il's hadith ('moving it') sahih (Sahih an-Nasa'i)", "https://islamqa.info/ar/answers/11527", "Graded sahih Wa'il's hadith with the words 'moving it, supplicating with it' (Nasa'i 889).", "Menilai sahih hadis Wa'il dengan lafaz 'menggerakkannya, berdoa dengannya' (Nasa'i 889)."),
+ ('tasyahhud1',0,'uthaymin'): (UT_SM+" 3/202", "https://islamqa.info/ar/answers/11527"),
+ ('qunut',0,'ibnbaz'): (BZ_NUR+" 10/225", "https://binbaz.org.sa/fatwas/15800"),
+ ('qunut',0,'uthaymin'): (UT_MF+" 14/131", "https://dorar.net/feqhia/936"),
+}
+ADD = {('iftitah',0): ['ibnbaz']}
+for _e in E:
+    for _ti, _d in enumerate(_e.get('d', [])):
+        for _w in ADD.get((_e['id'], _ti), []):
+            if not any(p['w'] == _w for p in _d['p']): _d['p'].append(dict(w=_w, en='', ms=''))
+        _keep = []
+        for _p in _d['p']:
+            if _p['w'] not in COMMENTATORS: _keep.append(_p); continue
+            r = REFS.get((_e['id'], _ti, _p['w']))
+            if not r: continue                       # no reliable source found: not shown
+            _p['ref'] = r[0]
+            if r[1]: _p['src'] = r[1]
+            if len(r) > 2: _p['en'], _p['ms'] = r[2], r[3]
+            _keep.append(_p)
+        _d['p'] = _keep
+for _e in E:
+    for _d in _e.get('d', []):
+        if _d.get('note') and 'al-Albani, judged it weak' in _d['note']['en']:
+            _d['note'] = dict(en=_d['note']['en'].replace("others, including Ibn al-Qayyim and al-Albani, judged it weak", "others, including Ibn al-Qayyim (Zad al-Ma'ad), judged it weak"),
+                              ms=_d['note']['ms'].replace("yang lain, termasuk Ibn al-Qayyim dan al-Albani, menilainya lemah", "yang lain, termasuk Ibn al-Qayyim (Zad al-Ma'ad), menilainya lemah"))
