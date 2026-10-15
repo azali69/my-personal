@@ -47,6 +47,6 @@ for c in C:
     ns=[r[0] for r in recs]
     sections.append({'n':c['n'],'en':TITLE(c['en']),'ar':c['ar'],'first':min(ns),'last':max(ns),'count':len(recs),'v':hashlib.md5(s.encode()).hexdigest()[:8]})
 B=json.load(open(os.path.join(R,'kutub','books.json')))   # written to books2.json (books.json + this book); the released app keeps reading books.json
-B['books']=[b for b in B['books'] if b['id']!='shamail']+[{'id':'shamail','ar':'الشمائل المحمدية','en':"Ash-Shama'il al-Muhammadiyyah",'count':sum(s['count'] for s in sections),'sections':sections}]
+B['books']=[b for b in B['books'] if b['id']!='shamail']+[{'id':'shamail','ar':'الشمائل المحمدية','en':"Asy-Syama'il al-Muhammadiyyah",'count':sum(s['count'] for s in sections),'sections':sections}]
 json.dump(B,open(os.path.join(R,'kutub','books2.json'),'w'),ensure_ascii=False,separators=(',',':'))
 print(len(sections),'chapters',sum(s['count'] for s in sections),'hadith;',len(alb),"with al-Albani's grading")
