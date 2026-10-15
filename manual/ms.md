@@ -107,7 +107,7 @@ Blok mewarnakan halaman mengikut bahagian supaya anda boleh menghafaz dan mengul
 | Mod | Warna |
 | --- | --- |
 | Off | Tiada (tanda waqaf sentiasa dipaparkan) |
-| Ruku' (original) | Ruku' asal (ع), berselang emas gelap dan emas cerah supaya awal dan akhir setiap ruku' jelas kelihatan |
+| Ruku' (original) | Ruku' asal (ع), berlatar emas cerah |
 | My ruku' | Biru, ruku' anda sendiri |
 | My blocks | Blok anda sendiri, sebarang panjang |
 

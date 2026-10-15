@@ -107,7 +107,7 @@ Blocks shade the page in sections so you can memorise and revise one at a time. 
 | Mode | Shading |
 | --- | --- |
 | Off | None (waqf signs always show) |
-| Ruku' (original) | The original ruku' sections (ع), in alternating darker and lighter gold so each section's start and end show |
+| Ruku' (original) | The original ruku' sections (ع), shaded in light gold |
 | My ruku' | Blue, your own ruku' sections |
 | My blocks | Your own blocks, any length |
 
