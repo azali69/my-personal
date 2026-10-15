@@ -43,6 +43,7 @@ Kembali ke Home dari mana-mana dengan **butang rumah** (atas kiri skrin bacaan) 
 | Bookmarks | Penanda buku dalam dua tab, Qur'an dan Hadith; My ruku' dan My blocks |
 | Doa & zikir | Hisnul Muslim (bahagian 8) |
 | Hadith | Enam kitab hadis (Kutub as-Sittah) dan al-Muwatta Imam Malik, dengan hukum hadis (bahagian 8) |
+| Shama'il | Membuka Asy-Syama'il al-Muhammadiyyah, kitab hadis kelapan (bahagian 8) |
 | Sifat Solat Nabi ﷺ | Solat Nabi langkah demi langkah, dengan hadis dan perbezaan pendapat ulama (bahagian 8) |
 | Scan & check | Semak sama ada ayat atau hadis yang dikongsi orang ada dalam Al-Quran atau kitab hadis (bahagian 8) |
 | Masjid & musollah | Masjid dan musolla, yang paling dekat dahulu, dengan arah jalan; tambah tempat sendiri (bahagian 8) |
@@ -216,8 +217,8 @@ Semuanya dibuka dari **menu ayat**; memerlukan internet sekali bagi setiap surah
 
 1. Home → **Sifat Solat Nabi ﷺ**: solat dalam 16 langkah, daripada niat hingga salam, dan qunut Subuh.
 2. Setiap langkah ada huraian ringkas dan **hadis**nya daripada tujuh kitab dengan darjatnya; ketik untuk membacanya (butang kembali telefon membawa anda semula ke langkah itu).
-3. **Perbezaan pendapat ulama** (ditanda "ada perbezaan" dalam senarai) meletakkan pendapat mazhab **Syafi'i**, **Hanafi**, **Maliki** dan **Hanbali** serta **al-Albani** bersebelahan, setiap satu dengan dalil yang dibincangkan dan darjatnya, tanpa memilih antara mereka: cth. tempat meletak tangan, basmalah dikuatkan, Al-Fatihah di belakang imam, lutut atau tangan dahulu, duduk istirahat, jari ketika tasyahhud, qunut Subuh.
-4. Sumber pendapat mazhab: al-Nawawi (*al-Majmu'*, *Minhaj at-Talibin*), Ibn Qudamah (*al-Mughni*), Ibn Rushd (*Bidayat al-Mujtahid*); al-Albani: *Sifat Solat an-Nabi*. Ditulis untuk aplikasi ini; untuk amalan anda, ikut guru anda.
+3. **Perbezaan pendapat ulama** (ditanda "ada perbezaan" dalam senarai) meletakkan pendapat empat mazhab, **Syafi'i**, **Hanafi**, **Maliki** dan **Hanbali**, bersebelahan; di bawahnya, **Pandangan ulama lain** membuka kotak berasingan dengan **al-Albani**, **Ibn Baz** dan **Ibn 'Uthaimin** jika mereka membincangkannya. Dalil yang dibincangkan disenaraikan dengan darjatnya, tanpa memilih antara mereka: cth. tempat meletak tangan, basmalah dikuatkan, Al-Fatihah di belakang imam, lutut atau tangan dahulu, duduk istirahat, jari ketika tasyahhud, qunut Subuh.
+4. Sumber pendapat mazhab: al-Nawawi (*al-Majmu'*, *Minhaj at-Talibin*), Ibn Qudamah (*al-Mughni*), Ibn Rushd (*Bidayat al-Mujtahid*); ulama lain: al-Albani (*Sifat Solat an-Nabi*), Ibn Baz (*Majmu' Fatawa*), Ibn 'Uthaimin (*asy-Syarh al-Mumti'*). Ditulis untuk aplikasi ini; untuk amalan anda, ikut guru anda.
 
 **Sirah**
 
