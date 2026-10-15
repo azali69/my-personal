@@ -198,15 +198,16 @@ E = [
         dict(w='ibnbaz',en="Only at times of calamity.",ms="Hanya ketika musibah.",src='https://binbaz.org.sa/fatwas/15800'),
         dict(w='uthaymin',en="Only at times of calamity.",ms="Hanya ketika musibah.")],
      h=[['tirmidhi',402,dict(en="Abu Malik al-Ashja'i's father: 'My son, it is something newly begun'",ms="Bapa Abu Malik al-Asyja'i: 'Wahai anakku, ia perkara baharu'")]],
-     note=dict(en="The Shafi'is also cite Anas: 'He kept making qunut in Fajr until he left this world', in Musnad Ahmad and al-Bayhaqi (not in this app's books). Al-Hakim, al-Bayhaqi and al-Nawawi held it authentic; others, including Ibn al-Qayyim and al-Albani, judged it weak.",ms="Mazhab Syafi'i juga berhujah dengan riwayat Anas: 'Baginda sentiasa berqunut dalam Subuh hingga Baginda meninggalkan dunia', dalam Musnad Ahmad dan al-Baihaqi (bukan dalam kitab aplikasi ini). Al-Hakim, al-Baihaqi dan al-Nawawi menilainya sahih; yang lain, termasuk Ibn al-Qayyim dan al-Albani, menilainya lemah."))]),
+     note=dict(en="The Shafi'is also cite Anas: 'He kept making qunut in Fajr until he left this world' (Musnad Ahmad 12657; al-Hakim, al-Arba'in; al-Bayhaqi, as-Sunan al-Kubra 2/201; not in this app's books). Judged weak by Ibn al-Jawzi (al-'Ilal al-Mutanahiyah 1/444), Ibn Taymiyyah (Majmu' al-Fatawa 22/374), Ibn al-Qayyim (Zad al-Ma'ad 1/99), Ibn Hajar (at-Talkhis al-Habir 1/245), al-Albani (as-Silsilah ad-Da'ifah 1238) and Ibn Baz (Fatawa Nur 'ala ad-Darb 10/227), as listed by IslamQA 101015 and Dorar.net.",ms="Mazhab Syafi'i juga berhujah dengan riwayat Anas: 'Baginda sentiasa berqunut dalam Subuh hingga Baginda meninggalkan dunia' (Musnad Ahmad 12657; al-Hakim, al-Arba'in; al-Baihaqi, as-Sunan al-Kubra 2/201; bukan dalam kitab aplikasi ini). Dinilai lemah oleh Ibn al-Jauzi (al-'Ilal al-Mutanahiyah 1/444), Ibn Taimiyyah (Majmu' al-Fatawa 22/374), Ibn al-Qayyim (Zad al-Ma'ad 1/99), Ibn Hajar (at-Talkhis al-Habir 1/245), al-Albani (as-Silsilah adh-Dha'ifah 1238) dan Ibn Baz (Fatawa Nur 'ala ad-Darb 10/227), seperti yang disenaraikan oleh IslamQA 101015 dan Dorar.net."))]),
 ]
 
 WHO = dict(shafii=dict(en="Shafi'i", ms="Syafi'i"), hanafi=dict(en="Hanafi", ms="Hanafi"), maliki=dict(en="Maliki", ms="Maliki"),
            hanbali=dict(en="Hanbali", ms="Hanbali"), albani=dict(en="Al-Albani", ms="Al-Albani"),
-           ibnbaz=dict(en="Ibn Baz", ms="Ibn Baz"), uthaymin=dict(en="Ibn 'Uthaymin", ms="Ibn 'Uthaimin"))
+           ibnbaz=dict(en="Ibn Baz", ms="Ibn Baz"), uthaymin=dict(en="Ibn 'Uthaymin", ms="Ibn 'Uthaimin"),
+           nawawi=dict(en="Imam al-Nawawi", ms="Imam al-Nawawi"), arnaut=dict(en="Shu'ayb al-Arna'ut", ms="Syu'aib al-Arna'ut"))
 # Commentators, shown apart from the four schools in their own box: al-Albani (Sifat Salat an-Nabi), 'Abd al-'Aziz ibn Baz
 # (Majmu' Fatawa), Muhammad ibn Salih al-'Uthaymin (al-Sharh al-Mumti').
-COMMENTATORS = ['albani', 'ibnbaz', 'uthaymin']
+COMMENTATORS = ['nawawi', 'albani', 'ibnbaz', 'uthaymin', 'arnaut']
 
 # ---- Sources for the commentators (Azli, 15 Oct 2026: include other scholars' views only with a reliable source) ----
 # Each line: (step id, topic number, scholar) -> (reference, link or None[, new English, new Malay]).
@@ -249,7 +250,23 @@ REFS = {
  ('qunut',0,'ibnbaz'): (BZ_NUR+" 10/225", "https://binbaz.org.sa/fatwas/15800"),
  ('qunut',0,'uthaymin'): (UT_MF+" 14/131", "https://dorar.net/feqhia/936"),
 }
-ADD = {('iftitah',0): ['ibnbaz']}
+NW = "al-Nawawi, al-Majmu' Sharh al-Muhadhdhab"
+AR = "Shu'ayb al-Arna'ut"
+REFS.update({
+ ('qiyam',0,'nawawi'): (NW+" 3/313", "https://dorar.net/feqhia/914", "Our school: below the chest, above the navel. He also quotes Ibn al-Mundhir: nothing is established from the Prophet ﷺ on the exact place, so one may choose.", "Mazhab kami: di bawah dada, di atas pusat. Beliau juga memetik Ibn al-Mundzir: tiada yang sabit daripada Nabi ﷺ tentang tempatnya yang tepat, jadi seseorang boleh memilih."),
+ ('qiyam',0,'arnaut'): (AR+", Takhrij al-Musnad 21967", "https://dorar.net/h/GB5LZpJM", "Hulb at-Ta'i's hadith (Musnad Ahmad): sahih li-ghayrihi, except the words 'he placed this on his chest'.", "Hadis Hulb at-Ta'i (Musnad Ahmad): sahih li-ghairihi, kecuali lafaz 'Baginda meletakkan ini di atas dadanya'."),
+ ('basmalah',0,'nawawi'): (NW+" 3/208, as cited by Ibn Sarkand, al-Ahkam al-Fiqhiyyah allati qila fiha bin-naskh 2/832", "https://shamela.ws/book/787/792", "Saying it aloud is the view of most scholars from the Companions onward.", "Menguatkannya ialah pendapat kebanyakan ulama sejak para Sahabat."),
+ ('fatihah',0,'nawawi'): (NW+" 3/327, 3/364", "https://dorar.net/feqhia/923", "Al-Fatihah is required: the prayer of anyone able to recite it is not valid without it. (3/364 records the school's old view that the follower does not recite in loud prayers.)", "Al-Fatihah wajib: solat orang yang mampu membacanya tidak sah tanpanya. (3/364 mencatat pendapat lama mazhab bahawa makmum tidak membaca dalam solat jahar.)"),
+ ('fatihah',1,'nawawi'): (NW+" 3/368-373; Sharh Muslim 4/130", "https://dorar.net/feqhia/933", "Amin is a confirmed sunnah, aloud in loud prayers by the imam and those behind him.", "Amin sunat muakkad, dikuatkan dalam solat jahar oleh imam dan makmum."),
+ ('ruku',0,'nawawi'): (NW+" 3/425-426", "https://islamqa.info/ar/answers/128038", "Raising the hands when standing up from the first tashahhud is recommended: 'this is what is correct' (وهذا هو الصواب).", "Mengangkat tangan ketika bangun daripada tasyahhud awal adalah sunat: 'inilah yang betul' (وهذا هو الصواب)."),
+ ('sujud',0,'nawawi'): (NW+" 3/421", "https://dorar.net/feqhia/969", "Knees first (the Shafi'i school).", "Lutut dahulu (mazhab Syafi'i)."),
+ ('istirahah',0,'nawawi'): (NW+" 3/442", "https://dorar.net/feqhia/989", "Recommended (the Shafi'i school).", "Sunat (mazhab Syafi'i)."),
+ ('istirahah',0,'arnaut'): (AR+", Takhrij al-Musnad 16892", "https://dorar.net/feqhia/989", "Mu'awiyah's hadith 'Do not race me in bowing and prostrating, for I have grown heavy' (cited by those who say he sat only from need): sahih li-ghayrihi.", "Hadis Mu'awiyah 'Jangan mendahuluiku dalam rukuk dan sujud, kerana badanku sudah berat' (dalil mereka yang berkata Baginda duduk kerana keperluan): sahih li-ghairihi."),
+ ('tasyahhud1',0,'nawawi'): (NW+" 3/454", "https://dorar.net/feqhia/1012", "Moving the finger is not prescribed in the tashahhud (the Shafi'i school).", "Menggerakkan jari tidak disyariatkan dalam tasyahhud (mazhab Syafi'i)."),
+ ('qunut',0,'arnaut'): (AR+", Takhrij Zad al-Ma'ad 1/263", "https://dorar.net/feqhia/936", "Abu Mijlaz's report that he prayed Fajr behind Ibn 'Umar and Ibn 'Umar did not make qunut: hasan.", "Riwayat Abu Mijlaz bahawa beliau solat Subuh di belakang Ibn 'Umar dan Ibn 'Umar tidak berqunut: hasan."),
+})
+ADD = {('iftitah',0): ['ibnbaz'], ('qiyam',0): ['nawawi','arnaut'], ('basmalah',0): ['nawawi'], ('fatihah',0): ['nawawi'], ('fatihah',1): ['nawawi'],
+       ('ruku',0): ['nawawi'], ('sujud',0): ['nawawi'], ('istirahah',0): ['nawawi','arnaut'], ('tasyahhud1',0): ['nawawi'], ('qunut',0): ['arnaut']}
 for _e in E:
     for _ti, _d in enumerate(_e.get('d', [])):
         for _w in ADD.get((_e['id'], _ti), []):
@@ -263,7 +280,7 @@ for _e in E:
             if r[1]: _p['src'] = r[1]
             if len(r) > 2: _p['en'], _p['ms'] = r[2], r[3]
             _keep.append(_p)
-        _d['p'] = _keep
+        _d['p'] = [x for x in _keep if x['w'] not in COMMENTATORS] + sorted([x for x in _keep if x['w'] in COMMENTATORS], key=lambda x: COMMENTATORS.index(x['w']))
 for _e in E:
     for _d in _e.get('d', []):
         if _d.get('note') and 'al-Albani, judged it weak' in _d['note']['en']:
