@@ -207,6 +207,18 @@ Semuanya dibuka dari **menu ayat**; memerlukan internet sekali bagi setiap surah
 10. **Also in** di bawah hadis menyenaraikan hadis yang sama dalam kitab lain (contohnya "Muslim 113", "Abu Dawud 3692"). "(close wording)" bermaksud kebanyakan lafaznya sama tetapi tidak semua, atau hanya sebahagian daripada hadis yang lebih panjang. Ketik untuk membacanya bersama hukum daripada kitab itu sendiri, kemudian **Open in …** untuk pergi ke sana. Ia dicari dengan membandingkan teks Arab, jadi ia membantu mencari riwayat lain; ia tidak bermaksud sanad atau hukumnya sama.
 11. Setiap hadis ada butang **penanda buku** (lima warna, seperti al-Quran) dan butang **nota**. **Continue reading** (tempat anda berhenti) berada di bahagian atas halaman Hadith. Senarai penanda buku dipaparkan di bawahnya apabila **Show** (di sebelah **All**) ditanda; ia tidak ditanda pada mulanya.
 
+**Sirah**
+
+1. Home → **Sirah**: sirah Nabi ﷺ sebagai garis masa dalam tiga bahagian: **Sebelum kenabian**, **Makkah** dan **Madinah**. Bahasanya mengikut Settings → Translation language.
+2. Ketik satu peristiwa untuk ringkasan pendek, kemudian:
+   - **Al-Quran**: ayat yang dikaitkan dengan peristiwa itu oleh kitab hadis atau tafsir. Ketik untuk membukanya dalam mushaf.
+   - **Hadis**: riwayat dalam kitab aplikasi ini, berserta hukumnya (Bukhari dan Muslim ditanda Sahih). Ketik untuk membaca hadis itu; **Open in …** membawa anda kepadanya dalam kitab.
+   - **Riwayat dalam kitab lain**: riwayat daripada kitab yang tiada dalam aplikasi ini (contohnya Musnad Ahmad), dinamakan supaya anda boleh merujuknya.
+   - **Kisah popular: semak statusnya**: kisah yang sering diceritakan tentang peristiwa itu, setiap satu dengan label berwarna: **Tiada asas yang sahih** (merah), **Lemah** (jingga), **Ulama berbeza pendapat** (kuning tua), atau **Riwayat ahli sejarah: sanad tidak disemak** (kelabu: diriwayatkan oleh Ibn Ishaq dan ahli sejarah lain, tidak disahkan dalam kitab hadis).
+3. Tanda **!** jingga pada garis masa bermaksud peristiwa itu ada kisah popular yang ditanda.
+4. **‹ ›** di bawah untuk ke peristiwa sebelum atau selepasnya.
+5. Ringkasan ditulis untuk aplikasi ini berdasarkan hadis dan ahli sejarah yang dinamakan; tarikh yang tidak ditetapkan oleh hadis (contohnya 12 Rabiulawal, 27 Rejab) ditanda sedemikian.
+
 **Nota (Notes)**
 
 1. Home → **Notes**: semua nota anda, yang terbaru dahulu. Tapis mengikut **Qur'an**, **Hadith** atau **Free notes**, atau cari.

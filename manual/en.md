@@ -207,6 +207,18 @@ All open from the **ayah menu**; they need the internet once per surah.
 10. **Also in** under a hadith lists the same hadith in the other books (e.g. "Muslim 113", "Abu Dawud 3692"). "(close wording)" means most, not all, of the wording matches, or only part of a longer hadith. Tap one to read it with that book's own grading, then **Open in …** to go there. They are found by comparing the Arabic text, so they help you find other narrations; they do not mean the chains or gradings are the same.
 11. Each hadith has a **bookmark** button (five colours, as for the Qur'an) and a **note** button. **Continue reading** (where you last stopped) is at the top of the Hadith page. Your bookmarks are listed below it when **Show** (beside **All**) is ticked; it is off at first.
 
+**Sirah**
+
+1. Home → **Sirah**: the life of the Prophet ﷺ as a timeline in three parts: **Before prophethood**, **Makkah** and **Madinah**. The language follows Settings → Translation language.
+2. Tap an event for a short summary, then:
+   - **Qur'an**: the ayat linked to the event by the hadith books or the tafsir. Tap to open them in the mushaf.
+   - **Hadith**: the narrations in this app's books, with their gradings (Bukhari and Muslim are marked Sahih). Tap to read the hadith; **Open in …** takes you to it in the book.
+   - **Reports in other books**: narrations from books not in this app (e.g. Musnad Ahmad), named so you can look them up.
+   - **Popular stories: check their status**: stories often told about the event, each with a coloured label: **No authentic basis** (red), **Weak** (orange), **Scholars differ** (amber), or **Historians' report: no checked chain** (grey: told by Ibn Ishaq and other historians, not authenticated in the hadith books).
+3. An orange **!** in the timeline means the event has marked popular stories.
+4. **‹ ›** at the bottom move to the previous or next event.
+5. The summaries are written for this app from the hadith and the named historians; dates the hadith do not fix (e.g. 12 Rabi' al-Awwal, 27 Rajab) are marked as such.
+
 **Notes**
 
 1. Home → **Notes**: all your notes, newest first. Filter by **Qur'an**, **Hadith** or **Free notes**, or search.
