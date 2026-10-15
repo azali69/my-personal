@@ -43,6 +43,8 @@ Kembali ke Home dari mana-mana dengan **butang rumah** (atas kiri skrin bacaan) 
 | Bookmarks | Penanda buku dalam dua tab, Qur'an dan Hadith; My ruku' dan My blocks |
 | Doa & zikir | Hisnul Muslim (bahagian 8) |
 | Hadith | Enam kitab hadis (Kutub as-Sittah) dan al-Muwatta Imam Malik, dengan hukum hadis (bahagian 8) |
+| Scan & check | Semak sama ada ayat atau hadis yang dikongsi orang ada dalam Al-Quran atau kitab hadis (bahagian 8) |
+| Masjid & musollah | Masjid dan musolla, yang paling dekat dahulu, dengan arah jalan; tambah tempat sendiri (bahagian 8) |
 | Notes | Buku nota anda: nota pada ayat, pada hadis, dan nota bebas (bahagian 8) |
 | Prayer times | Waktu solat MUIS, peringatan (bahagian 8) |
 | Qibla | Kompas arah Kaabah (bahagian 8) |
@@ -222,6 +224,26 @@ Semuanya dibuka dari **menu ayat**; memerlukan internet sekali bagi setiap surah
 7. Mengetik ayat atau **Open in …** pada hadis membawa anda ke sana; butang **kembali** telefon (atau butang **‹ Kembali** di atas mushaf) membawa anda semula ke peristiwa yang sama.
 8. **Makna perkataan:** tekan lama sesuatu perkataan dalam Sirah (juga dalam halaman Hadis dan Doa) untuk memilihnya, kemudian ketik **Cari makna**: Kamus Dewan (DBP) atau kamus Inggeris, atau Almaany untuk bahasa Arab, dibuka dalam pelayar. Menu pilihan teks telefon anda juga mungkin ada pilihan Terjemah.
 9. Ringkasan ditulis untuk aplikasi ini berdasarkan hadis dan ahli sejarah yang dinamakan; tarikh yang tidak ditetapkan oleh hadis (contohnya 12 Rabiulawal, 27 Rejab) ditanda sedemikian.
+
+**Imbas & semak (Scan & check)**
+
+1. Seseorang berkongsi "ayat" atau "hadis" dan anda mahu menyemaknya. Home → **Scan & check**, kemudian:
+   - **Kamera** (aplikasi Android): pilih dahulu bahasa teks itu (**Arabic** atau **Melayu / English**), ambil gambar teks itu, dan aplikasi membacanya dalam telefon (tidak perlu internet untuk membaca).
+   - **Gambar / tangkap layar**: pilih tangkapan layar atau gambar yang sudah ada.
+   - **Kongsi**: dalam WhatsApp, Telegram, pelayar atau galeri, ketik **Share → My Personal Quran** ("Check in My Quran"). Teks yang dikongsi terus disemak; untuk gambar, pilih bahasanya.
+   - **Tampal**: tampal teks dalam kotak. Ini juga boleh dalam pelayar.
+2. Semak teks dalam kotak (kamera boleh tersilap membaca huruf, terutama Arab berbaris atau tulisan berhias), betulkan jika perlu, dan ketik **Semak**.
+3. **Al-Quran**: hijau **Dijumpai dalam Al-Quran**, **Dijumpai: sebahagian daripada ayat**, kuning **Hampir dengan ayat Al-Quran: ada perbezaan**, atau merah **Tiada ayat Al-Quran yang sepadan**. Setiap padanan menunjukkan ayat, terjemahannya dan berapa banyak yang sepadan; ketik untuk membuka ayat itu (butang **kembali** telefon membawa anda semula ke semakan).
+4. **Hadis**: tujuh kitab dalam aplikasi ini disemak (kali pertama, setiap kitab dimuat turun, jadi guna Wi-Fi). Setiap padanan menunjukkan kitab, nombor dan darjatnya, dan sama ada seluruh teks itu ada dalam hadis tersebut atau **hanya sebahagian**. Merah **Tidak dijumpai** bukan bukti hadis itu palsu: ia mungkin ada dalam kitab lain (seperti Musnad Ahmad) atau dengan lafaz lain. Tanya guru yang berkelayakan.
+5. Cara padanan: Arab, perkataan yang sama mengikut susunan (baris diabaikan); Melayu dan Inggeris, perkataan penting yang sama. Penterjemah memilih perkataan berbeza, jadi peratus rendah tidak bermakna tiada. Teks hadis Bahasa Melayu dibandingkan dengan terjemahan Indonesia.
+
+**Masjid & musolla (Masjid & musollah)**
+
+1. Home → **Masjid & musollah**: 70 masjid dalam Direktori Masjid MUIS (dengan alamat dan telefon), 3 masjid bukan di bawah MUIS, dan beberapa musolla dari OpenStreetMap dan Wikipedia.
+2. Ketik butang **lokasi** untuk menyusun yang paling dekat dahulu. **Arah** membuka Google Maps; **Telefon** menelefon masjid.
+3. **Cari** ikut nama, jalan atau poskod. **Semua · Masjid · Musolla · Tempat saya** menapis senarai.
+4. **Tambah tempat**: nama, jenis, alamat dan catatan (tingkat, ruang wanita, tempat wuduk), dan lokasinya: **Lokasi saya sekarang** (berdiri di tempat itu) atau tampal pautan Google Maps. Tempat anda disimpan dalam telefon; ketik **Ubah** untuk mengubah atau memadamnya.
+5. Waktu buka, kemudahan dan aturan solat Jumaat tidak disenaraikan; semak dengan masjid atau MUIS.
 
 **Nota (Notes)**
 

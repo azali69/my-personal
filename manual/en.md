@@ -43,6 +43,8 @@ Return to Home from anywhere with the **house button** (top left of the reading 
 | Bookmarks | Bookmarks in two tabs, Qur'an and Hadith; My ruku' and My blocks |
 | Doa & zikir | Hisnul Muslim (section 8) |
 | Hadith | The six books (Kutub as-Sittah) and the Muwatta of Imam Malik, with gradings (section 8) |
+| Scan & check | Check whether a posted ayah or hadith is in the Qur'an or the hadith books (section 8) |
+| Masjid & musollah | Mosques and musollahs, nearest first, with directions; add your own (section 8) |
 | Notes | Your notepad: notes on ayat, on hadith, and free notes (section 8) |
 | Prayer times | MUIS times, alerts and reminders (section 8) |
 | Qibla | Compass to the Ka'bah (section 8) |
@@ -222,6 +224,26 @@ All open from the **ayah menu**; they need the internet once per surah.
 7. Tapping an ayah or **Open in …** on a hadith takes you there; the phone's **back** button (or the **‹ Back** button over the mushaf) returns to the same event.
 8. **Meaning of a word:** long-press a word in the Sirah (also in Hadith and Doa pages) to select it, then tap **Meaning**: Kamus Dewan (DBP) or English dictionaries, or Almaany for Arabic, open in the browser. Your phone's own selection menu may also offer Translate.
 9. The summaries are written for this app from the hadith and the named historians; dates the hadith do not fix (e.g. 12 Rabi' al-Awwal, 27 Rajab) are marked as such.
+
+**Scan & check**
+
+1. Someone posts an "ayah" or a "hadith" and you want to check it. Home → **Scan & check**, then:
+   - **Camera** (Android app): choose the language of the text first (**Arabic** or **Melayu / English**), take a photo of the text, and the app reads it on the phone (no internet needed for reading).
+   - **Picture / screenshot**: pick a screenshot or photo you already have.
+   - **Share**: in WhatsApp, Telegram, the browser or the gallery, tap **Share → My Personal Quran** ("Check in My Quran"). Shared text is checked at once; for a shared picture, choose its language.
+   - **Paste**: paste the text into the box. This works in the browser too.
+2. Check the text in the box (the camera can misread a letter, especially in Arabic with harakat or decorated fonts), correct it if needed, and tap **Check**.
+3. **Qur'an**: green **Found in the Qur'an**, **Found: part of an ayah**, amber **Close to an ayah: there are differences**, or red **No ayah matched**. Each match shows the ayah, its translation and how much of it matched; tap it to open the ayah (the phone's **back** button returns to your check).
+4. **Hadith**: the seven books in this app are searched (the first time, every kitab is downloaded, so use Wi-Fi). Each match shows the book, number and gradings, and whether the whole text is in that hadith or **only part of it**. A red **Not found** is not proof that a hadith is fabricated: it may be in other books (such as Musnad Ahmad) or in other words. Ask a qualified teacher.
+5. How it matches: Arabic, the same words in the same order (harakat ignored); Malay and English, the same important words. Translators word things differently, so a low percentage does not mean it is absent. Malay hadith text is compared with the Indonesian translation.
+
+**Masjid & musollah**
+
+1. Home → **Masjid & musollah**: the 70 mosques in MUIS's Mosque Directory (with address and phone), 3 mosques not under MUIS, and the few musollahs in OpenStreetMap and Wikipedia.
+2. Tap the **location** button to list the nearest first. **Directions** opens Google Maps; **Call** phones the mosque.
+3. **Search** by name, street or postal code. **All · Masjid · Musollah · My places** filter the list.
+4. **Add a place**: name, type, address and notes (level, women's area, wudhu), and its location: **My location now** (stand at the place) or paste a Google Maps link. Your places are kept on the phone; tap **Edit** on one to change or delete it.
+5. Opening hours, facilities and Friday prayer arrangements are not listed; check with the mosque or MUIS.
 
 **Notes**
 
