@@ -255,6 +255,7 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         openTarget = getIntent() == null ? null : getIntent().getStringExtra("open");
+        takeShare(getIntent());
         if (Build.VERSION.SDK_INT >= 28) {
             WindowManager.LayoutParams lp = getWindow().getAttributes();
             lp.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
@@ -790,8 +791,75 @@ public class MainActivity extends Activity {
         super.onNewIntent(i); setIntent(i);
         String o = i == null ? null : i.getStringExtra("open");
         if (o != null && web != null) { final String w = o.replaceAll("[^a-z]", ""); js("window.__openFrom && window.__openFrom('" + w + "')"); }
+        if (takeShare(i) && web != null) js("window.__sharedIn && window.__sharedIn()");
+    }
+
+    /* ---------------- Scan & check: camera, picture, "Share to" this app ---------------- */
+    private static final int REQ_CAM = 26, REQ_IMG = 27;
+    private volatile String sharedText = null; private volatile Uri sharedImage = null; private volatile boolean sharedImageNew = false;
+    private Uri camUri = null; private String scanLang = "ms";
+
+    /** Keeps what another app shared: text as it is; a picture copied into the cache (the read grant does not last). */
+    private boolean takeShare(Intent i) {
+        if (i == null || !Intent.ACTION_SEND.equals(i.getAction())) return false;
+        String type = i.getType() == null ? "" : i.getType();
+        if (type.startsWith("text/")) {
+            CharSequence t = i.getCharSequenceExtra(Intent.EXTRA_TEXT);
+            if (t == null) return false;
+            sharedText = t.toString(); i.setAction(Intent.ACTION_MAIN); return true;
+        }
+        if (type.startsWith("image/")) {
+            Uri u = i.getParcelableExtra(Intent.EXTRA_STREAM);
+            if (u == null) return false;
+            try {
+                File dir = new File(getCacheDir(), "scan"); dir.mkdirs();
+                File f = new File(dir, "shared.img");
+                try (InputStream in = getContentResolver().openInputStream(u); OutputStream out = new FileOutputStream(f)) {
+                    byte[] b = new byte[65536]; int n; long total = 0;
+                    while ((n = in.read(b)) > 0) { out.write(b, 0, n); total += n; if (total > 40_000_000) throw new Exception("too big"); }
+                }
+                sharedImage = Uri.fromFile(f); sharedImageNew = true; i.setAction(Intent.ACTION_MAIN); return true;
+            } catch (Exception e) { return false; }
+        }
+        return false;
+    }
+    private void runScan(Uri u, String lang) {
+        if (u == null) { js("window.__scanned && window.__scanned({cancel:1})"); return; }
+        js("window.__scanBusy && window.__scanBusy()");
+        ScanOcr.run(this, u, lang, json -> js("window.__scanned && window.__scanned(" + json + ")"));
     }
     private class ExtraBridge {
+        @JavascriptInterface public String scanAvailable() { return "1"; }
+        @JavascriptInterface public String takeShared() {
+            try {
+                JSONObject o = new JSONObject();
+                String t = sharedText; sharedText = null;
+                if (t != null) o.put("text", t);
+                if (sharedImageNew) { sharedImageNew = false; o.put("image", true); }
+                return o.length() == 0 ? "" : o.toString();
+            } catch (Exception e) { return ""; }
+        }
+        @JavascriptInterface public void scanShared(String lang) { final String l = lang; final Uri u = sharedImage; runOnUiThread(() -> runScan(u, l)); }
+        @JavascriptInterface public void scanCamera(String lang) {
+            scanLang = lang;
+            runOnUiThread(() -> {
+                try {
+                    File dir = new File(getCacheDir(), "scan"); dir.mkdirs();
+                    File f = new File(dir, "camera.jpg"); if (f.exists()) f.delete();
+                    camUri = androidx.core.content.FileProvider.getUriForFile(MainActivity.this, getPackageName() + ".files", f);
+                    Intent it = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE).putExtra(android.provider.MediaStore.EXTRA_OUTPUT, camUri)
+                        .addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    startActivityForResult(it, REQ_CAM);
+                } catch (Exception e) { js("window.__scanned && window.__scanned(" + ScanOcr.err("No camera app could be opened.") + ")"); }
+            });
+        }
+        @JavascriptInterface public void scanPicture(String lang) {
+            scanLang = lang;
+            runOnUiThread(() -> {
+                try { startActivityForResult(new Intent(Intent.ACTION_GET_CONTENT).addCategory(Intent.CATEGORY_OPENABLE).setType("image/*"), REQ_IMG); }
+                catch (Exception e) { js("window.__scanned && window.__scanned(" + ScanOcr.err("No picture app could be opened.") + ")"); }
+            });
+        }
         @JavascriptInterface public String takeOpen() { String o = openTarget; openTarget = null; return o == null ? "" : o; }
         @JavascriptInterface public void setPrayerStatus(String json, String mode) { PrayerStatus.save(MainActivity.this, json, mode); }
         @JavascriptInterface public void setPrayerAlarms(String json) { PrayerAlarms.save(MainActivity.this, json); }
@@ -912,6 +980,8 @@ public class MainActivity extends Activity {
     @Override
     protected void onActivityResult(int req, int res, Intent data) {
         super.onActivityResult(req, res, data);
+        if (req == REQ_CAM) { runScan(res == RESULT_OK ? camUri : null, scanLang); return; }
+        if (req == REQ_IMG) { runScan(res == RESULT_OK && data != null ? data.getData() : null, scanLang); return; }
         if (req == REQ_SAVE) {
             boolean ok = false; String text = pendingBackup; pendingBackup = null;
             if (res == RESULT_OK && data != null && data.getData() != null && text != null) {

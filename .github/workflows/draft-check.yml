@@ -15,5 +15,8 @@ jobs:
         with: { gradle-version: '8.7' }
       - run: |
           mkdir -p android/app/src/main/assets && cp index.html android/app/src/main/assets/index.html
+          mkdir -p android/app/src/main/assets/tessdata
+          curl -fsSL --retry 3 -o android/app/src/main/assets/tessdata/ara.traineddata https://github.com/tesseract-ocr/tessdata_best/raw/main/ara.traineddata
+          ls -l android/app/src/main/assets/tessdata; test $(stat -c%s android/app/src/main/assets/tessdata/ara.traineddata) -gt 1000000
           set +e; gradle -p android assembleRelease --no-daemon > build.log 2>&1; code=$?
-          tail -n 40 build.log; grep -E -A6 "error:|What went wrong" build.log | head -60; exit $code
+          tail -n 40 build.log; ls -l android/app/build/outputs/apk/release/ || true; grep -E -A6 "error:|What went wrong" build.log | head -60; exit $code
