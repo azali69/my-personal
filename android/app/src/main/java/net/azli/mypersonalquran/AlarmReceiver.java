@@ -28,7 +28,10 @@ public class AlarmReceiver extends BroadcastReceiver {
                     if (Build.VERSION.SDK_INT >= 26) c.startForegroundService(s); else c.startService(s);
                 } else {
                     PrayerAlarms.channels(c);
-                    String ch = "adhan".equals(kind) ? (mode == 1 && !"silent".equals(sound) ? PrayerAlarms.CH_VIBRATE : PrayerAlarms.CH_SILENT) : PrayerAlarms.CH_REMIND;
+                    // "Notification only" means no sound at all, for the reminder too (Azli, 15 Oct 2026)
+                    boolean quiet = "silent".equals(sound);
+                    String ch = "adhan".equals(kind) ? (mode == 1 && !quiet ? PrayerAlarms.CH_VIBRATE : PrayerAlarms.CH_SILENT)
+                            : (quiet || mode == 0 ? PrayerAlarms.CH_SILENT : mode == 1 ? PrayerAlarms.CH_VIBRATE : PrayerAlarms.CH_REMIND);
                     PendingIntent open = PendingIntent.getActivity(c, 3, new Intent(c, MainActivity.class).putExtra("open", "prayer"), PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
                     Notification.Builder b = Build.VERSION.SDK_INT >= 26 ? new Notification.Builder(c, ch) : new Notification.Builder(c);
                     b.setSmallIcon(R.drawable.ic_stat_prayer).setContentTitle(o.optString("title")).setContentText(o.optString("text"))

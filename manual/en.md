@@ -43,6 +43,8 @@ Return to Home from anywhere with the **house button** (top left of the reading 
 | Bookmarks | Bookmarks in two tabs, Qur'an and Hadith; My ruku' and My blocks |
 | Doa & zikir | Hisnul Muslim (section 8) |
 | Hadith | The six books (Kutub as-Sittah) and the Muwatta of Imam Malik, with gradings (section 8) |
+| Scan & check | Check whether a posted ayah or hadith is in the Qur'an or the hadith books (section 8) |
+| Masjid & musollah | Mosques and musollahs, nearest first, with directions; add your own (section 8) |
 | Notes | Your notepad: notes on ayat, on hadith, and free notes (section 8) |
 | Prayer times | MUIS times, alerts and reminders (section 8) |
 | Qibla | Compass to the Ka'bah (section 8) |
@@ -105,7 +107,7 @@ Blocks shade the page in sections so you can memorise and revise one at a time. 
 | Mode | Shading |
 | --- | --- |
 | Off | None (waqf signs always show) |
-| Ruku' (original) | Gold, the original ruku' sections (ع) |
+| Ruku' (original) | The original ruku' sections (ع), one section shaded light gold, the next unshaded, in turn through the whole Qur'an |
 | My ruku' | Blue, your own ruku' sections |
 | My blocks | Your own blocks, any length |
 
@@ -197,15 +199,51 @@ All open from the **ayah menu**; they need the internet once per surah.
 
 1. Home → **Hadith**. Tick what to show, **Arabic**, **Bahasa Indonesia** and/or **English** (at least one; the same boxes are at the top of each kitab), then a book: Sahih al-Bukhari, Sahih Muslim, Sunan Abi Dawud, Jami' at-Tirmidhi, Sunan an-Nasa'i, Sunan Ibn Majah or Muwatta Malik.
 2. Open a kitab to read its hadith: Arabic with harakat, then the translation. More hadith load as you scroll.
-3. **Hadith number** + **Go** jumps to a hadith. **Search** looks through the whole book in Arabic, English or Indonesian (the first search downloads the book).
+3. **Search all seven books** (at the top of the Hadith page) looks through every book at once, in Arabic, English or Indonesian; the first time it downloads each book (about 80 MB in all, Wi-Fi recommended). **Hadith number** + **Go** jumps to a hadith. **Search** looks through the whole book in Arabic, English or Indonesian (the first search downloads the book).
 4. Gradings appear above each hadith of the four Sunan: al-Albani, Shu'ayb al-Arna'ut, Zubair 'Ali Za'i, and for at-Tirmidhi his own verdict in Arabic. Green is sahih, blue hasan, orange da'if, red very weak or fabricated. Bukhari and Muslim are sahih by the agreement of the scholars, so they have no per-hadith grade. The Muwatta has one grading, Salim al-Hilali's; Mawquf means the words of a Companion and Maqtu' the words of a Successor, not of the Prophet ﷺ. The Muwatta is always shown in full (with its chain).
 5. The copy button copies the Arabic, the translation, the reference and the gradings.
 6. Each kitab needs the internet the first time; after that it is kept on the phone.
 7. Hadith show the **text only** at first, with "Narrated by …" (the Companion) above it. Where the Companion only says "I heard" or "that" before the Prophet ﷺ, the text starts at "the Messenger of Allah ﷺ" / "the Prophet ﷺ". Tick **SANAD** to see the full chain of narrators; the chain is then shown in a softer colour so the text stands out. Where the chain could not be separated with certainty, the hadith is shown in full.
-8. The kitab title and the **AR · BI · ENG · SANAD** boxes stay at the top while you scroll. Tap the title to jump to another kitab of the same book.
+8. The kitab title and the **AR · BI · ENG · SANAD** boxes stay at the top while you scroll; tap once on the text to hide them, and again to show them (the same in Doa & zikir and the Sirah). Tap the title to jump to another kitab of the same book.
 9. Hadith that HadeethEnc.com explains have a **Syarah · HadeethEnc** button under the text. It opens their explanation, lessons from the hadith and word meanings, in **BM** (Bahasa Melayu, for about 100 hadith so far), **BI**, **ENG** or **AR**, unchanged from HadeethEnc. It is linked to the hadith by matching the text, so it may quote another narration of the same hadith.
 10. **Also in** under a hadith lists the same hadith in the other books (e.g. "Muslim 113", "Abu Dawud 3692"). "(close wording)" means most, not all, of the wording matches, or only part of a longer hadith. Tap one to read it with that book's own grading, then **Open in …** to go there. They are found by comparing the Arabic text, so they help you find other narrations; they do not mean the chains or gradings are the same.
 11. Each hadith has a **bookmark** button (five colours, as for the Qur'an) and a **note** button. **Continue reading** (where you last stopped) is at the top of the Hadith page. Your bookmarks are listed below it when **Show** (beside **All**) is ticked; it is off at first.
+
+**Sirah**
+
+1. Home → **Sirah**: the life of the Prophet ﷺ as a timeline in three parts: **Before prophethood**, **Makkah** and **Madinah**. The language follows Settings → Translation language.
+2. Tap an event for a short summary, then:
+   - **Qur'an**: the ayat linked to the event by the hadith books or the tafsir. Tap to open them in the mushaf.
+   - **Hadith**: the narrations in this app's books, with their gradings (Bukhari and Muslim are marked Sahih). Tap to read the hadith; **Open in …** takes you to it in the book.
+   - **Reports in other books**: narrations from books not in this app (e.g. Musnad Ahmad), named so you can look them up.
+   - **Popular stories: check their status**: stories often told about the event, each with a coloured label: **No authentic basis** (red), **Weak** (orange), **Scholars differ** (amber), or **Historians' report: no checked chain** (grey: told by Ibn Ishaq and other historians, not authenticated in the hadith books).
+3. An orange **!** in the timeline means the event has marked popular stories.
+4. **‹ ›** at the bottom move to the previous or next event.
+5. The three parts open and close when you tap them. **Search** (it stays at the top) finds events in Malay or English, e.g. "Badar", "Hijrah", "Ramadan". **Continue reading** at the top opens the last event you read.
+6. On an event: **Bookmark** (listed under Bookmarked in the Sirah and in the Bookmarks button's **Sirah** tab), **Note** (also in Notes, under **Sirah**) and **Copy** (the summary, references and story statuses).
+7. Tapping an ayah or **Open in …** on a hadith takes you there; the phone's **back** button (or the **‹ Back** button over the mushaf) returns to the same event.
+8. **Meaning of a word:** long-press a word in the Sirah (also in Hadith and Doa pages) to select it, then tap **Meaning**: Kamus Dewan (DBP) or English dictionaries, or Almaany for Arabic, open in the browser. Your phone's own selection menu may also offer Translate.
+9. The summaries are written for this app from the hadith and the named historians; dates the hadith do not fix (e.g. 12 Rabi' al-Awwal, 27 Rajab) are marked as such.
+
+**Scan & check**
+
+1. Someone posts an "ayah" or a "hadith" and you want to check it. Home → **Scan & check**, then:
+   - **Camera** (Android app): choose the language of the text first (**Arabic** or **Melayu / English**), take a photo of the text, and the app reads it on the phone (no internet needed for reading).
+   - **Picture / screenshot**: pick a screenshot or photo you already have.
+   - **Share**: in WhatsApp, Telegram, the browser or the gallery, tap **Share → My Personal Quran** ("Check in My Quran"). Shared text is checked at once; for a shared picture, choose its language.
+   - **Paste**: paste the text into the box. This works in the browser too.
+2. Check the text in the box (the camera can misread a letter, especially in Arabic with harakat or decorated fonts), correct it if needed, and tap **Check**.
+3. **Qur'an**: green **Found in the Qur'an**, **Found: part of an ayah**, amber **Close to an ayah: there are differences**, or red **No ayah matched**. Each match shows the ayah, its translation and how much of it matched; tap it to open the ayah (the phone's **back** button returns to your check).
+4. **Hadith**: the seven books in this app are searched (the first time, every kitab is downloaded, so use Wi-Fi). Each match shows the book, number and gradings, and whether the whole text is in that hadith or **only part of it**. A red **Not found** is not proof that a hadith is fabricated: it may be in other books (such as Musnad Ahmad) or in other words. Ask a qualified teacher.
+5. How it matches: Arabic, the same words in the same order (harakat ignored); Malay and English, the same important words. Translators word things differently, so a low percentage does not mean it is absent. Malay hadith text is compared with the Indonesian translation.
+
+**Masjid & musollah**
+
+1. Home → **Masjid & musollah**: the 70 mosques in MUIS's Mosque Directory (with address and phone), 3 mosques not under MUIS, and the few musollahs in OpenStreetMap and Wikipedia.
+2. Tap the **location** button to list the nearest first. **Directions** opens Google Maps; **Call** phones the mosque.
+3. **Search** by name, street or postal code. **All · Masjid · Musollah · My places** filter the list.
+4. **Add a place**: name, type, address and notes (level, women's area, wudhu), and its location: **My location now** (stand at the place) or paste a Google Maps link. Your places are kept on the phone; tap **Edit** on one to change or delete it.
+5. Opening hours, facilities and Friday prayer arrangements are not listed; check with the mosque or MUIS.
 
 **Notes**
 
@@ -224,7 +262,7 @@ All open from the **ayah menu**; they need the internet once per surah.
 **Alerts** (Android)
 
 1. Tap the **bell** beside each prayer to turn its alert on or off.
-2. **Sound**: Makkah adhan, Madinah adhan, Short tone, Notification only, or **None** (no adhan alert at all; the reminder before the prayer and the notification bar still work if they are on). For an adhan, tap **Choose … adhan file** and pick a recording on your phone.
+2. **Sound**: Makkah adhan, Madinah adhan, Short tone, **Notification only** (a notification with no sound at all, for the reminder and Syuruk too), or **None** (no adhan alert at all; the reminder before the prayer and the notification bar still work if they are on). For an adhan, tap **Choose … adhan file** and pick a recording on your phone.
 3. **Reminder before each prayer**: Off to 30 minutes.
 4. **Test the sound** / **Stop**. If alerts do not come, allow notifications and alarms, and remove battery limits.
 5. Alerts are **on by default** for the five prayers, and the app asks once to allow notifications. They follow the phone's sound mode: **ring** = the adhan or tone plays; **vibrate** = the phone vibrates with the notification, no sound; **silent or Do Not Disturb** = a silent notification only. **Test the sound** follows the same rule (on vibrate it only vibrates). With earphones or a Bluetooth earpiece connected, the adhan plays in the earphones only.

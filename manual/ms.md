@@ -43,6 +43,8 @@ Kembali ke Home dari mana-mana dengan **butang rumah** (atas kiri skrin bacaan) 
 | Bookmarks | Penanda buku dalam dua tab, Qur'an dan Hadith; My ruku' dan My blocks |
 | Doa & zikir | Hisnul Muslim (bahagian 8) |
 | Hadith | Enam kitab hadis (Kutub as-Sittah) dan al-Muwatta Imam Malik, dengan hukum hadis (bahagian 8) |
+| Scan & check | Semak sama ada ayat atau hadis yang dikongsi orang ada dalam Al-Quran atau kitab hadis (bahagian 8) |
+| Masjid & musollah | Masjid dan musolla, yang paling dekat dahulu, dengan arah jalan; tambah tempat sendiri (bahagian 8) |
 | Notes | Buku nota anda: nota pada ayat, pada hadis, dan nota bebas (bahagian 8) |
 | Prayer times | Waktu solat MUIS, peringatan (bahagian 8) |
 | Qibla | Kompas arah Kaabah (bahagian 8) |
@@ -105,7 +107,7 @@ Blok mewarnakan halaman mengikut bahagian supaya anda boleh menghafaz dan mengul
 | Mod | Warna |
 | --- | --- |
 | Off | Tiada (tanda waqaf sentiasa dipaparkan) |
-| Ruku' (original) | Emas, mengikut ruku' asal (ع) |
+| Ruku' (original) | Ruku' asal (ع), satu ruku' berlatar emas cerah, ruku' berikutnya tanpa latar, bergilir-gilir sepanjang Al-Quran |
 | My ruku' | Biru, ruku' anda sendiri |
 | My blocks | Blok anda sendiri, sebarang panjang |
 
@@ -197,15 +199,51 @@ Semuanya dibuka dari **menu ayat**; memerlukan internet sekali bagi setiap surah
 
 1. Home → **Hadith**. Tandakan apa yang hendak dipaparkan, **Arabic**, **Bahasa Indonesia** dan/atau **English** (sekurang-kurangnya satu; kotak yang sama ada di atas setiap kitab), kemudian sebuah kitab: Sahih al-Bukhari, Sahih Muslim, Sunan Abi Dawud, Jami' at-Tirmidhi, Sunan an-Nasa'i, Sunan Ibn Majah atau Muwatta Malik.
 2. Buka satu kitab (bab besar) untuk membaca hadisnya: teks Arab berbaris, kemudian terjemahan. Hadis seterusnya dimuat apabila anda menatal ke bawah.
-3. **Hadith number** + **Go** terus ke nombor hadis. **Search** mencari dalam seluruh kitab dalam bahasa Arab, Inggeris atau Indonesia (carian pertama memuat turun kitab itu).
+3. **Search all seven books** (di atas halaman Hadith) mencari dalam semua kitab sekali gus, dalam bahasa Arab, Inggeris atau Indonesia; kali pertama ia memuat turun setiap kitab (kira-kira 80 MB semuanya, disyorkan guna Wi-Fi). **Hadith number** + **Go** terus ke nombor hadis. **Search** mencari dalam seluruh kitab dalam bahasa Arab, Inggeris atau Indonesia (carian pertama memuat turun kitab itu).
 4. Hukum hadis dipaparkan di atas setiap hadis dalam empat kitab Sunan: al-Albani, Shu'ayb al-Arna'ut, Zubair 'Ali Za'i, dan bagi at-Tirmidhi hukum beliau sendiri dalam bahasa Arab. Hijau sahih, biru hasan, jingga da'if, merah sangat lemah atau palsu. Bukhari dan Muslim sahih dengan kesepakatan ulama, jadi tiada hukum bagi setiap hadis. Al-Muwatta mempunyai satu hukum sahaja, oleh Salim al-Hilali; Mawquf bermaksud kata-kata Sahabat dan Maqtu' kata-kata Tabi'in, bukan sabda Nabi ﷺ. Al-Muwatta sentiasa dipaparkan penuh (bersama sanad).
 5. Butang salin menyalin teks Arab, terjemahan, rujukan dan hukum hadis.
 6. Setiap kitab memerlukan internet kali pertama; selepas itu ia disimpan dalam telefon.
 7. Hadis dipaparkan **matan sahaja** pada mulanya, dengan "Narrated by …" (Sahabat perawi) di atasnya. Jika Sahabat hanya berkata "aku mendengar" atau "bahawa" sebelum Nabi ﷺ, matan bermula pada "Rasulullah ﷺ" / "Nabi ﷺ". Tandakan **SANAD** untuk melihat rantaian perawi penuh; sanad itu dipaparkan dalam warna lebih pudar supaya matan lebih jelas. Jika sanad tidak dapat dipisahkan dengan pasti, hadis dipaparkan penuh.
-8. Tajuk kitab dan kotak **AR · BI · ENG · SANAD** kekal di atas semasa anda menatal. Ketik tajuk untuk beralih ke kitab lain dalam buku yang sama.
+8. Tajuk kitab dan kotak **AR · BI · ENG · SANAD** kekal di atas semasa anda menatal; ketik sekali pada teks untuk menyembunyikannya, dan sekali lagi untuk memaparkannya (begitu juga dalam Doa & zikir dan Sirah). Ketik tajuk untuk beralih ke kitab lain dalam buku yang sama.
 9. Hadis yang dihuraikan oleh HadeethEnc.com mempunyai butang **Syarah · HadeethEnc** di bawah teksnya. Ia membuka huraian, pengajaran hadis dan makna perkataan dalam **BM** (Bahasa Melayu, kira-kira 100 hadis setakat ini), **BI**, **ENG** atau **AR**, tanpa sebarang perubahan daripada HadeethEnc. Ia dipadankan dengan hadis melalui teksnya, jadi ia mungkin memetik riwayat lain bagi hadis yang sama.
 10. **Also in** di bawah hadis menyenaraikan hadis yang sama dalam kitab lain (contohnya "Muslim 113", "Abu Dawud 3692"). "(close wording)" bermaksud kebanyakan lafaznya sama tetapi tidak semua, atau hanya sebahagian daripada hadis yang lebih panjang. Ketik untuk membacanya bersama hukum daripada kitab itu sendiri, kemudian **Open in …** untuk pergi ke sana. Ia dicari dengan membandingkan teks Arab, jadi ia membantu mencari riwayat lain; ia tidak bermaksud sanad atau hukumnya sama.
 11. Setiap hadis ada butang **penanda buku** (lima warna, seperti al-Quran) dan butang **nota**. **Continue reading** (tempat anda berhenti) berada di bahagian atas halaman Hadith. Senarai penanda buku dipaparkan di bawahnya apabila **Show** (di sebelah **All**) ditanda; ia tidak ditanda pada mulanya.
+
+**Sirah**
+
+1. Home → **Sirah**: sirah Nabi ﷺ sebagai garis masa dalam tiga bahagian: **Sebelum kenabian**, **Makkah** dan **Madinah**. Bahasanya mengikut Settings → Translation language.
+2. Ketik satu peristiwa untuk ringkasan pendek, kemudian:
+   - **Al-Quran**: ayat yang dikaitkan dengan peristiwa itu oleh kitab hadis atau tafsir. Ketik untuk membukanya dalam mushaf.
+   - **Hadis**: riwayat dalam kitab aplikasi ini, berserta hukumnya (Bukhari dan Muslim ditanda Sahih). Ketik untuk membaca hadis itu; **Open in …** membawa anda kepadanya dalam kitab.
+   - **Riwayat dalam kitab lain**: riwayat daripada kitab yang tiada dalam aplikasi ini (contohnya Musnad Ahmad), dinamakan supaya anda boleh merujuknya.
+   - **Kisah popular: semak statusnya**: kisah yang sering diceritakan tentang peristiwa itu, setiap satu dengan label berwarna: **Tiada asas yang sahih** (merah), **Lemah** (jingga), **Ulama berbeza pendapat** (kuning tua), atau **Riwayat ahli sejarah: sanad tidak disemak** (kelabu: diriwayatkan oleh Ibn Ishaq dan ahli sejarah lain, tidak disahkan dalam kitab hadis).
+3. Tanda **!** jingga pada garis masa bermaksud peristiwa itu ada kisah popular yang ditanda.
+4. **‹ ›** di bawah untuk ke peristiwa sebelum atau selepasnya.
+5. Tiga bahagian itu terbuka dan tertutup apabila diketik. **Carian** (kekal di atas) mencari peristiwa dalam bahasa Melayu atau Inggeris, contohnya "Badar", "Hijrah", "Ramadan". **Sambung bacaan** di atas membuka peristiwa terakhir yang anda baca.
+6. Pada sesuatu peristiwa: **Penanda** (disenaraikan di bawah Penanda dalam Sirah dan dalam tab **Sirah** pada butang Bookmarks), **Nota** (juga dalam Notes, di bawah **Sirah**) dan **Salin** (ringkasan, rujukan dan status kisah).
+7. Mengetik ayat atau **Open in …** pada hadis membawa anda ke sana; butang **kembali** telefon (atau butang **‹ Kembali** di atas mushaf) membawa anda semula ke peristiwa yang sama.
+8. **Makna perkataan:** tekan lama sesuatu perkataan dalam Sirah (juga dalam halaman Hadis dan Doa) untuk memilihnya, kemudian ketik **Cari makna**: Kamus Dewan (DBP) atau kamus Inggeris, atau Almaany untuk bahasa Arab, dibuka dalam pelayar. Menu pilihan teks telefon anda juga mungkin ada pilihan Terjemah.
+9. Ringkasan ditulis untuk aplikasi ini berdasarkan hadis dan ahli sejarah yang dinamakan; tarikh yang tidak ditetapkan oleh hadis (contohnya 12 Rabiulawal, 27 Rejab) ditanda sedemikian.
+
+**Imbas & semak (Scan & check)**
+
+1. Seseorang berkongsi "ayat" atau "hadis" dan anda mahu menyemaknya. Home → **Scan & check**, kemudian:
+   - **Kamera** (aplikasi Android): pilih dahulu bahasa teks itu (**Arabic** atau **Melayu / English**), ambil gambar teks itu, dan aplikasi membacanya dalam telefon (tidak perlu internet untuk membaca).
+   - **Gambar / tangkap layar**: pilih tangkapan layar atau gambar yang sudah ada.
+   - **Kongsi**: dalam WhatsApp, Telegram, pelayar atau galeri, ketik **Share → My Personal Quran** ("Check in My Quran"). Teks yang dikongsi terus disemak; untuk gambar, pilih bahasanya.
+   - **Tampal**: tampal teks dalam kotak. Ini juga boleh dalam pelayar.
+2. Semak teks dalam kotak (kamera boleh tersilap membaca huruf, terutama Arab berbaris atau tulisan berhias), betulkan jika perlu, dan ketik **Semak**.
+3. **Al-Quran**: hijau **Dijumpai dalam Al-Quran**, **Dijumpai: sebahagian daripada ayat**, kuning **Hampir dengan ayat Al-Quran: ada perbezaan**, atau merah **Tiada ayat Al-Quran yang sepadan**. Setiap padanan menunjukkan ayat, terjemahannya dan berapa banyak yang sepadan; ketik untuk membuka ayat itu (butang **kembali** telefon membawa anda semula ke semakan).
+4. **Hadis**: tujuh kitab dalam aplikasi ini disemak (kali pertama, setiap kitab dimuat turun, jadi guna Wi-Fi). Setiap padanan menunjukkan kitab, nombor dan darjatnya, dan sama ada seluruh teks itu ada dalam hadis tersebut atau **hanya sebahagian**. Merah **Tidak dijumpai** bukan bukti hadis itu palsu: ia mungkin ada dalam kitab lain (seperti Musnad Ahmad) atau dengan lafaz lain. Tanya guru yang berkelayakan.
+5. Cara padanan: Arab, perkataan yang sama mengikut susunan (baris diabaikan); Melayu dan Inggeris, perkataan penting yang sama. Penterjemah memilih perkataan berbeza, jadi peratus rendah tidak bermakna tiada. Teks hadis Bahasa Melayu dibandingkan dengan terjemahan Indonesia.
+
+**Masjid & musolla (Masjid & musollah)**
+
+1. Home → **Masjid & musollah**: 70 masjid dalam Direktori Masjid MUIS (dengan alamat dan telefon), 3 masjid bukan di bawah MUIS, dan beberapa musolla dari OpenStreetMap dan Wikipedia.
+2. Ketik butang **lokasi** untuk menyusun yang paling dekat dahulu. **Arah** membuka Google Maps; **Telefon** menelefon masjid.
+3. **Cari** ikut nama, jalan atau poskod. **Semua · Masjid · Musolla · Tempat saya** menapis senarai.
+4. **Tambah tempat**: nama, jenis, alamat dan catatan (tingkat, ruang wanita, tempat wuduk), dan lokasinya: **Lokasi saya sekarang** (berdiri di tempat itu) atau tampal pautan Google Maps. Tempat anda disimpan dalam telefon; ketik **Ubah** untuk mengubah atau memadamnya.
+5. Waktu buka, kemudahan dan aturan solat Jumaat tidak disenaraikan; semak dengan masjid atau MUIS.
 
 **Nota (Notes)**
 
@@ -224,7 +262,7 @@ Semuanya dibuka dari **menu ayat**; memerlukan internet sekali bagi setiap surah
 **Peringatan** (Android)
 
 1. Ketik **loceng** di sebelah setiap waktu untuk menghidupkan atau mematikan peringatannya.
-2. **Sound**: azan Makkah, azan Madinah, nada pendek, notifikasi sahaja, atau **None** (tiada peringatan azan langsung; peringatan sebelum waktu dan bar notifikasi masih berfungsi jika dihidupkan). Untuk azan, ketik **Choose … adhan file** dan pilih rakaman azan dari telefon anda.
+2. **Sound**: azan Makkah, azan Madinah, nada pendek, **Notification only** (notifikasi sahaja, tanpa sebarang bunyi, termasuk peringatan sebelum waktu dan Syuruk), atau **None** (tiada peringatan azan langsung; peringatan sebelum waktu dan bar notifikasi masih berfungsi jika dihidupkan). Untuk azan, ketik **Choose … adhan file** dan pilih rakaman azan dari telefon anda.
 3. **Reminder before each prayer**: tiada hingga 30 minit sebelum waktu.
 4. **Test the sound** / **Stop**. Jika peringatan tidak berbunyi, benarkan notifikasi dan penggera, dan buang had bateri.
 5. Peringatan **dihidupkan secara lalai** untuk lima waktu solat, dan aplikasi meminta kebenaran notifikasi sekali. Ia mengikut mod bunyi telefon: **dering** = azan atau nada dimainkan; **getar** = telefon bergetar bersama notifikasi, tanpa bunyi; **senyap atau Jangan Ganggu** = notifikasi senyap sahaja. **Test the sound** mengikut peraturan yang sama (dalam mod getar ia hanya bergetar). Jika fon telinga atau earpiece Bluetooth disambung, azan dimainkan dalam fon telinga sahaja.
