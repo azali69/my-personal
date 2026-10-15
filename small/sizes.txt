@@ -1,0 +1,12 @@
+total 267612
+drwxr-xr-x 2 runner runner      4096 Oct 15 07:16 .
+drwxr-xr-x 6 runner runner      4096 Oct 15 07:13 ..
+-rw-r--r-- 1 runner runner       374 Oct 15 07:15 ar_rec.json
+-rw-r--r-- 1 runner runner 215233849 Oct 15 07:15 ar_rec.onnx
+-rw-r--r-- 1 runner runner  54000956 Oct 15 07:15 ar_rec_q.onnx
+-rw-r--r-- 1 runner runner   4745517 Oct 15 07:16 det.onnx
+-rw-r--r-- 1 runner runner      1944 Oct 15 07:15 export.txt
+-rw-r--r-- 1 runner runner     20971 Oct 15 07:15 pip.txt
+-rw-r--r-- 1 runner runner      2834 Oct 15 07:15 pipe_fp32.txt
+-rw-r--r-- 1 runner runner      2833 Oct 15 07:16 pipe_q.txt
+-rw-r--r-- 1 runner runner         0 Oct 15 07:16 sizes.txt
