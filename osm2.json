@@ -1,0 +1,3196 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.62.11 87bfad18",
+  "osm3s": {
+    "timestamp_osm_base": "2026-05-31T22:37:44Z",
+    "timestamp_areas_base": "2026-05-31T22:37:44Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "node",
+  "id": 410459848,
+  "lat": 1.3700884,
+  "lon": 103.8453659,
+  "tags": {
+    "bus": "yes",
+    "highway": "bus_stop",
+    "location": "Ang Mo Kio Avenue 6",
+    "name": "Opposite Al-Muttaqin Mosque",
+    "public_transport": "platform",
+    "ref": "54031",
+    "route_ref": "13;86;138;138A;138B;162;162M;851;851e;852;853;853M;NR1"
+  }
+},
+{
+  "type": "node",
+  "id": 410459850,
+  "lat": 1.3707194,
+  "lon": 103.8457237,
+  "tags": {
+    "bench": "yes",
+    "bin": "yes",
+    "bus": "yes",
+    "highway": "bus_stop",
+    "location": "Ang Mo Kio Avenue 6",
+    "name": "Before Al-Muttaqin Mosque",
+    "public_transport": "platform",
+    "ref": "54039",
+    "route_ref": "13;86;138;162;162M;851;851e;852;853;853M",
+    "shelter": "yes",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 410462107,
+  "lat": 1.3433835,
+  "lon": 103.8512224,
+  "tags": {
+    "bench": "yes",
+    "bin": "yes",
+    "bus": "yes",
+    "highway": "bus_stop",
+    "lit": "yes",
+    "location": "Braddell Road",
+    "name": "After Muhajirin Mosque",
+    "public_transport": "platform",
+    "ref": "52039",
+    "route_ref": "13;56;57;59;88;93;157;163",
+    "shelter": "yes",
+    "tactile_paving": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 410462711,
+  "lat": 1.4564297,
+  "lon": 103.8208749,
+  "tags": {
+    "bus": "yes",
+    "highway": "bus_stop",
+    "location": "Canberra Road",
+    "name": "Before Assyafaah Mosque",
+    "public_transport": "platform",
+    "ref": "58139",
+    "route_ref": "856;981",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 410462715,
+  "lat": 1.4562246,
+  "lon": 103.8204704,
+  "tags": {
+    "bus": "yes",
+    "highway": "bus_stop",
+    "location": "Canberra Road",
+    "name": "After Assyafaah Mosque",
+    "public_transport": "platform",
+    "ref": "58131",
+    "route_ref": "856;981",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 410462763,
+  "lat": 1.3189547,
+  "lon": 103.9124220,
+  "tags": {
+    "bench": "yes",
+    "bin": "yes",
+    "bus": "yes",
+    "departures_board": "no",
+    "highway": "bus_stop",
+    "lit": "yes",
+    "location": "Changi Road",
+    "name": "Masjid Kassim",
+    "network": "Land Transport Authority",
+    "network:short": "LTA",
+    "network:wikidata": "Q3299279",
+    "operator": "Land Transport Authority",
+    "public_transport": "platform",
+    "ref": "83059",
+    "route_ref": "2;7;7A;24;25;26;28;30;33;33B;67;854",
+    "shelter": "yes",
+    "short_name": "Mjd Kassim",
+    "tactile_paving": "no",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 410463732,
+  "lat": 1.2978890,
+  "lon": 103.7696380,
+  "tags": {
+    "bench": "yes",
+    "bin": "yes",
+    "bus": "yes",
+    "highway": "bus_stop",
+    "lit": "yes",
+    "location": "Clementi Road",
+    "name": "Tentera Diraja Mosque",
+    "name:ms": "Masjid Tentera Diraja",
+    "public_transport": "platform",
+    "ref": "16141",
+    "route_ref": "33;33A;183;188",
+    "shelter": "yes",
+    "tactile_paving": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 410464343,
+  "lat": 1.3121991,
+  "lon": 103.8772284,
+  "tags": {
+    "bench": "no",
+    "bin": "yes",
+    "bus": "yes",
+    "highway": "bus_stop",
+    "location": "Geylang Road",
+    "name": "Opposite Mohd Salleh Mosque",
+    "public_transport": "platform",
+    "ref": "80069",
+    "route_ref": "2;13;21;21A;26;51;62;63;63A;67;80;100;158;158A;853M",
+    "shelter": "yes",
+    "tactile_paving": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 410465053,
+  "lat": 1.3722107,
+  "lon": 103.6944186,
+  "tags": {
+    "bus": "yes",
+    "highway": "bus_stop",
+    "location": "Jalan Bahar",
+    "name": "Pusara Aman Mosque",
+    "name:ms": "Masjid Pusara Aman",
+    "operator": "Land Transport Authority",
+    "public_transport": "platform",
+    "ref": "31051",
+    "route_ref": "172;405"
+  }
+},
+{
+  "type": "node",
+  "id": 410468050,
+  "lat": 1.3034335,
+  "lon": 103.8596966,
+  "tags": {
+    "bus": "yes",
+    "highway": "bus_stop",
+    "location": "North Bridge Road",
+    "name": "Before Sultan Mosque",
+    "network": "Land Transport Authority",
+    "network:short": "LTA",
+    "network:wikidata": "Q3299279",
+    "operator": "Land Transport Authority",
+    "public_transport": "platform",
+    "ref": "01229",
+    "route_ref": "7;7A;32;51;61;63;63A;80;145;175;197"
+  }
+},
+{
+  "type": "node",
+  "id": 410477180,
+  "lat": 1.3559490,
+  "lon": 103.9389478,
+  "tags": {
+    "bus": "yes",
+    "highway": "bus_stop",
+    "location": "Tampines Avenue 5",
+    "name": "Opposite Darul Ghufran Mosque",
+    "public_transport": "platform",
+    "ref": "75121",
+    "route_ref": "2N;34;34A;34B;46;69;72;291;291T;513"
+  }
+},
+{
+  "type": "node",
+  "id": 410477182,
+  "lat": 1.3556461,
+  "lon": 103.9393944,
+  "tags": {
+    "bus": "yes",
+    "highway": "bus_stop",
+    "location": "Tampines Avenue 5",
+    "name": "Darul Ghufran Mosque",
+    "name:ms": "Masjid Darul Ghufran",
+    "public_transport": "platform",
+    "ref": "75129",
+    "route_ref": "34;34B;46;69;72;291;291T;513"
+  }
+},
+{
+  "type": "node",
+  "id": 410477599,
+  "lat": 1.3611512,
+  "lon": 103.8914628,
+  "tags": {
+    "bench": "yes",
+    "bin": "yes",
+    "bus": "yes",
+    "highway": "bus_stop",
+    "location": "Tampines Road",
+    "name": "After En-Naeem Mosque",
+    "public_transport": "platform",
+    "ref": "63139",
+    "route_ref": "53;62;62A;112;112A",
+    "shelter": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 410478390,
+  "lat": 1.3225075,
+  "lon": 103.7393668,
+  "tags": {
+    "bus": "yes",
+    "highway": "bus_stop",
+    "location": "Teban Gardens Road",
+    "name": "After Hasanah Mosque",
+    "public_transport": "platform",
+    "ref": "20239",
+    "route_ref": "79;79A;143;143M;201;655"
+  }
+},
+{
+  "type": "node",
+  "id": 410478394,
+  "lat": 1.3222552,
+  "lon": 103.7396281,
+  "tags": {
+    "bus": "yes",
+    "highway": "bus_stop",
+    "location": "Teban Gardens Road",
+    "name": "Before Hasanah Mosque",
+    "public_transport": "platform",
+    "ref": "20231",
+    "route_ref": "30;79;143;143M;655"
+  }
+},
+{
+  "type": "node",
+  "id": 410478629,
+  "lat": 1.2756743,
+  "lon": 103.8191266,
+  "tags": {
+    "bus": "yes",
+    "highway": "bus_stop",
+    "location": "Telok Blangah Way",
+    "name": "Al-Amin Mosque",
+    "name:en": "Al-Amin Mosque",
+    "name:ms": "Masjid Al-Amin",
+    "public_transport": "platform",
+    "ref": "14271",
+    "route_ref": "124;131;195;195A"
+  }
+},
+{
+  "type": "node",
+  "id": 410478806,
+  "lat": 1.2885100,
+  "lon": 103.8207499,
+  "tags": {
+    "bus": "yes",
+    "highway": "bus_stop",
+    "location": "Tiong Bahru Road",
+    "name": "Before Ar-rabitah Mosque",
+    "network": "Land Transport Authority",
+    "network:short": "LTA",
+    "network:wikidata": "Q3299279",
+    "operator": "Land Transport Authority",
+    "public_transport": "platform",
+    "ref": "10181",
+    "route_ref": "32;33;63;63A;64;120;132;145;NR5",
+    "short_name": "Bef Ar-Rabitah Mque"
+  }
+},
+{
+  "type": "node",
+  "id": 410487018,
+  "lat": 1.4372161,
+  "lon": 103.8337564,
+  "tags": {
+    "bench": "yes",
+    "bin": "yes",
+    "highway": "bus_stop",
+    "lit": "yes",
+    "location": "Yishun Avenue 2",
+    "name": "Darul Makmur Mosque",
+    "name:ms": "Masjid Darul Makmur",
+    "operator": "Land Transport Authority",
+    "ref": "59259",
+    "route_ref": "117;117M;169;169A;883;965;965A;965T",
+    "shelter": "yes",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 410487025,
+  "lat": 1.4367106,
+  "lon": 103.8337030,
+  "tags": {
+    "bench": "yes",
+    "bin": "yes",
+    "bus": "yes",
+    "highway": "bus_stop",
+    "lit": "yes",
+    "location": "Yishun Avenue 2",
+    "name": "Opposite Darul Makmur Mosque",
+    "operator": "Land Transport Authority",
+    "public_transport": "platform",
+    "ref": "59251",
+    "route_ref": "117;117M;169;800;811;811T;883;883B;883M;965",
+    "shelter": "yes",
+    "wheelchair": "limited"
+  }
+},
+{
+  "type": "node",
+  "id": 1907922852,
+  "lat": 1.3349128,
+  "lon": 103.7195300,
+  "tags": {
+    "bus": "yes",
+    "highway": "bus_stop",
+    "location": "Corporation Road",
+    "name": "Assyakirin Mosque",
+    "name:ms": "Masjid Assyakirin",
+    "public_transport": "platform",
+    "ref": "21279",
+    "route_ref": "178"
+  }
+},
+{
+  "type": "node",
+  "id": 1907922926,
+  "lat": 1.3346590,
+  "lon": 103.7194750,
+  "tags": {
+    "bus": "yes",
+    "highway": "bus_stop",
+    "location": "Corporation Road",
+    "name": "Opposite Assyakirin Mosque",
+    "public_transport": "platform",
+    "ref": "21271",
+    "route_ref": "178"
+  }
+},
+{
+  "type": "node",
+  "id": 2678378797,
+  "lat": 1.4066708,
+  "lon": 103.8206656,
+  "tags": {
+    "addr:city": "Singapore",
+    "addr:country": "SG",
+    "addr:housenumber": "15",
+    "addr:postcode": "769227",
+    "addr:street": "Jalan Ulu Seletar",
+    "amenity": "place_of_worship",
+    "denomination": "sunni",
+    "email": "info@ahmadibrahim.mosque.org.sg",
+    "name": "Masjid Ahmad Ibrahim",
+    "name:ms": "Masjid Ahmad Ibrahim",
+    "operator": "Majlis Ugama Islam Singapura",
+    "operator:wikidata": "Q6738012",
+    "phone": "+65 6454 0848",
+    "religion": "muslim",
+    "wikidata": "Q1087696",
+    "wikipedia": "en:Masjid Ahmad Ibrahim"
+  }
+},
+{
+  "type": "node",
+  "id": 2719632989,
+  "lat": 1.2853335,
+  "lon": 103.8500184,
+  "tags": {
+    "addr:city": "Singapore",
+    "addr:country": "SG",
+    "addr:housenumber": "80",
+    "addr:postcode": "048624",
+    "addr:street": "Raffles Place",
+    "amenity": "place_of_worship",
+    "denomination": "sunni",
+    "email": "masjidmoulana@singnet.com.sg",
+    "name": "Masjid Moulana Mohd Ali",
+    "name:fa": "مسجد مولانا محمد علی",
+    "name:ms": "Masjid Moulana Mohd Ali",
+    "operator": "Majlis Ugama Islam Singapura",
+    "operator:wikidata": "Q6738012",
+    "phone": "+65 6536 5238",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "node",
+  "id": 4871555422,
+  "lat": 1.2729174,
+  "lon": 103.8473281,
+  "tags": {
+    "addr:street": "Shenton Way Terminal",
+    "historic": "tomb",
+    "name": "Maqam Habib Noh",
+    "name:en": "Maqam Habib Noh",
+    "name:id": "Makam Habib Nuh",
+    "name:ms": "Makam Habib Nuh",
+    "religion": "muslim",
+    "tomb": "mausoleum"
+  }
+},
+{
+  "type": "node",
+  "id": 6197046885,
+  "lat": 1.3131275,
+  "lon": 103.8487212,
+  "tags": {
+    "addr:city": "Singapore",
+    "addr:country": "SG",
+    "addr:housenumber": "46",
+    "addr:postcode": "219852",
+    "addr:street": "Bristol Road",
+    "amenity": "place_of_worship",
+    "denomination": "sunni",
+    "name": "Masjid Tasek Utara",
+    "name:en": "Tasek Utara Mosque",
+    "name:ms": "Masjid Tasek Utara",
+    "operator": "Majlis Ugama Islam Singapura",
+    "operator:wikidata": "Q6738012",
+    "phone": "+65 6293 8351",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "node",
+  "id": 6423030825,
+  "lat": 1.3050660,
+  "lon": 103.8599472,
+  "tags": {
+    "historic": "memorial",
+    "image": "https://images.mapillary.com/qpzXQxGeNhjRiBfaFoz0fA/thumb-2048.jpg",
+    "mapillary": "970545773753453",
+    "memorial": "plaque",
+    "name": "Malabar Muslim Jama'atah Mosque",
+    "name:ms": "Masjid Malabar Muslim Jama'atah"
+  }
+},
+{
+  "type": "node",
+  "id": 6856660234,
+  "lat": 1.3736314,
+  "lon": 103.9327656,
+  "tags": {
+    "description": "prayer room for Muslims",
+    "indoor": "room",
+    "level": "3",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "node",
+  "id": 9574586537,
+  "lat": 1.3023203,
+  "lon": 103.8622476,
+  "tags": {
+    "addr:unit": "23",
+    "amenity": "kindergarten",
+    "education": "kindergarten",
+    "level": "1",
+    "name": "Little Quran Kids",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "node",
+  "id": 10677678627,
+  "lat": 1.2666722,
+  "lon": 103.8247599,
+  "tags": {
+    "addr:housenumber": "30",
+    "addr:postcode": "098827",
+    "addr:street": "Telok Blangah Road",
+    "amenity": "grave_yard",
+    "name": "Johor Royal Mausoleum",
+    "name:ms": "Makam Diraja Johor Teluk Blangah;Tanah Kubor Temenggong Johor",
+    "name:zh": "柔佛皇家陵墓",
+    "religion": "muslim",
+    "wikidata": "Q6738651",
+    "wikipedia": "en:Makam Diraja Johor Telok Blangah"
+  }
+},
+{
+  "type": "node",
+  "id": 10781433652,
+  "lat": 1.4075007,
+  "lon": 103.9817470,
+  "tags": {
+    "name": "Surau Kampong"
+  }
+},
+{
+  "type": "node",
+  "id": 11133709893,
+  "lat": 1.3156345,
+  "lon": 103.8967435,
+  "tags": {
+    "addr:city": "Singapore",
+    "addr:housenumber": "32",
+    "addr:postcode": "424484",
+    "addr:street": "Onan Road",
+    "alt_name": "Darul Arqam Singapore",
+    "contact:facebook": "darularqam.sg",
+    "contact:instagram": "darularqamsg",
+    "contact:telegram": "https://t.me/MCASDA",
+    "contact:youtube": "darularqamsingapore",
+    "name": "Muslim Converts’ Association of Singapore",
+    "office": "religion",
+    "phone": "+65 63488344",
+    "religion": "muslim",
+    "short_name": "MCAS",
+    "website": "https://www.darul-arqam.org.sg/"
+  }
+},
+{
+  "type": "node",
+  "id": 12926961297,
+  "lat": 1.2989572,
+  "lon": 103.8223846,
+  "tags": {
+    "addr:city": "Singapore",
+    "addr:country": "SG",
+    "amenity": "place_of_worship",
+    "name": "Masjid Istiqamah - KBRI",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "node",
+  "id": 13328152980,
+  "lat": 1.3019784,
+  "lon": 103.8592898,
+  "tags": {
+    "name": "Masjid Sultan (Sultan Mosque) information board",
+    "tourism": "information"
+  }
+},
+{
+  "type": "way",
+  "id": 22919804,
+  "center": {
+    "lat": 1.2835730,
+    "lon": 103.8452183
+  },
+  "tags": {
+    "highway": "residential",
+    "lanes": "2",
+    "maxspeed": "50",
+    "name": "Mosque Street",
+    "name:en": "Mosque Street",
+    "name:en:signed": "yes",
+    "name:zh": "摩士街",
+    "name:zh:signed": "yes",
+    "oneway": "yes",
+    "parking:condition:left:vehicles": "motorcar,hgv",
+    "parking:condition:right:vehicles": "motorcar",
+    "parking:lane:both": "parallel",
+    "sidewalk": "right",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 32919131,
+  "center": {
+    "lat": 1.3834249,
+    "lon": 103.8902139
+  },
+  "tags": {
+    "addr:city": "Singapore",
+    "addr:country": "SG",
+    "addr:housenumber": "151",
+    "addr:postcode": "544997",
+    "addr:street": "Compassvale Bow",
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "denomination": "sunni",
+    "email": "info@almawaddah.mosque.org.sg",
+    "name": "Masjid Al-Mawaddah",
+    "name:ms": "Masjid Al-Mawaddah",
+    "operator": "Majlis Ugama Islam Singapura",
+    "operator:wikidata": "Q6738012",
+    "phone": "+65 6489 0224",
+    "religion": "muslim",
+    "source": "Kaart Ground Survey 2017",
+    "website": "http://v1.almawaddah.sg/",
+    "wikidata": "Q1088320",
+    "wikipedia": "en:Masjid Al-Mawaddah"
+  }
+},
+{
+  "type": "way",
+  "id": 35096650,
+  "center": {
+    "lat": 1.3609801,
+    "lon": 103.8925267
+  },
+  "tags": {
+    "addr:city": "Singapore",
+    "addr:country": "SG",
+    "addr:housenumber": "120",
+    "addr:postcode": "535136",
+    "addr:street": "Tampines Road",
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "denomination": "sunni",
+    "email": "info@ennaeem.mosque.sg",
+    "name": "Masjid En-Naeem",
+    "name:ms": "Masjid En-Naeem",
+    "operator": "Majlis Ugama Islam Singapura",
+    "operator:wikidata": "Q6738012",
+    "phone": "+65 6911 8140",
+    "religion": "muslim",
+    "source": "Kaart Ground Survey 2017",
+    "wikidata": "Q6783344",
+    "wikipedia": "en:Masjid En-Naeem"
+  }
+},
+{
+  "type": "way",
+  "id": 37355745,
+  "center": {
+    "lat": 1.3704566,
+    "lon": 103.8460326
+  },
+  "tags": {
+    "addr:city": "Singapore",
+    "addr:country": "SG",
+    "addr:housenumber": "5140",
+    "addr:postcode": "569844",
+    "addr:street": "Ang Mo Kio Avenue 6",
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "denomination": "sunni",
+    "email": "info@almuttaqin.mosque.org.sg",
+    "name": "Masjid Al-Muttaqin",
+    "name:ms": "Masjid Al-Muttaqin",
+    "operator": "Majlis Ugama Islam Singapura",
+    "operator:wikidata": "Q6738012",
+    "phone": "+65 6454 7472",
+    "religion": "muslim",
+    "wheelchair": "yes",
+    "wikidata": "Q6783332",
+    "wikimedia_commons": "Category:Masjid Al-Muttaqin",
+    "wikipedia": "en:Masjid Al-Muttaqin"
+  }
+},
+{
+  "type": "way",
+  "id": 62272679,
+  "center": {
+    "lat": 1.3366804,
+    "lon": 103.9139868
+  },
+  "tags": {
+    "addr:city": "Singapore",
+    "addr:country": "SG",
+    "addr:housenumber": "200",
+    "addr:postcode": "479221",
+    "addr:street": "Bedok Reservoir Road",
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "building:levels": "3",
+    "denomination": "sunni",
+    "email": "inbox@alkaffkm.mosque.sg",
+    "image": "https://images.mapillary.com/jdrZuKWnhjLST9x5_7Coaw/thumb-2048.jpg",
+    "mapillary": "748671222495624",
+    "name": "Masjid Alkaff Kampung Melayu",
+    "name:en": "Alkaff Kampung Melayu Mosque",
+    "name:ms": "Masjid Alkaff Kampung Melayu",
+    "operator": "Majlis Ugama Islam Singapura",
+    "operator:wikidata": "Q6738012",
+    "phone": "+65 6242 7244",
+    "religion": "muslim",
+    "wikidata": "Q30622971",
+    "wikipedia": "en:Masjid Alkaff Kampung Melayu"
+  }
+},
+{
+  "type": "way",
+  "id": 77338538,
+  "center": {
+    "lat": 1.3124780,
+    "lon": 103.7711099
+  },
+  "tags": {
+    "addr:city": "Singapore",
+    "addr:country": "SG",
+    "addr:housenumber": "3002",
+    "addr:postcode": "129579",
+    "addr:street": "Commonwealth Avenue West",
+    "amenity": "place_of_worship",
+    "building": "mosque",
+    "denomination": "sunni",
+    "email": "feedback@darussalam.mosque.org.sg",
+    "name": "Masjid Darussalam",
+    "name:ms": "Masjid Darussalam",
+    "operator": "Majlis Ugama Islam Singapura",
+    "operator:wikidata": "Q6738012",
+    "phone": "+65 6777 0028",
+    "religion": "muslim",
+    "source": "KG Ground Survey 2016"
+  }
+},
+{
+  "type": "way",
+  "id": 116582867,
+  "center": {
+    "lat": 1.3165676,
+    "lon": 103.9232748
+  },
+  "tags": {
+    "barrier": "fence",
+    "landuse": "cemetery",
+    "name": "Kubur Kassim Cemetery",
+    "religion": "muslim",
+    "wikipedia": "en:Kubur Kassim"
+  }
+},
+{
+  "type": "way",
+  "id": 147104299,
+  "center": {
+    "lat": 1.2878274,
+    "lon": 103.8443369
+  },
+  "tags": {
+    "addr:city": "Singapore",
+    "addr:country": "SG",
+    "addr:housenumber": "10",
+    "addr:postcode": "059607",
+    "addr:street": "Keng Cheow Street",
+    "amenity": "place_of_worship",
+    "building": "mosque",
+    "denomination": "sunni",
+    "email": "masjidomar@kgmelaka.mosque.org.sg",
+    "height": "35",
+    "name": "Masjid Omar Kampung Melaka",
+    "name:ms": "Masjid Omar Kampung Melaka",
+    "operator": "Majlis Ugama Islam Singapura",
+    "operator:wikidata": "Q6738012",
+    "phone": "+65 6532 6764",
+    "religion": "muslim",
+    "roof:material": "roof_tiles",
+    "start_date": "1820",
+    "wikidata": "Q2478845",
+    "wikipedia": "en:Masjid Omar Kampong Melaka"
+  }
+},
+{
+  "type": "way",
+  "id": 155990076,
+  "center": {
+    "lat": 1.3022204,
+    "lon": 103.8589901
+  },
+  "tags": {
+    "addr:city": "Singapore",
+    "addr:country": "SG",
+    "addr:housenumber": "3",
+    "addr:postcode": "198833",
+    "addr:street": "Muscat Street",
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "denomination": "sunni",
+    "image": "https://images.mapillary.com/XTxFCH9Y3D5cuF-1eyhCjg/thumb-2048.jpg",
+    "mapillary": "489742402477892",
+    "name": "Masjid Sultan",
+    "name:ja": "サルタンモスク",
+    "name:ko": "술탄 모스크",
+    "name:ms": "Masjid Sultan",
+    "name:zh": "苏丹回教堂",
+    "opening_hours": "Mo-Th 10:00-12:00, 14:00-16:00; Fr 14:30-16:00; Sa 10:00-12:00, 14:00-16:00",
+    "operator": "Majlis Ugama Islam Singapura",
+    "operator:wikidata": "Q6738012",
+    "phone": "+65 6293 4405",
+    "religion": "muslim",
+    "start_date": "1932",
+    "wheelchair": "yes",
+    "wikidata": "Q1907146",
+    "wikimedia_commons": "Category:Masjid Sultan",
+    "wikipedia": "en:Sultan Mosque"
+  }
+},
+{
+  "type": "way",
+  "id": 159797006,
+  "center": {
+    "lat": 1.3692238,
+    "lon": 103.8756293
+  },
+  "tags": {
+    "addr:city": "Singapore",
+    "addr:country": "SG",
+    "addr:housenumber": "2",
+    "addr:postcode": "555876",
+    "addr:street": "Seragoon North Avenue 2",
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "denomination": "sunni",
+    "email": "feedback@alistiqamah.mosque.org.sg",
+    "name": "Masjid Al Istiqamah",
+    "name:en": "Al Istiqamah Mosque",
+    "name:ms": "Masjid Al Istiqamah",
+    "operator": "Majlis Ugama Islam Singapura",
+    "operator:wikidata": "Q6738012",
+    "phone": "+65 6281 4287",
+    "religion": "muslim",
+    "wikidata": "Q712057",
+    "wikipedia": "en:Masjid Al-Istiqamah"
+  }
+},
+{
+  "type": "way",
+  "id": 160827420,
+  "center": {
+    "lat": 1.2199616,
+    "lon": 103.8498355
+  },
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "way",
+  "id": 168815880,
+  "center": {
+    "lat": 1.3046432,
+    "lon": 103.8576709
+  },
+  "tags": {
+    "amenity": "school",
+    "name": "Madrasah Aljunied Al-Islamiah",
+    "name:en": "Aljunied Islamic School",
+    "name:ms": "Madrasah Aljunied Al-Islamiah",
+    "name:zh": "阿裕尼回教学校",
+    "religion": "muslim",
+    "wikipedia": "en:Madrasah Aljunied Al-Islamiah"
+  }
+},
+{
+  "type": "way",
+  "id": 169511247,
+  "center": {
+    "lat": 1.3429912,
+    "lon": 103.8520589
+  },
+  "tags": {
+    "addr:city": "Singapore",
+    "addr:country": "SG",
+    "addr:housenumber": "275",
+    "addr:postcode": "579704",
+    "addr:street": "Braddell Road",
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "check_date": "2026-01-14",
+    "denomination": "sunni",
+    "email": "info@muhajirin.mosque.sg",
+    "name": "Masjid Muhajirin",
+    "name:ms": "Masjid Muhajirin",
+    "operator": "Majlis Ugama Islam Singapura",
+    "operator:wikidata": "Q6738012",
+    "phone": "+65 6256 1166",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "way",
+  "id": 170417140,
+  "center": {
+    "lat": 1.3179801,
+    "lon": 103.9046492
+  },
+  "tags": {
+    "addr:city": "Singapore",
+    "addr:country": "SG",
+    "addr:housenumber": "1",
+    "addr:postcode": "419493",
+    "addr:street": "Jalan Eunos",
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "denomination": "sunni",
+    "email": "info@darulaman.mosque.org.sg",
+    "name": "Masjid Darul Aman",
+    "name:ms": "Masjid Darul Aman",
+    "operator": "Majlis Ugama Islam Singapura",
+    "operator:wikidata": "Q6738012",
+    "phone": "+65 6744 5544",
+    "religion": "muslim",
+    "wheelchair": "yes",
+    "wikidata": "Q133252522",
+    "wikipedia": "en:Masjid Darul Aman"
+  }
+},
+{
+  "type": "way",
+  "id": 172093878,
+  "center": {
+    "lat": 1.2751837,
+    "lon": 103.8192653
+  },
+  "tags": {
+    "addr:city": "Singapore",
+    "addr:country": "SG",
+    "addr:housenumber": "50",
+    "addr:postcode": "098801",
+    "addr:street": "Telok Blangah Way",
+    "amenity": "place_of_worship",
+    "building": "mosque",
+    "denomination": "sunni",
+    "email": "alamin@alamin.mosque.org.sg",
+    "name": "Masjid Al-Amin",
+    "name:en": "Al-Amin Mosque",
+    "name:ms": "Masjid Al-Amin",
+    "operator": "Majlis Ugama Islam Singapura",
+    "operator:wikidata": "Q6738012",
+    "phone": "+65 6272 5309",
+    "religion": "muslim",
+    "wikidata": "Q3719915",
+    "wikipedia": "en:Masjid Al-Amin"
+  }
+},
+{
+  "type": "way",
+  "id": 172367155,
+  "center": {
+    "lat": 1.2916499,
+    "lon": 103.8283661
+  },
+  "tags": {
+    "addr:city": "Singapore",
+    "addr:country": "SG",
+    "addr:housenumber": "10",
+    "addr:postcode": "169831",
+    "addr:street": "Delta Avenue",
+    "amenity": "place_of_worship",
+    "building": "religious",
+    "denomination": "sunni",
+    "name": "Masjid Kampong Delta",
+    "name:ms": "Masjid Kampong Delta",
+    "operator": "Majlis Ugama Islam Singapura",
+    "operator:wikidata": "Q6738012",
+    "phone": "+65 6272 1750",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "way",
+  "id": 172596716,
+  "center": {
+    "lat": 1.2993385,
+    "lon": 103.8503473
+  },
+  "tags": {
+    "addr:city": "Singapore",
+    "addr:country": "SG",
+    "addr:housenumber": "59",
+    "addr:postcode": "189630",
+    "addr:street": "Bencoolen Street",
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "denomination": "sunni",
+    "email": "masjid@bencoolen.mosque.org.sg",
+    "height": "40",
+    "name": "Masjid Bencoolen",
+    "name:ms": "Masjid Bencoolen",
+    "operator": "Majlis Ugama Islam Singapura",
+    "operator:wikidata": "Q6738012",
+    "phone": "+65 6333 3016",
+    "religion": "muslim",
+    "source": "Bing",
+    "start_date": "2004",
+    "wikidata": "Q6783333",
+    "wikipedia": "en:Masjid Bencoolen"
+  }
+},
+{
+  "type": "way",
+  "id": 172904416,
+  "center": {
+    "lat": 1.2803077,
+    "lon": 103.8472610
+  },
+  "tags": {
+    "addr:city": "Singapore",
+    "addr:country": "SG",
+    "addr:housenumber": "192",
+    "addr:postcode": "068635",
+    "addr:street": "Telok Ayer Street",
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "building:levels": "1",
+    "denomination": "sunni",
+    "name": "Masjid Al-Abrar",
+    "name:en": "Al-Abrar Mosque",
+    "name:fa": "مسجد الابرار",
+    "name:ms": "Masjid Al-Abrar",
+    "operator": "Majlis Ugama Islam Singapura",
+    "operator:wikidata": "Q6738012",
+    "phone": "+65 6220 6306",
+    "religion": "muslim",
+    "roof:colour": "#ff3333",
+    "start_date": "1855",
+    "wikidata": "Q4022275",
+    "wikipedia": "en:Masjid Al-Abrar"
+  }
+},
+{
+  "type": "way",
+  "id": 173391653,
+  "center": {
+    "lat": 1.2981256,
+    "lon": 103.8009599
+  },
+  "tags": {
+    "addr:city": "Singapore",
+    "addr:country": "SG",
+    "addr:housenumber": "590",
+    "addr:postcode": "148952",
+    "addr:street": "Stirling Road",
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "building:levels": "4",
+    "check_date": "2024-09-26",
+    "denomination": "sunni",
+    "email": "info@mujahidin.mosque.org.sg",
+    "name": "Masjid Mujahidin",
+    "name:ms": "Masjid Mujahidin",
+    "name:ms-Arab": "مسجد المجاهدين",
+    "operator": "Majlis Ugama Islam Singapura",
+    "operator:wikidata": "Q6738012",
+    "phone": "+65 6473 7400",
+    "religion": "muslim",
+    "source": "Bing",
+    "wikipedia": "en:Mujahidin Mosque"
+  }
+},
+{
+  "type": "way",
+  "id": 173723549,
+  "center": {
+    "lat": 1.4368632,
+    "lon": 103.8343289
+  },
+  "tags": {
+    "addr:city": "Singapore",
+    "addr:country": "SG",
+    "addr:housenumber": "950",
+    "addr:postcode": "769099",
+    "addr:street": "Yishun Avenue 2",
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "denomination": "sunni",
+    "email": "korporat@darulmakmur.mosque.org.sg",
+    "name": "Masjid Darul Makmur",
+    "name:ms": "Masjid Darul Makmur",
+    "operator": "Majlis Ugama Islam Singapura",
+    "operator:wikidata": "Q6738012",
+    "phone": "+65 6752 1402",
+    "religion": "muslim",
+    "source": "Kaart Ground Survey 2017",
+    "wikidata": "Q4022366",
+    "wikipedia": "en:Masjid Darul Makmur"
+  }
+},
+{
+  "type": "way",
+  "id": 176326990,
+  "center": {
+    "lat": 1.3043997,
+    "lon": 103.8537384
+  },
+  "tags": {
+    "addr:city": "Singapore",
+    "addr:country": "SG",
+    "addr:housenumber": "41",
+    "addr:postcode": "209369",
+    "addr:street": "Dunlop Street",
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "building:levels": "1",
+    "denomination": "sunni",
+    "email": "info@abdgafoor.mosque.org.sg",
+    "image": "https://images.mapillary.com/r5v8XDXQNm9Zs4q3jkz-6w/thumb-2048.jpg",
+    "mapillary": "505484397253509",
+    "name": "Masjid Abdul Gafoor",
+    "name:ar": "مسجد عبد الغفور",
+    "name:fa": "مسجد عبدالغفار",
+    "name:kk": "Абдул Ғаффур мешіті",
+    "name:ms": "Masjid Abdul Gafoor",
+    "name:ru": "Мечеть Абдуль Гаффур",
+    "name:rw": "Umusigiti wa Abdul Gaffoor",
+    "name:uk": "Мечеть Абдуль Гаффур",
+    "name:zh": "阿都卡夫回教堂",
+    "operator": "Majlis Ugama Islam Singapura",
+    "operator:wikidata": "Q6738012",
+    "phone": "+65 6295 4209",
+    "religion": "muslim",
+    "source": "Bing",
+    "wikidata": "Q2477287",
+    "wikipedia": "en:Masjid Abdul Gaffoor"
+  }
+},
+{
+  "type": "way",
+  "id": 190944931,
+  "center": {
+    "lat": 1.3028321,
+    "lon": 103.8629526
+  },
+  "tags": {
+    "addr:city": "Singapore",
+    "addr:country": "SG",
+    "addr:housenumber": "4001",
+    "addr:postcode": "199584",
+    "addr:street": "Beach Road",
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "denomination": "sunni",
+    "email": "marhaba@hjhfatimah.mosque.sg",
+    "name": "Masjid Hajjah Fatimah",
+    "name:en": "Hajjah Fatimah Mosque",
+    "name:ms": "Masjid Hajjah Fatimah",
+    "operator": "Majlis Ugama Islam Singapura",
+    "operator:wikidata": "Q6738012",
+    "phone": "+65 6297 2774",
+    "religion": "muslim",
+    "source": "Bing",
+    "wheelchair": "yes",
+    "wikidata": "Q2667415",
+    "wikipedia": "en:Masjid Hajjah Fatimah"
+  }
+},
+{
+  "type": "way",
+  "id": 190945732,
+  "center": {
+    "lat": 1.3035269,
+    "lon": 103.8606330
+  },
+  "tags": {
+    "addr:city": "Singapore",
+    "addr:country": "SG",
+    "addr:housenumber": "111",
+    "addr:postcode": "199006",
+    "addr:street": "Jalan Sultan",
+    "amenity": "college",
+    "name": "Madrasah Alsagoff Al-Arabiah Arab School",
+    "religion": "muslim",
+    "source": "Bing",
+    "wikidata": "Q55640956",
+    "wikipedia": "en:Madrasah Alsagoff Al-Arabiah"
+  }
+},
+{
+  "type": "way",
+  "id": 190945743,
+  "center": {
+    "lat": 1.3025156,
+    "lon": 103.8593593
+  },
+  "tags": {
+    "building": "yes",
+    "building:levels": "2",
+    "height": "11",
+    "name": "Masjid Sultan Annexe House",
+    "name:ms": "Bangunan Tambahan Masjid Sultan",
+    "religion": "muslim",
+    "roof:shape": "flat",
+    "source": "Bing"
+  }
+},
+{
+  "type": "way",
+  "id": 194283783,
+  "center": {
+    "lat": 1.4407182,
+    "lon": 103.7718829
+  },
+  "tags": {
+    "addr:city": "Singapore",
+    "addr:country": "SG",
+    "addr:housenumber": "6",
+    "addr:postcode": "739983",
+    "addr:street": "Admiralty Road",
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "denomination": "sunni",
+    "email": "annur@annur.mosque.org.sg",
+    "name": "Masjid An-Nur",
+    "name:ms": "Masjid An-Nur",
+    "operator": "Majlis Ugama Islam Singapura",
+    "operator:wikidata": "Q6738012",
+    "phone": "+65 6363 1383",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "way",
+  "id": 203052305,
+  "center": {
+    "lat": 1.4557425,
+    "lon": 103.8193822
+  },
+  "tags": {
+    "addr:city": "Singapore",
+    "addr:country": "SG",
+    "addr:housenumber": "1",
+    "addr:postcode": "757620",
+    "addr:street": "Admiralty Lane",
+    "amenity": "place_of_worship",
+    "building": "mosque",
+    "denomination": "sunni",
+    "email": "assyafaah@assyafaah.mosque.org.sg",
+    "name": "Masjid Assyafaah",
+    "name:en": "Assyafaah Mosque",
+    "name:ms": "Masjid Assyafaah",
+    "operator": "Majlis Ugama Islam Singapura",
+    "operator:wikidata": "Q6738012",
+    "phone": "+65 6756 3008",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "way",
+  "id": 213593443,
+  "center": {
+    "lat": 1.3710584,
+    "lon": 103.9641243
+  },
+  "tags": {
+    "addr:city": "Singapore",
+    "addr:country": "SG",
+    "addr:housenumber": "2",
+    "addr:postcode": "518239",
+    "addr:street": "Pasir Ris Walk",
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "denomination": "sunni",
+    "email": "alistighfar@alistighfar.mosque.org.sg",
+    "name": "Masjid Al-Istighfar",
+    "name:ms": "Masjid Al-Istighfar",
+    "operator": "Majlis Ugama Islam Singapura",
+    "operator:wikidata": "Q6738012",
+    "phone": "+65 6426 7130",
+    "religion": "muslim",
+    "wikidata": "Q4262158",
+    "wikimedia_commons": "Category:Al-Istighfar Mosque",
+    "wikipedia": "en:Masjid Al-Istighfar"
+  }
+},
+{
+  "type": "way",
+  "id": 232204347,
+  "center": {
+    "lat": 1.3781167,
+    "lon": 103.7727618
+  },
+  "tags": {
+    "addr:city": "Singapore",
+    "addr:country": "SG",
+    "addr:housenumber": "10",
+    "addr:postcode": "679943",
+    "addr:street": "Bukit Panjang Ring Road",
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "denomination": "sunni",
+    "email": "aliman@aliman.mosque.org.sg",
+    "name": "Masjid Al-Iman",
+    "name:ms": "Masjid Al-Iman",
+    "operator": "Majlis Ugama Islam Singapura",
+    "operator:wikidata": "Q6738012",
+    "phone": "+65 6769 0770",
+    "religion": "muslim",
+    "wikidata": "Q6783331",
+    "wikipedia": "en:Masjid Al-Iman"
+  }
+},
+{
+  "type": "way",
+  "id": 233022890,
+  "center": {
+    "lat": 1.3826421,
+    "lon": 103.7500011
+  },
+  "tags": {
+    "addr:city": "Singapore",
+    "addr:country": "SG",
+    "addr:housenumber": "1",
+    "addr:postcode": "688847",
+    "addr:street": "Teck Whye Crescent",
+    "amenity": "place_of_worship",
+    "building": "mosque",
+    "building:levels": "3",
+    "denomination": "sunni",
+    "name": "Masjid Al-Khair",
+    "name:ar": "مسجد الخير",
+    "name:ms": "Masjid Al-Khair",
+    "operator": "Majlis Ugama Islam Singapura",
+    "operator:wikidata": "Q6738012",
+    "phone": "+65 6760 1139",
+    "religion": "muslim",
+    "wikipedia": "en:Masjid Al-Khair"
+  }
+},
+{
+  "type": "way",
+  "id": 233521920,
+  "center": {
+    "lat": 1.4590595,
+    "lon": 103.8417470
+  },
+  "tags": {
+    "addr:city": "Singapore",
+    "addr:country": "SG",
+    "addr:housenumber": "27-B",
+    "addr:postcode": "759055",
+    "addr:street": "Jalan Mempurong",
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "denomination": "sunni",
+    "email": "petempatan@gmail.com",
+    "name": "Masjid Petempatan Melayu Sembawang",
+    "name:ms": "Masjid Petempatan Melayu Sembawang",
+    "operator": "Majlis Ugama Islam Singapura",
+    "operator:wikidata": "Q6738012",
+    "phone": "+65 6257 7614",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "way",
+  "id": 241254838,
+  "center": {
+    "lat": 1.3558027,
+    "lon": 103.8797110
+  },
+  "tags": {
+    "addr:city": "Singapore",
+    "addr:country": "SG",
+    "addr:housenumber": "2",
+    "addr:postcode": "548920",
+    "addr:street": "Hillside Drive",
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "denomination": "sunni",
+    "email": "info@hjyusoff.mosque.org.sg",
+    "name": "Masjid Haji Yusoff",
+    "name:ms": "Masjid Haji Yusoff",
+    "operator": "Majlis Ugama Islam Singapura",
+    "operator:wikidata": "Q6738012",
+    "phone": "+65 6284 5459",
+    "religion": "muslim",
+    "source": "Kaart Ground Survey 2017",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "way",
+  "id": 255393930,
+  "center": {
+    "lat": 1.2883312,
+    "lon": 103.8201665
+  },
+  "tags": {
+    "addr:city": "Singapore",
+    "addr:country": "SG",
+    "addr:housenumber": "601",
+    "addr:postcode": "158787",
+    "addr:street": "Tiong Bahru Road",
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "building:levels": "3",
+    "denomination": "sunni",
+    "email": "official@arrabitah.mosque.sg",
+    "name": "Masjid Jamiyah Ar-Rabitah",
+    "name:ms": "Masjid Jamiyah Ar-Rabitah",
+    "operator": "Majlis Ugama Islam Singapura",
+    "operator:wikidata": "Q6738012",
+    "phone": "+65 6273 3848",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "way",
+  "id": 261413888,
+  "center": {
+    "lat": 1.3347020,
+    "lon": 103.8319585
+  },
+  "tags": {
+    "addr:city": "Singapore",
+    "addr:country": "SG",
+    "addr:housenumber": "441-B",
+    "addr:postcode": "299173",
+    "addr:street": "Jalan Mashhor",
+    "amenity": "place_of_worship",
+    "building": "mosque",
+    "check_date": "2024-01-28",
+    "contact:instagram": "https://www.instagram.com/omarsalmahsg/?hl=en",
+    "denomination": "sunni",
+    "email": "info@omarsalmahmosque.com",
+    "name": "Masjid Omar Salmah",
+    "name:ms": "Masjid Omar Salmah",
+    "operator": "Majlis Ugama Islam Singapura",
+    "operator:wikidata": "Q6738012",
+    "phone": "+65 6250 0120",
+    "religion": "muslim",
+    "website": "https://www.muis.gov.sg/mosque/Our-Mosques/Mosque-Directory/Omar-Salmah"
+  }
+},
+{
+  "type": "way",
+  "id": 266390564,
+  "center": {
+    "lat": 1.3199729,
+    "lon": 103.8410559
+  },
+  "tags": {
+    "addr:city": "Singapore",
+    "addr:country": "SG",
+    "addr:housenumber": "10",
+    "addr:postcode": "309194",
+    "addr:street": "Gentle Road",
+    "amenity": "place_of_worship",
+    "building": "mosque",
+    "denomination": "sunni",
+    "name": "Masjid Abdul Hamid Kampung Pasiran",
+    "name:ms": "Masjid Abdul Hamid Kampung Pasiran",
+    "operator": "Majlis Ugama Islam Singapura",
+    "operator:wikidata": "Q6738012",
+    "phone": "+65 6251 2729",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "way",
+  "id": 293503089,
+  "center": {
+    "lat": 1.3150301,
+    "lon": 103.9062427
+  },
+  "tags": {
+    "addr:city": "Singapore",
+    "addr:country": "SG",
+    "addr:housenumber": "152",
+    "addr:postcode": "423991",
+    "addr:street": "Still Road",
+    "amenity": "school",
+    "name": "Al-Khairiah Islamic School",
+    "religion": "muslim",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "way",
+  "id": 295367705,
+  "center": {
+    "lat": 1.3269903,
+    "lon": 103.9263539
+  },
+  "tags": {
+    "addr:city": "Singapore",
+    "addr:country": "SG",
+    "addr:housenumber": "155",
+    "addr:postcode": "469751",
+    "addr:street": "Bedok North Avenue 1",
+    "amenity": "place_of_worship",
+    "building": "residential",
+    "denomination": "sunni",
+    "email": "mail@alansar.mosque.sg",
+    "name": "Masjid Al-Ansar",
+    "name:en": "Al-Ansar Mosque",
+    "name:ms": "Masjid Al-Ansar",
+    "operator": "Majlis Ugama Islam Singapura",
+    "operator:wikidata": "Q6738012",
+    "phone": "+65 6449 2420",
+    "religion": "muslim",
+    "wikidata": "Q2477258",
+    "wikimedia_commons": "Category:Al-Ansar Mosque",
+    "wikipedia": "en:Masjid Al-Ansar"
+  }
+},
+{
+  "type": "way",
+  "id": 295762388,
+  "center": {
+    "lat": 1.2895593,
+    "lon": 103.7986253
+  },
+  "tags": {
+    "addr:city": "Singapore",
+    "addr:country": "SG",
+    "addr:housenumber": "100",
+    "addr:postcode": "139533",
+    "addr:street": "Jalan Hang Jebat",
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "denomination": "sunni",
+    "email": "admin@hangjebat.mosque.org.sg",
+    "name": "Masjid Hang Jebat",
+    "name:ms": "Masjid Hang Jebat",
+    "operator": "Majlis Ugama Islam Singapura",
+    "operator:wikidata": "Q6738012",
+    "phone": "+65 6471 0728",
+    "religion": "muslim",
+    "wikidata": "Q28221601",
+    "wikipedia": "en:Masjid Hang Jebat"
+  }
+},
+{
+  "type": "way",
+  "id": 299966997,
+  "center": {
+    "lat": 1.3535386,
+    "lon": 103.8512822
+  },
+  "tags": {
+    "addr:city": "Singapore",
+    "addr:country": "SG",
+    "addr:housenumber": "9A",
+    "addr:postcode": "579786",
+    "addr:street": "Bishan Street 14",
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "denomination": "sunni",
+    "email": "info@annahdhah.mosque.org.sg",
+    "name": "Masjid An-Nahdhah",
+    "name:en": "An-Nahdhah Mosque",
+    "name:ms": "Masjid An-Nahdhah",
+    "operator": "Majlis Ugama Islam Singapura",
+    "operator:wikidata": "Q6738012",
+    "phone": "+65 6354 3138",
+    "religion": "muslim",
+    "wikidata": "Q4261602",
+    "wikimedia_commons": "Category:An-Nahdhah Mosque",
+    "wikipedia": "en:Masjid An-Nahdhah"
+  }
+},
+{
+  "type": "way",
+  "id": 303267060,
+  "center": {
+    "lat": 1.3516373,
+    "lon": 103.7560148
+  },
+  "tags": {
+    "addr:city": "Singapore",
+    "addr:country": "SG",
+    "addr:housenumber": "30",
+    "addr:postcode": "659919",
+    "addr:street": "Bukit Batok East Avenue 2",
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "check_date": "2024-06-02",
+    "denomination": "sunni",
+    "email": "arraudhah@arraudhah.mosque.org.sg",
+    "name": "Masjid Ar-Raudhah",
+    "name:ms": "Masjid Ar-Raudhah",
+    "operator": "Majlis Ugama Islam Singapura",
+    "operator:wikidata": "Q6738012",
+    "phone": "+65 6899 5840",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "way",
+  "id": 304104734,
+  "center": {
+    "lat": 1.3391063,
+    "lon": 103.7415223
+  },
+  "tags": {
+    "addr:city": "Singapore",
+    "addr:country": "SG",
+    "addr:housenumber": "271",
+    "addr:postcode": "609603",
+    "addr:street": "Jurong East Street 21",
+    "amenity": "place_of_worship",
+    "building": "mosque",
+    "check_date": "2024-07-07",
+    "denomination": "sunni",
+    "email": "mosque@almukminin.mosque.sg",
+    "height": "0",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/b/b9/Masjid_Al-Mukminin%2C_Jurong_East%2C_Singapore_%282025%29_-_img_02.jpg",
+    "name": "Masjid Al-Mukminin",
+    "name:en": "Al-Mukminin Mosque",
+    "name:ms": "Masjid Al-Mukminin",
+    "operator": "Majlis Ugama Islam Singapura",
+    "operator:wikidata": "Q6738012",
+    "phone": "+65 6567 7777",
+    "religion": "muslim",
+    "source": "Bing",
+    "wikidata": "Q136102022"
+  }
+},
+{
+  "type": "way",
+  "id": 306119361,
+  "center": {
+    "lat": 1.3187023,
+    "lon": 103.9122458
+  },
+  "tags": {
+    "addr:city": "Singapore",
+    "addr:country": "SG",
+    "addr:housenumber": "450",
+    "addr:postcode": "419877",
+    "addr:street": "Changi Road",
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "denomination": "sunni",
+    "email": "kassim@kassim.mosque.org.sg",
+    "height": "0",
+    "name": "Masjid Kassim",
+    "name:ms": "Masjid Kassim",
+    "operator": "Majlis Ugama Islam Singapura",
+    "operator:wikidata": "Q6738012",
+    "phone": "+65 6440 9434",
+    "religion": "muslim",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "way",
+  "id": 308900485,
+  "center": {
+    "lat": 1.3135525,
+    "lon": 103.8990983
+  },
+  "tags": {
+    "addr:city": "Singapore",
+    "addr:country": "SG",
+    "addr:housenumber": "130",
+    "addr:postcode": "427727",
+    "addr:street": "Joo Chiat Road",
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "denomination": "sunni",
+    "email": "admin@masjidkhalid.sg",
+    "name": "Masjid Khalid",
+    "name:ms": "Masjid Khalid",
+    "operator": "Majlis Ugama Islam Singapura",
+    "operator:wikidata": "Q6738012",
+    "phone": "+65 6345 2884",
+    "religion": "muslim",
+    "source": "Bing"
+  }
+},
+{
+  "type": "way",
+  "id": 309982924,
+  "center": {
+    "lat": 1.2987520,
+    "lon": 103.7691705
+  },
+  "tags": {
+    "addr:city": "Singapore",
+    "addr:country": "SG",
+    "addr:housenumber": "81",
+    "addr:postcode": "129797",
+    "addr:street": "Clementi Road",
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "denomination": "sunni",
+    "email": "info@tentera.mosque.org.sg",
+    "name": "Masjid Tentera Di Raja",
+    "name:ms": "Masjid Tentera Di Raja",
+    "name:ms-Arab": "مسجد تنترا دراج",
+    "operator": "Majlis Ugama Islam Singapura",
+    "operator:wikidata": "Q6738012",
+    "phone": "+65 6776 5612",
+    "religion": "muslim",
+    "start_date": "1961",
+    "wikidata": "Q29467653",
+    "wikimedia_commons": "File:Masjid Tentera Diraja at Clementi.jpg",
+    "wikipedia": "en:Masjid Tentera Diraja"
+  }
+},
+{
+  "type": "way",
+  "id": 343376001,
+  "center": {
+    "lat": 1.3353703,
+    "lon": 103.7194901
+  },
+  "tags": {
+    "addr:city": "Singapore",
+    "addr:country": "SG",
+    "addr:housenumber": "550",
+    "addr:postcode": "618617",
+    "addr:street": "Yung An Road",
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "denomination": "sunni",
+    "email": "assyakirin@assyakirin.mosque.org.sg",
+    "name": "Masjid Assyakirin",
+    "name:ms": "Masjid Assyakirin",
+    "operator": "Majlis Ugama Islam Singapura",
+    "operator:wikidata": "Q6738012",
+    "phone": "+65 6268 1846",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "way",
+  "id": 372072200,
+  "center": {
+    "lat": 1.3206852,
+    "lon": 103.8225515
+  },
+  "tags": {
+    "addr:city": "Singapore",
+    "addr:country": "SG",
+    "addr:housenumber": "2",
+    "addr:postcode": "258590",
+    "addr:street": "Lewis Road",
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "check_date": "2026-01-27",
+    "denomination": "sunni",
+    "email": "baalwiemosque@gmail.com",
+    "name": "Masjid Ba'alwie",
+    "name:ms": "Masjid Ba'alwie",
+    "operator": "Majlis Ugama Islam Singapura",
+    "operator:wikidata": "Q6738012",
+    "phone": "+65 6732 6795",
+    "religion": "muslim",
+    "source": "Bing"
+  }
+},
+{
+  "type": "way",
+  "id": 388268880,
+  "center": {
+    "lat": 1.3225214,
+    "lon": 103.9152668
+  },
+  "tags": {
+    "addr:city": "Singapore",
+    "addr:country": "SG",
+    "addr:housenumber": "67",
+    "addr:postcode": "419007",
+    "addr:street": "Jalan Lapang",
+    "amenity": "place_of_worship",
+    "building": "residential",
+    "denomination": "sunni",
+    "email": "masjidmydin@mydin.mosque.org.sg",
+    "name": "Masjid Mydin",
+    "name:ms": "Masjid Mydin",
+    "operator": "Majlis Ugama Islam Singapura",
+    "operator:wikidata": "Q6738012",
+    "phone": "+65 6243 2129",
+    "religion": "muslim",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "way",
+  "id": 396336447,
+  "center": {
+    "lat": 1.3106273,
+    "lon": 103.8540561
+  },
+  "tags": {
+    "addr:city": "Singapore",
+    "addr:country": "SG",
+    "addr:housenumber": "265",
+    "addr:postcode": "218099",
+    "addr:street": "Serangoon Road",
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "denomination": "sunni",
+    "email": "info@angulliamosque.com.sg",
+    "name": "Masjid Angullia",
+    "name:ms": "Masjid Angullia",
+    "operator": "Majlis Ugama Islam Singapura",
+    "operator:wikidata": "Q6738012",
+    "phone": "+65 6295 1478",
+    "religion": "muslim",
+    "source": "Kaart Ground Survey 2017"
+  }
+},
+{
+  "type": "way",
+  "id": 397219589,
+  "center": {
+    "lat": 1.3234307,
+    "lon": 103.9073122
+  },
+  "tags": {
+    "addr:city": "Singapore",
+    "addr:country": "SG",
+    "addr:housenumber": "30",
+    "addr:postcode": "419285",
+    "addr:street": "Jalan Ismail",
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "building:levels": "1",
+    "denomination": "sunni",
+    "email": "admin@abdrazak.mosque.org.sg",
+    "name": "Masjid Al-Abdul Razak",
+    "name:ar": "مسجد العبد الرزاق",
+    "name:ms": "Masjid Al-Abdul Razak",
+    "operator": "Majlis Ugama Islam Singapura",
+    "operator:wikidata": "Q6738012",
+    "phone": "+65 6846 8404",
+    "religion": "muslim",
+    "wikidata": "Q4262083",
+    "wikipedia": "en:Masjid Al-Abdul Razak"
+  }
+},
+{
+  "type": "way",
+  "id": 401190523,
+  "center": {
+    "lat": 1.3174768,
+    "lon": 103.8919259
+  },
+  "tags": {
+    "addr:city": "Singapore",
+    "addr:country": "SG",
+    "addr:housenumber": "25",
+    "addr:postcode": "409004",
+    "addr:street": "Paya Lebar Road",
+    "amenity": "place_of_worship",
+    "building": "mosque",
+    "building:levels": "2",
+    "denomination": "sunni",
+    "email": "info@waktanjong.mosque.org.sg",
+    "name": "Masjid Wak Tanjong",
+    "name:ms": "Masjid Wak Tanjong",
+    "operator": "Majlis Ugama Islam Singapura",
+    "operator:wikidata": "Q6738012",
+    "phone": "+65 6747 2743",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "way",
+  "id": 401190529,
+  "center": {
+    "lat": 1.3171660,
+    "lon": 103.8913074
+  },
+  "tags": {
+    "addr:city": "Singapore",
+    "addr:country": "SG",
+    "addr:housenumber": "589",
+    "addr:postcode": "387600",
+    "addr:street": "Sims Avenue",
+    "building": "school",
+    "building:levels": "4",
+    "height": "30",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "way",
+  "id": 419646843,
+  "center": {
+    "lat": 1.2929787,
+    "lon": 103.8154535
+  },
+  "tags": {
+    "addr:city": "Singapore",
+    "addr:country": "SG",
+    "addr:housenumber": "946",
+    "addr:postcode": "149309",
+    "addr:street": "Margaret Drive",
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "denomination": "sunni",
+    "email": "queenstownmasjidjamek@gmail.com",
+    "name": "Masjid Jamek Queenstown",
+    "name:ms": "Masjid Jamek Queenstown",
+    "operator": "Majlis Ugama Islam Singapura",
+    "operator:wikidata": "Q6738012",
+    "phone": "+65 6928 0442",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "way",
+  "id": 425038471,
+  "center": {
+    "lat": 1.3037701,
+    "lon": 103.8366628
+  },
+  "tags": {
+    "addr:city": "Singapore",
+    "addr:country": "SG",
+    "addr:housenumber": "22",
+    "addr:postcode": "229923",
+    "addr:street": "Bideford Road",
+    "amenity": "place_of_worship",
+    "building:levels": "6",
+    "building:part": "yes",
+    "denomination": "sunni",
+    "email": "alfalah@alfalah.mosque.org.sg",
+    "name": "Masjid Al-Falah",
+    "name:ms": "Masjid Al-Falah",
+    "operator": "Majlis Ugama Islam Singapura",
+    "operator:wikidata": "Q6738012",
+    "phone": "+65 6235 3172",
+    "religion": "muslim",
+    "roof:levels": "1",
+    "roof:material": "grass",
+    "roof:shape": "flat",
+    "wikidata": "Q4117045",
+    "wikipedia": "en:Masjid Al-Falah, Singapore"
+  }
+},
+{
+  "type": "way",
+  "id": 428918386,
+  "center": {
+    "lat": 1.2666301,
+    "lon": 103.8245129
+  },
+  "tags": {
+    "addr:city": "Singapore",
+    "addr:country": "SG",
+    "addr:housenumber": "30",
+    "addr:postcode": "098827",
+    "addr:street": "Telok Blangah Road",
+    "alt_name": "Masjid Diraja Teluk Blangah",
+    "amenity": "place_of_worship",
+    "landuse": "religious",
+    "name": "Masjid Tememggong Daeng Ibrahim",
+    "name:ms": "Masjid Tememggong Daeng Ibrahim",
+    "name:zh": "达因·依布拉欣天猛公回教堂",
+    "old_name": "Masjid Kampong Telok Blangah",
+    "owner": "Sultan of Johor",
+    "religion": "muslim",
+    "wikidata": "Q6783343",
+    "wikipedia": "en:Masjid Temenggong Daeng Ibrahim"
+  }
+},
+{
+  "type": "way",
+  "id": 428918388,
+  "center": {
+    "lat": 1.2663439,
+    "lon": 103.8246834
+  },
+  "tags": {
+    "addr:housenumber": "30",
+    "addr:postcode": "098827",
+    "addr:street": "Telok Blangah Road",
+    "building": "yes",
+    "building:levels": "1",
+    "historic": "tomb",
+    "name": "Makam Diraja Johor Telok Blangah",
+    "owner": "State of Johor",
+    "religion": "muslim",
+    "tomb": "mausoleum"
+  }
+},
+{
+  "type": "way",
+  "id": 442512513,
+  "center": {
+    "lat": 1.3427784,
+    "lon": 103.8525049
+  },
+  "tags": {
+    "addr:city": "Singapore",
+    "addr:country": "SG",
+    "addr:housename": "Singapore Islamic Hub",
+    "addr:housenumber": "273",
+    "addr:postcode": "579702",
+    "addr:street": "Braddell Road",
+    "landuse": "religious",
+    "name": "Singapore Islamic Hub",
+    "operator": "Islamic Religious Council of Singapore",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "way",
+  "id": 443291368,
+  "center": {
+    "lat": 1.3728476,
+    "lon": 103.6944227
+  },
+  "tags": {
+    "addr:city": "Singapore",
+    "addr:country": "SG",
+    "addr:housenumber": "11",
+    "addr:postcode": "719452",
+    "addr:street": "Lim Chu Kang Road",
+    "amenity": "place_of_worship",
+    "building": "mosque",
+    "denomination": "sunni",
+    "email": "info@pusaraman.mosque.org.sg",
+    "name": "Masjid Pusara Aman",
+    "name:ms": "Masjid Pusara Aman",
+    "operator": "Majlis Ugama Islam Singapura",
+    "operator:wikidata": "Q6738012",
+    "phone": "+65 6792 9378",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "way",
+  "id": 444841323,
+  "center": {
+    "lat": 1.2727739,
+    "lon": 103.8474597
+  },
+  "tags": {
+    "addr:city": "Singapore",
+    "addr:country": "SG",
+    "addr:housenumber": "37",
+    "addr:postcode": "079424",
+    "addr:street": "Palmer Road",
+    "amenity": "place_of_worship",
+    "building": "religious",
+    "denomination": "sunni",
+    "email": "admin@hjmuhdsalleh.org.sg",
+    "name": "Masjid Haji Muhammad Salleh",
+    "name:fa": "مسجد حاجی محمد صالح",
+    "name:ms": "Masjid Haji Muhammad Salleh",
+    "name:nl": "Haji Muhammad Salleh-moskee",
+    "operator": "Majlis Ugama Islam Singapura",
+    "operator:wikidata": "Q6738012",
+    "phone": "+65 6220 9257",
+    "religion": "muslim",
+    "website": "https://www.hjmuhdsalleh.org.sg/",
+    "wikipedia": "en:Keramat Habib Noh"
+  }
+},
+{
+  "type": "way",
+  "id": 445271591,
+  "center": {
+    "lat": 1.3329001,
+    "lon": 103.8706413
+  },
+  "tags": {
+    "addr:city": "Singapore",
+    "addr:country": "SG",
+    "addr:housenumber": "66",
+    "addr:postcode": "348261",
+    "addr:street": "Pheng Geck Avenue",
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "denomination": "sunni",
+    "email": "info@alkaffus.sg",
+    "name": "Masjid Alkaff Upper Serangoon",
+    "name:ms": "Masjid Alkaff Upper Serangoon",
+    "operator": "Majlis Ugama Islam Singapura",
+    "operator:wikidata": "Q6738012",
+    "phone": "+65 6280 0300",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "way",
+  "id": 448460532,
+  "center": {
+    "lat": 1.3261628,
+    "lon": 103.8548416
+  },
+  "tags": {
+    "addr:city": "Singapore",
+    "addr:country": "SG",
+    "addr:housenumber": "76",
+    "addr:postcode": "328835",
+    "addr:street": "Kim Keat Road",
+    "amenity": "place_of_worship",
+    "building": "mosque",
+    "building:levels": "4",
+    "check_date": "2024-04-19",
+    "contact:facebook": "https://www.facebook.com/rahimabirahmah",
+    "denomination": "sunni",
+    "email": "hjrahimabi@hjrahimabi.mosque.org.sg",
+    "name": "Masjid Hajjah Rahimabi Kebun Limau",
+    "name:ms": "Masjid Hajjah Rahimabi Kebun Limau",
+    "operator": "Majlis Ugama Islam Singapura",
+    "operator:wikidata": "Q6738012",
+    "phone": "+65 6255 8262",
+    "religion": "muslim",
+    "wheelchair": "yes",
+    "wikidata": "Q25483444",
+    "wikipedia": "ms:Masjid Hajjah Rahimabi Kebun Limau"
+  }
+},
+{
+  "type": "way",
+  "id": 451925813,
+  "center": {
+    "lat": 1.3233226,
+    "lon": 103.7949211
+  },
+  "tags": {
+    "addr:city": "Singapore",
+    "addr:country": "SG",
+    "addr:housenumber": "34",
+    "addr:postcode": "268534",
+    "addr:street": "Jalan Haji Alias",
+    "amenity": "place_of_worship",
+    "building": "mosque",
+    "denomination": "sunni",
+    "name": "Masjid Al-Huda",
+    "name:ms": "Masjid Al-Huda",
+    "operator": "Majlis Ugama Islam Singapura",
+    "operator:wikidata": "Q6738012",
+    "phone": "+65 6468 4844",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "way",
+  "id": 452284988,
+  "center": {
+    "lat": 1.3219054,
+    "lon": 103.9535457
+  },
+  "tags": {
+    "addr:city": "Singapore",
+    "addr:country": "SG",
+    "addr:housenumber": "11A",
+    "addr:postcode": "468862",
+    "addr:street": "Jalan Bilal",
+    "amenity": "place_of_worship",
+    "building": "mosque",
+    "denomination": "sunni",
+    "email": "info@altaqua.mosque.org.sg",
+    "name": "Masjid Al-Taqua",
+    "name:ms": "Masjid Al-Taqua",
+    "operator": "Majlis Ugama Islam Singapura",
+    "operator:wikidata": "Q6738012",
+    "phone": "+65 6442 7704",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "way",
+  "id": 453583783,
+  "center": {
+    "lat": 1.3099581,
+    "lon": 103.9275400
+  },
+  "tags": {
+    "addr:city": "Singapore",
+    "addr:country": "SG",
+    "addr:housenumber": "451",
+    "addr:postcode": "449283",
+    "addr:street": "Marine Parade Road",
+    "amenity": "place_of_worship",
+    "building": "mosque",
+    "building:levels": "2",
+    "denomination": "sunni",
+    "email": "info@mks.org.sg",
+    "name": "Masjid Kampung Siglap",
+    "name:ms": "Masjid Kampung Siglap",
+    "operator": "Majlis Ugama Islam Singapura",
+    "operator:wikidata": "Q6738012",
+    "phone": "+65 6243 7060",
+    "religion": "muslim",
+    "website": "https://www.mks.org.sg/"
+  }
+},
+{
+  "type": "way",
+  "id": 454060533,
+  "center": {
+    "lat": 1.3554009,
+    "lon": 103.9399111
+  },
+  "tags": {
+    "addr:city": "Singapore",
+    "addr:country": "SG",
+    "addr:housenumber": "503",
+    "addr:postcode": "529651",
+    "addr:street": "Tampines Avenue 5",
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "building:levels": "4",
+    "denomination": "sunni",
+    "email": "helpdesk@ghufran.mosque.org.sg",
+    "name": "Masjid Darul Ghufran",
+    "name:ms": "Masjid Darul Ghufran",
+    "operator": "Majlis Ugama Islam Singapura",
+    "operator:wikidata": "Q6738012",
+    "phone": "+65 6786 5545",
+    "religion": "muslim",
+    "wikidata": "Q4262113",
+    "wikimedia_commons": "Category:Darul Ghufran Mosque",
+    "wikipedia": "en:Masjid Darul Ghufran"
+  }
+},
+{
+  "type": "way",
+  "id": 454254204,
+  "center": {
+    "lat": 1.3123887,
+    "lon": 103.8769261
+  },
+  "tags": {
+    "addr:city": "Singapore",
+    "addr:country": "SG",
+    "addr:housenumber": "245",
+    "addr:postcode": "389304",
+    "addr:street": "Geylang Road",
+    "amenity": "place_of_worship",
+    "building": "mosque",
+    "building:levels": "3",
+    "denomination": "sunni",
+    "email": "enquiry@mhms.org.sg",
+    "name": "Masjid Haji Mohd Salleh",
+    "name:ms": "Masjid Haji Mohd Salleh",
+    "operator": "Majlis Ugama Islam Singapura",
+    "operator:wikidata": "Q6738012",
+    "phone": "+65 6846 0857",
+    "religion": "muslim",
+    "source": "Kaart Ground Survey 2017"
+  }
+},
+{
+  "type": "way",
+  "id": 454274728,
+  "center": {
+    "lat": 1.3141399,
+    "lon": 103.8861085
+  },
+  "tags": {
+    "addr:city": "Singapore",
+    "addr:country": "SG",
+    "addr:housenumber": "583",
+    "addr:postcode": "389522",
+    "addr:street": "Geylang Road",
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "denomination": "sunni",
+    "email": "admin@khadijahmosque.org",
+    "name": "Masjid Khadijah",
+    "name:en": "Khadijah Mosque",
+    "name:ms": "Masjid Khadijah",
+    "operator": "Majlis Ugama Islam Singapura",
+    "operator:wikidata": "Q6738012",
+    "phone": "+65 6747 5607",
+    "religion": "muslim",
+    "source": "Kaart Ground Survey 2017"
+  }
+},
+{
+  "type": "way",
+  "id": 469316829,
+  "center": {
+    "lat": 1.3166405,
+    "lon": 103.9231085
+  },
+  "tags": {
+    "addr:city": "Singapore",
+    "addr:country": "SG",
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "name": "Kubur Kassim",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "way",
+  "id": 474909151,
+  "center": {
+    "lat": 1.3257523,
+    "lon": 103.8812279
+  },
+  "tags": {
+    "addr:city": "Singapore",
+    "addr:country": "SG",
+    "addr:housenumber": "1",
+    "addr:postcode": "387725",
+    "addr:street": "Mattar Road",
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "building:levels": "4",
+    "denomination": "sunni",
+    "email": "info@sallimmattar.mosque.org.sg",
+    "name": "Masjid Sallim Mattar",
+    "name:ms": "Masjid Sallim Mattar",
+    "operator": "Majlis Ugama Islam Singapura",
+    "operator:wikidata": "Q6738012",
+    "phone": "+65 6749 2382",
+    "religion": "muslim",
+    "wikidata": "Q4022214",
+    "wikipedia": "en:Masjid Sallim Mattar"
+  }
+},
+{
+  "type": "way",
+  "id": 491057819,
+  "center": {
+    "lat": 1.3485021,
+    "lon": 103.7049948
+  },
+  "tags": {
+    "addr:city": "Singapore",
+    "addr:country": "SG",
+    "addr:housenumber": "20",
+    "addr:postcode": "648125",
+    "addr:street": "Jurong West Street 26",
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "denomination": "sunni",
+    "email": "info1@maarof.mosque.sg",
+    "name": "Masjid Maarof",
+    "name:ms": "Masjid Maarof",
+    "operator": "Majlis Ugama Islam Singapura",
+    "operator:wikidata": "Q6738012",
+    "phone": "+65 6515 5033",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "way",
+  "id": 493445786,
+  "center": {
+    "lat": 1.4012682,
+    "lon": 103.9014887
+  },
+  "tags": {
+    "addr:city": "Singapore",
+    "addr:country": "SG",
+    "addr:housenumber": "30",
+    "addr:postcode": "828812",
+    "addr:street": "Punggol Field",
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "denomination": "sunni",
+    "email": "info@islah.mosque.org.sg",
+    "name": "Masjid Al-Islah",
+    "name:ms": "Masjid Al-Islah",
+    "operator": "Majlis Ugama Islam Singapura",
+    "operator:wikidata": "Q6738012",
+    "phone": "+65 6312 5194",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "way",
+  "id": 499649047,
+  "center": {
+    "lat": 1.3216935,
+    "lon": 103.7382028
+  },
+  "tags": {
+    "addr:city": "Singapore",
+    "addr:country": "SG",
+    "addr:housenumber": "492",
+    "addr:postcode": "608878",
+    "addr:street": "Teban Gardens",
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "denomination": "sunni",
+    "email": "info@hasanah.mosque.org.sg",
+    "name": "Masjid Hasanah",
+    "name:ms": "Masjid Hasanah",
+    "operator": "Majlis Ugama Islam Singapura",
+    "operator:wikidata": "Q6738012",
+    "phone": "+65 6561 7990",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "way",
+  "id": 500121347,
+  "center": {
+    "lat": 1.2668575,
+    "lon": 103.8214789
+  },
+  "tags": {
+    "landuse": "cemetery",
+    "name": "Marang Cemetery",
+    "name:ms": "Tanah Perkuburan Marang",
+    "name:zh": "玛朗墓地",
+    "religion": "muslim",
+    "start_date": "1860s",
+    "wikipedia": "en:Marang Cemetery"
+  }
+},
+{
+  "type": "way",
+  "id": 505212786,
+  "center": {
+    "lat": 1.4264958,
+    "lon": 103.7961617
+  },
+  "tags": {
+    "addr:city": "Singapore",
+    "addr:country": "SG",
+    "addr:housenumber": "10",
+    "addr:postcode": "737740",
+    "addr:street": "Woodlands Drive 17",
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "denomination": "sunni",
+    "email": "contact@yusofishak.mosque.sg",
+    "name": "Masjid Yusof Ishak",
+    "name:en": "Yusof Ishak Mosque",
+    "name:ms": "Masjid Yusof Ishak",
+    "operator": "Majlis Ugama Islam Singapura",
+    "operator:wikidata": "Q6738012",
+    "phone": "+65 6893 0093",
+    "religion": "muslim",
+    "wikidata": "Q19595579",
+    "wikipedia": "en:Masjid Yusof Ishak"
+  }
+},
+{
+  "type": "way",
+  "id": 508994096,
+  "center": {
+    "lat": 1.2831697,
+    "lon": 103.8454340
+  },
+  "tags": {
+    "addr:city": "Singapore",
+    "addr:country": "SG",
+    "addr:housenumber": "218",
+    "addr:postcode": "058767",
+    "addr:street": "South Bridge Road",
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "building:levels": "2",
+    "denomination": "sunni",
+    "email": "masjidjamae@singnet.com.sg",
+    "height": "10",
+    "name": "Masjid Jamae (Chulia)",
+    "name:fa": "مسجد جامع",
+    "name:ms": "Masjid Jamae",
+    "operator": "Majlis Ugama Islam Singapura",
+    "operator:wikidata": "Q6738012",
+    "phone": "+65 6221 4165",
+    "religion": "muslim",
+    "source": "Kaart Ground Survey 2017",
+    "start_date": "1835",
+    "wikidata": "Q2993428",
+    "wikipedia": "en:Masjid Jamae"
+  }
+},
+{
+  "type": "way",
+  "id": 531916524,
+  "center": {
+    "lat": 1.3051210,
+    "lon": 103.8597826
+  },
+  "tags": {
+    "addr:city": "Singapore",
+    "addr:country": "SG",
+    "addr:housenumber": "471",
+    "addr:postcode": "198370",
+    "addr:street": "Victoria Street",
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "denomination": "sunni",
+    "email": "admin@malabar.org.sg",
+    "image": "https://images.mapillary.com/_uBABd9xZeKRT7nga6GtHw/thumb-2048.jpg",
+    "mapillary": "1188063584974142",
+    "name": "Masjid Malabar",
+    "name:ms": "Masjid Malabar",
+    "operator": "Majlis Ugama Islam Singapura",
+    "operator:wikidata": "Q6738012",
+    "phone": "+65 6294 3862",
+    "religion": "muslim",
+    "start_date": "1963",
+    "wheelchair": "yes",
+    "wikipedia": "en:Masjid Malabar"
+  }
+},
+{
+  "type": "way",
+  "id": 541302397,
+  "center": {
+    "lat": 1.4092259,
+    "lon": 103.9804056
+  },
+  "tags": {
+    "landuse": "cemetery",
+    "name": "Muslim Cemetery",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "way",
+  "id": 543438050,
+  "center": {
+    "lat": 1.3841584,
+    "lon": 103.8786933
+  },
+  "tags": {
+    "addr:city": "Singapore",
+    "addr:country": "SG",
+    "addr:housenumber": "23F",
+    "addr:postcode": "547578",
+    "addr:street": "Lorong Buangkok",
+    "addr:street:official": "Lorong Buang Kok",
+    "amenity": "place_of_worship",
+    "building": "house",
+    "name": "Surau Al-Firdaus",
+    "name:ms": "Surau Al-Firdaus",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "way",
+  "id": 595932319,
+  "center": {
+    "lat": 1.3130892,
+    "lon": 103.9127389
+  },
+  "tags": {
+    "addr:city": "Singapore",
+    "addr:country": "SG",
+    "addr:housenumber": "90",
+    "addr:postcode": "425723",
+    "addr:street": "Lorong K Telok Kurau",
+    "amenity": "place_of_worship",
+    "building": "mosque",
+    "denomination": "sunni",
+    "email": "mosque@aleemsiddique.org.sg",
+    "name": "Masjid Abdul Aleem Siddique",
+    "name:ar": "مسجد عبد العليم صديق",
+    "name:ms": "Masjid Abdul Aleem Siddique",
+    "operator": "Majlis Ugama Islam Singapura",
+    "operator:wikidata": "Q6738012",
+    "phone": "+65 6034 6153",
+    "religion": "muslim",
+    "wikidata": "Q6783321",
+    "wikipedia": "en:Masjid Abdul Aleem Siddique"
+  }
+},
+{
+  "type": "way",
+  "id": 634154902,
+  "center": {
+    "lat": 1.3193986,
+    "lon": 103.9125068
+  },
+  "tags": {
+    "highway": "residential",
+    "lanes": "1",
+    "maxspeed": "40",
+    "name": "Jalan Masjid",
+    "oneway": "yes",
+    "sidewalk": "left",
+    "source": "Yahoo aerial images",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 665722900,
+  "center": {
+    "lat": 1.2834151,
+    "lon": 103.8454979
+  },
+  "tags": {
+    "highway": "residential",
+    "lanes": "2",
+    "maxspeed": "50",
+    "name": "Mosque Street",
+    "name:en": "Mosque Street",
+    "name:en:signed": "yes",
+    "name:zh": "摩士街",
+    "name:zh:signed": "yes",
+    "oneway": "yes",
+    "parking:condition:left:vehicles": "hgv",
+    "parking:condition:right:vehicles": "motorcar",
+    "parking:lane:both": "parallel",
+    "sidewalk": "right",
+    "sidewalk:right:surface": "paving_stones",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 665722901,
+  "center": {
+    "lat": 1.2832949,
+    "lon": 103.8456943
+  },
+  "tags": {
+    "highway": "residential",
+    "lanes": "2",
+    "lit": "yes",
+    "maxspeed": "50",
+    "name": "Mosque Street",
+    "name:en": "Mosque Street",
+    "name:en:signed": "yes",
+    "name:zh": "摩士街",
+    "name:zh:signed": "yes",
+    "oneway": "yes",
+    "sidewalk": "both",
+    "surface": "asphalt",
+    "turn:lanes": "through|through"
+  }
+},
+{
+  "type": "way",
+  "id": 665722902,
+  "center": {
+    "lat": 1.2843473,
+    "lon": 103.8438369
+  },
+  "tags": {
+    "highway": "residential",
+    "lanes": "2",
+    "maxspeed": "50",
+    "name": "Mosque Street",
+    "name:en": "Mosque Street",
+    "name:en:signed": "yes",
+    "name:zh": "摩士街",
+    "name:zh:signed": "yes",
+    "oneway": "yes",
+    "sidewalk": "both",
+    "surface": "asphalt",
+    "turn:lanes": "left|left"
+  }
+},
+{
+  "type": "way",
+  "id": 666591469,
+  "center": {
+    "lat": 1.3202967,
+    "lon": 103.9123300
+  },
+  "tags": {
+    "highway": "residential",
+    "lanes": "1",
+    "maxspeed": "40",
+    "name": "Jalan Masjid",
+    "oneway": "yes",
+    "parking:condition:right:vehicles": "motorcar",
+    "parking:lane:right": "parallel",
+    "source": "Yahoo aerial images",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 666591470,
+  "center": {
+    "lat": 1.3205813,
+    "lon": 103.9122709
+  },
+  "tags": {
+    "foot": "no",
+    "highway": "residential",
+    "lanes": "1",
+    "maxspeed": "40",
+    "name": "Jalan Masjid",
+    "oneway": "yes",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 666591547,
+  "center": {
+    "lat": 1.3194880,
+    "lon": 103.9124892
+  },
+  "tags": {
+    "highway": "residential",
+    "lanes": "1",
+    "maxspeed": "40",
+    "name": "Jalan Masjid",
+    "oneway": "yes",
+    "parking:condition:right:vehicles": "motorcycle",
+    "parking:lane:right": "perpendicular",
+    "sidewalk": "left",
+    "source": "Yahoo aerial images",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 666591550,
+  "center": {
+    "lat": 1.3195183,
+    "lon": 103.9124833
+  },
+  "tags": {
+    "highway": "residential",
+    "lanes": "1",
+    "maxspeed": "40",
+    "name": "Jalan Masjid",
+    "oneway": "yes",
+    "sidewalk": "left",
+    "source": "Yahoo aerial images",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 666591554,
+  "center": {
+    "lat": 1.3196065,
+    "lon": 103.9124659
+  },
+  "tags": {
+    "highway": "residential",
+    "lanes": "1",
+    "maxspeed": "40",
+    "name": "Jalan Masjid",
+    "oneway": "yes",
+    "parking:condition:right:vehicles": "motorcar",
+    "parking:lane:right": "parallel",
+    "sidewalk": "left",
+    "source": "Yahoo aerial images",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 666591557,
+  "center": {
+    "lat": 1.3199269,
+    "lon": 103.9124028
+  },
+  "tags": {
+    "highway": "residential",
+    "lanes": "1",
+    "maxspeed": "40",
+    "name": "Jalan Masjid",
+    "oneway": "yes",
+    "parking:condition:right:vehicles": "motorcar",
+    "parking:lane:right": "parallel",
+    "sidewalk": "left",
+    "source": "Yahoo aerial images",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 666594540,
+  "center": {
+    "lat": 1.3192889,
+    "lon": 103.9125319
+  },
+  "tags": {
+    "highway": "residential",
+    "maxspeed": "40",
+    "name": "Jalan Masjid",
+    "oneway": "yes",
+    "sidewalk": "left",
+    "source": "Yahoo aerial images",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 666594542,
+  "center": {
+    "lat": 1.3193099,
+    "lon": 103.9125257
+  },
+  "tags": {
+    "highway": "residential",
+    "lanes": "1",
+    "maxspeed": "40",
+    "name": "Jalan Masjid",
+    "oneway": "yes",
+    "parking:condition:right:vehicles": "motorcar",
+    "parking:lane:right": "perpendicular",
+    "sidewalk": "left",
+    "source": "Yahoo aerial images",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 666594544,
+  "center": {
+    "lat": 1.3191267,
+    "lon": 103.9125663
+  },
+  "tags": {
+    "highway": "residential",
+    "lanes": "1",
+    "maxspeed": "40",
+    "name": "Jalan Masjid",
+    "oneway": "yes",
+    "source": "Yahoo aerial images",
+    "surface": "asphalt",
+    "turn:lanes": "right"
+  }
+},
+{
+  "type": "way",
+  "id": 666594546,
+  "center": {
+    "lat": 1.3192344,
+    "lon": 103.9125439
+  },
+  "tags": {
+    "highway": "residential",
+    "lanes": "1",
+    "maxspeed": "40",
+    "name": "Jalan Masjid",
+    "oneway": "yes",
+    "parking:condition:right:vehicles": "motorcar",
+    "parking:lane:right": "parallel",
+    "sidewalk": "left",
+    "source": "Yahoo aerial images",
+    "surface": "asphalt",
+    "turn:lanes": "right"
+  }
+},
+{
+  "type": "way",
+  "id": 666600898,
+  "center": {
+    "lat": 1.2834624,
+    "lon": 103.8454141
+  },
+  "tags": {
+    "highway": "residential",
+    "lanes": "2",
+    "maxspeed": "50",
+    "name": "Mosque Street",
+    "name:en": "Mosque Street",
+    "name:en:signed": "yes",
+    "name:zh": "摩士街",
+    "name:zh:signed": "yes",
+    "oneway": "yes",
+    "parking:condition:left:vehicles": "motorcycle",
+    "parking:condition:right:vehicles": "motorcar",
+    "parking:lane:left": "perpendicular",
+    "parking:lane:right": "parallel",
+    "sidewalk": "right",
+    "sidewalk:right:surface": "paving_stones",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 666600901,
+  "center": {
+    "lat": 1.2839613,
+    "lon": 103.8445271
+  },
+  "tags": {
+    "highway": "residential",
+    "lanes": "2",
+    "maxspeed": "50",
+    "name": "Mosque Street",
+    "name:en": "Mosque Street",
+    "name:en:signed": "yes",
+    "name:zh": "摩士街",
+    "name:zh:signed": "yes",
+    "oneway": "yes",
+    "parking:condition:both:vehicles": "motorcar",
+    "parking:lane:both": "parallel",
+    "sidewalk": "right",
+    "sidewalk:right:surface": "paving_stones",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 688030342,
+  "center": {
+    "lat": 1.2943729,
+    "lon": 103.8473158
+  },
+  "tags": {
+    "building": "roof",
+    "historic": "wayside_shrine",
+    "image": "https://images.mapillary.com/oEMS-Sef21GA_QwcXmg1CQ/thumb-2048.jpg",
+    "mapillary": "379669816626639",
+    "name": "Keramat Sultan Iskandar Shah",
+    "religion": "muslim",
+    "wikipedia": "en:Keramat Iskandar Shah"
+  }
+},
+{
+  "type": "way",
+  "id": 723676572,
+  "center": {
+    "lat": 1.2933807,
+    "lon": 103.8504306
+  },
+  "tags": {
+    "addr:city": "Singapore",
+    "addr:country": "SG",
+    "addr:housenumber": "39",
+    "addr:postcode": "179364",
+    "addr:street": "Hill Street",
+    "amenity": "place_of_worship",
+    "building": "mosque",
+    "denomination": "ismaili",
+    "height": "13",
+    "name": "Masjid Al-Burhani",
+    "operator": "Majlis Ugama Islam Singapura",
+    "operator:wikidata": "Q6738012",
+    "phone": "+65 6334 3712",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "way",
+  "id": 739520595,
+  "center": {
+    "lat": 1.2808749,
+    "lon": 103.7872158
+  },
+  "tags": {
+    "addr:city": "Singapore",
+    "addr:country": "SG",
+    "addr:housenumber": "2",
+    "addr:postcode": "119173",
+    "addr:street": "Lor Sarhad",
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "denomination": "sunni",
+    "email": "info@ahmad.mosque.org.sg",
+    "name": "Masjid Ahmad",
+    "name:ms": "Masjid Ahmad",
+    "name:zh": "阿末会教堂",
+    "operator": "Majlis Ugama Islam Singapura",
+    "operator:wikidata": "Q6738012",
+    "phone": "+65 6479 6442",
+    "religion": "muslim",
+    "wikidata": "Q6783326",
+    "wikipedia": "en:Masjid Ahmad"
+  }
+},
+{
+  "type": "way",
+  "id": 743796829,
+  "center": {
+    "lat": 1.2913822,
+    "lon": 103.7717229
+  },
+  "tags": {
+    "addr:city": "Singapore",
+    "addr:country": "SG",
+    "addr:housenumber": "394",
+    "addr:postcode": "118730",
+    "addr:street": "Pasir Panjang Road",
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "denomination": "sunni",
+    "email": "info@hussainsulaiman.mosque.sg",
+    "name": "Masjid Hussain Sulaiman",
+    "name:ms": "Masjid Hussain Sulaiman",
+    "operator": "Majlis Ugama Islam Singapura",
+    "operator:wikidata": "Q6738012",
+    "phone": "+65 9759 7487",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "way",
+  "id": 924400207,
+  "center": {
+    "lat": 1.3204775,
+    "lon": 103.9122933
+  },
+  "tags": {
+    "highway": "residential",
+    "lanes": "1",
+    "maxspeed": "40",
+    "name": "Jalan Masjid",
+    "oneway": "yes",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1115488625,
+  "center": {
+    "lat": 1.2699856,
+    "lon": 103.8240186
+  },
+  "tags": {
+    "addr:city": "Singapore",
+    "addr:country": "SG",
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "name": "Keramat Radin Mas",
+    "name:zh": "拉丁马士圣陵",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "way",
+  "id": 1171884211,
+  "center": {
+    "lat": 1.2832687,
+    "lon": 103.8453377
+  },
+  "tags": {
+    "landuse": "religious",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "way",
+  "id": 1174515662,
+  "center": {
+    "lat": 1.4264862,
+    "lon": 103.7961641
+  },
+  "tags": {
+    "landuse": "religious",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "way",
+  "id": 1197550458,
+  "center": {
+    "lat": 1.3136386,
+    "lon": 103.8980536
+  },
+  "tags": {
+    "addr:city": "Singapore",
+    "addr:country": "SG",
+    "addr:housenumber": "118",
+    "addr:postcode": "424530",
+    "addr:street": "Onan Road",
+    "alt_name": "Masjid Taha",
+    "alt_name:ur": "مسجد طہ",
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "contact:phone": "+65 63448241",
+    "contact:website": "https://ahmadiyya.org.sg/",
+    "denomination": "ahmadiyya",
+    "name": "Masjid Táhá",
+    "name:en": "Taha Mosque",
+    "name:hi": "मस्जिद ताहा",
+    "name:ur": "مسجد طٰہٰ",
+    "religion": "muslim",
+    "wikidata": "Q3720047",
+    "wikipedia": "en:Masjid Taha"
+  }
+},
+{
+  "type": "way",
+  "id": 1212729240,
+  "center": {
+    "lat": 1.3257022,
+    "lon": 103.8813705
+  },
+  "tags": {
+    "landuse": "religious",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "way",
+  "id": 1336893299,
+  "center": {
+    "lat": 1.3749394,
+    "lon": 103.7164322
+  },
+  "tags": {
+    "addr:city": "Singapore",
+    "addr:country": "SG",
+    "addr:housenumber": "11",
+    "addr:postcode": "698955",
+    "addr:street": "Jalan Ibadat",
+    "amenity": "place_of_worship",
+    "building": "mosque",
+    "denomination": "sunni",
+    "email": "alfirdaus@alfirdaus.mosque.org.sg",
+    "name": "Masjid Al-Firdaus",
+    "name:ms": "Masjid Al-Firdaus",
+    "operator": "Majlis Ugama Islam Singapura",
+    "operator:wikidata": "Q6738012",
+    "phone": "+65 6764 6334",
+    "religion": "muslim",
+    "wikidata": "Q12497267",
+    "wikipedia": "en:Masjid Al-Firdaus"
+  }
+},
+{
+  "type": "way",
+  "id": 1468129201,
+  "center": {
+    "lat": 1.3279519,
+    "lon": 103.8652679
+  },
+  "tags": {
+    "building": "yes",
+    "landuse": "cemetery",
+    "name": "Keramat Baba Zainah",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "way",
+  "id": 1469187856,
+  "center": {
+    "lat": 1.3485155,
+    "lon": 103.7049653
+  },
+  "tags": {
+    "landuse": "religious",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "relation",
+  "id": 2306423,
+  "center": {
+    "lat": 1.2838188,
+    "lon": 103.8447608
+  },
+  "tags": {
+    "name": "Mosque Street",
+    "type": "associatedStreet"
+  }
+},
+{
+  "type": "relation",
+  "id": 9952235,
+  "center": {
+    "lat": 1.3046543,
+    "lon": 103.8587101
+  },
+  "tags": {
+    "barrier": "wall",
+    "disused": "yes",
+    "image": "https://images.mapillary.com/8rKqZV_EUBWUmK9WLUbdyw/thumb-2048.jpg;https://images.mapillary.com/RiSpLkCQX0DLMBKkCuAwLA/thumb-2048.jpg",
+    "landuse": "cemetery",
+    "mapillary": "https://www.mapillary.com/map/im/8rKqZV_EUBWUmK9WLUbdyw;https://www.mapillary.com/map/im/RiSpLkCQX0DLMBKkCuAwLA",
+    "name": "Jalan Kubor Cemetery",
+    "name:en": "Jalan Kubor Cemetery",
+    "name:ms": "Tanah Perkuburan Jalan Kubor",
+    "religion": "muslim",
+    "start_date": "1852",
+    "type": "multipolygon",
+    "wikipedia": "en:Jalan Kubor Cemetery"
+  }
+}
+
+  ]
+}
