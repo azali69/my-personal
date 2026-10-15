@@ -14,9 +14,10 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
         with: { gradle-version: '8.7' }
       - run: |
-          mkdir -p android/app/src/main/assets/tessdata && cp index.html android/app/src/main/assets/index.html
-          curl -fsSL --retry 3 -o android/app/src/main/assets/tessdata/ara.traineddata https://github.com/tesseract-ocr/tessdata_best/raw/main/ara.traineddata || echo "::error::tessdata download failed"
-          echo "::notice::tessdata $(stat -c%s android/app/src/main/assets/tessdata/ara.traineddata 2>/dev/null)"
+          mkdir -p android/app/src/main/assets && cp index.html android/app/src/main/assets/index.html
+          mkdir -p android/app/src/main/assets/ocr
+          for f in det.onnx ar_rec.onnx ar_rec.json; do curl -fsSL --retry 3 -o android/app/src/main/assets/ocr/$f https://github.com/azali69/my-personal/releases/download/ocr-models-1/$f; done
+          ls -l android/app/src/main/assets/ocr; echo ::notice::models $(stat -c%s android/app/src/main/assets/ocr/ar_rec.onnx) -gt 1000000
           set +e; gradle -p android assembleRelease --no-daemon > build.log 2>&1; code=$?
           echo "::notice::apk $(ls -l android/app/build/outputs/apk/release/*.apk 2>/dev/null | awk '{print $5}')"
           if [ $code -ne 0 ]; then

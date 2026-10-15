@@ -43,6 +43,7 @@ Return to Home from anywhere with the **house button** (top left of the reading 
 | Bookmarks | Bookmarks in two tabs, Qur'an and Hadith; My ruku' and My blocks |
 | Doa & zikir | Hisnul Muslim (section 8) |
 | Hadith | The six books (Kutub as-Sittah) and the Muwatta of Imam Malik, with gradings (section 8) |
+| Sifat Solat Nabi ﷺ | The Prophet's prayer step by step, with hadith and where scholars differ (section 8) |
 | Scan & check | Check whether a posted ayah or hadith is in the Qur'an or the hadith books (section 8) |
 | Masjid & musollah | Mosques and musollahs, nearest first, with directions; add your own (section 8) |
 | Notes | Your notepad: notes on ayat, on hadith, and free notes (section 8) |
@@ -199,7 +200,7 @@ All open from the **ayah menu**; they need the internet once per surah.
 
 1. Home → **Hadith**. Tick what to show, **Arabic**, **Bahasa Indonesia** and/or **English** (at least one; the same boxes are at the top of each kitab), then a book: Sahih al-Bukhari, Sahih Muslim, Sunan Abi Dawud, Jami' at-Tirmidhi, Sunan an-Nasa'i, Sunan Ibn Majah or Muwatta Malik.
 2. Open a kitab to read its hadith: Arabic with harakat, then the translation. More hadith load as you scroll.
-3. **Search all seven books** (at the top of the Hadith page) looks through every book at once, in Arabic, English or Indonesian; the first time it downloads each book (about 80 MB in all, Wi-Fi recommended). **Hadith number** + **Go** jumps to a hadith. **Search** looks through the whole book in Arabic, English or Indonesian (the first search downloads the book).
+3. **Search all eight books** (at the top of the Hadith page) looks through every book at once, in Arabic, English or Indonesian; the first time it downloads each book (about 80 MB in all, Wi-Fi recommended). **Hadith number** + **Go** jumps to a hadith. **Search** looks through the whole book in Arabic, English or Indonesian (the first search downloads the book).
 4. Gradings appear above each hadith of the four Sunan: al-Albani, Shu'ayb al-Arna'ut, Zubair 'Ali Za'i, and for at-Tirmidhi his own verdict in Arabic. Green is sahih, blue hasan, orange da'if, red very weak or fabricated. Bukhari and Muslim are sahih by the agreement of the scholars, so they have no per-hadith grade. The Muwatta has one grading, Salim al-Hilali's; Mawquf means the words of a Companion and Maqtu' the words of a Successor, not of the Prophet ﷺ. The Muwatta is always shown in full (with its chain).
 5. The copy button copies the Arabic, the translation, the reference and the gradings.
 6. Each kitab needs the internet the first time; after that it is kept on the phone.
@@ -208,6 +209,15 @@ All open from the **ayah menu**; they need the internet once per surah.
 9. Hadith that HadeethEnc.com explains have a **Syarah · HadeethEnc** button under the text. It opens their explanation, lessons from the hadith and word meanings, in **BM** (Bahasa Melayu, for about 100 hadith so far), **BI**, **ENG** or **AR**, unchanged from HadeethEnc. It is linked to the hadith by matching the text, so it may quote another narration of the same hadith.
 10. **Also in** under a hadith lists the same hadith in the other books (e.g. "Muslim 113", "Abu Dawud 3692"). "(close wording)" means most, not all, of the wording matches, or only part of a longer hadith. Tap one to read it with that book's own grading, then **Open in …** to go there. They are found by comparing the Arabic text, so they help you find other narrations; they do not mean the chains or gradings are the same.
 11. Each hadith has a **bookmark** button (five colours, as for the Qur'an) and a **note** button. **Continue reading** (where you last stopped) is at the top of the Hadith page. Your bookmarks are listed below it when **Show** (beside **All**) is ticked; it is off at first.
+
+12. **Ash-Shama'il al-Muhammadiyyah** (at-Tirmidhi) is the eighth book: the Prophet's appearance, manners and daily life ﷺ, 400 hadith in 56 chapters, in Arabic and English (Sunnah.com). Each hadith shows the grading of **Zubair 'Ali Za'i** and, where the hadith is in al-Albani's *Mukhtasar ash-Shama'il*, **al-Albani**'s grading with his number. He left out repeated chains, so a missing grading of his does not mean weak. **Also in** shows the same hadith in the six books, with their own gradings (al-Albani, Shu'ayb al-Arna'ut, Zubair 'Ali Za'i). There is no open Malay translation of this book, so BI shows the English.
+
+**Sifat Solat Nabi ﷺ**
+
+1. Home → **Sifat Solat Nabi ﷺ**: the prayer in 16 steps, from the intention to the salam, and qunut in Subuh.
+2. Each step has a short description and its **hadith** from the seven books with their gradings; tap one to read it (the phone's back button returns to the step).
+3. **Where scholars differ** (marked "scholars differ" in the list) sets the **Shafi'i**, **Hanafi**, **Maliki** and **Hanbali** positions and **al-Albani**'s side by side, each with the evidence discussed and its grading, without choosing between them: e.g. where to place the hands, the basmalah aloud, al-Fatihah behind the imam, knees or hands first, the short sitting, the finger in tashahhud, qunut in Subuh.
+4. Sources for the schools: al-Nawawi (*al-Majmu'*, *Minhaj at-Talibin*), Ibn Qudamah (*al-Mughni*), Ibn Rushd (*Bidayat al-Mujtahid*); al-Albani: *Sifat Salat an-Nabi*. Written for this app; for your own practice, follow your teacher.
 
 **Sirah**
 
@@ -228,14 +238,15 @@ All open from the **ayah menu**; they need the internet once per surah.
 **Scan & check**
 
 1. Someone posts an "ayah" or a "hadith" and you want to check it. Home → **Scan & check**, then:
-   - **Camera** (Android app): choose the language of the text first (**Arabic** or **Melayu / English**), take a photo of the text, and the app reads it on the phone (no internet needed for reading).
+   - **Camera** (Android app): choose the language of the text first (**Arabic** or **Melayu / English**), take a photo of the text, and the app reads it on the phone (no internet needed for reading). Arabic is read by a reader made for Arabic script (from EasyOCR), which handles harakat and Qur'an script; Malay and English by Google ML Kit.
+   - **Read with Google Lens**: if a reading is not right, Lens (in the Google app) reads the last picture, or opens its own camera. Select the text, tap **Share → My Personal Quran**, and it is checked here. Lens needs the internet.
    - **Picture / screenshot**: pick a screenshot or photo you already have.
    - **Share**: in WhatsApp, Telegram, the browser or the gallery, tap **Share → My Personal Quran** ("Check in My Quran"). Shared text is checked at once; for a shared picture, choose its language.
    - **Paste**: paste the text into the box. This works in the browser too.
    - The language of this page, the Sirah and Masjid & musollah follows Settings → **Language of the Sirah, Scan & check and Masjid pages** (Same as translation, Bahasa Melayu or English).
 2. Check the text in the box (the camera can misread a letter, especially in Arabic with harakat or decorated fonts), correct it if needed, and tap **Check**.
 3. **Qur'an**: green **Found in the Qur'an**, **Found: part of an ayah**, amber **Close to an ayah: there are differences**, or red **No ayah matched**. Each match shows the ayah, its translation and how much of it matched; tap it to open the ayah (the phone's **back** button returns to your check).
-4. **Hadith**: the seven books in this app are searched (the first time, every kitab is downloaded, so use Wi-Fi). Each match shows the book, number and gradings, and whether the whole text is in that hadith or **only part of it**. A red **Not found** is not proof that a hadith is fabricated: it may be in other books (such as Musnad Ahmad) or in other words. Ask a qualified teacher.
+4. **Hadith**: the eight books in this app are searched (the first time, every kitab is downloaded, so use Wi-Fi). Each match shows the book, number and gradings, and whether the whole text is in that hadith or **only part of it**. A red **Not found** is not proof that a hadith is fabricated: it may be in other books (such as Musnad Ahmad) or in other words. Ask a qualified teacher.
 5. How it matches: Arabic, the same letters and words (harakat, alif and hamza ignored, so the mushaf's Uthmani spelling and plain spelling compare the same, and a few misread words do not stop a match); Malay and English, the same important words. Translators word things differently, so a low percentage does not mean it is absent. Malay hadith text is compared with the Indonesian translation.
 
 **Masjid & musollah**
