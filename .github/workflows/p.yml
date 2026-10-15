@@ -16,4 +16,8 @@ jobs:
           python pipe.py out/ar_rec.onnx > out/pipe_fp32.txt 2>&1
           python pipe.py out/ar_rec_q.onnx > out/pipe_q.txt 2>&1
           cp $(python -c "import rapidocr_onnxruntime as R,glob,os;print(glob.glob(os.path.join(os.path.dirname(R.__file__),'models','*det*.onnx'))[0])") out/det.onnx
-          git config user.name probe; git config user.email p@x; git add -f out; git commit -qm out; git push -q origin HEAD:probe-ocr2-out -f
+          ls -la out > out/sizes.txt
+          mkdir -p small; cp out/*.txt out/*.json small/ 2>/dev/null
+          git config user.name probe; git config user.email p@x; git add -f small; git commit -qm out; git push -q origin HEAD:probe-ocr2-out -f
+      - uses: actions/upload-artifact@v4
+        with: { name: models, path: out/*.onnx }
