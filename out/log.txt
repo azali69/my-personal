@@ -1,0 +1,21 @@
+/opt/hostedtoolcache/Python/3.11.17/x64/lib/python3.11/site-packages/paddle/utils/cpp_extension/extension_utils.py:718: UserWarning: No ccache found. Please be aware that recompiling all source files may be required. You can download and install ccache from: https://github.com/ccache/ccache/blob/master/doc/INSTALL.md
+  warnings.warn(warning_message)
+[32mCreating model: ('PP-OCRv5_server_det', None, None)[0m
+[33mChecking connectivity to the model hosters, this may take a while. To bypass this check, set `PADDLE_PDX_DISABLE_MODEL_SOURCE_CHECK` to `True`.[0m
+[32mUsing official model (PP-OCRv5_server_det), the model files will be automatically downloaded and saved in `/home/runner/.paddlex/official_models/PP-OCRv5_server_det`.[0m
+Fetching 6 files:   0%|          | 0/6 [00:00<?, ?it/s]Fetching 6 files:  33%|███▎      | 2/6 [00:00<00:00, 11.82it/s]Fetching 6 files: 100%|██████████| 6/6 [00:01<00:00,  3.14it/s]Fetching 6 files: 100%|██████████| 6/6 [00:01<00:00,  3.38it/s]
+[32mCreating model: ('arabic_PP-OCRv5_mobile_rec', None, None)[0m
+[32mUsing official model (arabic_PP-OCRv5_mobile_rec), the model files will be automatically downloaded and saved in `/home/runner/.paddlex/official_models/arabic_PP-OCRv5_mobile_rec`.[0m
+Fetching 6 files:   0%|          | 0/6 [00:00<?, ?it/s]Fetching 6 files:  17%|█▋        | 1/6 [00:00<00:00,  9.39it/s]Fetching 6 files: 100%|██████████| 6/6 [00:00<00:00,  5.98it/s]Fetching 6 files: 100%|██████████| 6/6 [00:00<00:00,  6.09it/s]
+img/403a357f.jpg ar ['وَالفرءان', 'الحكيم', 'Retry', 'OK']
+img/4a57f621.jpg ar ['Surah Al-..', 'M', 'Page 572,...', '72:1', 'اَا سع اَُْا عَا', 'ی', 'Katakanlah (wahai N', 'Muhammad):', '"Telah', 'diwahyukan', 'kepadaku,', 'bahawa sesungguhnya: satu', 'rombongan', 'n jin telah mendengar', '(AI-Quran', 'aku bacakan),', '', 'yang', 'lalu r', 'mereka', '(menyampaikan hal', 'itu kepada k', 'kaumnya dengan)', "berkata: 'Sesungguhnya kami", 'telah mendengar', 'Al-Quran (sebuah', 'Kitab Suci) yang', 'susunannya', 'dan kandungannya sungguh', 'menakjubkan!', '72:2', 'Minshawi Murattal', 'V']
+img/5496b336.jpg ar ['ك َ من', 'يَأ َلََِ لَ شَُِ', 'أَلْعَقَابِ', 'x']
+img/c6e9f7ed.jpg ar ['وعن أمي الن أي  ر الطاب بن نفيلب', 'العزى بن رباح بن', 'عبد ا', 'the intentions,', 'الله عنه، قال', 'قرط بن رزاح بن عدى بن لوى ابن غالب القرشى العدوى', 'رضي', '.So whoever', 'سمعت رسول الله صلى الله عليه وسلم يقولإنما الأعمال', 'بالنياته وإنما لكل', 'or Allah and His', 'for a woman to', 'امرى ا نوى فن كانت هجرت يى ل وسوله فهجرته إلى', 'ومن', 'ورسوله', 'الله', 'كانت', 'هجرتة  ا لى اجر إله', 'عل', 'متفق', 'صحته', 'روا  النأبوله حدب إسماعيل', 'بَرَدزبَهُ', 'إبراهيم', 'المغيرة', 'بن', 'بن', 'بن', 'الحجاج', 'مسلم', 'الحسين', 'أبو', 'مسلم', 'البخاري،', 'الجعفي', 'رضي', 'النيسابورى', 'القشيرى', 'بن', 'بن', 'المصنفة', 'الكتب', 'هما أصح', 'اللذين', 'صحيحهما', 'عنهما', 'الله', 'في', 'Retry', 'OK', 'F', 'rror I Share I Copy']
+img/d5db3138.jpg ar ['da hari itu (keluar beramai-ramai) bercampur-baur antara satu dengan yang lai', 'up sangkakala, lalu Kami himpunkan makhluk-makhluk seluruhnya diPadang', '200M', '100', '1x', 'حَََْْفِين عَرْضًا', 'وَعََرَضْنَا', 'raka Jahannam, pada hari itu kepada orang-orang kafir, dengan pendedahan yang']
+total 16
+drwxr-xr-x 4 runner runner 4096 Oct 15 06:40 .
+drwxr-xr-x 6 runner runner 4096 Oct 15 06:39 ..
+drwxr-xr-x 3 runner runner 4096 Oct 15 06:39 PP-OCRv5_server_det
+drwxr-xr-x 3 runner runner 4096 Oct 15 06:40 arabic_PP-OCRv5_mobile_rec
+85M	/home/runner/.paddlex/official_models/PP-OCRv5_server_det
+7.9M	/home/runner/.paddlex/official_models/arabic_PP-OCRv5_mobile_rec
