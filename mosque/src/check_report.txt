@@ -1,0 +1,70 @@
+Masjid Abdul Aleem Siddique                   425723 1.312970,103.912738      OSM nearest     13 m Masjid Abdul Aleem Siddique
+Masjid Abdul Gafoor                           209369 1.304484,103.853690      OSM nearest     11 m Masjid Abdul Gafoor
+Masjid Abdul Hamid Kampung Pasiran            309194 1.320002,103.841044      OSM nearest      3 m Masjid Abdul Hamid Kampung Pasiran
+Masjid Ahmad                                  119173 1.280872,103.787212      OSM nearest      1 m Masjid Ahmad
+Masjid Ahmad Ibrahim                          769227 1.406668,103.820437      OSM nearest     25 m Masjid Ahmad Ibrahim
+Masjid Al-Abdul Razak                         419285 1.323399,103.907303      OSM nearest      4 m Masjid Al-Abdul Razak
+Masjid Al-Abrar                               068635 1.280322,103.847217      OSM nearest      5 m Masjid Al-Abrar
+Masjid Al-Amin                                098801 1.275205,103.819279      OSM nearest      3 m Masjid Al-Amin
+Masjid Al-Ansar                               469751 1.326973,103.926386      OSM nearest      4 m Masjid Al-Ansar
+Masjid Al-Falah                               229923 1.303775,103.836654      OSM nearest      1 m Masjid Al-Falah
+Masjid Al-Firdaus                             698955 1.374963,103.716460      OSM nearest      4 m Masjid Al-Firdaus
+Masjid Al-Huda                                268534 1.323188,103.794917      OSM nearest     15 m Masjid Al-Huda
+Masjid Al-Iman                                679943 1.378130,103.772763      OSM nearest      1 m Masjid Al-Iman
+Masjid Al-Islah                               828812 1.401244,103.901499      OSM nearest      3 m Masjid Al-Islah
+Masjid Al-Istighfar                           518239 1.370998,103.964110      OSM nearest      7 m Masjid Al-Istighfar
+Masjid Al-Istiqamah                           555876 1.369202,103.875627      OSM nearest      2 m Masjid Al Istiqamah
+Masjid Alkaff Kampung Melayu                  479221 1.336690,103.913994      OSM nearest      1 m Masjid Alkaff Kampung Melayu
+Masjid Alkaff Upper Serangoon                 348261 1.332945,103.870618      OSM nearest      6 m Masjid Alkaff Upper Serangoon
+Masjid Al-Khair                               688847 1.382645,103.750010      OSM nearest      1 m Masjid Al-Khair
+Masjid Al-Mawaddah                            544997 1.383441,103.890251      OSM nearest      4 m Masjid Al-Mawaddah
+Masjid Al-Mukminin                            609603 1.339216,103.741422      OSM nearest     17 m Masjid Al-Mukminin
+Masjid Al-Muttaqin                            569844 1.370522,103.845905      OSM nearest     16 m Masjid Al-Muttaqin
+Masjid Al-Taqua                               468862 1.321797,103.953501      OSM nearest     13 m Masjid Al-Taqua
+Masjid Angullia                               218099 1.310621,103.854074      OSM nearest      2 m Masjid Angullia
+Masjid An-Nahdhah                             579786 1.353556,103.851131      OSM nearest     17 m Masjid An-Nahdhah
+Masjid An-Nur                                 739983 1.440728,103.771878      OSM nearest      1 m Masjid An-Nur
+Masjid Ar-Raudhah                             659919 1.351658,103.756024      OSM nearest      3 m Masjid Ar-Raudhah
+Masjid Assyafaah                              757620 1.455771,103.819381      OSM nearest      3 m Masjid Assyafaah
+Masjid Assyakirin                             618617 1.335448,103.719566      OSM nearest     12 m Masjid Assyakirin
+Masjid Ba'alwie                               258590 1.320734,103.822590      OSM nearest      7 m Masjid Ba'alwie
+Masjid Bencoolen                              189630 1.299374,103.850356      OSM nearest      4 m Masjid Bencoolen
+Masjid Burhani                                179364 1.293369,103.850499      OSM nearest      8 m Masjid Al-Burhani
+Masjid Darul Aman                             419493 1.317964,103.904562      OSM nearest     10 m Masjid Darul Aman
+Masjid Darul Ghufran                          529651 1.355354,103.939911      OSM nearest      5 m Masjid Darul Ghufran
+Masjid Darul Makmur                           769099 1.436872,103.834462      OSM nearest     15 m Masjid Darul Makmur
+Masjid Darussalam                             129579 1.312485,103.771076      OSM nearest      4 m Masjid Darussalam
+Masjid En-Naeem                               535136 1.360969,103.892562      OSM nearest      4 m Masjid En-Naeem
+Masjid Haji Mohd Salleh (G)                   389304 1.312405,103.876889      OSM nearest      5 m Masjid Haji Mohd Salleh
+Masjid Haji Muhammad Salleh (P)               079424 1.272766,103.847319      OSM nearest     16 m Masjid Haji Muhammad Salleh
+Masjid Haji Yusoff                            548920 1.355807,103.879714      OSM nearest      1 m Masjid Haji Yusoff
+Masjid Hajjah Fatimah                         199584 1.302918,103.862908      OSM nearest     11 m Masjid Hajjah Fatimah
+Masjid Hajjah Rahimabi                        328835 1.326116,103.854827      OSM nearest      5 m Masjid Hajjah Rahimabi Kebun Limau
+Masjid Hang Jebat                             139533 1.289526,103.798638      OSM nearest      4 m Masjid Hang Jebat
+Masjid Hasanah                                608878 1.321687,103.738215      OSM nearest      2 m Masjid Hasanah
+Masjid Hussain Sulaiman                       118730 1.291374,103.771712      OSM nearest      2 m Masjid Hussain Sulaiman
+Masjid Jamae Chulia                           058767 1.283186,103.845354      OSM nearest      9 m Masjid Jamae (Chulia)
+Masjid Jamek Queenstown                       149309 1.293011,103.815428      OSM nearest      5 m Masjid Jamek Queenstown
+Masjid Jamiyah Ar-Rabitah                     158787 1.288329,103.820155      OSM nearest      1 m Masjid Jamiyah Ar-Rabitah
+Masjid Kampong Delta                          169831 1.291640,103.828371      OSM nearest      1 m Masjid Kampong Delta
+Masjid Kampung Siglap                         449283 1.309855,103.927555      OSM nearest     12 m Masjid Kampung Siglap
+Masjid Kassim                                 419877 1.318718,103.912247      OSM nearest      2 m Masjid Kassim
+Masjid Khadijah                               389522 1.314185,103.886099      OSM nearest      5 m Masjid Khadijah
+Masjid Khalid                                 427727 1.313416,103.898941      OSM nearest     23 m Masjid Khalid
+Masjid Maarof                                 648125 1.348518,103.704984      OSM nearest      2 m Masjid Maarof
+Masjid Malabar                                198370 1.305039,103.859733      OSM nearest     11 m Masjid Malabar
+Masjid Moulana Mohd Ali                       048624 1.285407,103.850568      OSM nearest     62 m Masjid Moulana Mohd Ali
+Masjid Muhajirin                              579704 1.342990,103.852062      OSM nearest      0 m Masjid Muhajirin
+Masjid Mujahidin                              148952 1.298133,103.800954      OSM nearest      1 m Masjid Mujahidin
+Masjid Mydin                                  419007 1.322518,103.915271      OSM nearest      1 m Masjid Mydin
+Masjid Omar Kg Melaka                         059607 1.287817,103.844266      OSM nearest      8 m Masjid Omar Kampung Melaka
+Masjid Omar Salmah                            299173 1.334688,103.831956      OSM nearest      2 m Masjid Omar Salmah
+Masjid Petempatan Melayu Sembawang            759055 1.459095,103.841747      OSM nearest      4 m Masjid Petempatan Melayu Sembawang
+Masjid Pulau Bukom                            921095 1.226761,103.777535      OSM nearest   6113 m Masjid Ahmad
+Masjid Pusara Aman                            719452 1.372793,103.694316      OSM nearest     13 m Masjid Pusara Aman
+Masjid Sallim Mattar                          387725 1.325747,103.881230      OSM nearest      1 m Masjid Sallim Mattar
+Masjid Sultan                                 198833 1.302238,103.859004      OSM nearest      2 m Masjid Sultan
+Masjid Tasek Utara                            219852 1.313008,103.849141      OSM nearest     49 m Masjid Tasek Utara
+Masjid Tentera Di Raja                        129797 1.298784,103.769167      OSM nearest      4 m Masjid Tentera Di Raja
+Masjid Wak Tanjong                            409004 1.317582,103.891815      OSM nearest     17 m Masjid Wak Tanjong
+Masjid Yusof Ishak                            737740 1.426508,103.796182      OSM nearest      3 m Masjid Yusof Ishak
