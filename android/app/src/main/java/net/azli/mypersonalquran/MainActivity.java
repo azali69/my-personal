@@ -831,6 +831,15 @@ public class MainActivity extends Activity {
         @JavascriptInterface public void removeAdhan(String slot) { File f = AdhanService.adhanFile(MainActivity.this, slot); if (f != null) f.delete(); }
         /** Test the alert as it will really be: it follows the phone's sound mode (returns "ring", "vibrate" or "silent"). */
         @JavascriptInterface public String testSound(String sound) {
+            if ("none".equals(sound)) return "none";
+            if ("silent".equals(sound)) {   // Notification only: a notification with no sound and no vibration
+                try { PrayerAlarms.channels(MainActivity.this);
+                    android.app.NotificationManager nm = (android.app.NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                    android.app.Notification.Builder b = Build.VERSION.SDK_INT >= 26 ? new android.app.Notification.Builder(MainActivity.this, PrayerAlarms.CH_SILENT) : new android.app.Notification.Builder(MainActivity.this);
+                    b.setSmallIcon(R.drawable.ic_stat_prayer).setContentTitle("Test").setContentText("Notification only: no sound").setAutoCancel(true);
+                    if (Build.VERSION.SDK_INT < 26) b.setSound(null).setVibrate(null);
+                    if (nm != null) nm.notify(77, b.build()); } catch (Exception ignored) { }
+                return "notify"; }
             int mode = PrayerAlarms.soundMode(MainActivity.this);
             if (mode == 1) {
                 try { android.os.Vibrator v = (android.os.Vibrator) getSystemService(Context.VIBRATOR_SERVICE);

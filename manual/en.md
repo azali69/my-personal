@@ -105,7 +105,7 @@ Blocks shade the page in sections so you can memorise and revise one at a time. 
 | Mode | Shading |
 | --- | --- |
 | Off | None (waqf signs always show) |
-| Ruku' (original) | Gold, the original ruku' sections (ع) |
+| Ruku' (original) | The original ruku' sections (ع), in alternating darker and lighter gold so each section's start and end show |
 | My ruku' | Blue, your own ruku' sections |
 | My blocks | Your own blocks, any length |
 
@@ -197,12 +197,12 @@ All open from the **ayah menu**; they need the internet once per surah.
 
 1. Home → **Hadith**. Tick what to show, **Arabic**, **Bahasa Indonesia** and/or **English** (at least one; the same boxes are at the top of each kitab), then a book: Sahih al-Bukhari, Sahih Muslim, Sunan Abi Dawud, Jami' at-Tirmidhi, Sunan an-Nasa'i, Sunan Ibn Majah or Muwatta Malik.
 2. Open a kitab to read its hadith: Arabic with harakat, then the translation. More hadith load as you scroll.
-3. **Hadith number** + **Go** jumps to a hadith. **Search** looks through the whole book in Arabic, English or Indonesian (the first search downloads the book).
+3. **Search all seven books** (at the top of the Hadith page) looks through every book at once, in Arabic, English or Indonesian; the first time it downloads each book (about 80 MB in all, Wi-Fi recommended). **Hadith number** + **Go** jumps to a hadith. **Search** looks through the whole book in Arabic, English or Indonesian (the first search downloads the book).
 4. Gradings appear above each hadith of the four Sunan: al-Albani, Shu'ayb al-Arna'ut, Zubair 'Ali Za'i, and for at-Tirmidhi his own verdict in Arabic. Green is sahih, blue hasan, orange da'if, red very weak or fabricated. Bukhari and Muslim are sahih by the agreement of the scholars, so they have no per-hadith grade. The Muwatta has one grading, Salim al-Hilali's; Mawquf means the words of a Companion and Maqtu' the words of a Successor, not of the Prophet ﷺ. The Muwatta is always shown in full (with its chain).
 5. The copy button copies the Arabic, the translation, the reference and the gradings.
 6. Each kitab needs the internet the first time; after that it is kept on the phone.
 7. Hadith show the **text only** at first, with "Narrated by …" (the Companion) above it. Where the Companion only says "I heard" or "that" before the Prophet ﷺ, the text starts at "the Messenger of Allah ﷺ" / "the Prophet ﷺ". Tick **SANAD** to see the full chain of narrators; the chain is then shown in a softer colour so the text stands out. Where the chain could not be separated with certainty, the hadith is shown in full.
-8. The kitab title and the **AR · BI · ENG · SANAD** boxes stay at the top while you scroll. Tap the title to jump to another kitab of the same book.
+8. The kitab title and the **AR · BI · ENG · SANAD** boxes stay at the top while you scroll; tap once on the text to hide them, and again to show them (the same in Doa & zikir and the Sirah). Tap the title to jump to another kitab of the same book.
 9. Hadith that HadeethEnc.com explains have a **Syarah · HadeethEnc** button under the text. It opens their explanation, lessons from the hadith and word meanings, in **BM** (Bahasa Melayu, for about 100 hadith so far), **BI**, **ENG** or **AR**, unchanged from HadeethEnc. It is linked to the hadith by matching the text, so it may quote another narration of the same hadith.
 10. **Also in** under a hadith lists the same hadith in the other books (e.g. "Muslim 113", "Abu Dawud 3692"). "(close wording)" means most, not all, of the wording matches, or only part of a longer hadith. Tap one to read it with that book's own grading, then **Open in …** to go there. They are found by comparing the Arabic text, so they help you find other narrations; they do not mean the chains or gradings are the same.
 11. Each hadith has a **bookmark** button (five colours, as for the Qur'an) and a **note** button. **Continue reading** (where you last stopped) is at the top of the Hadith page. Your bookmarks are listed below it when **Show** (beside **All**) is ticked; it is off at first.
@@ -240,7 +240,7 @@ All open from the **ayah menu**; they need the internet once per surah.
 **Alerts** (Android)
 
 1. Tap the **bell** beside each prayer to turn its alert on or off.
-2. **Sound**: Makkah adhan, Madinah adhan, Short tone, Notification only, or **None** (no adhan alert at all; the reminder before the prayer and the notification bar still work if they are on). For an adhan, tap **Choose … adhan file** and pick a recording on your phone.
+2. **Sound**: Makkah adhan, Madinah adhan, Short tone, **Notification only** (a notification with no sound at all, for the reminder and Syuruk too), or **None** (no adhan alert at all; the reminder before the prayer and the notification bar still work if they are on). For an adhan, tap **Choose … adhan file** and pick a recording on your phone.
 3. **Reminder before each prayer**: Off to 30 minutes.
 4. **Test the sound** / **Stop**. If alerts do not come, allow notifications and alarms, and remove battery limits.
 5. Alerts are **on by default** for the five prayers, and the app asks once to allow notifications. They follow the phone's sound mode: **ring** = the adhan or tone plays; **vibrate** = the phone vibrates with the notification, no sound; **silent or Do Not Disturb** = a silent notification only. **Test the sound** follows the same rule (on vibrate it only vibrates). With earphones or a Bluetooth earpiece connected, the adhan plays in the earphones only.

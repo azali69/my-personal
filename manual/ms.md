@@ -105,7 +105,7 @@ Blok mewarnakan halaman mengikut bahagian supaya anda boleh menghafaz dan mengul
 | Mod | Warna |
 | --- | --- |
 | Off | Tiada (tanda waqaf sentiasa dipaparkan) |
-| Ruku' (original) | Emas, mengikut ruku' asal (ع) |
+| Ruku' (original) | Ruku' asal (ع), berselang emas gelap dan emas cerah supaya awal dan akhir setiap ruku' jelas kelihatan |
 | My ruku' | Biru, ruku' anda sendiri |
 | My blocks | Blok anda sendiri, sebarang panjang |
 
@@ -197,12 +197,12 @@ Semuanya dibuka dari **menu ayat**; memerlukan internet sekali bagi setiap surah
 
 1. Home → **Hadith**. Tandakan apa yang hendak dipaparkan, **Arabic**, **Bahasa Indonesia** dan/atau **English** (sekurang-kurangnya satu; kotak yang sama ada di atas setiap kitab), kemudian sebuah kitab: Sahih al-Bukhari, Sahih Muslim, Sunan Abi Dawud, Jami' at-Tirmidhi, Sunan an-Nasa'i, Sunan Ibn Majah atau Muwatta Malik.
 2. Buka satu kitab (bab besar) untuk membaca hadisnya: teks Arab berbaris, kemudian terjemahan. Hadis seterusnya dimuat apabila anda menatal ke bawah.
-3. **Hadith number** + **Go** terus ke nombor hadis. **Search** mencari dalam seluruh kitab dalam bahasa Arab, Inggeris atau Indonesia (carian pertama memuat turun kitab itu).
+3. **Search all seven books** (di atas halaman Hadith) mencari dalam semua kitab sekali gus, dalam bahasa Arab, Inggeris atau Indonesia; kali pertama ia memuat turun setiap kitab (kira-kira 80 MB semuanya, disyorkan guna Wi-Fi). **Hadith number** + **Go** terus ke nombor hadis. **Search** mencari dalam seluruh kitab dalam bahasa Arab, Inggeris atau Indonesia (carian pertama memuat turun kitab itu).
 4. Hukum hadis dipaparkan di atas setiap hadis dalam empat kitab Sunan: al-Albani, Shu'ayb al-Arna'ut, Zubair 'Ali Za'i, dan bagi at-Tirmidhi hukum beliau sendiri dalam bahasa Arab. Hijau sahih, biru hasan, jingga da'if, merah sangat lemah atau palsu. Bukhari dan Muslim sahih dengan kesepakatan ulama, jadi tiada hukum bagi setiap hadis. Al-Muwatta mempunyai satu hukum sahaja, oleh Salim al-Hilali; Mawquf bermaksud kata-kata Sahabat dan Maqtu' kata-kata Tabi'in, bukan sabda Nabi ﷺ. Al-Muwatta sentiasa dipaparkan penuh (bersama sanad).
 5. Butang salin menyalin teks Arab, terjemahan, rujukan dan hukum hadis.
 6. Setiap kitab memerlukan internet kali pertama; selepas itu ia disimpan dalam telefon.
 7. Hadis dipaparkan **matan sahaja** pada mulanya, dengan "Narrated by …" (Sahabat perawi) di atasnya. Jika Sahabat hanya berkata "aku mendengar" atau "bahawa" sebelum Nabi ﷺ, matan bermula pada "Rasulullah ﷺ" / "Nabi ﷺ". Tandakan **SANAD** untuk melihat rantaian perawi penuh; sanad itu dipaparkan dalam warna lebih pudar supaya matan lebih jelas. Jika sanad tidak dapat dipisahkan dengan pasti, hadis dipaparkan penuh.
-8. Tajuk kitab dan kotak **AR · BI · ENG · SANAD** kekal di atas semasa anda menatal. Ketik tajuk untuk beralih ke kitab lain dalam buku yang sama.
+8. Tajuk kitab dan kotak **AR · BI · ENG · SANAD** kekal di atas semasa anda menatal; ketik sekali pada teks untuk menyembunyikannya, dan sekali lagi untuk memaparkannya (begitu juga dalam Doa & zikir dan Sirah). Ketik tajuk untuk beralih ke kitab lain dalam buku yang sama.
 9. Hadis yang dihuraikan oleh HadeethEnc.com mempunyai butang **Syarah · HadeethEnc** di bawah teksnya. Ia membuka huraian, pengajaran hadis dan makna perkataan dalam **BM** (Bahasa Melayu, kira-kira 100 hadis setakat ini), **BI**, **ENG** atau **AR**, tanpa sebarang perubahan daripada HadeethEnc. Ia dipadankan dengan hadis melalui teksnya, jadi ia mungkin memetik riwayat lain bagi hadis yang sama.
 10. **Also in** di bawah hadis menyenaraikan hadis yang sama dalam kitab lain (contohnya "Muslim 113", "Abu Dawud 3692"). "(close wording)" bermaksud kebanyakan lafaznya sama tetapi tidak semua, atau hanya sebahagian daripada hadis yang lebih panjang. Ketik untuk membacanya bersama hukum daripada kitab itu sendiri, kemudian **Open in …** untuk pergi ke sana. Ia dicari dengan membandingkan teks Arab, jadi ia membantu mencari riwayat lain; ia tidak bermaksud sanad atau hukumnya sama.
 11. Setiap hadis ada butang **penanda buku** (lima warna, seperti al-Quran) dan butang **nota**. **Continue reading** (tempat anda berhenti) berada di bahagian atas halaman Hadith. Senarai penanda buku dipaparkan di bawahnya apabila **Show** (di sebelah **All**) ditanda; ia tidak ditanda pada mulanya.
@@ -240,7 +240,7 @@ Semuanya dibuka dari **menu ayat**; memerlukan internet sekali bagi setiap surah
 **Peringatan** (Android)
 
 1. Ketik **loceng** di sebelah setiap waktu untuk menghidupkan atau mematikan peringatannya.
-2. **Sound**: azan Makkah, azan Madinah, nada pendek, notifikasi sahaja, atau **None** (tiada peringatan azan langsung; peringatan sebelum waktu dan bar notifikasi masih berfungsi jika dihidupkan). Untuk azan, ketik **Choose … adhan file** dan pilih rakaman azan dari telefon anda.
+2. **Sound**: azan Makkah, azan Madinah, nada pendek, **Notification only** (notifikasi sahaja, tanpa sebarang bunyi, termasuk peringatan sebelum waktu dan Syuruk), atau **None** (tiada peringatan azan langsung; peringatan sebelum waktu dan bar notifikasi masih berfungsi jika dihidupkan). Untuk azan, ketik **Choose … adhan file** dan pilih rakaman azan dari telefon anda.
 3. **Reminder before each prayer**: tiada hingga 30 minit sebelum waktu.
 4. **Test the sound** / **Stop**. Jika peringatan tidak berbunyi, benarkan notifikasi dan penggera, dan buang had bateri.
 5. Peringatan **dihidupkan secara lalai** untuk lima waktu solat, dan aplikasi meminta kebenaran notifikasi sekali. Ia mengikut mod bunyi telefon: **dering** = azan atau nada dimainkan; **getar** = telefon bergetar bersama notifikasi, tanpa bunyi; **senyap atau Jangan Ganggu** = notifikasi senyap sahaja. **Test the sound** mengikut peraturan yang sama (dalam mod getar ia hanya bergetar). Jika fon telinga atau earpiece Bluetooth disambung, azan dimainkan dalam fon telinga sahaja.
