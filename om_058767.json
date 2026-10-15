@@ -1,0 +1,19 @@
+{
+  "found": 1,
+  "totalNumPages": 1,
+  "pageNum": 1,
+  "results": [
+    {
+      "SEARCHVAL": "MASJID JAMAE (CHULIA)",
+      "BLK_NO": "218",
+      "ROAD_NAME": "SOUTH BRIDGE ROAD",
+      "BUILDING": "MASJID JAMAE (CHULIA)",
+      "ADDRESS": "218 SOUTH BRIDGE ROAD MASJID JAMAE (CHULIA) SINGAPORE 058767",
+      "POSTAL": "058767",
+      "X": "29339.46428262815",
+      "Y": "29513.67898776568",
+      "LATITUDE": "1.283185707709976",
+      "LONGITUDE": "103.8453541896504"
+    }
+  ]
+}

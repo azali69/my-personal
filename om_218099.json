@@ -1,0 +1,19 @@
+{
+  "found": 1,
+  "totalNumPages": 1,
+  "pageNum": 1,
+  "results": [
+    {
+      "SEARCHVAL": "MASJID ANGULLIA",
+      "BLK_NO": "265",
+      "ROAD_NAME": "SERANGOON ROAD",
+      "BUILDING": "MASJID ANGULLIA",
+      "ADDRESS": "265 SERANGOON ROAD MASJID ANGULLIA SINGAPORE 218099",
+      "POSTAL": "218099",
+      "X": "30309.88901431486",
+      "Y": "32547.32615670562",
+      "LATITUDE": "1.310620887617847",
+      "LONGITUDE": "103.8540740583439"
+    }
+  ]
+}

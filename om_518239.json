@@ -1,0 +1,20 @@
+{
+  "error": "Authentication token missing. Please create an account and generate or renew your API Token.",
+  "found": 1,
+  "totalNumPages": 1,
+  "pageNum": 1,
+  "results": [
+    {
+      "SEARCHVAL": "MASJID AL-ISTIGHFAR",
+      "BLK_NO": "2",
+      "ROAD_NAME": "PASIR RIS WALK",
+      "BUILDING": "MASJID AL-ISTIGHFAR",
+      "ADDRESS": "2 PASIR RIS WALK MASJID AL-ISTIGHFAR SINGAPORE 518239",
+      "POSTAL": "518239",
+      "X": "42555.55005170032",
+      "Y": "39223.88452695496",
+      "LATITUDE": "1.370997804044545",
+      "LONGITUDE": "103.9641103868214"
+    }
+  ]
+}

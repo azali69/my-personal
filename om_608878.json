@@ -1,0 +1,20 @@
+{
+  "error": "Authentication token missing. Please create an account and generate or renew your API Token.",
+  "found": 1,
+  "totalNumPages": 1,
+  "pageNum": 1,
+  "results": [
+    {
+      "SEARCHVAL": "MASJID HASANAH",
+      "BLK_NO": "492",
+      "ROAD_NAME": "TEBAN GARDENS ROAD",
+      "BUILDING": "MASJID HASANAH",
+      "ADDRESS": "492 TEBAN GARDENS ROAD MASJID HASANAH SINGAPORE 608878",
+      "POSTAL": "608878",
+      "X": "17415.92669033166",
+      "Y": "33771.09963275492",
+      "LATITUDE": "1.321686516275145",
+      "LONGITUDE": "103.7382151418974"
+    }
+  ]
+}

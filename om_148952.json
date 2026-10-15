@@ -1,0 +1,19 @@
+{
+  "found": 1,
+  "totalNumPages": 1,
+  "pageNum": 1,
+  "results": [
+    {
+      "SEARCHVAL": "MASJID MUJAHIDIN",
+      "BLK_NO": "590",
+      "ROAD_NAME": "STIRLING ROAD",
+      "BUILDING": "MASJID MUJAHIDIN",
+      "ADDRESS": "590 STIRLING ROAD MASJID MUJAHIDIN SINGAPORE 148952",
+      "POSTAL": "148952",
+      "X": "24398.16194269806",
+      "Y": "31166.44244338572",
+      "LATITUDE": "1.298132539593497",
+      "LONGITUDE": "103.8009544684681"
+    }
+  ]
+}

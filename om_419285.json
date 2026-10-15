@@ -1,0 +1,19 @@
+{
+  "found": 1,
+  "totalNumPages": 1,
+  "pageNum": 1,
+  "results": [
+    {
+      "SEARCHVAL": "MASJID AL-ABDUL RAZAK",
+      "BLK_NO": "30",
+      "ROAD_NAME": "JALAN ISMAIL",
+      "BUILDING": "MASJID AL-ABDUL RAZAK",
+      "ADDRESS": "30 JALAN ISMAIL MASJID AL-ABDUL RAZAK SINGAPORE 419285",
+      "POSTAL": "419285",
+      "X": "36233.70681363437",
+      "Y": "33960.3720241636",
+      "LATITUDE": "1.323398951874887",
+      "LONGITUDE": "103.9073028076282"
+    }
+  ]
+}

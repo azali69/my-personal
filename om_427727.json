@@ -1,0 +1,19 @@
+{
+  "found": 1,
+  "totalNumPages": 1,
+  "pageNum": 1,
+  "results": [
+    {
+      "SEARCHVAL": "MASJID KHALID",
+      "BLK_NO": "130",
+      "ROAD_NAME": "JOO CHIAT ROAD",
+      "BUILDING": "MASJID KHALID",
+      "ADDRESS": "130 JOO CHIAT ROAD MASJID KHALID SINGAPORE 427727",
+      "POSTAL": "427727",
+      "X": "35303.15088849328",
+      "Y": "32856.50195720419",
+      "LATITUDE": "1.313416184324836",
+      "LONGITUDE": "103.8989410110241"
+    }
+  ]
+}

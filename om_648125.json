@@ -1,0 +1,19 @@
+{
+  "found": 1,
+  "totalNumPages": 1,
+  "pageNum": 1,
+  "results": [
+    {
+      "SEARCHVAL": "MASJID MAAROF",
+      "BLK_NO": "20",
+      "ROAD_NAME": "JURONG WEST STREET 26",
+      "BUILDING": "MASJID MAAROF",
+      "ADDRESS": "20 JURONG WEST STREET 26 MASJID MAAROF SINGAPORE 648125",
+      "POSTAL": "648125",
+      "X": "13717.81843069941",
+      "Y": "36738.12373085879",
+      "LATITUDE": "1.34851765818894",
+      "LONGITUDE": "103.7049843612369"
+    }
+  ]
+}

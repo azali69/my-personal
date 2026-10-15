@@ -1,0 +1,19 @@
+{
+  "found": 1,
+  "totalNumPages": 1,
+  "pageNum": 1,
+  "results": [
+    {
+      "SEARCHVAL": "MASJID MUHAJIRIN",
+      "BLK_NO": "275",
+      "ROAD_NAME": "BRADDELL ROAD",
+      "BUILDING": "MASJID MUHAJIRIN",
+      "ADDRESS": "275 BRADDELL ROAD MASJID MUHAJIRIN SINGAPORE 579704",
+      "POSTAL": "579704",
+      "X": "30085.99171427265",
+      "Y": "36126.53193920106",
+      "LATITUDE": "1.342989972166974",
+      "LONGITUDE": "103.8520624754258"
+    }
+  ]
+}

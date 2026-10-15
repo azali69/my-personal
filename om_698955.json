@@ -1,0 +1,19 @@
+{
+  "found": 1,
+  "totalNumPages": 1,
+  "pageNum": 1,
+  "results": [
+    {
+      "SEARCHVAL": "MASJID AL-FIRDAUS",
+      "BLK_NO": "11",
+      "ROAD_NAME": "JALAN IBADAT",
+      "BUILDING": "MASJID AL-FIRDAUS",
+      "ADDRESS": "11 JALAN IBADAT MASJID AL-FIRDAUS SINGAPORE 698955",
+      "POSTAL": "698955",
+      "X": "14995.03911239561",
+      "Y": "39662.24604937807",
+      "LATITUDE": "1.374962904260772",
+      "LONGITUDE": "103.7164596869592"
+    }
+  ]
+}

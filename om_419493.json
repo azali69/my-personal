@@ -1,0 +1,19 @@
+{
+  "found": 1,
+  "totalNumPages": 1,
+  "pageNum": 1,
+  "results": [
+    {
+      "SEARCHVAL": "MASJID DARUL AMAN",
+      "BLK_NO": "1",
+      "ROAD_NAME": "JALAN EUNOS",
+      "BUILDING": "MASJID DARUL AMAN",
+      "ADDRESS": "1 JALAN EUNOS MASJID DARUL AMAN SINGAPORE 419493",
+      "POSTAL": "419493",
+      "X": "35928.64891178533",
+      "Y": "33359.44427879713",
+      "LATITUDE": "1.31796445871933",
+      "LONGITUDE": "103.9045615471024"
+    }
+  ]
+}

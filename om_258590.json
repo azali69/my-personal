@@ -1,0 +1,19 @@
+{
+  "found": 1,
+  "totalNumPages": 1,
+  "pageNum": 1,
+  "results": [
+    {
+      "SEARCHVAL": "MASJID BA'ALWIE",
+      "BLK_NO": "2",
+      "ROAD_NAME": "LEWIS ROAD",
+      "BUILDING": "MASJID BA'ALWIE",
+      "ADDRESS": "2 LEWIS ROAD MASJID BA'ALWIE SINGAPORE 258590",
+      "POSTAL": "258590",
+      "X": "26806.04645536467",
+      "Y": "33665.52236303873",
+      "LATITUDE": "1.320733522321022",
+      "LONGITUDE": "103.8225902809179"
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "found": 1,
+  "totalNumPages": 1,
+  "pageNum": 1,
+  "results": [
+    {
+      "SEARCHVAL": "MASJID ASSYAFAAH",
+      "BLK_NO": "1",
+      "ROAD_NAME": "ADMIRALTY LANE",
+      "BUILDING": "MASJID ASSYAFAAH",
+      "ADDRESS": "1 ADMIRALTY LANE MASJID ASSYAFAAH SINGAPORE 757620",
+      "POSTAL": "757620",
+      "X": "26449.01464197412",
+      "Y": "48597.22977541201",
+      "LATITUDE": "1.455770509957751",
+      "LONGITUDE": "103.8193813715277"
+    }
+  ]
+}

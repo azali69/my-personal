@@ -1,0 +1,19 @@
+{
+  "found": 1,
+  "totalNumPages": 1,
+  "pageNum": 1,
+  "results": [
+    {
+      "SEARCHVAL": "MASJID MYDIN",
+      "BLK_NO": "67",
+      "ROAD_NAME": "JALAN LAPANG",
+      "BUILDING": "MASJID MYDIN",
+      "ADDRESS": "67 JALAN LAPANG MASJID MYDIN SINGAPORE 419007",
+      "POSTAL": "419007",
+      "X": "37120.52190041542",
+      "Y": "33863.04032830335",
+      "LATITUDE": "1.322518467332397",
+      "LONGITUDE": "103.9152712780769"
+    }
+  ]
+}

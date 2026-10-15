@@ -1,0 +1,19 @@
+{
+  "found": 1,
+  "totalNumPages": 1,
+  "pageNum": 1,
+  "results": [
+    {
+      "SEARCHVAL": "MASJID TASEK UTARA",
+      "BLK_NO": "46",
+      "ROAD_NAME": "BRISTOL ROAD",
+      "BUILDING": "MASJID TASEK UTARA",
+      "ADDRESS": "46 BRISTOL ROAD MASJID TASEK UTARA SINGAPORE 219852",
+      "POSTAL": "219852",
+      "X": "29760.88657010719",
+      "Y": "32811.26469999552",
+      "LATITUDE": "1.313007890807786",
+      "LONGITUDE": "103.8491410187941"
+    }
+  ]
+}

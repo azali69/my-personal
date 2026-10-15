@@ -1,0 +1,19 @@
+{
+  "found": 1,
+  "totalNumPages": 1,
+  "pageNum": 1,
+  "results": [
+    {
+      "SEARCHVAL": "MASJID ALKAFF UPPER SERANGOON",
+      "BLK_NO": "66",
+      "ROAD_NAME": "PHENG GECK AVENUE",
+      "BUILDING": "MASJID ALKAFF UPPER SERANGOON",
+      "ADDRESS": "66 PHENG GECK AVENUE MASJID ALKAFF UPPER SERANGOON SINGAPORE 348261",
+      "POSTAL": "348261",
+      "X": "32151.08583283611",
+      "Y": "35015.86014174484",
+      "LATITUDE": "1.332945238609967",
+      "LONGITUDE": "103.8706184407245"
+    }
+  ]
+}

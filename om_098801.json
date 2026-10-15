@@ -1,0 +1,19 @@
+{
+  "found": 1,
+  "totalNumPages": 1,
+  "pageNum": 1,
+  "results": [
+    {
+      "SEARCHVAL": "MASJID AL-AMIN",
+      "BLK_NO": "50",
+      "ROAD_NAME": "TELOK BLANGAH WAY",
+      "BUILDING": "MASJID AL-AMIN",
+      "ADDRESS": "50 TELOK BLANGAH WAY MASJID AL-AMIN SINGAPORE 098801",
+      "POSTAL": "098801",
+      "X": "26437.48777653929",
+      "Y": "28631.17203391157",
+      "LATITUDE": "1.27520461393923",
+      "LONGITUDE": "103.8192788394899"
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "found": 1,
+  "totalNumPages": 1,
+  "pageNum": 1,
+  "results": [
+    {
+      "SEARCHVAL": "MASJID KAMPONG DELTA",
+      "BLK_NO": "10",
+      "ROAD_NAME": "DELTA AVENUE",
+      "BUILDING": "MASJID KAMPONG DELTA",
+      "ADDRESS": "10 DELTA AVENUE MASJID KAMPONG DELTA SINGAPORE 169831",
+      "POSTAL": "169831",
+      "X": "27449.42226323951",
+      "Y": "30448.53956501558",
+      "LATITUDE": "1.291640282114963",
+      "LONGITUDE": "103.8283714066974"
+    }
+  ]
+}

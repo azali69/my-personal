@@ -1,0 +1,19 @@
+{
+  "found": 1,
+  "totalNumPages": 1,
+  "pageNum": 1,
+  "results": [
+    {
+      "SEARCHVAL": "MASJID HANG JEBAT",
+      "BLK_NO": "100",
+      "ROAD_NAME": "JALAN HANG JEBAT",
+      "BUILDING": "MASJID HANG JEBAT",
+      "ADDRESS": "100 JALAN HANG JEBAT MASJID HANG JEBAT SINGAPORE 139533",
+      "POSTAL": "139533",
+      "X": "24140.30926182214",
+      "Y": "30214.77360075898",
+      "LATITUDE": "1.289525951786426",
+      "LONGITUDE": "103.7986376650843"
+    }
+  ]
+}

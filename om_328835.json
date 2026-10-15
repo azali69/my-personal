@@ -1,0 +1,19 @@
+{
+  "found": 1,
+  "totalNumPages": 1,
+  "pageNum": 1,
+  "results": [
+    {
+      "SEARCHVAL": "MASJID HAJJAH RAHIMABI KEBUN LIMAU",
+      "BLK_NO": "76",
+      "ROAD_NAME": "KIM KEAT ROAD",
+      "BUILDING": "MASJID HAJJAH RAHIMABI KEBUN LIMAU",
+      "ADDRESS": "76 KIM KEAT ROAD MASJID HAJJAH RAHIMABI KEBUN LIMAU SINGAPORE 328835",
+      "POSTAL": "328835",
+      "X": "30393.7210078286",
+      "Y": "34260.72376910038",
+      "LATITUDE": "1.326116242787235",
+      "LONGITUDE": "103.8548274625344"
+    }
+  ]
+}

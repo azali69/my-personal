@@ -1,0 +1,19 @@
+{
+  "found": 1,
+  "totalNumPages": 1,
+  "pageNum": 1,
+  "results": [
+    {
+      "SEARCHVAL": "MASJID AN-NAHDHAH",
+      "BLK_NO": "9A",
+      "ROAD_NAME": "BISHAN STREET 14",
+      "BUILDING": "MASJID AN-NAHDHAH",
+      "ADDRESS": "9A BISHAN STREET 14 MASJID AN-NAHDHAH SINGAPORE 579786",
+      "POSTAL": "579786",
+      "X": "29982.32710871473",
+      "Y": "37294.8201451879",
+      "LATITUDE": "1.353555561857295",
+      "LONGITUDE": "103.8511310630426"
+    }
+  ]
+}

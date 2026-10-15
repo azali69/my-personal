@@ -1,0 +1,19 @@
+{
+  "found": 1,
+  "totalNumPages": 1,
+  "pageNum": 1,
+  "results": [
+    {
+      "SEARCHVAL": "MASJID AL-TAQUA",
+      "BLK_NO": "11A",
+      "ROAD_NAME": "JALAN BILAL",
+      "BUILDING": "MASJID AL-TAQUA",
+      "ADDRESS": "11A JALAN BILAL MASJID AL-TAQUA SINGAPORE 468862",
+      "POSTAL": "468862",
+      "X": "41375.13183016889",
+      "Y": "33783.38567975722",
+      "LATITUDE": "1.321796534169989",
+      "LONGITUDE": "103.9535011098452"
+    }
+  ]
+}

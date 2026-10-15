@@ -1,0 +1,19 @@
+{
+  "found": 1,
+  "totalNumPages": 1,
+  "pageNum": 1,
+  "results": [
+    {
+      "SEARCHVAL": "MASJID ABDUL HAMID (KG PASIRAN)",
+      "BLK_NO": "10",
+      "ROAD_NAME": "GENTLE ROAD",
+      "BUILDING": "MASJID ABDUL HAMID (KG PASIRAN)",
+      "ADDRESS": "10 GENTLE ROAD MASJID ABDUL HAMID (KG PASIRAN) SINGAPORE 309194",
+      "POSTAL": "309194",
+      "X": "28859.7939240681",
+      "Y": "33584.66431999579",
+      "LATITUDE": "1.320002282093101",
+      "LONGITUDE": "103.8410442757787"
+    }
+  ]
+}

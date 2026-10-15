@@ -1,0 +1,19 @@
+{
+  "found": 1,
+  "totalNumPages": 1,
+  "pageNum": 1,
+  "results": [
+    {
+      "SEARCHVAL": "MASJID PUSARA AMAN",
+      "BLK_NO": "11",
+      "ROAD_NAME": "LIM CHU KANG ROAD",
+      "BUILDING": "MASJID PUSARA AMAN",
+      "ADDRESS": "11 LIM CHU KANG ROAD MASJID PUSARA AMAN SINGAPORE 719452",
+      "POSTAL": "719452",
+      "X": "12530.73365548532",
+      "Y": "39422.47298000008",
+      "LATITUDE": "1.372793294580393",
+      "LONGITUDE": "103.6943163023387"
+    }
+  ]
+}

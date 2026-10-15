@@ -1,0 +1,19 @@
+{
+  "found": 1,
+  "totalNumPages": 1,
+  "pageNum": 1,
+  "results": [
+    {
+      "SEARCHVAL": "MASJID YUSOF ISHAK",
+      "BLK_NO": "10",
+      "ROAD_NAME": "WOODLANDS DRIVE 17",
+      "BUILDING": "MASJID YUSOF ISHAK",
+      "ADDRESS": "10 WOODLANDS DRIVE 17 MASJID YUSOF ISHAK SINGAPORE 737740",
+      "POSTAL": "737740",
+      "X": "23867.24168276787",
+      "Y": "45361.58522176184",
+      "LATITUDE": "1.426508255750369",
+      "LONGITUDE": "103.7961819490459"
+    }
+  ]
+}

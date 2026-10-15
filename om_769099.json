@@ -1,0 +1,19 @@
+{
+  "found": 1,
+  "totalNumPages": 1,
+  "pageNum": 1,
+  "results": [
+    {
+      "SEARCHVAL": "MASJID DARUL MAKMUR",
+      "BLK_NO": "950",
+      "ROAD_NAME": "YISHUN AVENUE 2",
+      "BUILDING": "MASJID DARUL MAKMUR",
+      "ADDRESS": "950 YISHUN AVENUE 2 MASJID DARUL MAKMUR SINGAPORE 769099",
+      "POSTAL": "769099",
+      "X": "28127.192852268",
+      "Y": "46507.54092239216",
+      "LATITUDE": "1.43687216585825",
+      "LONGITUDE": "103.8344615282044"
+    }
+  ]
+}

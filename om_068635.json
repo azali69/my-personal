@@ -1,0 +1,19 @@
+{
+  "found": 1,
+  "totalNumPages": 1,
+  "pageNum": 1,
+  "results": [
+    {
+      "SEARCHVAL": "MASJID AL-ABRAR (KOOCHOO PALLY)",
+      "BLK_NO": "192",
+      "ROAD_NAME": "TELOK AYER STREET",
+      "BUILDING": "MASJID AL-ABRAR (KOOCHOO PALLY)",
+      "ADDRESS": "192 TELOK AYER STREET MASJID AL-ABRAR (KOOCHOO PALLY) SINGAPORE 068635",
+      "POSTAL": "068635",
+      "X": "29546.77966127452",
+      "Y": "29197.03771015443",
+      "LATITUDE": "1.280322105624986",
+      "LONGITUDE": "103.8472169839349"
+    }
+  ]
+}

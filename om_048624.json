@@ -1,0 +1,19 @@
+{
+  "found": 1,
+  "totalNumPages": 1,
+  "pageNum": 1,
+  "results": [
+    {
+      "SEARCHVAL": "UOB PLAZA",
+      "BLK_NO": "80",
+      "ROAD_NAME": "RAFFLES PLACE",
+      "BUILDING": "UOB PLAZA",
+      "ADDRESS": "80 RAFFLES PLACE UOB PLAZA SINGAPORE 048624",
+      "POSTAL": "048624",
+      "X": "29919.66572346352",
+      "Y": "29759.2535518501",
+      "LATITUDE": "1.285406567807966",
+      "LONGITUDE": "103.8505675412054"
+    }
+  ]
+}

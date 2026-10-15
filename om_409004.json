@@ -1,0 +1,19 @@
+{
+  "found": 1,
+  "totalNumPages": 1,
+  "pageNum": 1,
+  "results": [
+    {
+      "SEARCHVAL": "MASJID WAK TANJONG",
+      "BLK_NO": "25",
+      "ROAD_NAME": "PAYA LEBAR ROAD",
+      "BUILDING": "MASJID WAK TANJONG",
+      "ADDRESS": "25 PAYA LEBAR ROAD MASJID WAK TANJONG SINGAPORE 409004",
+      "POSTAL": "409004",
+      "X": "34510.03073879331",
+      "Y": "33317.0832367409",
+      "LATITUDE": "1.317581694638952",
+      "LONGITUDE": "103.8918145328464"
+    }
+  ]
+}

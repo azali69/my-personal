@@ -1,0 +1,19 @@
+{
+  "found": 1,
+  "totalNumPages": 1,
+  "pageNum": 1,
+  "results": [
+    {
+      "SEARCHVAL": "MASJID ALKAFF KAMPUNG MELAYU",
+      "BLK_NO": "200",
+      "ROAD_NAME": "BEDOK RESERVOIR ROAD",
+      "BUILDING": "MASJID ALKAFF KAMPUNG MELAYU",
+      "ADDRESS": "200 BEDOK RESERVOIR ROAD MASJID ALKAFF KAMPUNG MELAYU SINGAPORE 479221",
+      "POSTAL": "479221",
+      "X": "36978.34313192405",
+      "Y": "35430.01669053733",
+      "LATITUDE": "1.336689674618635",
+      "LONGITUDE": "103.913994187667"
+    }
+  ]
+}

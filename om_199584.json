@@ -1,0 +1,19 @@
+{
+  "found": 1,
+  "totalNumPages": 1,
+  "pageNum": 1,
+  "results": [
+    {
+      "SEARCHVAL": "MASJID HAJJAH FATIMAH",
+      "BLK_NO": "4001",
+      "ROAD_NAME": "BEACH ROAD",
+      "BUILDING": "MASJID HAJJAH FATIMAH",
+      "ADDRESS": "4001 BEACH ROAD MASJID HAJJAH FATIMAH SINGAPORE 199584",
+      "POSTAL": "199584",
+      "X": "31293.02381718718",
+      "Y": "31695.58818223514",
+      "LATITUDE": "1.302917981319819",
+      "LONGITUDE": "103.8629079131975"
+    }
+  ]
+}

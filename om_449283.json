@@ -1,0 +1,19 @@
+{
+  "found": 1,
+  "totalNumPages": 1,
+  "pageNum": 1,
+  "results": [
+    {
+      "SEARCHVAL": "MASJID KAMPONG SIGLAP",
+      "BLK_NO": "451",
+      "ROAD_NAME": "MARINE PARADE ROAD",
+      "BUILDING": "MASJID KAMPONG SIGLAP",
+      "ADDRESS": "451 MARINE PARADE ROAD MASJID KAMPONG SIGLAP SINGAPORE 449283",
+      "POSTAL": "449283",
+      "X": "38487.6618606355",
+      "Y": "32462.83819544874",
+      "LATITUDE": "1.309855112268421",
+      "LONGITUDE": "103.9275552659052"
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "found": 1,
+  "totalNumPages": 1,
+  "pageNum": 1,
+  "results": [
+    {
+      "SEARCHVAL": "MASJID DARUSSALAM",
+      "BLK_NO": "3002",
+      "ROAD_NAME": "COMMONWEALTH AVENUE WEST",
+      "BUILDING": "MASJID DARUSSALAM",
+      "ADDRESS": "3002 COMMONWEALTH AVENUE WEST MASJID DARUSSALAM SINGAPORE 129579",
+      "POSTAL": "129579",
+      "X": "21072.97543120757",
+      "Y": "32753.51947092824",
+      "LATITUDE": "1.312484933856084",
+      "LONGITUDE": "103.771075850427"
+    }
+  ]
+}

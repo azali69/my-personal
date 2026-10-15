@@ -1,0 +1,19 @@
+{
+  "found": 1,
+  "totalNumPages": 1,
+  "pageNum": 1,
+  "results": [
+    {
+      "SEARCHVAL": "MASJID HUSSAIN SULAIMAN",
+      "BLK_NO": "394",
+      "ROAD_NAME": "PASIR PANJANG ROAD",
+      "BUILDING": "MASJID HUSSAIN SULAIMAN",
+      "ADDRESS": "394 PASIR PANJANG ROAD MASJID HUSSAIN SULAIMAN SINGAPORE 118730",
+      "POSTAL": "118730",
+      "X": "21143.6903399583",
+      "Y": "30419.20907155797",
+      "LATITUDE": "1.29137428067037",
+      "LONGITUDE": "103.7717117710278"
+    }
+  ]
+}

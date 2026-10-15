@@ -1,0 +1,19 @@
+{
+  "found": 1,
+  "totalNumPages": 1,
+  "pageNum": 1,
+  "results": [
+    {
+      "SEARCHVAL": "MASJID AL-ISLAH",
+      "BLK_NO": "30",
+      "ROAD_NAME": "PUNGGOL FIELD",
+      "BUILDING": "MASJID AL-ISLAH",
+      "ADDRESS": "30 PUNGGOL FIELD MASJID AL-ISLAH SINGAPORE 828812",
+      "POSTAL": "828812",
+      "X": "35587.55682398006",
+      "Y": "42568.04691521078",
+      "LATITUDE": "1.401243806249778",
+      "LONGITUDE": "103.9014989973902"
+    }
+  ]
+}

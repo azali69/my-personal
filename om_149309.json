@@ -1,0 +1,19 @@
+{
+  "found": 1,
+  "totalNumPages": 1,
+  "pageNum": 1,
+  "results": [
+    {
+      "SEARCHVAL": "MASJID JAMEK QUEENSTOWN",
+      "BLK_NO": "946",
+      "ROAD_NAME": "MARGARET DRIVE",
+      "BUILDING": "MASJID JAMEK QUEENSTOWN",
+      "ADDRESS": "946 MARGARET DRIVE MASJID JAMEK QUEENSTOWN SINGAPORE 149309",
+      "POSTAL": "149309",
+      "X": "26008.9728529714",
+      "Y": "30600.15413528681",
+      "LATITUDE": "1.293011372342972",
+      "LONGITUDE": "103.8154283534655"
+    }
+  ]
+}

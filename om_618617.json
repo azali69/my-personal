@@ -1,0 +1,19 @@
+{
+  "found": 1,
+  "totalNumPages": 1,
+  "pageNum": 1,
+  "results": [
+    {
+      "SEARCHVAL": "MASJID ASSYAKIRIN",
+      "BLK_NO": "550",
+      "ROAD_NAME": "YUNG AN ROAD",
+      "BUILDING": "MASJID ASSYAKIRIN",
+      "ADDRESS": "550 YUNG AN ROAD MASJID ASSYAKIRIN SINGAPORE 618617",
+      "POSTAL": "618617",
+      "X": "15340.55280779861",
+      "Y": "35292.90923191421",
+      "LATITUDE": "1.335448407028946",
+      "LONGITUDE": "103.7195662146723"
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "error": "Authentication token missing. Please create an account and generate or renew your API Token.",
+  "found": 1,
+  "totalNumPages": 1,
+  "pageNum": 1,
+  "results": [
+    {
+      "SEARCHVAL": "MASJID AL-MAWADDAH",
+      "BLK_NO": "151",
+      "ROAD_NAME": "COMPASSVALE BOW",
+      "BUILDING": "MASJID AL-MAWADDAH",
+      "ADDRESS": "151 COMPASSVALE BOW MASJID AL-MAWADDAH SINGAPORE 544997",
+      "POSTAL": "544997",
+      "X": "34335.88867681753",
+      "Y": "40599.50270075537",
+      "LATITUDE": "1.383441309780829",
+      "LONGITUDE": "103.8902513100117"
+    }
+  ]
+}

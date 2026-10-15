@@ -1,0 +1,19 @@
+{
+  "found": 1,
+  "totalNumPages": 1,
+  "pageNum": 1,
+  "results": [
+    {
+      "SEARCHVAL": "MASJID AHMAD IBRAHIM",
+      "BLK_NO": "15",
+      "ROAD_NAME": "JALAN ULU SELETAR",
+      "BUILDING": "MASJID AHMAD IBRAHIM",
+      "ADDRESS": "15 JALAN ULU SELETAR MASJID AHMAD IBRAHIM SINGAPORE 769227",
+      "POSTAL": "769227",
+      "X": "26566.46019998286",
+      "Y": "43167.67698130943",
+      "LATITUDE": "1.406667606953181",
+      "LONGITUDE": "103.8204370155467"
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "found": 1,
+  "totalNumPages": 1,
+  "pageNum": 1,
+  "results": [
+    {
+      "SEARCHVAL": "MASJID AL-ANSAR",
+      "BLK_NO": "155",
+      "ROAD_NAME": "BEDOK NORTH AVENUE 1",
+      "BUILDING": "MASJID AL-ANSAR",
+      "ADDRESS": "155 BEDOK NORTH AVENUE 1 MASJID AL-ANSAR SINGAPORE 469751",
+      "POSTAL": "469751",
+      "X": "38357.41367194708",
+      "Y": "34355.66804747656",
+      "LATITUDE": "1.326973217979408",
+      "LONGITUDE": "103.9263855598665"
+    }
+  ]
+}

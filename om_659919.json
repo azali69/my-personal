@@ -1,0 +1,20 @@
+{
+  "error": "Authentication token missing. Please create an account and generate or renew your API Token.",
+  "found": 1,
+  "totalNumPages": 1,
+  "pageNum": 1,
+  "results": [
+    {
+      "SEARCHVAL": "MASJID AR-RAUDHAH",
+      "BLK_NO": "30",
+      "ROAD_NAME": "BUKIT BATOK EAST AVENUE 2",
+      "BUILDING": "MASJID AR-RAUDHAH",
+      "ADDRESS": "30 BUKIT BATOK EAST AVENUE 2 MASJID AR-RAUDHAH SINGAPORE 659919",
+      "POSTAL": "659919",
+      "X": "19398.01137810573",
+      "Y": "37085.15639475547",
+      "LATITUDE": "1.351658264974316",
+      "LONGITUDE": "103.756024260587"
+    }
+  ]
+}

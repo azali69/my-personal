@@ -1,0 +1,20 @@
+{
+  "error": "Authentication token missing. Please create an account and generate or renew your API Token.",
+  "found": 1,
+  "totalNumPages": 1,
+  "pageNum": 1,
+  "results": [
+    {
+      "SEARCHVAL": "MASJID ABDUL GAFOOR",
+      "BLK_NO": "41",
+      "ROAD_NAME": "DUNLOP STREET",
+      "BUILDING": "MASJID ABDUL GAFOOR",
+      "ADDRESS": "41 DUNLOP STREET MASJID ABDUL GAFOOR SINGAPORE 209369",
+      "POSTAL": "209369",
+      "X": "30267.097137779",
+      "Y": "31868.73896774463",
+      "LATITUDE": "1.304483987858786",
+      "LONGITUDE": "103.8536895030495"
+    }
+  ]
+}

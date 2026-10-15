@@ -1,0 +1,20 @@
+{
+  "error": "Authentication token missing. Please create an account and generate or renew your API Token.",
+  "found": 1,
+  "totalNumPages": 1,
+  "pageNum": 1,
+  "results": [
+    {
+      "SEARCHVAL": "MASJID HAJI YUSOFF",
+      "BLK_NO": "2",
+      "ROAD_NAME": "HILLSIDE DRIVE",
+      "BUILDING": "MASJID HAJI YUSOFF",
+      "ADDRESS": "2 HILLSIDE DRIVE MASJID HAJI YUSOFF SINGAPORE 548920",
+      "POSTAL": "548920",
+      "X": "33163.33180735633",
+      "Y": "37543.76405041479",
+      "LATITUDE": "1.355806540580685",
+      "LONGITUDE": "103.8797144747907"
+    }
+  ]
+}

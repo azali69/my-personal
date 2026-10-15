@@ -1,0 +1,19 @@
+{
+  "found": 1,
+  "totalNumPages": 1,
+  "pageNum": 1,
+  "results": [
+    {
+      "SEARCHVAL": "MASJID BURHANI",
+      "BLK_NO": "39",
+      "ROAD_NAME": "HILL STREET",
+      "BUILDING": "MASJID BURHANI",
+      "ADDRESS": "39 HILL STREET MASJID BURHANI SINGAPORE 179364",
+      "POSTAL": "179364",
+      "X": "29912.03991684224",
+      "Y": "30639.6965016257",
+      "LATITUDE": "1.293368984727863",
+      "LONGITUDE": "103.8504990736284"
+    }
+  ]
+}

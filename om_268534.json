@@ -1,0 +1,19 @@
+{
+  "found": 1,
+  "totalNumPages": 1,
+  "pageNum": 1,
+  "results": [
+    {
+      "SEARCHVAL": "MASJID AL-HUDA",
+      "BLK_NO": "34",
+      "ROAD_NAME": "JALAN HAJI ALIAS",
+      "BUILDING": "MASJID AL-HUDA",
+      "ADDRESS": "34 JALAN HAJI ALIAS MASJID AL-HUDA SINGAPORE 268534",
+      "POSTAL": "268534",
+      "X": "23726.23534462601",
+      "Y": "33936.9676387012",
+      "LATITUDE": "1.323188101455384",
+      "LONGITUDE": "103.7949165293271"
+    }
+  ]
+}

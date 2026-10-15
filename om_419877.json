@@ -1,0 +1,19 @@
+{
+  "found": 1,
+  "totalNumPages": 1,
+  "pageNum": 1,
+  "results": [
+    {
+      "SEARCHVAL": "MASJID KASSIM",
+      "BLK_NO": "450",
+      "ROAD_NAME": "CHANGI ROAD",
+      "BUILDING": "MASJID KASSIM",
+      "ADDRESS": "450 CHANGI ROAD MASJID KASSIM SINGAPORE 419877",
+      "POSTAL": "419877",
+      "X": "36783.92391202878",
+      "Y": "33442.77391458675",
+      "LATITUDE": "1.318717828686605",
+      "LONGITUDE": "103.9122466497392"
+    }
+  ]
+}

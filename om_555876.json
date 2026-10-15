@@ -1,0 +1,19 @@
+{
+  "found": 1,
+  "totalNumPages": 1,
+  "pageNum": 1,
+  "results": [
+    {
+      "SEARCHVAL": "MASJID AL-ISTIQAMAH",
+      "BLK_NO": "2",
+      "ROAD_NAME": "SERANGOON NORTH AVENUE 2",
+      "BUILDING": "MASJID AL-ISTIQAMAH",
+      "ADDRESS": "2 SERANGOON NORTH AVENUE 2 MASJID AL-ISTIQAMAH SINGAPORE 555876",
+      "POSTAL": "555876",
+      "X": "32708.37671036366",
+      "Y": "39024.92529110983",
+      "LATITUDE": "1.369201706357191",
+      "LONGITUDE": "103.8756266416055"
+    }
+  ]
+}

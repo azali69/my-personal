@@ -1,0 +1,19 @@
+{
+  "found": 1,
+  "totalNumPages": 1,
+  "pageNum": 1,
+  "results": [
+    {
+      "SEARCHVAL": "MASJID AN-NUR",
+      "BLK_NO": "6",
+      "ROAD_NAME": "ADMIRALTY ROAD",
+      "BUILDING": "MASJID AN-NUR",
+      "ADDRESS": "6 ADMIRALTY ROAD MASJID AN-NUR SINGAPORE 739983",
+      "POSTAL": "739983",
+      "X": "21162.5607025316",
+      "Y": "46933.95164600015",
+      "LATITUDE": "1.440727636158169",
+      "LONGITUDE": "103.7718775345684"
+    }
+  ]
+}

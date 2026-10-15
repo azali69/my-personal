@@ -1,0 +1,19 @@
+{
+  "found": 1,
+  "totalNumPages": 1,
+  "pageNum": 1,
+  "results": [
+    {
+      "SEARCHVAL": "MASJID AL-KHAIR",
+      "BLK_NO": "1",
+      "ROAD_NAME": "TECK WHYE CRESCENT",
+      "BUILDING": "MASJID AL-KHAIR",
+      "ADDRESS": "1 TECK WHYE CRESCENT MASJID AL-KHAIR SINGAPORE 688847",
+      "POSTAL": "688847",
+      "X": "18728.85635876656",
+      "Y": "40511.54136729427",
+      "LATITUDE": "1.382645034607454",
+      "LONGITUDE": "103.7500104145839"
+    }
+  ]
+}

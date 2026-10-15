@@ -1,0 +1,19 @@
+{
+  "found": 1,
+  "totalNumPages": 1,
+  "pageNum": 1,
+  "results": [
+    {
+      "SEARCHVAL": "MASJID OMAR SALMAH",
+      "BLK_NO": "411B",
+      "ROAD_NAME": "JALAN MASHHOR",
+      "BUILDING": "MASJID OMAR SALMAH",
+      "ADDRESS": "411B JALAN MASHHOR MASJID OMAR SALMAH SINGAPORE 299173",
+      "POSTAL": "299173",
+      "X": "27848.34838637616",
+      "Y": "35208.5205193758",
+      "LATITUDE": "1.334687874423136",
+      "LONGITUDE": "103.8319559021633"
+    }
+  ]
+}

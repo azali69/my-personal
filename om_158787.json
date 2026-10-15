@@ -1,0 +1,20 @@
+{
+  "error": "Authentication token missing. Please create an account and generate or renew your API Token.",
+  "found": 1,
+  "totalNumPages": 1,
+  "pageNum": 1,
+  "results": [
+    {
+      "SEARCHVAL": "MASJID JAMIYAH AR-RABITAH",
+      "BLK_NO": "601",
+      "ROAD_NAME": "TIONG BAHRU ROAD",
+      "BUILDING": "MASJID JAMIYAH AR-RABITAH",
+      "ADDRESS": "601 TIONG BAHRU ROAD MASJID JAMIYAH AR-RABITAH SINGAPORE 158787",
+      "POSTAL": "158787",
+      "X": "26535.04100377206",
+      "Y": "30082.36391481571",
+      "LATITUDE": "1.288328688735941",
+      "LONGITUDE": "103.8201553235677"
+    }
+  ]
+}

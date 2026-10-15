@@ -1,0 +1,19 @@
+{
+  "found": 1,
+  "totalNumPages": 1,
+  "pageNum": 1,
+  "results": [
+    {
+      "SEARCHVAL": "MASJID AL-MUKMININ",
+      "BLK_NO": "271",
+      "ROAD_NAME": "JURONG EAST STREET 21",
+      "BUILDING": "MASJID AL-MUKMININ",
+      "ADDRESS": "271 JURONG EAST STREET 21 MASJID AL-MUKMININ SINGAPORE 609603",
+      "POSTAL": "609603",
+      "X": "17772.87793034874",
+      "Y": "35709.45825294405",
+      "LATITUDE": "1.33921644391402",
+      "LONGITUDE": "103.7414218840309"
+    }
+  ]
+}

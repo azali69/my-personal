@@ -1,0 +1,19 @@
+{
+  "found": 1,
+  "totalNumPages": 1,
+  "pageNum": 1,
+  "results": [
+    {
+      "SEARCHVAL": "MASJID KHADIJAH",
+      "BLK_NO": "583",
+      "ROAD_NAME": "GEYLANG ROAD",
+      "BUILDING": "MASJID KHADIJAH",
+      "ADDRESS": "583 GEYLANG ROAD MASJID KHADIJAH SINGAPORE 389522",
+      "POSTAL": "389522",
+      "X": "33873.90680686943",
+      "Y": "32941.42499046028",
+      "LATITUDE": "1.314184503983716",
+      "LONGITUDE": "103.886098564499"
+    }
+  ]
+}

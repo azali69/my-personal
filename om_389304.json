@@ -1,0 +1,19 @@
+{
+  "found": 1,
+  "totalNumPages": 1,
+  "pageNum": 1,
+  "results": [
+    {
+      "SEARCHVAL": "MASJID HAJI MOHD SALLEH",
+      "BLK_NO": "245",
+      "ROAD_NAME": "GEYLANG ROAD",
+      "BUILDING": "MASJID HAJI MOHD SALLEH",
+      "ADDRESS": "245 GEYLANG ROAD MASJID HAJI MOHD SALLEH SINGAPORE 389304",
+      "POSTAL": "389304",
+      "X": "32848.92927089334",
+      "Y": "32744.61980594322",
+      "LATITUDE": "1.312404846569756",
+      "LONGITUDE": "103.8768886007578"
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "found": 1,
+  "totalNumPages": 1,
+  "pageNum": 1,
+  "results": [
+    {
+      "SEARCHVAL": "MASJID SULTAN",
+      "BLK_NO": "3",
+      "ROAD_NAME": "MUSCAT STREET",
+      "BUILDING": "MASJID SULTAN",
+      "ADDRESS": "3 MUSCAT STREET MASJID SULTAN SINGAPORE 198833",
+      "POSTAL": "198833",
+      "X": "30858.5846017031",
+      "Y": "31620.34064292349",
+      "LATITUDE": "1.302237512211979",
+      "LONGITUDE": "103.8590042703744"
+    }
+  ]
+}

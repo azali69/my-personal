@@ -1,0 +1,19 @@
+{
+  "found": 1,
+  "totalNumPages": 1,
+  "pageNum": 1,
+  "results": [
+    {
+      "SEARCHVAL": "MASJID AL-MUTTAQIN",
+      "BLK_NO": "5140",
+      "ROAD_NAME": "ANG MO KIO AVENUE 6",
+      "BUILDING": "MASJID AL-MUTTAQIN",
+      "ADDRESS": "5140 ANG MO KIO AVENUE 6 MASJID AL-MUTTAQIN SINGAPORE 569844",
+      "POSTAL": "569844",
+      "X": "29400.69217617065",
+      "Y": "39170.87281705812",
+      "LATITUDE": "1.370521945852685",
+      "LONGITUDE": "103.845904787078"
+    }
+  ]
+}
