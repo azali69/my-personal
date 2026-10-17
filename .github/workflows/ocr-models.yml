@@ -1,6 +1,6 @@
 name: Arabic reader models
 # Exports EasyOCR's Arabic recogniser (Apache-2.0) to ONNX (int8 weights) and publishes it with PaddleOCR's text-line
-# detector (PP-OCRv4 det, Apache-2.0, as shipped in RapidOCR) as release "ocr-models-1". The APK build downloads them.
+# detector (PP-OCRv4 det, Apache-2.0, as shipped in RapidOCR) as release "ocr-models-1". The app downloads them on first use of the Arabic reader (ArabicOcr.java).
 on: workflow_dispatch
 permissions: { contents: write }
 jobs:

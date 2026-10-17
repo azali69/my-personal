@@ -29,7 +29,6 @@ jobs:
           mkdir -p android/app/src/main/assets
           cp index.html android/app/src/main/assets/index.html
 
-
       - name: Build
         env:
           VERSION_CODE: ${{ github.run_number }}
@@ -49,11 +48,6 @@ jobs:
           mkdir -p out
           cp android/app/build/outputs/apk/release/app-release.apk "out/My-Personal-Quran-v1.0-build${{ github.run_number }}.apk"
           sha256sum out/*.apk
-
-      - uses: actions/upload-artifact@v4
-        with:
-          name: apk
-          path: out/*.apk
 
       - name: Publish release
         uses: softprops/action-gh-release@v2

@@ -3922,7 +3922,7 @@ function mqEdit(id){ const ms=sL()==='ms', all=mqMine(), p=id?all.find(x=>x.id==
   $('#mqDel')?.addEventListener('click',()=>{ if(!confirm(ms?'Padam tempat ini?':'Delete this place?')) return; store.set('myPlaces',mqMine().filter(x=>x.id!==id)); closeSheet(); window.mqRedraw?.(); }); }
 
 /* ============================ SIFAT SOLAT NABI (Azli, 15 Oct 2026) ============================
-   The Prophet's prayer ﷺ step by step, written for this app (solat/solat.json, built from tools/sifat_solat.py). Each step
+   The Prophet's prayer ﷺ step by step, written for this app (solat/solat2.json, built from tools/sifat_solat.py). Each step
    cites hadith in the seven books with their gradings; where scholars differ, the schools' positions and al-Albani's are
    given side by side with their evidence, without choosing between them. */
 let solatD=null; const slData={};
@@ -3998,7 +3998,7 @@ async function khutbahBox(box,ms){ if(!box) return; const all='https://www.muis.
   box.innerHTML=base+`<a class="tile wide sr-cont" href="${all}" target="_blank" rel="noopener"><span style="flex:1"><small>muis.gov.sg</small><br><b>${ms?'Semua khutbah MUIS':'All MUIS khutbahs'}</b></span>›</a>`;
   let j=null; try{ j=await ktGet('../khutbah/latest.json'); }catch(e){} if(!j||!(j.items||[]).length) return;
   const want=ms?'ms':'en', its=j.items.filter(x=>!x.lang||x.lang===want), other=j.items.find(x=>x.lang===(ms?'en':'ms')&&x.date===(its[0]||{}).date);
-  box.innerHTML=base+its.slice(0,2).concat(other?[other]:[]).map(x=>`<a class="tile wide sr-cont" href="${esc(x.url)}" target="_blank" rel="noopener"><span style="flex:1"><small>${esc(x.date||'')}</small><br><b>${esc(x.title)}</b></span>›</a>${x.pdf?`<a class="sl-src" style="margin:0 0 8px 14px;display:inline-block" href="${esc(x.pdf)}" target="_blank" rel="noopener">PDF ›</a>`:''}`).join('')+`<a class="sl-src" style="margin:2px 0 10px 4px;display:inline-block" href="${all}" target="_blank" rel="noopener">${ms?'Semua khutbah MUIS':'All MUIS khutbahs'} ›</a>`; }
+  box.innerHTML=base+[its[0],other,its[1]].filter(Boolean).map(x=>`<a class="tile wide sr-cont" href="${esc(x.url)}" target="_blank" rel="noopener"><span style="flex:1"><small>${esc(x.date||'')}</small><br><b>${esc(x.title)}</b></span>›</a>${x.pdf?`<a class="sl-src" style="margin:0 0 8px 14px;display:inline-block" href="${esc(x.pdf)}" target="_blank" rel="noopener">PDF ›</a>`:''}`).join('')+`<a class="sl-src" style="margin:2px 0 10px 4px;display:inline-block" href="${all}" target="_blank" rel="noopener">${ms?'Semua khutbah MUIS':'All MUIS khutbahs'} ›</a>`; }
 /* ---- Back to where you came from (Azli, 15 Oct 2026) ----
    Opening an ayah or a hadith from the Sirah leaves it; the phone's back button (or the "Back to" button) returns to the
    same event instead of going to Home. */

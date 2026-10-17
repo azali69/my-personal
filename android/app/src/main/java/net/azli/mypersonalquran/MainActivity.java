@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
-import android.media.AudioAttributes;
 import android.media.AudioDeviceInfo;
 import android.media.MediaMetadata;
 import android.media.session.MediaSession;
@@ -448,9 +447,6 @@ public class MainActivity extends Activity {
         @JavascriptInterface
         public boolean recExists(String name) { return name != null && !name.contains("/") && new File(recDir(), name).exists(); }
 
-        @JavascriptInterface
-        public void recDelete(String name) { if (name != null && !name.contains("/")) new File(recDir(), name).delete(); }
-
         /** level: 0 normal, 1 high, 2 maximum. bt: use a Bluetooth headset microphone when one is connected. */
         @JavascriptInterface
         public void setMicPrefs(int level, boolean bt, boolean noisy) {
@@ -858,7 +854,6 @@ public class MainActivity extends Activity {
         js("window.__scanned && window.__scanned(" + ScanOcr.err("Google Lens is not on this phone. Install the Google app or Google Lens from the Play Store.") + ")");
     }
     private class ExtraBridge {
-        @JavascriptInterface public String scanAvailable() { return "1"; }
         @JavascriptInterface public void lens() { runOnUiThread(MainActivity.this::openLens); }
         @JavascriptInterface public String ocrReady() { return ArabicOcr.ready(MainActivity.this) ? "1" : "0"; }
         @JavascriptInterface public void ocrDownload() {
