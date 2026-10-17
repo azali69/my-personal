@@ -1,6 +1,6 @@
 name: Keep only the two newest APK releases
 # Azli, 17 Oct 2026: keep the latest APK build plus the one before it (the last working build); delete older
-# v1.0-build* releases and their tags. Other releases (ocr-models-1, used by the app) are never touched.
+# APK releases (v<major>.<minor>.<patch>.<build>, and the older v1.0-buildN) and their tags. Other releases (ocr-models-1, used by the app) are never touched.
 on:
   workflow_run:
     workflows: ['Build Android APK']
@@ -18,7 +18,7 @@ jobs:
       - env: { GH_TOKEN: '${{ github.token }}', GH_REPO: '${{ github.repository }}' }
         run: |
           gh release list --limit 300 --json tagName,createdAt \
-            -q '[.[] | select(.tagName|test("^v1\\.0-build[0-9]+$"))] | sort_by(.createdAt) | reverse | .[2:] | .[].tagName' > old.txt
-          echo "keeping: $(gh release list --limit 300 --json tagName,createdAt -q '[.[] | select(.tagName|test("^v1\\.0-build[0-9]+$"))] | sort_by(.createdAt) | reverse | .[:2] | map(.tagName) | join(", ")')"
+            -q '[.[] | select(.tagName|test("^v1\\.0-build[0-9]+$|^v[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+$"))] | sort_by(.createdAt) | reverse | .[2:] | .[].tagName' > old.txt
+          echo "keeping: $(gh release list --limit 300 --json tagName,createdAt -q '[.[] | select(.tagName|test("^v1\\.0-build[0-9]+$|^v[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+$"))] | sort_by(.createdAt) | reverse | .[:2] | map(.tagName) | join(", ")')"
           while read -r t; do [ -n "$t" ] && gh release delete "$t" --yes --cleanup-tag && echo "deleted $t"; done < old.txt
           echo "::notice::deleted $(wc -l < old.txt) old APK releases"

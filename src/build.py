@@ -1,11 +1,13 @@
 """Builds index.html (the whole app in one file) from src/app.html.
 
-Usage, from anywhere:  python3 src/build.py
+Usage, from anywhere:  python3 src/build.py <build>     e.g. python3 src/build.py 65
+Version: v<major>.<minor>.<patch>.<build>. major.minor.patch is in the file VERSION; <build> is the APK build number
+(the GitHub Actions run number of the next "Build Android APK" run). It is shown in the app and names the cache in sw.js.
 Fills the %%...%% placeholders in app.html with: the Qur'an data (src/data.json), the fonts (src/fonts/),
 the cover art (src/art/), the manuals (manual/), the MUIS timetable and Hijri dates (prayer/) and the
 recitation timing corrections (tools/timing-corrections.json). Writes index.html at the repository root.
-After building: bump the cache name in sw.js, then commit; pushing index.html builds the APK."""
-import base64, json, os, re
+Then commit; pushing index.html builds the APK, tagged v<version>."""
+import base64, json, os, re, sys
 
 R = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))   # repository root
 S = os.path.join(R, 'src')
@@ -14,7 +16,13 @@ b64 = lambda *p: base64.b64encode(open(os.path.join(*p), 'rb').read()).decode()
 js = lambda s: s.replace('</', '<\\/')                              # safe inside a <script> block
 
 t = rd(S, 'app.html')
+sw = rd(R, 'sw.js')
+if len(sys.argv) > 1: build = int(sys.argv[1])
+else: build = int(re.search(r"const C='mpq-v[\d.]*?(\d+)';", sw).group(1))       # rebuild with the same number
+VERSION = rd(R, 'VERSION').strip() + '.' + str(build)
+assert re.fullmatch(r'\d+\.\d+\.\d+\.\d+', VERSION), VERSION
 rep = {
+    'VERSION': VERSION,
     'FAVICON': b64(S, 'art', 'fav96.png'),
     'HIJRI': rd(R, 'prayer', 'hijri.json'),
     'MANUAL_EN': js(json.dumps(rd(R, 'manual', 'en.md'))),
@@ -33,4 +41,5 @@ t = re.sub(r'%%([A-Z0-9_]+)%%', lambda m: rep[m.group(1)], t)
 left = re.findall(r'%%[A-Z0-9_:.a-z-]+%%', t)
 assert not left, f'unfilled placeholders: {left}'
 open(os.path.join(R, 'index.html'), 'w', encoding='utf-8').write(t)
-print(f'index.html {len(t)/1e6:.2f} MB')
+open(os.path.join(R, 'sw.js'), 'w', encoding='utf-8').write(re.sub(r"const C='mpq-v[^']*';", f"const C='mpq-v{VERSION}';", sw))
+print(f'index.html v{VERSION} {len(t)/1e6:.2f} MB')

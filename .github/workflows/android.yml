@@ -43,21 +43,24 @@ jobs:
             exit $code
           fi
 
-      - name: Name the APK
+      - name: Name the APK (version v<major>.<minor>.<patch>.<build>)
         run: |
+          V="$(tr -d '[:space:]' < VERSION).${{ github.run_number }}"
+          echo "V=$V" >> "$GITHUB_ENV"
+          grep -q "mpq-v$V'" sw.js || echo "::warning::index.html was built for another build number than $V (python3 src/build.py ${{ github.run_number }})"
           mkdir -p out
-          cp android/app/build/outputs/apk/release/app-release.apk "out/My-Personal-Quran-v1.0-build${{ github.run_number }}.apk"
+          cp android/app/build/outputs/apk/release/app-release.apk "out/My-Personal-Quran-v$V.apk"
           sha256sum out/*.apk
 
       - name: Publish release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.0-build${{ github.run_number }}
-          name: My Personal Quran v1.0 (build ${{ github.run_number }})
+          tag_name: v${{ env.V }}
+          name: My Personal Quran v${{ env.V }}
           make_latest: true
           files: out/*.apk
           body: |
-            Android app for My Personal Quran v1.0.
+            Android app for My Personal Quran v${{ env.V }}.
 
             Install: download the .apk on your phone and open it. Android will ask you to allow installs from this source the first time.
             Updates install over the previous version, keeping your blocks and hafazan history.

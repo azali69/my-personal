@@ -4,7 +4,7 @@ My Personal Quran ialah mushaf Madinah untuk membaca, menghafaz, mendengar bacaa
 
 **Memasang aplikasi (Android)**
 
-1. Muat turun fail **My-Personal-Quran-v1.0.apk** yang terkini.
+1. Muat turun fail **My-Personal-Quran-v1.0.0.<binaan>.apk** (contohnya My-Personal-Quran-v1.0.0.65.apk) yang terkini.
 2. Buka fail itu di telefon. Kali pertama, Android akan meminta izin memasang daripada aplikasi tersebut (contohnya Files atau WhatsApp); benarkan.
 3. Ketik **Install**. Versi baharu dipasang di atas versi lama dan menyimpan penanda buku, blok, sejarah hafazan dan tetapan anda.
 
@@ -82,6 +82,7 @@ Kembali ke Home dari mana-mana dengan **butang rumah** (atas kiri skrin bacaan) 
 **Gerakan pada halaman**
 
 - **Leret** ke kiri atau kanan: selak halaman; ia berlipat seperti kertas.
+- Settings → **Turning pages** → **Scroll (continuous)**: halaman bersambung apabila anda menatal ke bawah (leretan tidak lagi menyelak; ‹ › masih melompat satu halaman).
 - **Ketik** halaman: sembunyi atau papar bar.
 - **Tekan lama pada ayat** lalu lepaskan: **menu ayat**.
 - **Tekan lama pada perkataan, tahan dan seret** ke perkataan terakhir: pilih perkataan. Bar muncul dengan **My ruku'**, **My blocks**, **Erase**, **Hafazan**, **Listen** dan **Copy**.
@@ -183,7 +184,7 @@ Ketik **fon kepala** atau tekan lama pada ayat → **Listen from this ayah**.
 
 Semuanya dibuka dari **menu ayat**; memerlukan internet sekali bagi setiap surah.
 
-- **Word by word**: makna setiap perkataan (Indonesia atau Inggeris); ketik perkataan untuk mendengarnya. Settings → **Tap a word twice: meaning and sound** membukanya dengan mengetik perkataan dua kali pada halaman.
+- **Word by word**: makna setiap perkataan (Indonesia atau Inggeris); ketik perkataan untuk melihatnya, kemudian **Play word** untuk mendengarnya (atau pilih **Play automatically**). Settings → **Tap a word twice: meaning and sound** membukanya dengan mengetik perkataan dua kali pada halaman.
 - **Tafsir**: Al-Mukhtasar (Indonesia atau Inggeris) atau As-Sa'di (Indonesia); **Show Arabic original** memaparkan teks Arab. Daripada QuranEnc.com, tanpa sebarang perubahan.
 - **Hadith**: hadis yang dikaitkan oleh kitab itu sendiri (Kitab at-Tafsir dalam Sahih al-Bukhari dan Sahih Muslim), bersama tajuk bab, nombor, teks Arab, terjemahan dan pautan ke Sunnah.com; kemudian **In the eight hadith books in this app**: setiap hadis yang teks Arabnya memetik ayat itu kata demi kata (atau menamakannya, cth. "2.255"); ketik untuk membacanya dengan darjatnya. Ayat yang ada hadis ditanda dengan **simbol buku** kecil pada nombor ayat dalam mushaf (kira-kira 900 ayat).
 - **Copy**: pilih ayat dan kandungan yang hendak disalin, kemudian **Copy**.

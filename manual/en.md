@@ -4,7 +4,7 @@ My Personal Quran is a Madinah mushaf for reading, memorising (hafazan), listeni
 
 **Install (Android)**
 
-1. Download the latest **My-Personal-Quran-v1.0.apk** you were sent.
+1. Download the latest **My-Personal-Quran-v1.0.0.<build>.apk** (for example My-Personal-Quran-v1.0.0.65.apk) you were sent.
 2. Open it on the phone. The first time, Android asks you to allow installs from that app (e.g. Files or WhatsApp); allow it.
 3. Tap **Install**. A newer APK installs over the old one and keeps your bookmarks, blocks, Hafazan history and settings.
 
@@ -82,6 +82,7 @@ Return to Home from anywhere with the **house button** (top left of the reading 
 **Gestures on the page**
 
 - **Swipe** left or right: turn the page; it curls like paper.
+- Settings → **Turning pages** → **Scroll (continuous)**: the pages follow one another as you scroll down instead (swiping then does nothing; ‹ › still jump a page).
 - **Tap** the page: hide or show the bars.
 - **Long-press an ayah** and let go: the **ayah menu**.
 - **Long-press a word, keep holding and drag** to the last word: select words. A bar appears with **My ruku'**, **My blocks**, **Erase**, **Hafazan**, **Listen** and **Copy**.
@@ -183,7 +184,7 @@ Tap the **headphones** or long-press an ayah → **Listen from this ayah**.
 
 All open from the **ayah menu**; they need the internet once per surah.
 
-- **Word by word**: each word's meaning (Indonesian or English); tap a word to hear it. Settings → **Tap a word twice: meaning and sound** opens it by tapping a word twice on the page.
+- **Word by word**: each word's meaning (Indonesian or English); tap a word to see it, then **Play word** to hear it (or choose **Play automatically**). Settings → **Tap a word twice: meaning and sound** opens it by tapping a word twice on the page.
 - **Tafsir**: Al-Mukhtasar (Indonesian or English) or As-Sa'di (Indonesian); **Show Arabic original** adds the Arabic. From QuranEnc.com, unchanged.
 - **Hadith**: the hadith linked by the books themselves (Kitab at-Tafsir of Sahih al-Bukhari and Sahih Muslim), with the chapter heading, number, Arabic, translation and a link to Sunnah.com; then **In the eight hadith books in this app**: every hadith whose Arabic quotes the ayah word for word (or names it, e.g. "2.255"), tap one to read it with its grading. Ayat that have hadith show a small **book mark** on the ayah number in the mushaf (about 900 ayat).
 - **Copy**: choose the ayat and what to include, then **Copy**.

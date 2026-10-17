@@ -1,4 +1,6 @@
-# My Personal Quran v1.0
+# My Personal Quran
+
+Version numbers: v&lt;major&gt;.&lt;minor&gt;.&lt;patch&gt;.&lt;build&gt; (e.g. v1.0.0.65). major.minor.patch is in `VERSION`; build is the APK build number.
 
 A personal Madinah Mushaf reader and hafazan (memorisation) checker.
 
@@ -64,7 +66,7 @@ The Qur'an text and translations are reproduced without modification. The app ch
 
 ## Repository
 
-- `src/app.html`: the app's code. `python3 src/build.py` fills in the data, fonts, art and manuals and writes `index.html` (the whole app in one file). Then bump the cache name in `sw.js`.
+- `src/app.html`: the app's code. `python3 src/build.py <build>` fills in the data, fonts, art and manuals and writes `index.html` (the whole app in one file) and names the offline cache in `sw.js` after the version.
 - `index.html`: what GitHub Pages serves and what the APK carries. Pushing a change to it (or to `android/`) builds the APK (`.github/workflows/android.yml`) and publishes it as a release.
 - `android/`: the Android app around `index.html` (speech, prayer alerts, scanning, sync).
 - Data the app downloads when first used: `kutub/`, `hadith/`, `tafsir/`, `wbw/`, `translit/`, `dua/`, `sirah/`, `solat/`, `kamus/`, `quran/`, `khutbah/`, `mosque/`, `prayer/`.

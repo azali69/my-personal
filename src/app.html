@@ -88,7 +88,8 @@ main.fit{padding-block:8px 76px}
 .mline .sh{background:var(--shade)}
 .mline .sel{background:color-mix(in srgb,var(--accent) 22%,transparent)}
 .mline .num{margin-inline:.04em;vertical-align:0;font-size:1.25em}
-.num.hl{position:relative}.num.hl::after{content:"";position:absolute;top:-.42em;inset-inline-end:-.18em;width:.5em;height:.42em;background:var(--gold-hi,#b8902f);-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 20'%3E%3Cpath d='M1 2h8a3 3 0 0 1 3 3v15a2 2 0 0 0-2-2H1zM23 2h-8a3 3 0 0 0-3 3v15a2 2 0 0 1 2-2h9z'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 20'%3E%3Cpath d='M1 2h8a3 3 0 0 1 3 3v15a2 2 0 0 0-2-2H1zM23 2h-8a3 3 0 0 0-3 3v15a2 2 0 0 1 2-2h9z'/%3E%3C/svg%3E") center/contain no-repeat;pointer-events:none;opacity:.9}
+.spage+.spage{margin-top:18px;padding-top:10px;border-top:1px solid var(--line)}
+.num.hl{position:relative}.num.hl::after{content:"📖";position:absolute;top:-.95em;inset-inline-end:-.35em;font:normal .62em/1 "Noto Color Emoji","Apple Color Emoji","Segoe UI Emoji",sans-serif;pointer-events:none}
 .gmk{display:inline-block;border-radius:50%}
 .gmk.bm{background:color-mix(in srgb,var(--bmc) 30%,transparent);box-shadow:0 0 0 .05em var(--bmc)}
 .num.bm{color:var(--bmc);background:color-mix(in srgb,var(--bmc) 26%,transparent);border-radius:50%;box-shadow:0 0 0 .06em var(--bmc)}
@@ -221,7 +222,9 @@ main.fit .pagefoot.tight{margin-top:4px}
 .sheet-in{max-width:46rem;width:100%;margin:0 auto;display:flex;flex-direction:column;min-height:0;flex:1}
 .sheet-h{display:flex;align-items:center;gap:8px;padding:12px 16px 8px}
 .sheet-h h2{flex:1;margin:0;font-size:17px;font-weight:700}
-.sheet-b{overflow:auto;padding:4px 16px 20px;min-height:0}
+.sheet-b{overflow:auto;padding:4px 16px 20px;min-height:0;overscroll-behavior:contain}
+body:has(.sheet.open){overflow:hidden}body:has(.sheet.open) .home,body:has(.sheet.open) .panel{overflow:hidden}
+.home,.panel{overscroll-behavior:contain}
 @media (prefers-reduced-motion:reduce){.sheet,.scrim{transition:none}}
 .field{width:100%;height:44px;border-radius:12px;border:1px solid var(--line);background:var(--bg);padding:0 14px}
 textarea.field{height:110px;padding:10px 14px;direction:rtl;font-family:var(--ar);font-size:20px;line-height:1.8;resize:vertical}
@@ -432,6 +435,10 @@ body.immersive .dock.hz #mic{visibility:visible;pointer-events:auto}
 .cover[data-light] .cv-name{color:#6f5114;text-shadow:none}
 .cover-hint{position:absolute;left:0;right:0;bottom:calc(236 * var(--k));text-align:center;color:#b9a77a;font-size:12.5px;animation:hint 2.4s ease-in-out 1.2s infinite}
 .cover[data-light] .cover-hint{color:#6d5f3d}
+.cv-corner{position:absolute;top:calc(var(--sat,0px) + 6%);z-index:3;max-width:30%;padding:4px 8px;border-radius:10px;background:rgba(0,0,0,.62);font-size:12px;font-weight:700;line-height:1.25;color:#f3dc9a;pointer-events:none;transition:opacity .3s}
+.cv-corner.l{left:6%;text-align:left}.cv-corner.r{right:6%;text-align:right}
+.cover[data-light] .cv-corner{background:rgba(255,250,235,.85);color:#5a420f}
+.cover.open .cv-corner{opacity:0}
 @keyframes hint{50%{opacity:.35}}
 .cover.open .cover-leaf{transform:rotateY(-108deg);opacity:.0}
 .cover.open{background:transparent;pointer-events:none;transition:background .95s}
@@ -650,7 +657,7 @@ body.immersive .navret{display:none}
 <header class="top"><div class="top-in">
   <button class="ib" id="btnHome" aria-label="Home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11.5 12 5l8 6.5V20h-5v-5h-6v5H4z"/></svg></button>
   <button class="ib" id="btnNav" aria-label="Surahs and pages"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg></button>
-  <button class="where" id="where"><b id="whereT">My Personal Quran</b><small id="whereS">v1.0</small></button>
+  <button class="where" id="where"><b id="whereT">My Personal Quran</b><small id="whereS">v%%VERSION%%</small></button>
   <button class="ib" id="btnBlk" aria-label="Waqaf and ibtida' colours" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="4" y="5" width="16" height="5" rx="1.5" fill="currentColor" fill-opacity=".25"/><rect x="4" y="14" width="16" height="5" rx="1.5"/></svg></button>
   <button class="ib" id="btnBm" aria-label="Bookmarks"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M7 4h10v16l-5-3.5L7 20z"/></svg></button>
   <button class="ib" id="btnSearch" aria-label="Search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/></svg></button>
@@ -766,10 +773,10 @@ function syncSheet(){ const name=window.AndroidExtra?.syncName?.()||'', at=store
   sheetB.querySelector('#syOff')?.addEventListener('click',()=>{ window.AndroidExtra.syncOff(); toast('Syncing stopped on this device'); syncSheet(); }); }
 const st = {
   page: store.get('page', 1), tr: store.get('tr', false), lang: store.get('lang','ms'),
-  bg: store.get('bg','auto'), sname: store.get('sname','lat'), size: store.get('tsize', 0)||28, flow: store.get('flow', store.get('tsize',0)>0), mushaf: store.get('mushaf','v4'), blocks: store.get('blocks','off'),
+  bg: store.get('bg','auto'), sname: store.get('sname','lat'), size: store.get('tsize', 0)||28, flow: store.get('flow', store.get('tsize',0)>0), scroll: store.get('pscroll', false), mushaf: store.get('mushaf','v4'), blocks: store.get('blocks','off'),
   fn: store.get('fn', false), tl: store.get('tl', 'off')==='off'?'off':'simple', mine: new Set(store.get('mine', [])), sel: null, bm: store.get('bm', {})
 };
-function save(){ ['page','tr','lang','bg','blocks','fn','mushaf','sname','tl'].forEach(k=>store.set(k, st[k])); store.set('tsize', st.size); store.set('flow', st.flow); store.set('mine',[...st.mine]); }
+function save(){ ['page','tr','lang','bg','blocks','fn','mushaf','sname','tl'].forEach(k=>store.set(k, st[k])); store.set('tsize', st.size); store.set('flow', st.flow); store.set('pscroll', st.scroll); store.set('mine',[...st.mine]); }
 
 const BMC=[['1','Hijau'],['2','Emas'],['3','Merah'],['4','Biru'],['5','Ungu']];
 /* Ayat with hadith (Azli, 17 Oct 2026): a small book mark on the ayah number when a hadith in this app quotes or explains
@@ -878,8 +885,9 @@ function renderReader(){
   { const ws=document.getElementById('whereS'); ws.textContent = st.sname==='ar'? `الجزء ${arNum(first[5])} · صفحة ${arNum(p)}` : `Juz ${first[5]} · Page ${p}`; ws.dir='auto'; }
   let parity = blockIndex(g0)%2, h='';
   h+=`<div class="pagehead">${headName(p)}${juzLabel(first[5])}</div>`;
-  main.classList.remove('fit'); setFitMode(false); main.classList.toggle('trview', !!st.tr);
-  if(!st.tr && st.mushaf!=='text' && !glyphOff){
+  main.classList.remove('fit'); setFitMode(false); main.classList.toggle('trview', !!st.tr); main.classList.toggle('scrollv', !!st.scroll);
+  if(st.scroll){ renderScroll(p); }
+  else if(!st.tr && st.mushaf!=='text' && !glyphOff){
     renderGlyph(p);
   } else if(!st.tr && !st.flow){
     main.classList.add('fit','turning'); setFitMode(true); main.innerHTML = buildPage(p);
@@ -1056,6 +1064,44 @@ function pageFoot(p){ return `<div class="pagefoot"><span class="pageno">${pageN
 function goPage(p, sel){ st.page=Math.min(604,Math.max(1,p)); st.sel = sel ?? null; renderReader();
   if(sel!=null){ const el=main.querySelector(`[data-g="${sel}"]`); if(el) el.scrollIntoView({block:'center'}); } else window.scrollTo(0,0); }
 function goAyah(g){ goPage(A[g][4], g); }
+/* ---- Continuous scroll (Azli, 18 Oct 2026): pages one under another; more are added as you scroll either way, far
+   ones are dropped, and the top bar, last-read page and page buttons follow the page in view.
+   Uthmani text pages flow as running text (st.size); printed pages are drawn at the full width, as in landscape. ---- */
+let scrSeq=0, scrBusy=false;
+function spageInner(p){ const g0=pageStart[p], g1=pageStart[p+1]-1;
+  if(st.tr) return buildRows(p);
+  if(st.mushaf!=='text' && !glyphOff) return null;          // printed page: drawn once its font is in
+  return buildMushaf(g0,g1)+pageFoot(p); }
+function spageSize(sec){ const pg=sec.querySelector('.mpage'); if(!pg) return; const k=textZoom(), fs=pg.clientWidth/G_EM*0.985;
+  pg.style.fontSize=(fs/k)+'px'; pg.style.setProperty('--lh',(fs*1.85)+'px'); squeeze(pg); }
+function spageMake(p){ const sec=document.createElement('section'); sec.className='spage'; sec.dataset.p=p;
+  const h=spageInner(p); if(h!=null){ sec.innerHTML=h; return sec; }
+  const set=st.mushaf, my=scrSeq; sec.innerHTML='<p class="loadmsg" style="min-height:70vh">Loading page…</p>';
+  const needB=D.G.P[p-1].some(l=>l[0]==='b'), fonts=[loadPageFont(set,p)]; if(needB) fonts.push(loadPageFont(set,1));
+  Promise.all(fonts).then(r=>{ if(my!==scrSeq || !sec.isConnected) return; const top=sec.getBoundingClientRect().top, above=top<0, h0=sec.offsetHeight;
+    sec.innerHTML = r.every(Boolean) ? buildGlyph(p,set).replace(' id="mpage"','') : buildMushaf(pageStart[p],pageStart[p+1]-1)+pageFoot(p);
+    spageSize(sec); if(above) window.scrollBy(0, sec.offsetHeight-h0); });
+  return sec; }
+function renderScroll(p){ scrSeq++; main.innerHTML='<div class="sbox"></div>'; const box=main.firstChild;
+  box.appendChild(spageMake(p)); spageSize(box.lastChild); if(p<604){ box.appendChild(spageMake(p+1)); spageSize(box.lastChild); }
+  [p+2,p+3].forEach(q=>{ if(q<=604 && st.mushaf!=='text' && !st.tr) loadPageFont(st.mushaf,q); });
+  requestAnimationFrame(scrollFill); }
+function scrollFill(){ if(!st.scroll || hz || scrBusy) return; const box=main.querySelector('.sbox'); if(!box||!box.firstChild) return; scrBusy=true;
+  try{ const vh=innerHeight;
+    while(box.lastChild.getBoundingClientRect().bottom < vh*2.5 && +box.lastChild.dataset.p<604){ const q=+box.lastChild.dataset.p+1; box.appendChild(spageMake(q)); spageSize(box.lastChild); }
+    if(box.firstChild.getBoundingClientRect().top > -vh*0.6 && +box.firstChild.dataset.p>1){ const q=+box.firstChild.dataset.p-1, s0=document.documentElement.scrollHeight;
+      box.insertBefore(spageMake(q), box.firstChild); spageSize(box.firstChild); window.scrollBy(0, document.documentElement.scrollHeight-s0); }
+    while(box.children.length>7 && box.firstChild.getBoundingClientRect().bottom < -vh*3){ const h0=document.documentElement.scrollHeight; box.firstChild.remove(); window.scrollBy(0, document.documentElement.scrollHeight-h0); }
+    while(box.children.length>7 && box.lastChild.getBoundingClientRect().top > vh*4) box.lastChild.remove();
+    // the page in view: the one across the upper third of the screen
+    const y=vh/3; for(const sec of box.children){ const r=sec.getBoundingClientRect(); if(r.top<=y && r.bottom>y){ const q=+sec.dataset.p; if(q!==st.page){ st.page=q; scrollHead(q); } break; } }
+  } finally { scrBusy=false; } }
+function scrollHead(p){ const first=A[pageStart[p]];
+  { const ps=S[pageSurah(p)-1], w=document.getElementById('whereT'); w.textContent = st.sname==='ar'? `سورة ${ps[0]}` : ps[1]; w.classList.toggle('arname', st.sname==='ar'); }
+  { const ws=document.getElementById('whereS'); ws.textContent = st.sname==='ar'? `الجزء ${arNum(first[5])} · صفحة ${arNum(p)}` : `Juz ${first[5]} · Page ${p}`; }
+  clearTimeout(scrollHead.t); scrollHead.t=setTimeout(save,600); }
+let scrRaf=0; window.addEventListener('scroll',()=>{ if(!st.scroll||hz) return; cancelAnimationFrame(scrRaf); scrRaf=requestAnimationFrame(scrollFill); },{passive:true});
+window.addEventListener('resize',()=>{ if(st.scroll && !hz) main.querySelectorAll('.spage').forEach(spageSize); });
 
 /* ============================ SHEETS ============================ */
 const sheet=document.getElementById('sheet'), scrim=document.getElementById('scrim'), sheetB=document.getElementById('sheetB');
@@ -1229,14 +1275,16 @@ function setSheet(){
   <div class="label">Mushaf</div>${seg('mushaf',[['v4','Madinah 1441H'],['v4t','Madinah tajweed'],['text','Uthmani text']],st.mushaf)}
   <p class="note" id="mNote"></p>
   <div id="offWrap"></div>
+  <div class="label">Turning pages</div>${seg('pscroll',[[false,'Book (swipe)'],[true,'Scroll (continuous)']],st.scroll)}
+  <p class="note">Scroll: the pages follow one another as you scroll down, like a long scroll. Book: one page at a time, turned by swiping.</p>
   <div class="label">Surah name, juz and page</div>${seg('sname',[['lat','Latin (At-Takwīr · Juz 30)'],['ar','Arabic (سورة التكوير · الجزء ٣٠)']],st.sname)}
   <div class="label">Translation language</div>${seg('lang',[['ms','Bahasa Melayu'],['en','English']],st.lang)}
   <div class="label">Language of the Sirah, Scan &amp; check and Masjid pages</div>${seg('uiLang',[['auto','Same as translation'],['ms','Bahasa Melayu'],['en','English']],store.get('uiLang','auto'))}
   <div class="label">Home and colours</div><div class="actions"><button id="openHomeSet">${ic('blk')}Home background, bottom bar colour, book cover</button></div>
   <div class="label">Tap a word twice: meaning and sound</div>${seg('wtap',[[false,'Off'],[true,'On']],store.get('wordTap',false))}
-  <p class="note">Tapping once always shows or hides the bars. When this is On, tapping a word twice quickly shows its meaning word by word and plays it (in the text and translation views, tapping an ayah twice lists its words); tap twice again to close it.</p>
+  <p class="note">Tapping once always shows or hides the bars. When this is On, tapping a word twice quickly shows its meaning word by word, with a button to hear it (in the text and translation views, tapping an ayah twice lists its words); tap twice again to close it.</p>
   <div class="label">Transliteration (in the translation view)</div>${seg('tl',[['off','Off'],['simple','Show']],st.tl)}
-  <p class="note">Shown under the Arabic, never in place of it: a help while learning, not a replacement for reading the Arabic letters. It is approximate. Its key: <b>AA</b> = ع, <b>/</b> = hamzah (ء), <b>th</b> = ث or ذ, <b>kh</b> = خ, <b>sh</b> = ش, <b>gh</b> = غ, doubled letters = shaddah (e.g. arrahmani), <b>oo</b>/<b>ee</b> = long u/i. Check pronunciation with a teacher. From Quran.com; needs the internet once.</p>
+  <p class="note">Transliteration converts the writing system (letters) while keeping the original pronunciation. From Quran.com; needs the internet once.</p>
   <div class="label">English footnotes</div>${seg('fn',[[false,'Hide'],[true,'Show']],st.fn)}
   <div id="flowWrap"><div class="label">Uthmani text page</div>${seg('flow',[[false,'Fit page (15 lines)'],[true,'Larger text']],st.flow)}
   <p class="note">Fit page keeps the printed 15 lines on one screen. Larger text lets the lines run on, so you scroll to read the rest of the page.</p></div>
@@ -1269,6 +1317,7 @@ function setSheet(){
     document.getElementById('flowWrap').style.display = st.mushaf==='text'?'':'none';
     document.getElementById('sizeN').textContent = 'Used for translation, Hafazan'+(st.mushaf==='text'?' and Larger text.':'.')+' A fitted page always uses the largest size that fits your screen; turn the phone sideways for bigger letters.'; }; sizeLbl();
   segH('flow',v=>{ st.flow=(v==='true'); });
+  segH('pscroll',v=>{ st.scroll=(v==='true'); });
   sheetB.querySelector('#size').oninput=e=>{ st.size=22+(+e.target.value)*2; applyLook(); save(); sizeLbl(); rerender(); };
   bindMicSettings();
   sheetB.querySelector('#openHist').onclick=histSheet; sheetB.querySelector('#openAbout').onclick=aboutSheet;
@@ -1379,22 +1428,26 @@ function wordSheet(g,w){ wbStop();
   const draw=async()=>{ const x=A[g];
     openSheet(`Word by word · ${S[x[0]-1][1]} ${x[0]}:${x[1]}`, `
      <div class="seg" id="wbL" style="margin-top:0"><button data-v="id" aria-pressed="${lang==='id'}">Bahasa Indonesia</button><button data-v="en" aria-pressed="${lang==='en'}">English</button></div>
+     <div class="seg" id="wbAuto" style="margin-top:8px"><button data-v="0" aria-pressed="${!store.get('wbwAuto',false)}">Play when I tap ▶</button><button data-v="1" aria-pressed="${store.get('wbwAuto',false)}">Play automatically</button></div>
      <div id="wbBox"><p class="note">Loading…</p></div>
      <div class="row2" style="margin-top:12px;flex-wrap:wrap;gap:8px"><button class="pill" id="wbP" ${g<=0?'disabled':''}>‹ Previous ayah</button><button class="pill" id="wbAy">${ic('play')}Whole ayah</button><button class="pill" id="wbN" ${g>=N-1?'disabled':''}>Next ayah ›</button></div>
      <p class="note" style="font-size:12px;margin-top:12px">Meanings: Quran.com word by word (${lang==='id'?'Indonesian':'English'}), shown without changes. Malay is not published word by word; Indonesian is the closest. Sound: ${RECITERS[store.get('plRec','afasy')]?.qdc?RECITERS[store.get('plRec','afasy')].short:'Alafasy'}, cut from the recitation, so a word can sound joined to the next.</p>`);
     sheetB.querySelector('#wbL').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; lang=b.dataset.v; store.set('wbwLang',lang); draw(); };
+    sheetB.querySelector('#wbAuto').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; store.set('wbwAuto',b.dataset.v==='1'); sheetB.querySelectorAll('#wbAuto button').forEach(x=>x.setAttribute('aria-pressed',x===b)); };
     sheetB.querySelector('#wbP').onclick=()=>{ if(g>0){ g--; sel=null; draw(); } };
     sheetB.querySelector('#wbN').onclick=()=>{ if(g<N-1){ g++; sel=null; draw(); } };
     sheetB.querySelector('#wbAy').onclick=()=>playWords(P_(g,0),P_(g,ords(g).n-1));
     let j; try{ j=await wbwLoad(x[0]); }catch(e){ const b=document.getElementById('wbBox'); if(b) b.innerHTML='<p class="note">Could not load the meanings. They need the internet the first time; after that this surah is saved on the phone.</p>'; return; }
     const ws=wbwFor(j,g), box=document.getElementById('wbBox'); if(!box||!sheetB.contains(box)) return;
     const big = sel!=null && ws[sel] ? `<div style="text-align:center;margin:10px 0 6px"><div class="arl" style="font-size:40px;line-height:1.7">${ws[sel].t}</div>
-        <div style="font-size:18px;font-weight:600">${esc(ws[sel][lang]||'(no meaning given for this word)')}</div></div>` : '';
+        <div style="font-size:18px;font-weight:600">${esc(ws[sel][lang]||'(no meaning given for this word)')}</div>
+        <button class="pill primary" id="wbPlay" style="margin-top:10px">${ic('play')}Play word</button></div>` : '';
+    const playSel=()=>playWords(P_(g,sel),P_(g,sel), ws[sel]&&ws[sel].au?'https://audio.qurancdn.com/'+ws[sel].au:null);
     box.innerHTML = big + `<div class="wbw" dir="rtl">${ws.map((o,k)=>`<button class="wbw-w${k===sel?' on':''}" data-k="${k}"><span class="ar">${o.t}</span><small dir="auto">${esc(o[lang]||'–')}</small></button>`).join('')}</div>`;
-    box.onclick=e=>{ const b=e.target.closest('.wbw-w'); if(!b) return; sel=+b.dataset.k; const o=ws[sel];
+    box.onclick=e=>{ if(e.target.closest('#wbPlay')){ playSel(); return; } const b=e.target.closest('.wbw-w'); if(!b) return; sel=+b.dataset.k;
       box.querySelectorAll('.wbw-w').forEach(z=>z.classList.toggle('on',z===b));
-      playWords(P_(g,sel),P_(g,sel), o.au?'https://audio.qurancdn.com/'+o.au:null); draw(); };
-    if(w!=null && sel===w){ w=null; playWords(P_(g,sel),P_(g,sel), ws[sel]&&ws[sel].au?'https://audio.qurancdn.com/'+ws[sel].au:null); }
+      if(store.get('wbwAuto',false)) playSel(); draw(); };
+    if(w!=null && sel===w){ w=null; if(store.get('wbwAuto',false)) playSel(); }
   };
   draw(); }
 /* ---- Hadith linked to an ayah ----
@@ -2162,10 +2215,10 @@ async function curlFinish(c,commit){
     if(commit){ st.page=c.to; st.sel=null; renderReader(); if(c.fit) main.scrollTop=0; else window.scrollTo(0,0); await Promise.race([pageReady,new Promise(r=>setTimeout(r,1200))]); }
   } finally { curlEnd(c); clearTimeout(guard); turning=false; }
 }
-function turnPage(dir){ if(turning) return; const c=curlBegin(dir); if(!c) return turnTo(dir,0); curlSet(c,0.01); curlFinish(c,true); }
+function turnPage(dir){ if(st.scroll && !hz){ const to=st.page+dir; if(to>=1&&to<=604) goPage(to); return; } if(turning) return; const c=curlBegin(dir); if(!c) return turnTo(dir,0); curlSet(c,0.01); curlFinish(c,true); }
 // listen on the whole screen, so a swipe in the side margins (wide screens, scrolling views) also turns the page
 const onPage=e=>{ const t=e.target; return t===document.body||t===document.documentElement||main.contains(t); };
-document.addEventListener('touchstart',e=>{ if(hz||turning||e.touches.length>1||!onPage(e)) return; if(!main.contains(e.target)) lpFired=false; tx=e.touches[0].clientX; ty=e.touches[0].clientY; drag=null; },{passive:true});
+document.addEventListener('touchstart',e=>{ if(st.scroll&&!hz){ tx=null; return; } if(hz||turning||e.touches.length>1||!onPage(e)) return; if(!main.contains(e.target)) lpFired=false; tx=e.touches[0].clientX; ty=e.touches[0].clientY; drag=null; },{passive:true});
 document.addEventListener('touchmove',e=>{ if(tx===null||hz||lpFired||selecting||turning) return;
   const dx=e.touches[0].clientX-tx, dy=e.touches[0].clientY-ty;
   if(!drag){ if(Math.abs(dx)<14 || Math.abs(dx)<Math.abs(dy)*1.3) return; clearTimeout(lpT); const dir=dx>0?1:-1;
@@ -2934,7 +2987,7 @@ function histSheet(){
 async function sha(s){ const b=await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s)); return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join(''); }
 function aboutSheet(){
   openSheet('Sources & verification', `
-  <p class="note" style="margin-top:0"><b>My Personal Quran v1.0.</b> The Qur'an text is shown exactly as published by its source. The app never edits it.</p>
+  <p class="note" style="margin-top:0"><b>My Personal Quran v%%VERSION%%.</b> The Qur'an text is shown exactly as published by its source. The app never edits it.</p>
   <p id="integ" class="note">Checking the text in this copy of the app…</p>
   <ul class="src">
    <li><b>Qur'an text, waqf signs, pages and juz</b>King Fahd Glorious Qur'an Printing Complex (KFGQPC), Madinah. Uthmanic Hafs data v2.0: riwayah Hafs 'an 'Asim, 604-page Madinah Mushaf. <a href="https://qurancomplex.gov.sa" target="_blank" rel="noopener">qurancomplex.gov.sa</a></li>
@@ -2991,7 +3044,8 @@ function showCover(){ let el=document.getElementById('cover'); if(!el){ el=docum
     <div class="cv-pm"><img src="${cvSrc(g+'mid')}" alt="">${name||''}</div>
     <div class="cv-med"><img src="${cvSrc(g+'mid')}" alt=""></div><div class="cv-ttl"><div class="cv-tc"><img src="${cvSrc(g+'mid')}" alt=""></div>${name||''}</div>${hint||''}</div>`;
   el.innerHTML=`<div class="cover-leaf"><div class="cover-fr" aria-label="القرآن الكريم">
-    ${book('cv-b','')}${book('cv-g','g','<div class="cv-name">My Personal Quran</div>','<div class="cover-hint">Tap to open</div>')}</div></div>`;
+    ${book('cv-b','')}${book('cv-g','g','<div class="cv-name">My Personal Quran</div>','<div class="cover-hint">Tap to open</div>')}</div></div>
+    <div class="cv-corner l">Tap to OFF</div><div class="cv-corner r">Tap change colour</div>`;
   try{ window.AndroidSpeech?.setBarColor?.(COVER_BG[cc], !COVER_LIGHT.has(cc)); }catch(e){}
   const open=()=>{ if(el.classList.contains('open')) return; el.classList.add('open'); const h=document.getElementById('home'); if(h && !h.hidden) applyHomeBars(); else applyLook(); setTimeout(()=>{ el.hidden=true; },RM.matches?320:980); };
   /* Corners (Azli, 17 Oct 2026): top-left turns the book cover off (back on in Settings › Home); top-right changes its colour. */
