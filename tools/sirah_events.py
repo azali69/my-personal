@@ -16,11 +16,16 @@ ev(id='fil',era='pre',ce='c. 570',when={'en':'The Year of the Elephant','ms':'Ta
  q=[[105,1,5,'The event itself','Peristiwa itu sendiri']],
  h=[['bukhari',2731,'At al-Hudaybiyah the Prophet ﷺ said of his camel: "She was stopped by the One who stopped the elephant."','Di Hudaibiyah, Nabi ﷺ berkata tentang untanya: "Dia ditahan oleh (Allah) yang menahan gajah."'],
     ['tirmidhi',3619,'"I and the Messenger of Allah ﷺ were born in the Year of the Elephant" (see its grading).','"Aku dan Rasulullah ﷺ dilahirkan pada Tahun Gajah" (lihat hukumnya).']])
-ev(id='birth',era='pre',ce='c. 570',when={'en':'Monday, Rabi\' al-Awwal, Year of the Elephant','ms':'Isnin, Rabiulawal, Tahun Gajah'},
+ev(id='birth',era='pre',
+ nasab={'chain':['Muhammad ﷺ','\'Abdullah','\'Abd al-Muttalib','Hashim','\'Abd Manaf','Qusayy','Kilab','Murrah','Ka\'b','Lu\'ayy','Ghalib','Fihr','Malik','an-Nadr','Kinanah','Khuzaymah','Mudrikah','Ilyas','Mudar','Nizar','Ma\'add','\'Adnan'],
+  'ar':'محمد بن عبد الله بن عبد المطلب بن هاشم بن عبد مناف بن قصي بن كلاب بن مرة بن كعب بن لؤي بن غالب بن فهر بن مالك بن النضر بن كنانة بن خزيمة بن مدركة بن إلياس بن مضر بن نزار بن معد بن عدنان',
+  'en':'Al-Bukhari gives this lineage as the heading of the chapter on the sending of the Prophet ﷺ (Sahih al-Bukhari, Kitab Manaqib al-Ansar, before hadith 3851). Ibn al-Qayyim: up to \'Adnan it is known to be correct and agreed by the genealogists; above \'Adnan they differ (Zad al-Ma\'ad 1/70-71). That \'Adnan descends from Isma\'il (Ishmael), son of Ibrahim, is supported by the hadith "Allah chose Kinanah from the children of Isma\'il" (Muslim 5938). His mother Aminah bint Wahb ibn \'Abd Manaf ibn Zuhrah ibn Kilab: her line meets his father\'s at Kilab ibn Murrah (Nadrat an-Na\'im 1/193).',
+  'ms':'Al-Bukhari meletakkan nasab ini sebagai tajuk bab pengutusan Nabi ﷺ (Sahih al-Bukhari, Kitab Manaqib al-Ansar, sebelum hadis 3851). Ibn al-Qayyim: hingga \'Adnan ia diketahui sahih dan disepakati oleh ahli nasab; di atas \'Adnan mereka berselisih (Zad al-Ma\'ad 1/70-71). Bahawa \'Adnan daripada keturunan Ismail, anak Ibrahim, disokong oleh hadis "Allah memilih Kinanah daripada keturunan Ismail" (Muslim 5938). Ibunya Aminah binti Wahb bin \'Abd Manaf bin Zuhrah bin Kilab: nasabnya bertemu dengan nasab bapanya pada Kilab bin Murrah (Nadrat an-Na\'im 1/193).',
+  'url':'https://shamela.ws/book/22798/290'},ce='c. 570',when={'en':'Monday, Rabi\' al-Awwal, Year of the Elephant','ms':'Isnin, Rabiulawal, Tahun Gajah'},
  title={'en':'Birth of the Prophet ﷺ','ms':'Kelahiran Nabi ﷺ'},
  sum={'en':'Muhammad ﷺ was born in Makkah to Aminah bint Wahb, into Banu Hashim of Quraysh. He himself said he was born on a Monday. His father \'Abdullah had died before his birth, according to the historians.',
       'ms':'Muhammad ﷺ dilahirkan di Makkah oleh Aminah binti Wahb, dalam Bani Hasyim dari Quraisy. Baginda sendiri bersabda bahawa baginda lahir pada hari Isnin. Menurut ahli sejarah, bapanya, Abdullah, telah wafat sebelum baginda lahir.'},
- h=[['muslim',2750,'"That is the day I was born, and the day revelation came to me" (about fasting on Monday).','"Itulah hari aku dilahirkan dan hari wahyu diturunkan kepadaku" (tentang puasa hari Isnin).']],
+ h=[['muslim',2750,'"That is the day I was born, and the day revelation came to me" (about fasting on Monday).','"Itulah hari aku dilahirkan dan hari wahyu diturunkan kepadaku" (tentang puasa hari Isnin).'],['muslim',5938,'"Allah chose Kinanah from the children of Isma\'il, chose Quraysh from Kinanah, chose Banu Hashim from Quraysh, and chose me from Banu Hashim."','"Allah memilih Kinanah daripada keturunan Ismail, memilih Quraisy daripada Kinanah, memilih Bani Hasyim daripada Quraisy, dan memilih aku daripada Bani Hasyim."']],
  pop=[{'kind':'none','en':'The date 12 Rabi\' al-Awwal: the best-known date, but no authentic hadith fixes the day of the month; historians give 2, 8, 9, 10, 12 and others.','ms':'Tarikh 12 Rabiulawal: tarikh paling masyhur, tetapi tiada hadis sahih yang menetapkan harinya; ahli sejarah menyebut 2, 8, 9, 10, 12 dan lain-lain.'},
       {'kind':'hist','en':'His father \'Abdullah died in Madinah before he was born: told by the historians (Ibn Ishaq and others); not in an authenticated hadith.','ms':'Bapanya, Abdullah, wafat di Madinah sebelum baginda lahir: diriwayatkan oleh ahli sejarah (Ibn Ishaq dan lain-lain); tiada dalam hadis yang disahkan.'},
       {'kind':'none','en':'At his birth the palace of Chosroes shook, fourteen balconies fell and the fire of the Persians went out: reported by al-Bayhaqi and Abu Nu\'aym with a chain of unknown narrators; not established.','ms':'Ketika baginda lahir, istana Kisra bergegar, empat belas anjungnya runtuh dan api sembahan Parsi terpadam: diriwayatkan oleh al-Baihaqi dan Abu Nu\'aim dengan sanad yang perawinya tidak dikenali; tidak sabit.'}])
@@ -55,10 +60,11 @@ ev(id='fudul',era='pre',ce='c. 590',when={'en':'Age about 20','ms':'Usia kira-ki
  pop=[{'kind':'hist','en':'The details of the War of Fijar and of the Pact of al-Fudul, and his words "If I were called to it in Islam I would answer": told by Ibn Ishaq and al-Bayhaqi; not in the authenticated collections.','ms':'Butiran Perang Fijar dan Perjanjian al-Fudul, serta sabdanya "Jika aku diseru kepadanya dalam Islam, nescaya aku menyahutnya": diriwayatkan oleh Ibn Ishaq dan al-Baihaqi; tiada dalam himpunan hadis yang disahkan.'}])
 ev(id='khadijah',era='pre',ce='c. 595',when={'en':'Age 25 (according to most historians)','ms':'Usia 25 tahun (menurut kebanyakan ahli sejarah)'},
  title={'en':'Marriage to Khadijah','ms':'Perkahwinan dengan Khadijah'},
- sum={'en':'He married Khadijah bint Khuwaylid, a noble and wealthy woman of Quraysh; the historians say this followed his leading her trade caravan to Syria. She bore him all his children except Ibrahim. He said she was the best of the women of her time.',
-      'ms':'Baginda berkahwin dengan Khadijah binti Khuwailid, wanita Quraisy yang mulia dan berharta; menurut ahli sejarah, ini berlaku selepas baginda membawa kafilah dagangnya ke Syam. Beliau melahirkan semua anak baginda kecuali Ibrahim. Baginda bersabda bahawa beliau sebaik-baik wanita pada zamannya.'},
- h=[['bukhari',3815,'"The best of the world\'s women is Mary, and the best of the world\'s women is Khadijah."','"Sebaik-baik wanita dunia ialah Maryam, dan sebaik-baik wanita dunia ialah Khadijah."']],
- pop=[{'kind':'hist','en':'His trade journey for Khadijah with her servant Maysarah, and their ages at marriage (he 25, she 40): told by the historians; other ages are also reported.','ms':'Perjalanan dagang untuk Khadijah bersama khadamnya Maisarah, dan usia mereka ketika berkahwin (baginda 25, beliau 40): diriwayatkan oleh ahli sejarah; usia lain juga disebut.'}])
+ sum={'en':'He married Khadijah bint Khuwaylid, a noble and wealthy woman of Quraysh; the historians say this followed his leading her trade caravan to Syria. She bore him all his children except Ibrahim, his son by Mariyah al-Qibtiyyah, born in Madinah in Dhu al-Hijjah 8 AH (Ibn al-Athir, Usd al-Ghabah 1/49), who died as an infant (al-Bukhari 1303). He said she was the best of the women of her time.',
+      'ms':'Baginda berkahwin dengan Khadijah binti Khuwailid, wanita Quraisy yang mulia dan berharta; menurut ahli sejarah, ini berlaku selepas baginda membawa kafilah dagangnya ke Syam. Beliau melahirkan semua anak baginda kecuali Ibrahim, anak baginda dengan Mariyah al-Qibtiyyah, yang lahir di Madinah pada Zulhijjah tahun 8 H (Ibn al-Athir, Usd al-Ghabah 1/49) dan wafat ketika masih bayi (al-Bukhari 1303). Baginda bersabda bahawa beliau sebaik-baik wanita pada zamannya.'},
+ h=[['bukhari',3815,'"The best of the world\'s women is Mary, and the best of the world\'s women is Khadijah."','"Sebaik-baik wanita dunia ialah Maryam, dan sebaik-baik wanita dunia ialah Khadijah."'],['bukhari',1303,'Ibrahim, the son of the Prophet ﷺ, dies as an infant: "The eyes shed tears and the heart grieves..."','Ibrahim, anak Nabi ﷺ, wafat ketika bayi: "Mata menitiskan air mata dan hati bersedih..."']],
+ pop=[{'kind':'hist','en':'His trade journey for Khadijah with her servant Maysarah: told by Ibn Ishaq (Ibn Hisham, as-Sirah an-Nabawiyyah) without a checked chain.','ms':'Perjalanan dagang untuk Khadijah bersama khadamnya Maisarah: diriwayatkan oleh Ibn Ishaq (Ibn Hisyam, as-Sirah an-Nabawiyyah) tanpa sanad yang disemak.'},
+      {'kind':'weak','en':'Khadijah\'s age at the marriage: "40" (he was 25) is from al-Waqidi in Ibn Sa\'d, at-Tabaqat al-Kubra 1/132, and al-Waqidi is matruk (abandoned) as a narrator; Ibn Ishaq said 28 (al-Hakim, al-Mustadrak 3/200), without a chain. No authentic report fixes her age.','ms':'Usia Khadijah ketika berkahwin: "40" (baginda 25) datang daripada al-Waqidi dalam Ibn Sa\'d, at-Tabaqat al-Kubra 1/132, dan al-Waqidi seorang perawi yang matruk (ditinggalkan); Ibn Ishaq menyebut 28 (al-Hakim, al-Mustadrak 3/200), tanpa sanad. Tiada riwayat sahih yang menetapkan usianya.','src':"Muhammad al-'Awshan, Ma Sha'a wa Lam Yathbut fi as-Sirah an-Nabawiyyah, p. 18",'url':'https://shamela.ws/book/97932/17'}])
 ev(id='kabah',era='pre',ce='c. 605',when={'en':'Age about 35','ms':'Usia kira-kira 35 tahun'},
  title={'en':'Rebuilding the Ka\'bah and the Black Stone','ms':'Pembinaan semula Kaabah dan Hajarul Aswad'},
  sum={'en':'Quraysh rebuilt the Ka\'bah and he carried stones with his uncle al-\'Abbas. According to Musnad Ahmad and the historians, when the clans disputed who would put the Black Stone back in place, they accepted his judgement: he placed it on a cloth, each clan lifted a corner, and he set it with his own hand.',
@@ -103,7 +109,7 @@ ev(id='persecution',era='mak',ce='613–619',when={'en':'Years 4 to 10 of prophe
  sum={'en':'Quraysh tortured the weak Muslims, among them Bilal, \'Ammar and his parents, and Khabbab; Sumayyah, \'Ammar\'s mother, was killed, according to the historians. The Prophet ﷺ himself was harmed: camel entrails were thrown on him while he prostrated at the Ka\'bah, and \'Uqbah ibn Abi Mu\'ayt tried to strangle him.',
       'ms':'Quraisy menyeksa orang Islam yang lemah, antaranya Bilal, Ammar dan ibu bapanya, serta Khabbab; menurut ahli sejarah, Sumayyah, ibu Ammar, dibunuh. Nabi ﷺ sendiri disakiti: perut unta dilemparkan ke atasnya ketika baginda sujud di Kaabah, dan Uqbah bin Abi Mu\'ait cuba mencekiknya.'},
  h=[['ibnmajah',150,'The first to declare Islam, and how they were made to suffer.','Golongan pertama yang mengisytiharkan Islam, dan bagaimana mereka diseksa.'],['bukhari',240,'Camel entrails thrown on him while he prostrated.','Perut unta dilemparkan ke atasnya ketika baginda sujud.'],['bukhari',3856,'\'Uqbah tried to strangle him; Abu Bakr defended him.','Uqbah cuba mencekiknya; Abu Bakar membelanya.']],
- pop=[{'kind':'hist','en':'Bilal under the rock in the midday sun saying "Ahad, Ahad", and Sumayyah as the first martyr of Islam: told by Ibn Ishaq and others; widely accepted by historians, not in the authenticated collections in this form.','ms':'Bilal di bawah batu di tengah panas sambil menyebut "Ahad, Ahad", dan Sumayyah sebagai syahid pertama Islam: diriwayatkan oleh Ibn Ishaq dan lain-lain; diterima luas oleh ahli sejarah, tiada dalam himpunan hadis yang disahkan dalam bentuk ini.'}])
+ pop=[{'kind':'hist','en':'Bilal under a rock in the midday sun, and Sumayyah as the first martyr of Islam: told by Ibn Ishaq and others, not in the authenticated collections in this form. That Bilal kept saying "Ahad, Ahad" under torture is in Ibn Majah 150 (in this app).','ms':'Bilal ditindih batu di tengah panas, dan Sumayyah sebagai syahid pertama Islam: diriwayatkan oleh Ibn Ishaq dan lain-lain, tiada dalam himpunan hadis yang disahkan dalam bentuk ini. Bahawa Bilal terus menyebut "Ahad, Ahad" ketika diseksa ada dalam Ibn Majah 150 (dalam aplikasi ini).'}])
 ev(id='habasyah',era='mak',ce='615',when={'en':'5th year of prophethood','ms':'Tahun ke-5 kenabian'},
  title={'en':'Emigration to Abyssinia','ms':'Hijrah ke Habsyah'},
  sum={'en':'To escape persecution, a group of Muslims emigrated to Abyssinia, whose Christian king, the Negus (an-Najashi), protected them. Ja\'far ibn Abi Talib explained Islam to him. The Negus later accepted Islam, and when he died the Prophet ﷺ prayed the funeral prayer for him in absence.',
@@ -328,3 +334,49 @@ ev(id='wafat',era='mad',ce='632',when={'en':'Monday, Rabi\' al-Awwal, 11 AH (age
  q=[[3,144,144,'Recited by Abu Bakr that day','Dibaca oleh Abu Bakar pada hari itu'],[39,30,30,'"Indeed you will die, and they will die"','"Sesungguhnya engkau akan mati dan mereka juga akan mati"']],
  h=[['bukhari',4463,'"With the Highest Companion."','"Bersama teman yang Maha Tinggi."'],['bukhari',3667,'Abu Bakr\'s words and 3:144.','Kata-kata Abu Bakar dan 3:144.'],['bukhari',4466,'He died at sixty-three.','Baginda wafat pada usia enam puluh tiga.']],
  pop=[{'kind':'none','en':'12 Rabi\' al-Awwal as the day of his death: the best-known date, but scholars give other days (1st, 2nd, 12th); that it was a Monday in Rabi\' al-Awwal is established.','ms':'12 Rabiulawal sebagai hari kewafatan: tarikh paling masyhur, tetapi ulama menyebut hari-hari lain (1, 2, 12); bahawa ia hari Isnin dalam bulan Rabiulawal adalah sabit.'}])
+
+# ---- Sources for "reports in other books" and the popular stories (Azli, 17 Oct 2026: name the book) ----
+IH='Ibn Hisham, as-Sirah an-Nabawiyyah (from Ibn Ishaq)'
+AW='https://shamela.ws/book/97932/'
+AWB="Muhammad al-'Awshan, Ma Sha'a wa Lam Yathbut fi as-Sirah an-Nabawiyyah"
+SRC={
+ ('birth','pop',1):(IH+"; Ibn Sa'd, at-Tabaqat al-Kubra",None),
+ ('birth','pop',2):("al-Bayhaqi, Dala'il an-Nubuwwah; Abu Nu'aym, Dala'il an-Nubuwwah",None),
+ ('halimah','pop',0):(IH+", from Halimah",None),
+ ('aminah','pop',0):(IH+"; Ibn Sa'd, at-Tabaqat al-Kubra",None),
+ ('fudul','ext',0):("Musnad Ahmad (3/193); al-Bukhari, al-Adab al-Mufrad 567. Al-Haythami (Majma' az-Zawa'id 8/172): its narrators are those of the Sahih; the Musnad's editors: isnad sahih. The 'Mutayyabin' here is taken to mean the Pact of al-Fudul, whose members came from it",'https://islamqa.info/ar/answers/469391'),
+ ('fudul','pop',0):(IH+"; the words \"If I were called to it in Islam I would answer\": Ibn Kathir, al-Bidayah wa an-Nihayah 3/456, from al-Humaydi",'https://islamqa.info/ar/answers/469391'),
+ ('kabah','ext',0):("Musnad Ahmad, from the mawla of Mujahid (as-Sa'ib); al-Haythami, Majma' az-Zawa'id 3/294: \"Hilal ibn Khabbab is in it; he is trustworthy but has been criticised; the rest are narrators of the Sahih\"; also "+IH,'https://dorar.net/h/y1SBgEZQ'),
+ ('kabah','pop',0):(IH,None),
+ ('first','pop',0):(IH,None),
+ ('persecution','pop',0):("\"Ahad, Ahad\": Ibn Majah 150 (in this app; al-Albani hasan sahih). The rock on his chest: "+IH+". Sumayyah as the first martyr: Ibn Sa'd, at-Tabaqat al-Kubra",None),
+ ('habasyah','ext',0):("Musnad Ahmad, from Umm Salamah; Shu'ayb al-Arna'ut: sahih (Takhrij Siyar A'lam an-Nubala' 1/216); also "+IH,'https://dorar.net/h/fwdzGYyg'),
+ ('umar','pop',0):(AWB+", p. 54 (Ibn Ishaq's account: ar-Rawd al-Unuf 3/265)",AW+'53'),
+ ('umar','pop',1):(AWB+", p. 52: Ibn Ishaq from an unnamed man of Aslam (ar-Rawd al-Unuf 3/118); al-Hakim, al-Mustadrak 3/212-213, which adh-Dhahabi called mu'dal (two or more narrators missing)",AW+'51'),
+ ('boycott','pop',0):(IH+"; Ibn Sa'd, at-Tabaqat al-Kubra",None),
+ ('huzn','pop',0):(AWB+", p. 67: the only report is in al-Qastallani, al-Mawahib al-Ladunniyyah, from \"Sa'id\" without a chain",AW+'66'),
+ ('taif','pop',0):(IH+", from Muhammad ibn Ka'b al-Qurazi (mursal: no Companion named); Ibn Hajar, Fath al-Bari 6/315, from Musa ibn 'Uqbah",AW+'64'),
+ ('taif','pop',1):("al-Albani, Silsilat al-Ahadith ad-Da'ifah 6/486 and Fiqh as-Sirah p. 126: weak; Ibn Ishaq gives it with no chain",AW+'64'),
+ ('aqabah','pop',0):(IH,None),
+ ('hijrah','pop',0):("Musnad Ahmad, from Ibn 'Abbas; Ibn Kathir, al-Bidayah wa an-Nihayah 3/181: hasan; Ibn Hajar, Fath al-Bari 7/236: hasan, yet in Taqrib at-Tahdhib he called its narrator 'Uthman al-Jazari weak ("+AWB+", p. 80)",AW+'79'),
+ ('hijrah','pop',1):("Ibn Kathir, al-Fusul fi Sirat ar-Rasul p. 52, with \"it is said\" ("+AWB+", p. 80)",AW+'79'),
+ ('hijrah','pop',2):("'Ali in the bed: Musnad Ahmad, from Ibn 'Abbas (the same report as the spider). Umm Ma'bad: al-Hakim, al-Mustadrak; al-Bayhaqi, Dala'il an-Nubuwwah",None),
+ ('madinah','pop',0):("al-Bayhaqi, Dala'il an-Nubuwwah, from 'Ubaydullah ibn 'A'ishah (d. 228 AH); al-'Iraqi, Takhrij Ahadith al-Ihya' 3/1327: mu'dal; Ibn Hajar, Fath al-Bari 7/261-262: broken chain, and it may belong to the return from Tabuk",AW+'86'),
+ ('ukhuwwah','pop',0):(IH+"; Abu 'Ubayd, al-Amwal",None),
+ ('badr','pop',0):(IH,None),
+ ('qaynuqa','pop',0):("Ibn Hisham, as-Sirah an-Nabawiyyah, from Abu 'Awn",None),
+ ('uhud','pop',0):(IH,None),
+ ('nadir','pop',0):(IH+"; Musa ibn 'Uqbah, al-Maghazi",None),
+ ('khandaq','pop',0):("al-Waqidi, al-Maghazi; Ibn Sa'd, at-Tabaqat al-Kubra; Ibn Hisham, as-Sirah an-Nabawiyyah (\"it is said\")",None),
+ ('fath','pop',0):(IH+"; al-Bayhaqi, as-Sunan al-Kubra",None),
+ ('wafat','pop',0):(IH+" gives 12 Rabi' al-Awwal",None),
+}
+EXTBOOK={'fudul':'Musnad Ahmad, al-Adab al-Mufrad','kabah':'Musnad Ahmad','habasyah':'Musnad Ahmad'}
+for _e in E:
+    for kind in ('ext','pop'):
+        for i,x in enumerate(_e.get(kind,[])):
+            r=SRC.get((_e['id'],kind,i))
+            if r:
+                x['src']=r[0]
+                if r[1]: x['url']=r[1]
+    if _e['id'] in EXTBOOK: _e['extb']=EXTBOOK[_e['id']]
