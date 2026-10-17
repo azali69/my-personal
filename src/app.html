@@ -94,9 +94,6 @@ main.fit{padding-block:8px 76px}
 .num.bm{color:var(--bmc);background:color-mix(in srgb,var(--bmc) 26%,transparent);border-radius:50%;box-shadow:0 0 0 .06em var(--bmc)}
 .mline.bl{align-items:center}
 .mline.hd{align-items:center}
-.sframe{flex:1;height:82%;display:flex;align-items:center;justify-content:center;gap:.5em;position:relative;padding-inline:.6em;border:1px solid var(--line);border-radius:.4em;background:var(--surface);font-size:.86em}
-.sframe small{font-family:var(--ar);font-size:.68em;color:var(--muted);position:absolute;left:.7em;top:50%;transform:translateY(-50%)}
-.sframe .sn{color:var(--accent)}
 /* Ornamented surah frame: King Fahd Complex surah-header font (QUL). One glyph per surah, frame and name together. */
 .shdr{flex:1;align-self:stretch;container-type:size;display:flex;align-items:center;justify-content:center;color:var(--hdr,var(--accent))}
 .shdr .ow{position:relative;display:inline-block;font-size:min(30cqw,230cqh);line-height:1}
@@ -116,12 +113,9 @@ main.fit{padding-block:8px 76px}
 .mline .sh2,.sh2{background:color-mix(in srgb,var(--accent) 17%,var(--bg))}
 .mline .mr,.ay.mr,.row.mr{background:color-mix(in srgb,#4a78b8 22%,var(--bg));--bsc:color-mix(in srgb,#4a78b8 80%,var(--fg))}
 .mline .rk,.ay.rk,.row.rk{background:color-mix(in srgb,#c79a3a 18%,var(--bg));--bsc:color-mix(in srgb,#c79a3a 85%,var(--fg))}
-.mline .rk2,.ay.rk2,.row.rk2{background:color-mix(in srgb,#c79a3a 9%,var(--bg));--bsc:color-mix(in srgb,#c79a3a 85%,var(--fg))}
 .mline .sh2,.ay.sh2,.row.sh2{--bsc:color-mix(in srgb,var(--accent) 85%,var(--fg))}
 
 body:has(.selbar) .toast{bottom:auto;top:calc(80px + var(--sat))}
-.rkedit .mline [data-g],.rkedit .ay,.rkedit .row{cursor:cell}
-.rkstart{box-shadow:inset -3px 0 0 #b07d1f}
 .mline .pick{background:color-mix(in srgb,var(--accent) 38%,transparent)!important}
 main{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
 .selbar.mini{left:0;right:0;bottom:auto;padding:0 8px}
@@ -169,7 +163,6 @@ main.turnfx{will-change:transform;backface-visibility:hidden;-webkit-backface-vi
 .gpage .mline.cen{justify-content:center}
 .gpage .mline.cen>.sp{flex:0 0 .12em}
 .gpage .mline.bl{justify-content:center;gap:.25em}
-.gpage .hd .sframe{font-family:var(--ar)}
 .mline.sq{transform-origin:center}
 main.turning{visibility:hidden}
 .loadmsg{color:var(--muted);text-align:center;padding:40px 8px}
@@ -822,7 +815,6 @@ if(!store.get('blk2',false)){ if(st.blocks==='ruku') st.blocks='off'; store.set(
 const SETK={mine:'myb',myruku:'myr'};
 function curSet(){ const k=SETK[st.blocks]; return k?st[k]:null; }
 function saveSet(k){ st[k].sort((a,b)=>a.s-b.s); store.set(k,st[k]); }
-function saveMyb(){ saveSet('myb'); }
 function myBlockAt(p,arr){ arr=arr||curSet()||[]; let lo=0,hi=arr.length-1; while(lo<=hi){ const m=(lo+hi)>>1, b=arr[m]; if(p<b.s) hi=m-1; else if(p>b.e) lo=m+1; else return m; } return -1; }
 function myBlockInAyah(g,arr){ arr=arr||curSet()||[]; const a=P_(g,0), z=P_(g,511); for(let i=0;i<arr.length;i++){ const b=arr[i]; if(b.s<=z && b.e>=a) return i; if(b.s>z) break; } return -1; }
 function addMyBlock(s,e,k){ k=k||'myb'; if(s>e) [s,e]=[e,s]; const out=[];
@@ -852,32 +844,8 @@ function rkTone(g){ const k=st.blocks; if(k!==rkParKey){ rkPar=new Uint8Array(N)
 function wshade(g,w){ const t=TONES[st.blocks]; if(t) return myBlockAt(P_(g,w))<0?'':t; return st.blocks==='ruku'?rkTone(g):''; }
 function ashade(g){ const t=TONES[st.blocks]; if(t) return myBlockInAyah(g)<0?'':t; return st.blocks==='ruku'?rkTone(g):''; }
 function sameGroup(pg,pw,g,w){ if(TONES[st.blocks]){ const a=myBlockAt(P_(pg,pw)); return a>=0 && a===myBlockAt(P_(g,w)); } return pg===g || !isBlockStart(g); }
-/* ---- Ruku' sections: original Tanzil set plus your saved changes ---- */
-let rkEd=Object.assign({add:[],del:[]}, store.get('rkEdit',{})); let rkAdd=new Set(rkEd.add), rkDel=new Set(rkEd.del); let rkDraft=null;
+/* ---- Ruku' sections (Tanzil), read-only; your own sections are My ruku' (myr) ---- */
 function rkIsStart(g){ return A[g][1]===1 || rukuStarts.has(g); }
-function rkEffective(){ const s=new Set(); for(let g=0;g<N;g++) if(A[g][1]!==1 && ((rukuStarts.has(g)&&!rkDel.has(g))||rkAdd.has(g))) s.add(g); return s; }
-function rkChanges(){ return rkAdd.size+rkDel.size; }
-function rkSave(draft){ rkAdd=new Set(); rkDel=new Set();
-  for(const g of draft) if(!rukuStarts.has(g)) rkAdd.add(g);
-  for(const g of rukuStarts) if(A[g][1]!==1 && !draft.has(g)) rkDel.add(g);
-  store.set('rkEdit',{add:[...rkAdd],del:[...rkDel]}); }
-let rkBar=null;
-function rkEditStart(){ st.blocks='ruku'; store.set('lastBlocks','ruku'); save(); syncBlkBtn(); rkDraft=rkEffective(); closeSheet(); document.body.classList.add('rkedit');
-  if(rkBar) rkBar.remove(); rkBar=document.createElement('div'); rkBar.className='selbar';
-  rkBar.innerHTML=`<div class="selbar-in"><div class="selbar-t" id="rkT"></div><div class="selbar-b">
-    <button class="pri" data-a="save">Save</button><button data-a="cancel">Cancel</button><button data-a="surah">Original for this surah</button></div></div>`;
-  document.body.appendChild(rkBar); rkInfo();
-  rkBar.onclick=e=>{ const b=e.target.closest('button'); if(!b) return; const a=b.dataset.a;
-    if(a==='save'){ rkSave(rkDraft); rkEditEnd(); toast(`Ruku' sections saved${rkChanges()?` · ${rkChanges()} change${rkChanges()===1?'':'s'} from the original`:''}`); }
-    else if(a==='cancel'){ rkEditEnd(); toast('No changes saved'); }
-    else if(a==='surah'){ const sNo=A[pageStart[st.page]][0], s0=surahStart[sNo], s1=s0+S[sNo-1][5]-1;
-      for(let g=s0;g<=s1;g++){ rkDraft.delete(g); if(rukuStarts.has(g)&&A[g][1]!==1) rkDraft.add(g); } rkInfo(); renderReader(); } };
-  renderReader(); }
-function rkInfo(){ const t=document.getElementById('rkT'); if(t) t.textContent="Editing ruku' sections: tap an ayah to start a new section there. Tap the first ayah of a section to join it to the one before."; }
-function rkEditEnd(){ rkDraft=null; document.body.classList.remove('rkedit'); if(rkBar){ rkBar.remove(); rkBar=null; } renderReader(); }
-function rkToggle(g){ if(A[g][1]===1){ toast('Ayah 1 always starts a section'); return; }
-  if(rkDraft.has(g)){ rkDraft.delete(g); toast(`Joined ${A[g][0]}:${A[g][1]} to the section before`); } else { rkDraft.add(g); toast(`New section starts at ${A[g][0]}:${A[g][1]}`); }
-  renderReader(); }
 function blockFor(g){
   if(TONES[st.blocks]){ const i=myBlockInAyah(g); if(i<0) return null; const b=curSet()[i]; return {g0:Pg(b.s),g1:Pg(b.e),b,label:blockLabel(b)}; }
   if(st.blocks==='ruku'){ const [a,z]=blockRange(g); return {g0:a,g1:z,b:null,label:`Ruku' ${A[a][0]}:${A[a][1]}–${A[z][1]}`}; }
@@ -1351,29 +1319,38 @@ function copySheet(g,gEnd){
 
 
 /* ---- Transliteration (Quran.com), loaded when switched on, kept on the phone ---- */
-const TL={}; const TL_BASES=(()=>{ const b=[]; if(/github\.io$/.test(location.hostname)) b.push('translit/');
-  b.push('https://azali69.github.io/my-personal/translit/','https://cdn.jsdelivr.net/gh/azali69/my-personal@main/translit/'); return b; })();
+/* ---- Data files kept in this app's GitHub repository, saved on the phone after first use (cache "mpq-tafsir") ----
+   One loader for all of them. Order: the copy beside the page (GitHub Pages), GitHub Pages, then jsDelivr's copy of the repo.
+   o.ok(j): the file is the expected shape. o.v: a version; a kept copy with another version is replaced (kutub).
+   o.fresh: always ask the network first (small files that change). o.revalidate: use the kept copy now and check
+   for a newer one in the background, so corrected data reaches the phone on the next open. o.stale(j): a kept copy
+   to use only when offline. o.nullOn404: a file that does not exist is an answer (null), not an error. */
+const DL_GH='https://azali69.github.io/my-personal/', DL_CDN='https://cdn.jsdelivr.net/gh/azali69/my-personal@main/';
+function dlBases(dir,wide){ const b=[]; if(/github\.io$/.test(location.hostname) || (wide && !window.AndroidSpeech && /^https?:/.test(location.protocol))) b.push(dir+'/');
+  b.push(DL_GH+dir+'/',DL_CDN+dir+'/'); return b; }
+async function dlGet(dir,path,o={}){ const base='https://mpq.local/'+dir+'/'+path, q=o.v?'?v='+o.v:'', id=base+q; let c=null;
+  const good=j=>!o.ok||o.ok(j);
+  const keep=async r=>{ try{ if(c){ if(o.v) for(const k of await c.keys(base,{ignoreSearch:true})) if(k.url!==id) await c.delete(k); await c.put(id,r); } }catch(e){} };
+  try{ c=await caches.open('mpq-tafsir'); }catch(e){}
+  if(!o.fresh){ try{ const r=c&&await c.match(id); if(r){ const j=await r.json(); if(good(j) && !(o.stale&&o.stale(j))){
+      if(o.revalidate) (async()=>{ for(const b of dlBases(dir,o.wide)){ try{ const n=await fetch(b+path+q,{cache:'no-cache'}); if(!n.ok) continue; if(good(await n.clone().json())) await keep(n); return; }catch(e){} } })();
+      return j; } } }catch(e){} }
+  for(const b of dlBases(dir,o.wide)){ try{ const r=await fetch(b+path+q,{cache:'no-cache'}); if(o.nullOn404 && r.status===404) return null; if(!r.ok) continue;
+      const j=await r.clone().json(); if(!good(j)) continue; await keep(r); return j; }catch(e){} }
+  try{ const r=c&&await c.match(base,{ignoreSearch:true}); if(r){ const j=await r.json(); if(good(j)) return j; } }catch(e){}   // offline: an older kept copy is better than nothing
+  throw new Error('offline'); }
+const TL={};
 let tlBusy={};
 async function tlLoad(kind){ if(TL[kind] || tlBusy[kind]) return; tlBusy[kind]=true;
-  const id='https://mpq.local/translit/'+kind+'.json'; let c=null;
-  try{ c=await caches.open('mpq-tafsir'); const r=await c.match(id); if(r){ TL[kind]=await r.json(); tlBusy[kind]=false; rerender(); return; } }catch(e){}
-  for(const b of TL_BASES){ try{ const r=await fetch(b+kind+'.json',{cache:'no-cache'}); if(!r.ok) continue; const j=await r.clone().json();
-      if(!Array.isArray(j) || j.length!==114) continue; try{ c && await c.put(id,r); }catch(e){}
-      TL[kind]=j; tlBusy[kind]=false; rerender(); return; }catch(e){} }
-  tlBusy[kind]=false; toast('Could not load the transliteration. It needs the internet the first time.'); }
+  try{ TL[kind]=await dlGet('translit',kind+'.json',{ok:j=>Array.isArray(j)&&j.length===114,revalidate:true}); tlBusy[kind]=false; rerender(); }
+  catch(e){ tlBusy[kind]=false; toast('Could not load the transliteration. It needs the internet the first time.'); } }
 function tlText(g){ const a=A[g], d=TL[st.tl]; if(!d){ tlLoad(st.tl); return '…'; } return (d[a[0]-1]||[])[a[1]-1]||''; }
 /* ---- Word by word: meaning (Quran.com, English / Indonesian) and sound ----
    Meanings: Quran.com word-by-word translation, unchanged, loaded per surah and kept on the phone.
    Sound: the word as recited by the chosen reciter, cut from his recording with the word timings (Alafasy, as-Sudais,
    Yasser ad-Dussary); otherwise Quran.com's single-word recording. */
-const WBW_BASES=(()=>{ const b=[]; if(/github\.io$/.test(location.hostname)) b.push('wbw/');
-  b.push('https://azali69.github.io/my-personal/wbw/','https://cdn.jsdelivr.net/gh/azali69/my-personal@main/wbw/'); return b; })();
 const wbwMem=new Map();
-async function wbwLoad(s){ if(wbwMem.has(s)) return wbwMem.get(s); const id='https://mpq.local/wbw/'+p3(s)+'.json'; let c=null;
-  try{ c=await caches.open('mpq-tafsir'); const r=await c.match(id); if(r){ const j=await r.json(); wbwMem.set(s,j); return j; } }catch(e){}
-  for(const b of WBW_BASES){ try{ const r=await fetch(b+p3(s)+'.json',{cache:'no-cache'}); if(!r.ok) continue; const j=await r.clone().json(); if(!j.en) continue;
-      try{ c && await c.put(id,r); }catch(e){} wbwMem.set(s,j); return j; }catch(e){} }
-  throw new Error('offline'); }
+async function wbwLoad(s){ if(wbwMem.has(s)) return wbwMem.get(s); const j=await dlGet('wbw',p3(s)+'.json',{ok:j=>!!(j&&j.en),revalidate:true}); wbwMem.set(s,j); return j; }
 /* the meaning list of an ayah, one entry per word of our text (Quran.com splits 7 ayat differently: matched by the Arabic) */
 function wbwFor(j,g){ const x=A[g], toks=x[2].split(' ').filter(t=>!MK.has(t)), i=x[1]-1, en=j.en[i]||[], id=j.id[i]||[], ar=j.ar[i]||[], au=j.audio[i]||[];
   if(en.length===toks.length) return toks.map((t,k)=>({t,en:en[k],id:id[k],au:au[k]}));
@@ -1424,15 +1401,9 @@ function wordSheet(g,w){ wbStop();
    Only where the hadith books make the link themselves: the chapters of Kitab at-Tafsir in Sahih al-Bukhari (al-Bukhari's own
    chapter headings name the ayah) and the narrations of Kitab at-Tafsir in Sahih Muslim that quote the ayah. Built by
    tools/build_hadith.py; links it could not confirm both ways are listed in hadith/review.txt. */
-const HD_BASES=(()=>{ const b=[]; if(/github\.io$/.test(location.hostname)) b.push('hadith/');
-  b.push('https://azali69.github.io/my-personal/hadith/','https://cdn.jsdelivr.net/gh/azali69/my-personal@main/hadith/'); return b; })();
-const hdMem=new Map(); let hdIdx=null;
-async function hdGet(name){ if(hdMem.has(name)) return hdMem.get(name); const id='https://mpq.local/hadith/'+name; let c=null;
-  try{ c=await caches.open('mpq-tafsir'); const r=await c.match(id); if(r && name!=='index.json'){ const j=await r.json(); hdMem.set(name,j); return j; } }catch(e){}
-  for(const b of HD_BASES){ try{ const r=await fetch(b+name,{cache:'no-cache'}); if(r.status===404) return null; if(!r.ok) continue; const j=await r.clone().json();
-      try{ c && await c.put(id,r); }catch(e){} hdMem.set(name,j); return j; }catch(e){} }
-  try{ const r=c&&await c.match(id); if(r) return await r.json(); }catch(e){}
-  throw new Error('offline'); }
+const hdMem=new Map();
+async function hdGet(name){ if(hdMem.has(name)) return hdMem.get(name);
+  const j=await dlGet('hadith',name,{fresh:name==='index.json',revalidate:true,nullOn404:true}); if(j!==null) hdMem.set(name,j); return j; }
 function hdItem(h,lang){ const book=h.c==='bukhari'?'Sahih al-Bukhari':'Sahih Muslim';
   const tr = lang==='id' ? (h.id||'') : h.en; const trNote = lang==='id' && !h.id ? '<p class="note">No Indonesian translation in the source for this narration; English shown.</p>' : '';
   return `<div class="hd-item">
@@ -1472,18 +1443,12 @@ function hadithSheet(g){ let lang=store.get('hdLang', st.lang==='en'?'en':'id');
    Gradings shown: al-Albani, Shu'ayb al-Arna'ut, Zubair 'Ali Za'i, at-Tirmidhi's own verdict from his text, and Salim al-Hilali (Muwatta).
    Not shown: columns in the source under the names of Abu Ghuddah, Fuad 'Abd al-Baqi, Muhyi al-Din 'Abd al-Hamid and Ahmad Shakir,
    which are 95-97% identical to al-Albani's rulings (his rulings as printed in those editions), so they are not independent. */
-const KT_BASES=(()=>{ const b=[]; if(/github\.io$/.test(location.hostname) || (!window.AndroidSpeech && /^https?:/.test(location.protocol))) b.push('kutub/');   // files beside the page (GitHub Pages, or a preview that carries them)
-  b.push('https://azali69.github.io/my-personal/kutub/','https://cdn.jsdelivr.net/gh/azali69/my-personal@main/kutub/'); return b; })();
 const ktMem=new Map();
 async function ktGet(path){ if(ktMem.has(path)) return ktMem.get(path);
-  // a kept kitab is re-downloaded when its version in books.json changes (corrected or improved data)
+  // a kept kitab is re-downloaded when its version in books2.json changes (corrected or improved data)
   const pm=/^(\w+)\/(\d+)\.json$/.exec(path), sv=(pm&&ktBooks ? (pm[1]==='he'? ktHeV[pm[2]] : ktBooks.find(x=>x.id===pm[1])?.sections.find(x=>x.n===+pm[2])?.v) : '')||'';
-  const base='https://mpq.local/kutub/'+path, id=sv? base+'?v='+sv : base; let c=null;
-  try{ c=await caches.open('mpq-tafsir'); const r=await c.match(id); if(r && !/^(books2?\.json$|\.\.\/)/.test(path)){   /* the book lists, Sirah, Sifat Solat, Jumaat and the khutbah are small and change: fetched fresh when online */ const j=await r.json(); ktMem.set(path,j); return j; } }catch(e){}
-  for(const b of KT_BASES){ try{ const r=await fetch(b+path+(sv?'?v='+sv:''),{cache:'no-cache'}); if(!r.ok) continue; const j=await r.clone().json();
-      try{ if(c){ for(const o of await c.keys(base,{ignoreSearch:true})) if(o.url!==id) await c.delete(o); await c.put(id,r); } }catch(e){} ktMem.set(path,j); return j; }catch(e){} }
-  try{ const r=c&&await c.match(base,{ignoreSearch:true}); if(r){ const j=await r.json(); ktMem.set(path,j); return j; } }catch(e){}   // offline: an older kept copy is better than nothing
-  throw new Error('offline'); }
+  // the book lists, Sirah, Sifat Solat, Jumaat, the khutbah and the Kamus are small or change: fetched fresh when online
+  const j=await dlGet('kutub',path,{v:sv,wide:true,fresh:/^(books2?\.json$|\.\.\/)/.test(path)}); ktMem.set(path,j); return j; }
 const KT_GR={tir:'at-Tirmidhi',alb:'al-Albani',arn:"Shu'ayb al-Arna'ut",zub:"Zubair 'Ali Za'i",hil:'Salim al-Hilali'};
 /* Death years (Hijri / CE) of the scholars named in the app (Azli, 17 Oct 2026), as given in al-Zirikli's al-A'lam and the
    standard biographies. Living scholars have none. */
@@ -1885,18 +1850,11 @@ const TAFSIRS=[
   ['indonesian_mokhtasar','Al-Mukhtasar','Bahasa Indonesia','Tafsir Center for Quranic Studies (Markaz Tafsir)','arabic_mokhtasar'],
   ['english_mokhtasar','Al-Mukhtasar','English','Tafsir Center for Quranic Studies (Markaz Tafsir)','arabic_mokhtasar'],
   ['indonesian_saadi','As-Sa\'di','Bahasa Indonesia','Shaykh Abdurrahman bin Nasir as-Sa\'di','arabic_saadi']];
-const TAF_BASES=(()=>{ const b=[]; if(/github\.io$/.test(location.hostname)) b.push('tafsir/');
-  b.push('https://azali69.github.io/my-personal/tafsir/','https://cdn.jsdelivr.net/gh/azali69/my-personal@main/tafsir/'); return b; })();
 const tafMem=new Map();
 async function tafLoad(key,s){ const id=key+'/'+p3(s)+'.json'; if(tafMem.has(id)) return tafMem.get(id);
-  let c=null; try{ c=await caches.open('mpq-tafsir'); const r=await c.match('https://mpq.local/tafsir/'+id); if(r){ const j=await r.json(); tafMem.set(id,j); return j; } }catch(e){}
-  for(const b of TAF_BASES){ try{ const r=await fetch(b+id,{cache:'no-cache'}); if(!r.ok) continue; const j=await r.clone().json();
-      if(!j || !(Array.isArray(j.ayat)||Array.isArray(j.blocks))) continue;
-      try{ c && await c.put('https://mpq.local/tafsir/'+id, r); }catch(e){}
-      tafMem.set(id,j); return j; }catch(e){} }
-  throw new Error('offline'); }
+  const j=await dlGet('tafsir',id,{ok:j=>!!j&&(Array.isArray(j.ayat)||Array.isArray(j.blocks)),revalidate:true}); tafMem.set(id,j); return j; }
 let tafMeta=null;
-async function tafIndex(){ if(tafMeta) return tafMeta; for(const b of TAF_BASES){ try{ const r=await fetch(b+'index.json',{cache:'no-cache'}); if(r.ok){ tafMeta=await r.json(); return tafMeta; } }catch(e){} } return {}; }
+async function tafIndex(){ if(tafMeta) return tafMeta; try{ tafMeta=await dlGet('tafsir','index.json',{fresh:true}); return tafMeta; }catch(e){ return {}; } }
 function tafsirSheet(g){
   let key=store.get('tafsir', st.lang==='en'?'english_mokhtasar':'indonesian_mokhtasar'); if(!TAFSIRS.some(t=>t[0]===key)) key='indonesian_mokhtasar';
   let showAr=store.get('tafsirAr',false);
@@ -2086,7 +2044,7 @@ function paintSel(){ const lo=Math.min(selA,selB), hi=Math.max(selA,selB);
   main.querySelectorAll('.mline [data-g][data-w]').forEach(x=>{ const p=posOf(x); if(p>=lo&&p<=hi) x.classList.add('pick'); });
   main.querySelectorAll('.ay[data-g], .row[data-g]').forEach(x=>{ const g=+x.dataset.g; if(P_(g,wcount(g)-1)>=lo && P_(g,0)<=hi) x.classList.add('pick'); }); }
 function hitToRange(h,first){ if(h.p!=null) return [h.p,h.p]; return [P_(h.g,0),P_(h.g,wcount(h.g)-1)]; }
-main.addEventListener('pointerdown',e=>{ if(hz||rkDraft) return; lpFired=false; selMoved=false; lpX=e.clientX; lpY=e.clientY; clearTimeout(lpT);
+main.addEventListener('pointerdown',e=>{ if(hz) return; lpFired=false; selMoved=false; lpX=e.clientX; lpY=e.clientY; clearTimeout(lpT);
   const h=hitAt(e.clientX,e.clientY); if(!h) return;
   lpT=setTimeout(()=>{ lpFired=true; selecting=true; if(navigator.vibrate) try{navigator.vibrate(12);}catch(_){}
     const r=hitToRange(h); selA=r[0]; selB=r[1]; selAnchor=h; paintSel(); },430); });
@@ -3011,39 +2969,7 @@ const DOCK_COLS=[['home','Same as Home'],['hijau','Green'],['marun','Maroon'],['
   const ch=`<svg xmlns='http://www.w3.org/2000/svg' width='21' height='21'><g fill='none' stroke='#c9a14a' stroke-width='1.3'><circle cx='10.5' cy='10.5' r='4'/><path d='M0 10.5h3M18 10.5h3M10.5 0v3M10.5 18v3'/></g><circle cx='10.5' cy='10.5' r='1.3' fill='#c9a14a'/></svg>`;
   const u=x=>`url("data:image/svg+xml;utf8,${x.replace(/#/g,'%23')}")`;
   [['hitam','#1d4a35'],['hijau','#2c6e51'],['biru','#24427e'],['biru-muda','#a9c4d8'],['pastel','#a9d1b6'],['gading','#d8c393']].forEach(([k,col])=>document.documentElement.style.setProperty('--lat-'+k,u(lat(col)))); document.documentElement.style.setProperty('--chain',u(ch)); })();
-const GOLD_DEFS=`<defs><linearGradient id="gd" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f3dc9a"/><stop offset=".35" stop-color="#d4ab52"/><stop offset=".6" stop-color="#9c7428"/><stop offset=".85" stop-color="#e7c878"/><stop offset="1" stop-color="#b8903e"/></linearGradient></defs>`;
-/* An arabesque corner piece of my own drawing: scrolls ending in spirals, leaves and a bud on the diagonal. */
-function cornerSvg(){ const sp=(cx,cy,r,dir)=>{ let d=''; for(let i=0;i<=28;i++){ const t=i/28, a=dir*t*Math.PI*2.4, rr=r*(1-t*0.82); d+=(i?'L':'M')+(cx+rr*Math.cos(a)).toFixed(1)+' '+(cy+rr*Math.sin(a)).toFixed(1); } return d; };
-  const leaf=(x,y,rot,l)=>`<path d="M0 0 C${l*0.35} ${-l*0.28} ${l*0.75} ${-l*0.22} ${l} 0 C${l*0.75} ${l*0.22} ${l*0.35} ${l*0.28} 0 0Z" transform="translate(${x} ${y}) rotate(${rot})" fill="url(#gd)"/>`;
-  const half=`<path d="M14 14 C40 10 70 12 96 26 C112 34 120 46 116 58" fill="none" stroke="url(#gd)" stroke-width="4.2" stroke-linecap="round"/>
-    <path d="${sp(104,54,13,1)}" fill="none" stroke="url(#gd)" stroke-width="3.2" stroke-linecap="round"/>
-    <path d="M40 14 C58 24 64 40 58 52" fill="none" stroke="url(#gd)" stroke-width="2.6" stroke-linecap="round"/><path d="${sp(52,50,8,-1)}" fill="none" stroke="url(#gd)" stroke-width="2.2"/>
-    ${leaf(70,18,-12,26)}${leaf(86,28,20,20)}${leaf(120,64,95,18)}${leaf(30,20,30,16)}
-    <circle cx="130" cy="20" r="3" fill="url(#gd)"/><circle cx="140" cy="16" r="2" fill="url(#gd)"/><circle cx="148" cy="13" r="1.4" fill="url(#gd)"/>`;
-  return `<svg viewBox="0 0 160 160" aria-hidden="true">${GOLD_DEFS}<g>${half}</g><g transform="matrix(0 1 1 0 0 0)">${half}</g>
-    <g transform="translate(48 48) rotate(45)"><path d="M0 0 C-8 -14 -8 -26 0 -36 C8 -26 8 -14 0 0Z" fill="url(#gd)" transform="rotate(90)"/>${leaf(0,0,135,22)}${leaf(0,0,-45-180,0)}</g>
-    <path d="M30 30 C44 44 52 60 52 74" fill="none" stroke="url(#gd)" stroke-width="2.4"/><circle cx="52" cy="78" r="4" fill="url(#gd)"/><path d="M30 30 C44 44 60 52 74 52" fill="none" stroke="url(#gd)" stroke-width="2.4"/><circle cx="78" cy="52" r="4" fill="url(#gd)"/>
-    <circle cx="22" cy="22" r="7" fill="none" stroke="url(#gd)" stroke-width="2.6"/><circle cx="22" cy="22" r="2.6" fill="url(#gd)"/></svg>`; }
-/* Centre: Ayat al-Kursi (the app's own verified Uthmani text) set round a circle, with القرآن الكريم in the middle. */
-/* Centre: the corner ornament repeated round a scalloped rosette, with القرآن الكريم in the middle. */
-function coverMedallion(){ const c=150, orn=cornerSvg().replace(/^<svg[^>]*>/,'').replace(/<\/svg>$/,'').replace(GOLD_DEFS,'');
-  const lobes=16, R0=96, rl=13; let sc='';   // scalloped ring: a half-circle bump between each pair of points
-  for(let i=0;i<lobes;i++){ const a0=2*Math.PI*i/lobes, a1=2*Math.PI*(i+1)/lobes, p=a=>[(c+R0*Math.cos(a)).toFixed(2),(c+R0*Math.sin(a)).toFixed(2)];
-    const [x0,y0]=p(a0),[x1,y1]=p(a1); sc+=(i?'':`M${x0} ${y0}`)+`A${rl} ${rl} 0 0 1 ${x1} ${y1}`; }
-  const knobs=[...Array(lobes)].map((_,i)=>{ const a=2*Math.PI*(i+.5)/lobes, r=R0+rl+5; return `<circle cx="${(c+r*Math.cos(a)).toFixed(1)}" cy="${(c+r*Math.sin(a)).toFixed(1)}" r="2.6" fill="url(#gd)"/><line x1="${(c+(R0+rl-1)*Math.cos(a)).toFixed(1)}" y1="${(c+(R0+rl-1)*Math.sin(a)).toFixed(1)}" x2="${(c+(r-2)*Math.cos(a)).toFixed(1)}" y2="${(c+(r-2)*Math.sin(a)).toFixed(1)}" stroke="url(#gd)" stroke-width="1.2"/>`; }).join('');
-  // four corner pieces on the diagonals, their scrolls wrapping the rosette
-  const quads=[0,90,180,270].map(r=>`<g transform="rotate(${r} ${c} ${c}) translate(${c-142} ${c-142}) scale(.78)">${orn}</g>`).join('');
-  const card=[0,90,180,270].map(r=>`<g transform="rotate(${r} ${c} ${c})"><path d="M${c} ${c-112} C${c-9} ${c-120} ${c-9} ${c-132} ${c} ${c-142} C${c+9} ${c-132} ${c+9} ${c-120} ${c} ${c-112}Z" fill="url(#gd)"/>
-    <path d="M${c-6} ${c-113} C${c-20} ${c-118} ${c-30} ${c-112} ${c-30} ${c-104} M${c+6} ${c-113} C${c+20} ${c-118} ${c+30} ${c-112} ${c+30} ${c-104}" fill="none" stroke="url(#gd)" stroke-width="1.6"/>
-    <circle cx="${c-30}" cy="${c-102}" r="2.2" fill="url(#gd)"/><circle cx="${c+30}" cy="${c-102}" r="2.2" fill="url(#gd)"/><circle cx="${c}" cy="${c-147}" r="2" fill="url(#gd)"/></g>`).join('');
-  return `<svg viewBox="0 0 300 300" aria-hidden="true">${GOLD_DEFS}${quads}${card}
-    <path d="${sc}Z" fill="#070706" stroke="url(#gd)" stroke-width="2.2"/>${knobs}
-    <circle cx="${c}" cy="${c}" r="${R0-8}" fill="none" stroke="url(#gd)" stroke-width="1"/><circle cx="${c}" cy="${c}" r="${R0-12}" fill="none" stroke="url(#gd)" stroke-width=".6" stroke-dasharray="1.5 3"/>
-    <text x="${c}" y="${c-6}" text-anchor="middle" font-family="KFGQPC Hafs" font-size="40" fill="url(#gd)" direction="rtl">القرآن</text>
-    <text x="${c}" y="${c+40}" text-anchor="middle" font-family="KFGQPC Hafs" font-size="40" fill="url(#gd)" direction="rtl">الكريم</text></svg>`; }
-const LOGO_SVG=`<svg viewBox="0 0 512 512" aria-hidden="true"><defs><linearGradient id="lor" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffb03f"/><stop offset=".55" stop-color="#f08a2c"/><stop offset="1" stop-color="#e06524"/></linearGradient><linearGradient id="lpg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f6edd2"/><stop offset="1" stop-color="#d9c99c"/></linearGradient></defs><g transform="translate(0 -6)"><path d="M128 356 V205 C128 140 196 104 238 64 C280 104 348 140 348 205 V352" fill="none" stroke="#7a828c" stroke-width="22" stroke-linejoin="round"/><path d="M236 356 V215 C236 150 304 114 346 74 C388 114 456 150 456 215 V318" fill="none" stroke="url(#lor)" stroke-width="22" stroke-linejoin="round"/><path d="M60 352 C120 334 200 340 256 392 C312 340 392 334 452 352 L452 372 C392 356 312 362 256 412 C200 362 120 356 60 372 Z" fill="url(#lpg)"/><path d="M74 336 C134 320 206 326 256 372 C306 326 378 320 438 336 L452 352 C392 334 312 340 256 392 C200 340 120 334 60 352 Z" fill="#eadfbf"/></g></svg>`;
 function applyHomeLook(){ const r=document.documentElement; let t=store.get('homeTheme','hijau'); if(t==='marun'){ t='biru-muda'; store.set('homeTheme',t); } r.setAttribute('data-home',t); r.setAttribute('data-dock',store.get('dockCol','hijau')); }
-/* Cover colours: the reference medallion in its original green, and recoloured to black and navy (gold kept). */
 /* Book cover (design by Azli, 13 Oct 2026): the gold parts of his cover cut out (art/cover, made by tools in the app
    folder) and laid on a background of the chosen colour, so it fits any screen shape and any of the home colours. */
 const CV_ART={dm:'%%ART:p_damask.webp%%',top:'%%ART:p_top.webp%%',mid:'%%ART:p_mid.webp%%',bot:'%%ART:p_bot.webp%%',bars:'%%ART:p_bars.webp%%',bart:'%%ART:p_bart.webp%%',barb:'%%ART:p_barb.webp%%',gtop:'%%ART:g_top.webp%%',gmid:'%%ART:g_mid.webp%%',gbot:'%%ART:g_bot.webp%%',gbars:'%%ART:g_bars.webp%%',gbart:'%%ART:g_bart.webp%%',gbarb:'%%ART:g_barb.webp%%'};
@@ -3282,7 +3208,6 @@ const PR_CITIES=[
 /* hours the time zone is ahead of UTC on that day (summer time included) */
 function tzOff(tz,d){ try{ const f=new Intl.DateTimeFormat('en-US',{timeZone:tz,hourCycle:'h23',year:'numeric',month:'numeric',day:'numeric',hour:'numeric',minute:'numeric'});
   const p=Object.fromEntries(f.formatToParts(d).map(x=>[x.type,x.value])); return (Date.UTC(+p.year,p.month-1,+p.day,+p.hour%24,+p.minute)-Math.floor(d.getTime()/60000)*60000)/3600000; }catch(e){ return -d.getTimezoneOffset()/60; } }
-const phoneTz=()=>{ try{ return Intl.DateTimeFormat().resolvedOptions().timeZone; }catch(e){ return ''; } };
 function prLoc(){ return store.get('prLoc',{mode:'sg'}); }
 function ymd(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
 function sunCalc(d,lat,lng,M,tzh){ // returns hours (clock of the place, or of the phone) for the six times, or null where the sun never reaches the angle
@@ -3458,13 +3383,8 @@ window.__compass=(h,acc)=>{ const dial=document.getElementById('qbDial'); if(!di
    Hisn al-Muslim by Sa'id ibn Wahf al-Qahtani, from hisnmuslim.com: Arabic, English translation, transliteration,
    repeat counts and Arabic audio. Loaded the first time, then kept on the phone. */
 let hisn=null; const hisnA=new Audio();
-async function hisnLoad(){ if(hisn) return hisn; const id='https://mpq.local/dua/hisn.json'; let c=null;
-  let old=null;
-  try{ c=await caches.open('mpq-tafsir'); const r=await c.match(id); if(r){ const j=await r.json(); if((j.ver||1)>=2){ hisn=hisnPrep(j); return hisn; } old=j; } }catch(e){}
-  for(const b of [/github\.io$/.test(location.hostname)?'dua/':null,'https://azali69.github.io/my-personal/dua/','https://cdn.jsdelivr.net/gh/azali69/my-personal@main/dua/'].filter(Boolean)){
-    try{ const r=await fetch(b+'hisn.json',{cache:'no-cache'}); if(!r.ok) continue; const j=await r.clone().json(); if(!j.chapters) continue; try{ c&&await c.put(id,r); }catch(e){} hisn=hisnPrep(j); return hisn; }catch(e){} }
-  if(old){ hisn=hisnPrep(old); return hisn; }
-  throw new Error('offline'); }
+async function hisnLoad(){ if(hisn) return hisn;
+  hisn=hisnPrep(await dlGet('dua','hisn.json',{ok:j=>!!(j&&j.chapters),stale:j=>(j.ver||1)<2,revalidate:true})); return hisn; }
 /* Spelling in the source's chapter titles (Azli, 13 Oct 2026: ruku', not "Ruki'"). */
 const HISN_TITLE_FIX=[[/Ruki'/g,"Ruku'"],[/^vocation /,'Invocation '],[/when it thunder$/,'when it thunders'],[/Tash-ahhud/g,'Tashahhud']];
 /* Morning and evening sets, from chapter 27 as the book itself gives them: entries the book marks "in the morning"
@@ -3752,12 +3672,6 @@ const CK_AR_DROP=[normAr('صلى الله عليه وسلم'),normAr('رضي ا�
    the plain spelling (قرآنا, السماوات) and small scanning slips on alif/hamza all compare the same. */
 const ckSk=w=>w.replace(/[اء]/g,'');
 function ckArWords(t){ let s=' '+normAr((t||'').replace(/ﷺ|ﷻ|﴿|﴾|[0-9٠-٩]/g,' '))+' '; for(const p of CK_AR_DROP) s=s.split(' '+p+' ').join(' '); return s.trim().split(' ').map(ckSk).filter(w=>w.length>0); }
-/* the same words in the same order (exact), for the first pass */
-function ckLcs(q,ws){ const n=q.length,m=ws.length; if(!n||!m) return 0; let prev=new Uint16Array(m+1),cur=new Uint16Array(m+1);
-  for(let i=1;i<=n;i++){ const qi=q[i-1]; for(let j=1;j<=m;j++) cur[j]= qi===ws[j-1]? prev[j-1]+1 : (prev[j]>cur[j-1]?prev[j]:cur[j-1]); [prev,cur]=[cur,prev]; cur.fill(0); }
-  return prev[m]; }
-/* Qur'an, Arabic: windows of 1-4 consecutive ayat in one surah. cov = the ayat's words found in the text, in order;
-   qc = the text's words found in the ayat (a post may quote only part of a long ayah). */
 /* Qur'an, Arabic, by letters: runs of three letters of the skeleton (spaces ignored), so words that the camera splits,
    joins or misreads a letter of still mostly match. Windows of 1-3 consecutive ayat in one surah.
    cov = the ayat's letter-runs found in the text; qc = the text's letter-runs found in the ayat. */
@@ -3793,23 +3707,6 @@ function ckQuranWords(text){ const {sets,df,inv,idf}=ckQwIndex();
       if(k && m<=last) break; last=m; let aw=0; for(const w of W) aw+=idf(w); const cov=m/aw, qc=m/qW;
       if(n>=3 && qc>=0.6 && cov>=0.3 && (!best||m>best.m+0.5)) best={g,e:g+k,L:n,m,cov,qc}; }
     if(best) out.push(best); }
-  return out; }
-function ckQuranAr(qw){ arIndex(); if(qw.length<3) return [];
-  qw=qw.slice(0,300); const cnt=new Map();
-  for(const w of new Set(qw)){ const l=AIDX.get(w); if(l && l.length<2500) for(const g of l) cnt.set(g,(cnt.get(g)||0)+1); }
-  let cand=[...cnt.entries()].sort((a,b)=>b[1]-a[1]); const top=cand.length?cand[0][1]:0;
-  cand=cand.filter(x=>x[1]>=Math.max(2,top*0.25)||AW[x[0]].length<=3).slice(0,160).map(x=>x[0]);
-  const wins=[], qn=qw.length;
-  for(const g of cand){ let ws=[], best=null, lastL=0;
-    for(let k=0;k<4 && g+k<N && A[g+k][0]===A[g][0];k++){ ws=ws.concat(AW[g+k]); const L=ckLcs(qw,ws); if(k && L<=lastL) break; lastL=L;
-      const cov=L/ws.length, qc=L/qn; if((cov>=0.5||(qc>=0.6&&L>=5)) && (!best || L>best.L+1)) best={g,e:g+k,L,len:ws.length,cov,qc}; }
-    if(best && best.L>=Math.min(4,best.len)) wins.push(best); }
-  wins.sort((a,b)=>b.L-a.L||b.cov-a.cov);
-  // spelling tolerance for the best few (scanned text can misread a letter)
-  for(const w of wins.slice(0,8)){ let ws=[]; for(let g=w.g;g<=w.e;g++) ws=ws.concat(AW[g]); const q2=qw.slice(0,150), L=wordLcs(q2,ws);
-    if(L>w.L){ w.L=L; w.cov=L/ws.length; w.qc=Math.min(1,L/q2.length); } }
-  wins.sort((a,b)=>b.L-a.L||b.cov-a.cov); const out=[];
-  for(const w of wins){ if(out.length>=6) break; if(out.some(o=>!(w.e<o.g||w.g>o.e))) continue; out.push(w); }
   return out; }
 /* Qur'an, Malay / English: shared content words, weighted by rarity (translators word things differently). */
 let CK_QT=null;
@@ -4123,11 +4020,6 @@ document.addEventListener('selectionchange',()=>{ const sel=document.getSelectio
     lkBtn.addEventListener('pointerdown',ev=>ev.preventDefault()); lkBtn.onclick=()=>{ const w=lkBtn.dataset.w; lkBtn.remove(); lkBtn=null; lookupSheet(w); }; }
   lkBtn.dataset.w=t; lkBtn.textContent=(sL()==='ms'?'Cari makna: ':'Meaning: ')+(t.length>18?t.slice(0,18)+'…':t); });
 function lookupSheet(w){ return window.__meaning(w); }
-function lookupSheetOld(w){ const ms=sL()==='ms', ar=/[؀-ۿ]/.test(w), u=encodeURIComponent(w.replace(/[“”"'.,;:!?()]/g,''));
-  const links=ar?[['Almaany (العربية)',`https://www.almaany.com/ar/dict/ar-ar/${u}/`],['Almaany (Arabic–English)',`https://www.almaany.com/en/dict/ar-en/${u}/`],['Almaany (Arab–Melayu)',`https://www.almaany.com/ms/dict/ar-ms/${u}/`]]
-    :[['Kamus Dewan (PRPM, DBP)',`https://prpm.dbp.gov.my/Cari1?keyword=${u}`],['Wiktionary (English)',`https://en.wiktionary.org/wiki/${u}`],['Cambridge Dictionary (English)',`https://dictionary.cambridge.org/dictionary/english/${u}`]];
-  openSheet((ms?'Makna: ':'Meaning: ')+w,`<p class="note" style="margin-top:0">${ms?'Dibuka dalam pelayar (perlu internet).':'Opens in the browser (needs the internet).'}</p><div class="actions">${links.map(([n,h])=>`<a class="pill" style="justify-content:flex-start;text-decoration:none;color:inherit" href="${h}" target="_blank" rel="noopener">${esc(n)}</a>`).join('')}</div>
-   <p class="note" style="font-size:12px">${ms?'Menu salin/kongsi telefon anda juga mungkin ada pilihan Terjemah atau kamus.':'Your phone\'s own copy/share menu may also offer Translate or a dictionary.'}</p>`); }
 
 /* Tap once on a page to hide or show its fixed top part (Doa & zikir, Hadith, Sirah: Azli, 15 Oct 2026). Taps on buttons,
    links, fields and while selecting text do not count. */
@@ -4153,7 +4045,7 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change',ap
 
 window.__back=()=>{ if(sheet.classList.contains('open')){ closeSheet(); return true; }
   if(tq){ tqClose(); return true; } if(navRet&&navRet.kind==='panel'&&topPanel()?.id===navRet.pid) return navRetGo(); { const p=topPanel(); if(p){ closePanel(p.id); return true; } }
-  { const c=document.getElementById('cover'); if(c && !c.hidden) return false; } if(rkDraft){ rkEditEnd(); toast('No changes saved'); return true; } if(document.body.classList.contains('immersive')){ setImmersive(false); return true; } if(hz){ if(rec) stopListen(false); hz=null; renderReader(); return true; }
+  { const c=document.getElementById('cover'); if(c && !c.hidden) return false; } if(document.body.classList.contains('immersive')){ setImmersive(false); return true; } if(hz){ if(rec) stopListen(false); hz=null; renderReader(); return true; }
   if(navRet&&navRet.kind==='reader'&&!topPanel()) return navRetGo();
   { const h=document.getElementById('home'); if(!h || h.hidden){ showHome(); return true; } } return false; };
 /* The app goes to the background: close the book, so it opens with the cover next time. Not when the app itself sent the
