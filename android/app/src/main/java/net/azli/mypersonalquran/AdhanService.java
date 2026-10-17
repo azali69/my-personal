@@ -46,9 +46,14 @@ public class AdhanService extends Service {
             mp = new MediaPlayer();
             // earphones or Bluetooth connected: play there only (as media); otherwise as an alarm on the phone's speaker
             mp.setAudioAttributes(new AudioAttributes.Builder().setUsage(headset() ? AudioAttributes.USAGE_MEDIA : AudioAttributes.USAGE_ALARM).setContentType(AudioAttributes.CONTENT_TYPE_MUSIC).build());
-            File f = ("makkah".equals(sound) || "madinah".equals(sound)) ? adhanFile(this, sound) : null;
+            // "mytone:10" = the person's own sound, cut after 10 seconds (about "Allahu akbar, Allahu akbar"); tone2, tone3 = built-in
+            int cut = 0; String base = sound == null ? "tone" : sound;
+            if (base.startsWith("mytone")) { try { cut = Integer.parseInt(base.substring(base.indexOf(':') + 1)); } catch (Exception ignored) { cut = 10; } base = "mytone"; }
+            File f = ("makkah".equals(base) || "madinah".equals(base) || "mytone".equals(base)) ? adhanFile(this, base) : null;
+            int raw = "tone2".equals(base) ? R.raw.tone2 : "tone3".equals(base) ? R.raw.tone3 : R.raw.tone;
             if (f != null) mp.setDataSource(f.getPath());
-            else mp.setDataSource(this, Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.tone));
+            else mp.setDataSource(this, Uri.parse("android.resource://" + getPackageName() + "/" + raw));
+            if (f != null && cut > 0) { final MediaPlayer me = mp; new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(() -> { if (mp == me) stopAll(); }, cut * 1000L); }
             mp.setOnCompletionListener(m -> stopAll());
             mp.setOnErrorListener((m, w, e) -> { stopAll(); return true; });
             mp.prepare();

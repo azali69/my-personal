@@ -11,7 +11,7 @@ My Personal Quran ialah mushaf Madinah untuk membaca, menghafaz, mendengar bacaa
 **Kali pertama dibuka**
 
 - **Kulit buku** akan muncul. Ketik di mana-mana untuk membukanya; ia terbuka ke skrin **Home** (Laman Utama).
-- Kulit buku tertutup semula setiap kali anda keluar dari aplikasi. Untuk melangkaunya: Home → butang tetapan (atas kanan) → **Book cover when the app opens → Skip**.
+- Kulit buku muncul semula apabila anda keluar dari aplikasi lebih daripada 3 minit (keluar sekejap ke Google Translate atau pautan sumber tidak membawanya kembali). **Ketik penjuru atas kiri** kulit buku untuk mematikannya (hidupkan semula di Settings › Home); **ketik penjuru atas kanan** untuk menukar warnanya. Untuk melangkaunya dalam tetapan: Home → butang tetapan (atas kanan) → **Book cover when the app opens → Skip**.
 - Kulit buku berbingkai emas, dengan bunga di setiap penjuru dan medalion bertulis القرآن الكريم, serta "My Personal Quran" di bawahnya. Warnanya: butang tetapan yang sama → **Book cover colour**: **Same as home** (ikut latar Home), **Madinah green** (hijau), **Black** (hitam), **Night blue** (biru malam), **Light blue** (biru muda), **Pastel green** (hijau pastel) atau **Ivory** (gading). **Preview the cover** menunjukkannya serta-merta.
 - Jika aplikasi dibuka daripada notifikasi waktu solat, kulit buku dilangkau dan terus ke **Prayer times**.
 
@@ -31,7 +31,7 @@ Teks al-Quran, terjemahan dan hafazan boleh digunakan tanpa internet. Audio, taf
 Kembali ke Home dari mana-mana dengan **butang rumah** (atas kiri skrin bacaan) atau butang **Back** telefon.
 
 - **Tarikh** (atas kiri): tarikh Hijrah (kalendar Umm al-Qura; mungkin berbeza sehari daripada pengumuman MUIS) dan tarikh hari ini.
-- **Butang tetapan** (atas kanan): warna latar Home, warna bar atas dan bawah, serta pilihan kulit buku.
+- **Butang tetapan** (atas kanan): warna latar Home, warna bar atas dan bawah (**Same as Home** mengikut warna latar Home), serta pilihan kulit buku. Pada tablet yang dipusing melintang, setiap halaman menggunakan lebar penuh.
 - **Kad solat seterusnya**: waktu solat yang akan datang, berapa lama lagi, dan enam waktu hari ini. Ketik untuk membuka Waktu Solat.
 
 | Jubin | Membuka |
@@ -45,6 +45,8 @@ Kembali ke Home dari mana-mana dengan **butang rumah** (atas kiri skrin bacaan) 
 | Hadith | Enam kitab hadis (Kutub as-Sittah) dan al-Muwatta Imam Malik, dengan hukum hadis (bahagian 8) |
 | Syama'il | Asy-Syama'il al-Muhammadiyyah karya at-Tirmizi, dalam jubinnya sendiri (juga kitab kelapan dalam Hadith) (bahagian 8) |
 | Sifat Solat Nabi ﷺ | Solat Nabi langkah demi langkah, dengan hadis dan perbezaan pendapat ulama (bahagian 8) |
+| Solat Jumaat | Sunnah hari Jumaat dari sebelum khutbah hingga selepas solat, isu qabliyah, rukun khutbah, dan khutbah terkini MUIS (bahagian 8) |
+| Kamus Al-Quran | Setiap perkataan al-Quran mengikut akar kata: makna, kekerapan dan tempatnya (bahagian 8) |
 | Scan & check | Semak sama ada ayat atau hadis yang dikongsi orang ada dalam Al-Quran atau kitab hadis (bahagian 8) |
 | Masjid & musollah | Masjid dan musolla, yang paling dekat dahulu, dengan arah jalan; tambah tempat sendiri (bahagian 8) |
 | Notes | Buku nota anda: nota pada ayat, pada hadis, dan nota bebas (bahagian 8) |
@@ -183,7 +185,7 @@ Semuanya dibuka dari **menu ayat**; memerlukan internet sekali bagi setiap surah
 
 - **Word by word**: makna setiap perkataan (Indonesia atau Inggeris); ketik perkataan untuk mendengarnya. Settings → **Tap a word twice: meaning and sound** membukanya dengan mengetik perkataan dua kali pada halaman.
 - **Tafsir**: Al-Mukhtasar (Indonesia atau Inggeris) atau As-Sa'di (Indonesia); **Show Arabic original** memaparkan teks Arab. Daripada QuranEnc.com, tanpa sebarang perubahan.
-- **Hadith**: hanya hadis yang dikaitkan oleh kitab itu sendiri (Kitab at-Tafsir dalam Sahih al-Bukhari dan Sahih Muslim), bersama tajuk bab, nombor, teks Arab, terjemahan dan pautan ke Sunnah.com.
+- **Hadith**: hadis yang dikaitkan oleh kitab itu sendiri (Kitab at-Tafsir dalam Sahih al-Bukhari dan Sahih Muslim), bersama tajuk bab, nombor, teks Arab, terjemahan dan pautan ke Sunnah.com; kemudian **In the eight hadith books in this app**: setiap hadis yang teks Arabnya memetik ayat itu kata demi kata (atau menamakannya, cth. "2.255"); ketik untuk membacanya dengan darjatnya. Ayat yang ada hadis ditanda dengan **simbol buku** kecil pada nombor ayat dalam mushaf (kira-kira 900 ayat).
 - **Copy**: pilih ayat dan kandungan yang hendak disalin, kemudian **Copy**.
 - **Ayat with similar wording**: ayat lain yang berkongsi sekurang-kurangnya 5 perkataan berturut-turut dengan ayat ini (ayat mutasyabihat lafaz yang dibandingkan oleh huffaz semasa menghafal), yang paling panjang dahulu. Ketik untuk pergi ke ayat itu. Ia dicari dengan memadankan perkataan Arab; ungkapan lazim sahaja tidak dikira. Ia bukan rujukan silang tafsir.
 
@@ -195,7 +197,7 @@ Semuanya dibuka dari **menu ayat**; memerlukan internet sekali bagi setiap surah
 2. **Morning zikir** dan **Evening zikir** ialah bab zikir pagi dan petang dalam kitab itu, dijadikan dua set: yang kitab berikan untuk pagi sahaja ada dalam set pagi sahaja, yang untuk petang sahaja dalam set petang sahaja, dan set petang menggunakan lafaz petang (أمسينا، أمسيت…) di mana kitab memberikannya. Doa dengan lafaz petang tiada butang Listen kerana rakamannya dengan lafaz pagi.
 3. Setiap doa memaparkan teks Arab, transliterasi dan terjemahan Inggeris. **Listen** memperdengarkannya; pembilang **0 / 3** mengira ulangan.
 4. **Source** di bawah setiap doa: ketik untuk melihat rujukan yang diberikan dalam kitab (contohnya "Al-Bukhari …; Muslim …") bersama pautan ke doa itu di sunnah.com. Baris pertamanya meringkaskan hukum daripada rujukan itu: dipetik daripada Sahih al-Bukhari / Muslim; dinilai sahih atau hasan oleh ulama yang disebut; sahih sebagai kata-kata Sahabat; atau tiada hukum dalam kitab.
-5. Tajuk, butang on/off dan **Save chapter** kekal di atas semasa anda menatal. **Save chapter** terus bertukar kepada **Saved ✓**, dan bab itu terus muncul di bawah **Saved**; ketik sekali lagi untuk membuangnya.
+5. Tajuk dan butang on/off kekal di atas semasa anda menatal. Setiap bab ada **Bookmark** (lima warna, seperti Hadis), **Note** dan **Copy**. **Continue reading** dan **Bookmarks** anda (tanda **Show**; tapis mengikut warna) ada di atas Doa & zikir, susunan yang sama dengan Hadis. Bab yang disimpan dalam versi lama menjadi penanda warna emas.
 
 **Hadis (Kutub as-Sittah dan al-Muwatta)**
 
@@ -211,14 +213,29 @@ Semuanya dibuka dari **menu ayat**; memerlukan internet sekali bagi setiap surah
 10. **Also in** di bawah hadis menyenaraikan hadis yang sama dalam kitab lain (contohnya "Muslim 113", "Abu Dawud 3692"). "(close wording)" bermaksud kebanyakan lafaznya sama tetapi tidak semua, atau hanya sebahagian daripada hadis yang lebih panjang. Ketik untuk membacanya bersama hukum daripada kitab itu sendiri, kemudian **Open in …** untuk pergi ke sana. Ia dicari dengan membandingkan teks Arab, jadi ia membantu mencari riwayat lain; ia tidak bermaksud sanad atau hukumnya sama.
 11. Setiap hadis ada butang **penanda buku** (lima warna, seperti al-Quran) dan butang **nota**. **Continue reading** (tempat anda berhenti) berada di bahagian atas halaman Hadith. Senarai penanda buku dipaparkan di bawahnya apabila **Show** (di sebelah **All**) ditanda; ia tidak ditanda pada mulanya.
 
-12. **Asy-Syama'il al-Muhammadiyyah** (at-Tirmizi) ada jubinnya sendiri, **Syama'il**, di Home, dan juga kitab kelapan dalam senarai Hadith: rupa, akhlak dan kehidupan harian Nabi ﷺ, 400 hadis dalam 56 bab, dalam bahasa Arab dan Inggeris (Sunnah.com). Setiap hadis menunjukkan penilaian **Zubair 'Ali Za'i** dan, jika hadis itu ada dalam *Mukhtasar asy-Syama'il* al-Albani, penilaian **al-Albani** dengan nombornya. Beliau membuang sanad yang berulang, jadi tiada penilaian beliau tidak bermakna hadis itu lemah. **Also in** menunjukkan hadis yang sama dalam enam kitab, dengan penilaian masing-masing (al-Albani, Syu'aib al-Arna'ut, Zubair 'Ali Za'i). Tiada terjemahan Melayu terbuka untuk kitab ini, jadi BI memaparkan bahasa Inggeris.
+12. Setiap kitab ada **Continue reading** sendiri di atas halamannya (termasuk Syama'il). Pengenalan kitab dilipat dalam **About this book**; ketik untuk membacanya. Di bawah setiap hadis: **Maktabah Syamilah ›** (awal matan disalin; tampal di carian Syamilah, kerana Syamilah tiada pautan kepada satu hadis) dan **Scholars' gradings & syarah · Dorar.net ›** (Dorar menunjukkan penilaian para muhaddith, cth. al-Albani, Ibn Hajar, az-Zahabi, al-Haithami, dengan sebab hadis itu lemah, dan pautan ke syarahnya). Penilai darjat hadis ditunjukkan dengan tahun wafatnya.
+13. **Asy-Syama'il al-Muhammadiyyah** (at-Tirmizi) ada jubinnya sendiri, **Syama'il**, di Home, dan juga kitab kelapan dalam senarai Hadith: rupa, akhlak dan kehidupan harian Nabi ﷺ, 400 hadis dalam 56 bab, dalam bahasa Arab dan Inggeris (Sunnah.com). Setiap hadis menunjukkan penilaian **Zubair 'Ali Za'i** dan, jika hadis itu ada dalam *Mukhtasar asy-Syama'il* al-Albani, penilaian **al-Albani** dengan nombornya. Beliau membuang sanad yang berulang, jadi tiada penilaian beliau tidak bermakna hadis itu lemah. **Also in** menunjukkan hadis yang sama dalam enam kitab, dengan penilaian masing-masing (al-Albani, Syu'aib al-Arna'ut, Zubair 'Ali Za'i). Tiada terjemahan Melayu terbuka untuk kitab ini, jadi BI memaparkan bahasa Inggeris.
 
 **Sifat Solat Nabi ﷺ**
 
 1. Home → **Sifat Solat Nabi ﷺ**: solat dalam 17 langkah, daripada niat hingga salam, kemudian **zikir dan doa selepas solat**, dan qunut Subuh.
 2. Setiap langkah ada huraian ringkas dan **hadis**nya daripada tujuh kitab dengan darjatnya; ketik untuk membacanya (butang kembali telefon membawa anda semula ke langkah itu).
 3. **Perbezaan pendapat ulama** (ditanda "ada perbezaan" dalam senarai) meletakkan pendapat empat mazhab, **Syafi'i**, **Hanafi**, **Maliki** dan **Hanbali**, bersebelahan; di bawahnya, **Pandangan ulama lain** membuka kotak berasingan dengan **Imam al-Nawawi**, **Ibn Taimiyyah**, **asy-Syatibi**, **al-Albani**, **Ibn Baz**, **Ibn 'Uthaimin** dan **Syu'aib al-Arna'ut** (penilaian beliau terhadap riwayat di luar kitab aplikasi ini, cth. 'di atas dada' riwayat Hulb at-Ta'i) , **Dar al-Ifta' Mesir** (badan fatwa Mesir) dan **Jawatankuasa Fatwa Negeri Perlis** jika mereka membincangkannya, setiap satu bertanda \*, dengan **rujukan**nya (kitab dan jilid/halaman) dan **Buka sumber ›** (laman fatwa ulama itu, ensiklopedia fiqh Dorar.net atau IslamQA). Hanya pendapat yang ada rujukannya dimasukkan. Dalil yang dibincangkan disenaraikan dengan darjatnya, tanpa memilih antara mereka: cth. tempat meletak tangan, basmalah dikuatkan, Al-Fatihah di belakang imam, lutut atau tangan dahulu, duduk istirahat, jari ketika tasyahhud, qunut Subuh, zikir kuat atau perlahan selepas solat, dan doa imam dengan makmum mengaminkan.
-4. Sumber pendapat mazhab: al-Nawawi (*al-Majmu'*, *Minhaj at-Talibin*), Ibn Qudamah (*al-Mughni*), Ibn Rushd (*Bidayat al-Mujtahid*); ulama lain: al-Nawawi (*al-Majmu'*), al-Albani (*Asl Sifat Solat an-Nabi*), Ibn Baz (*Majmu' Fatawa*, *Fatawa Nur 'ala ad-Darb*), Ibn 'Uthaimin (*Majmu' Fatawa wa Rasa'il*, *asy-Syarh al-Mumti'*), Syu'aib al-Arna'ut (*Takhrij al-Musnad*, *Takhrij Zad al-Ma'ad*), Ibn Taimiyyah (*al-Fatawa al-Kubra*), Dar al-Ifta' Mesir (fatwa bernombor), setiap baris dengan jilid/halaman. Ditulis untuk aplikasi ini; untuk amalan anda, ikut guru anda.
+4. Setiap langkah ada **Penanda**, **Nota** dan **Salin**; **Sambung membaca** dan penanda anda ada di atas senarai. Langkah yang ada doa mempunyai **Buka di Doa & zikir ›** (cth. selepas solat → "bacaan selepas selesai solat" Hisn al-Muslim). Imam empat mazhab, para pengulas dan penilai hadis ditunjukkan dengan tahun wafatnya (w.).
+5. Sumber pendapat mazhab: al-Nawawi (*al-Majmu'*, *Minhaj at-Talibin*), Ibn Qudamah (*al-Mughni*), Ibn Rushd (*Bidayat al-Mujtahid*); ulama lain: al-Nawawi (*al-Majmu'*), al-Albani (*Asl Sifat Solat an-Nabi*), Ibn Baz (*Majmu' Fatawa*, *Fatawa Nur 'ala ad-Darb*), Ibn 'Uthaimin (*Majmu' Fatawa wa Rasa'il*, *asy-Syarh al-Mumti'*), Syu'aib al-Arna'ut (*Takhrij al-Musnad*, *Takhrij Zad al-Ma'ad*), Ibn Taimiyyah (*al-Fatawa al-Kubra*), Dar al-Ifta' Mesir (fatwa bernombor), setiap baris dengan jilid/halaman. Ditulis untuk aplikasi ini; untuk amalan anda, ikut guru anda.
+
+**Solat Jumaat**
+
+1. Home → **Solat Jumaat**: 7 langkah, susunan yang sama dengan Sifat Solat: persiapan (mandi, bersugi, wangian), pergi awal dan apa yang dilakukan sementara menunggu, **solat sunat qabliyah Jumaat?**, khutbah (mendengar, tahiyyatul masjid, **rukun khutbah** empat mazhab), **duduk antara dua khutbah**, solat, dan selepasnya.
+2. **Qabliyah**: pada zaman Nabi ﷺ hanya ada satu azan, ketika imam duduk di atas mimbar, lalu khutbah terus menyusul (al-Bukhari 912); tiada riwayat sahih yang menunjukkan Baginda atau para Sahabat solat selepas azan Jumaat. Pendapat empat mazhab (Syafi'i dan Hanafi: ada; Maliki: tiada sunat tetap; Hanbali: dua riwayat) dan ulama lain (Ibn Taimiyyah, Ibn Hajar, Dar al-Ifta' Mesir, Mufti Wilayah Persekutuan) diberi dengan rujukannya; hadis "empat rakaat sebelum Jumaat" (Ibn Majah 1129) sangat lemah.
+3. **Khutbah Jumaat MUIS**: khutbah terkini dari laman MUIS (Melayu atau Inggeris mengikut bahasa anda, dengan PDF), disemak setiap petang Khamis dan pagi Jumaat, serta pautan ke semua khutbah MUIS.
+
+**Kamus Al-Quran**
+
+1. Home → **Kamus Al-Quran**: setiap perkataan al-Quran mengikut akar katanya (1,650 akar kata dan partikel, 4,770 perkataan). Ketik satu huruf, atau cari dalam bahasa Arab (akar kata, perkataan atau bentuknya dalam ayat) atau dengan makna dalam Bahasa Melayu/Indonesia atau Inggeris (cth. "rahmat").
+2. Satu akar kata menunjukkan setiap perkataan daripadanya (lema) dengan jenis kata, berapa kali ia muncul, maknanya (Indonesia, hampir sama dengan Melayu, dan Inggeris) dan bentuk-bentuknya; **Lihat ayat** menyenaraikan tempatnya: ketik untuk membuka ayat itu (butang **‹ Kembali** membawa anda ke Kamus semula).
+3. Sumber: Quranic Arabic Corpus (Universiti Leeds, GNU GPL) dengan pembetulan mustafa0x/quran-morphology; makna daripada kata demi kata Quran.com. *Kamus Al-Qur'an* terbitan PTS dilindungi hak cipta, maka tidak disalin.
+4. **Makna di mana-mana**: tekan lama satu perkataan dan pilih **Makna** dalam menu (atau **Cari makna** yang muncul di halaman Sirah, Hadis dan Doa). Bahasa Arab membuka Kamus; Bahasa Melayu atau Inggeris memberi carian dalam terjemahan al-Quran dan pautan ke Kamus Dewan (PRPM, DBP), Wiktionary, Cambridge dan Google Translate. Kamus Melayu yang terbuka sepenuhnya untuk dimuat ke dalam aplikasi belum ada.
 
 **Sirah**
 
@@ -226,14 +243,15 @@ Semuanya dibuka dari **menu ayat**; memerlukan internet sekali bagi setiap surah
 2. Ketik satu peristiwa untuk ringkasan pendek, kemudian:
    - **Al-Quran**: ayat yang dikaitkan dengan peristiwa itu oleh kitab hadis atau tafsir. Ketik untuk membukanya dalam mushaf.
    - **Hadis**: riwayat dalam kitab aplikasi ini, berserta hukumnya (Bukhari dan Muslim ditanda Sahih). Ketik untuk membaca hadis itu; **Open in …** membawa anda kepadanya dalam kitab.
-   - **Riwayat dalam kitab lain**: riwayat daripada kitab yang tiada dalam aplikasi ini (contohnya Musnad Ahmad), dinamakan supaya anda boleh merujuknya.
-   - **Kisah popular: semak statusnya**: kisah yang sering diceritakan tentang peristiwa itu, setiap satu dengan label berwarna: **Tiada asas yang sahih** (merah), **Lemah** (jingga), **Ulama berbeza pendapat** (kuning tua), atau **Riwayat ahli sejarah: sanad tidak disemak** (kelabu: diriwayatkan oleh Ibn Ishaq dan ahli sejarah lain, tidak disahkan dalam kitab hadis).
+   - **Riwayat dalam kitab lain**: riwayat daripada kitab yang tiada dalam aplikasi ini; tajuknya menamakan kitab itu (cth. Musnad Ahmad), dan setiap satu ada **Sumber** (jilid/halaman atau nombor, darjat) dan **Buka sumber ›**.
+   - **Nasab Nabi ﷺ**: di bawah Kelahiran Nabi, nasab hingga 'Adnan seperti yang diberi al-Bukhari, dengan teks Arab dan sumbernya.
+   - **Kisah popular: semak statusnya**: kisah yang sering diceritakan tentang peristiwa itu, setiap satu dengan label berwarna: **Tiada asas yang sahih** (merah), **Lemah** (jingga), **Ulama berbeza pendapat** (kuning tua), atau **Riwayat ahli sejarah: sanad tidak disemak** (kelabu: diriwayatkan oleh Ibn Ishaq dan ahli sejarah lain, tidak disahkan dalam kitab hadis). Setiap kisah menamakan **Sumber**nya (cth. *as-Sirah an-Nabawiyyah* Ibn Hisyam, *Dala'il an-Nubuwwah* al-Baihaqi, dengan jilid/halaman jika telah disemak). **Ulama yang dirujuk dan tarikh wafat** ada di bawah halaman Sirah.
 3. Tanda **!** jingga pada garis masa bermaksud peristiwa itu ada kisah popular yang ditanda.
 4. **‹ ›** di bawah untuk ke peristiwa sebelum atau selepasnya.
 5. Tiga bahagian itu terbuka dan tertutup apabila diketik. **Carian** (kekal di atas) mencari peristiwa dalam bahasa Melayu atau Inggeris, contohnya "Badar", "Hijrah", "Ramadan". **Sambung bacaan** di atas membuka peristiwa terakhir yang anda baca.
 6. Pada sesuatu peristiwa: **Penanda** (disenaraikan di bawah Penanda dalam Sirah dan dalam tab **Sirah** pada butang Bookmarks), **Nota** (juga dalam Notes, di bawah **Sirah**) dan **Salin** (ringkasan, rujukan dan status kisah).
 7. Mengetik ayat atau **Open in …** pada hadis membawa anda ke sana; butang **kembali** telefon (atau butang **‹ Kembali** di atas mushaf) membawa anda semula ke peristiwa yang sama.
-8. **Makna perkataan:** tekan lama sesuatu perkataan dalam Sirah (juga dalam halaman Hadis dan Doa) untuk memilihnya, kemudian ketik **Cari makna**: Kamus Dewan (DBP) atau kamus Inggeris, atau Almaany untuk bahasa Arab, dibuka dalam pelayar. Menu pilihan teks telefon anda juga mungkin ada pilihan Terjemah.
+8. **Makna perkataan:** tekan lama sesuatu perkataan dalam Sirah (juga dalam halaman Hadis dan Doa) untuk memilihnya, kemudian ketik **Cari makna** (atau **Makna** dalam menu pilihan teks telefon, di mana-mana dalam aplikasi): perkataan Arab membuka **Kamus Al-Quran** (atau Almaany jika bukan perkataan al-Quran); perkataan Melayu atau Inggeris memberi carian dalam terjemahan al-Quran dan Kamus Dewan (DBP), Wiktionary, Cambridge atau Google Translate.
 9. Ringkasan ditulis untuk aplikasi ini berdasarkan hadis dan ahli sejarah yang dinamakan; tarikh yang tidak ditetapkan oleh hadis (contohnya 12 Rabiulawal, 27 Rejab) ditanda sedemikian.
 
 **Imbas & semak (Scan & check)**
@@ -247,7 +265,8 @@ Semuanya dibuka dari **menu ayat**; memerlukan internet sekali bagi setiap surah
    - Bahasa halaman ini, Sirah dan Masjid & musollah mengikut Settings → **Language of the Sirah, Scan & check and Masjid pages** (Same as translation, Bahasa Melayu atau English).
 2. Semak teks dalam kotak (kamera boleh tersilap membaca huruf, terutama Arab berbaris atau tulisan berhias), betulkan jika perlu, dan ketik **Semak**.
 3. **Al-Quran**: hijau **Dijumpai dalam Al-Quran**, **Dijumpai: sebahagian daripada ayat**, kuning **Hampir dengan ayat Al-Quran: ada perbezaan**, atau merah **Tiada ayat Al-Quran yang sepadan**. Setiap padanan menunjukkan ayat, terjemahannya dan berapa banyak yang sepadan; ketik untuk membuka ayat itu (butang **kembali** telefon membawa anda semula ke semakan).
-4. **Hadis**: lapan kitab dalam aplikasi ini disemak (kali pertama, setiap kitab dimuat turun, jadi guna Wi-Fi). Setiap padanan menunjukkan kitab, nombor dan darjatnya, dan sama ada seluruh teks itu ada dalam hadis tersebut atau **hanya sebahagian**. Merah **Tidak dijumpai** bukan bukti hadis itu palsu: ia mungkin ada dalam kitab lain (seperti Musnad Ahmad) atau dengan lafaz lain. Tanya guru yang berkelayakan.
+4. Tiada dalam kitab aplikasi ini (atau hanya sebahagian)? **Semak di luar aplikasi** memberi **Semak Hadis**, **Dorar.net** dan **Sunnah.com**; teks anda disalin dahulu (tampal di kotak carian Semak Hadis).
+5. **Hadis**: lapan kitab dalam aplikasi ini disemak (kali pertama, setiap kitab dimuat turun, jadi guna Wi-Fi). Setiap padanan menunjukkan kitab, nombor dan darjatnya, dan sama ada seluruh teks itu ada dalam hadis tersebut atau **hanya sebahagian**. Merah **Tidak dijumpai** bukan bukti hadis itu palsu: ia mungkin ada dalam kitab lain (seperti Musnad Ahmad) atau dengan lafaz lain. Tanya guru yang berkelayakan.
 5. Cara padanan: Arab, huruf dan perkataan yang sama (baris, alif dan hamzah diabaikan, jadi ejaan Uthmani mushaf dan ejaan biasa dikira sama, dan beberapa perkataan yang tersilap baca tidak menghalang padanan); Melayu dan Inggeris, perkataan penting yang sama. Penterjemah memilih perkataan berbeza, jadi peratus rendah tidak bermakna tiada. Teks hadis Bahasa Melayu dibandingkan dengan terjemahan Indonesia.
 
 **Masjid & musolla (Masjid & musollah)**
@@ -275,7 +294,7 @@ Semuanya dibuka dari **menu ayat**; memerlukan internet sekali bagi setiap surah
 **Peringatan** (Android)
 
 1. Ketik **loceng** di sebelah setiap waktu untuk menghidupkan atau mematikan peringatannya.
-2. **Sound**: azan Makkah, azan Madinah, nada pendek, **Notification only** (notifikasi sahaja, tanpa sebarang bunyi, termasuk peringatan sebelum waktu dan Syuruk), atau **None** (tiada peringatan azan langsung; peringatan sebelum waktu dan bar notifikasi masih berfungsi jika dihidupkan). Untuk azan, ketik **Choose … adhan file** dan pilih rakaman azan dari telefon anda.
+2. **Sound**: azan Makkah, azan Madinah, nada pendek, **Chime** (loceng lembut), **Bell** (loceng), **My short tone** (mana-mana fail audio anda sendiri, dimainkan hanya 6–20 saat pertama, kira-kira sepanjang "Allahu akbar, Allahu akbar" pada awal azan), **Notification only** (notifikasi sahaja, tanpa sebarang bunyi, termasuk peringatan sebelum waktu dan Syuruk), atau **None** (tiada peringatan azan langsung; peringatan sebelum waktu dan bar notifikasi masih berfungsi jika dihidupkan). Untuk azan, ketik **Choose … adhan file** dan pilih rakaman azan dari telefon anda.
 3. **Reminder before each prayer**: tiada hingga 30 minit sebelum waktu.
 4. **Test the sound** / **Stop**. Jika peringatan tidak berbunyi, benarkan notifikasi dan penggera, dan buang had bateri.
 5. Peringatan **dihidupkan secara lalai** untuk lima waktu solat, dan aplikasi meminta kebenaran notifikasi sekali. Ia mengikut mod bunyi telefon: **dering** = azan atau nada dimainkan; **getar** = telefon bergetar bersama notifikasi, tanpa bunyi; **senyap atau Jangan Ganggu** = notifikasi senyap sahaja. **Test the sound** mengikut peraturan yang sama (dalam mod getar ia hanya bergetar). Jika fon telinga atau earpiece Bluetooth disambung, azan dimainkan dalam fon telinga sahaja.
@@ -315,6 +334,13 @@ Semuanya dibuka dari **menu ayat**; memerlukan internet sekali bagi setiap surah
 2. **Save a backup file** menyimpan satu fail .json berisi semua tetapan, penanda buku al-Quran dan hadis, My ruku' dan My blocks, nota, keputusan Hafazan dan tempat terakhir dibaca. Pilih tempat simpanan, contohnya Google Drive, atau hantar kepada diri sendiri.
 3. **Restore from a backup file** di telefon ini atau telefon baharu menggantikan isi aplikasi dengan sandaran itu, kemudian membuka semula aplikasi.
 4. Tidak termasuk: rakaman suara Hafazan dan fail azan yang anda pilih (pilih semula), serta teks yang dimuat turun (akan dimuat turun semula).
+
+**Selaraskan telefon dan tablet (Sync)**
+
+1. Settings → Back up or restore → **Sync with your other devices (Google Drive)…**.
+2. Di peranti pertama ketik **Create the sync file**, dan dalam pemilih fail buka menu dan pilih **Drive**; simpan di situ. Di peranti lain ketik **Choose the sync file** dan pilih fail yang sama dalam Drive.
+3. Selepas itu, penanda (al-Quran, hadis, Sirah, Sifat Solat, Jumaat, Doa), nota, tempat terakhir dibaca, My ruku' dan My blocks, keputusan Hafazan dan tempat anda sendiri diselaraskan dengan sendirinya: apabila aplikasi dibuka, apabila anda kembali kepadanya, dan beberapa saat selepas sesuatu diubah. Yang dipadam di satu peranti dipadam juga di peranti lain. **Sync now** menyelaraskan serta-merta.
+4. Google Drive memerlukan internet untuk membawa perubahan dari peranti lain. Tetapan, peringatan waktu solat dan rakaman suara tidak diselaraskan.
 
 ## 10. Penyelesaian masalah
 

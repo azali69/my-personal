@@ -24,6 +24,9 @@ import android.media.audiofx.AutomaticGainControl;
 import android.media.audiofx.NoiseSuppressor;
 import android.os.ParcelFileDescriptor;
 import android.os.SystemClock;
+import android.view.ActionMode;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowInsets;
 import android.view.WindowInsetsController;
@@ -778,7 +781,7 @@ public class MainActivity extends Activity {
 
 
     /* ---------------- Prayer alerts, adhan files, location, compass ---------------- */
-    private static final int REQ_NOTIF = 21, REQ_LOC = 22, REQ_PICK = 23, REQ_SAVE = 24, REQ_OPEN = 25;
+    private static final int REQ_NOTIF = 21, REQ_LOC = 22, REQ_PICK = 23, REQ_SAVE = 24, REQ_OPEN = 25, REQ_SYNC = 26;
     private String pendingBackup = null, openedBackup = null;   // backup file text: to be written / just read
     private String pickSlot = null;
     private SensorManager sm; private SensorEventListener compassL; private float decl = 0f; private long lastCompass = 0;
@@ -909,6 +912,8 @@ public class MainActivity extends Activity {
                 File a = AdhanService.adhanFile(MainActivity.this, "makkah"), b = AdhanService.adhanFile(MainActivity.this, "madinah");
                 o.put("makkah", a == null ? "" : PrayerAlarms.prefs(MainActivity.this).getString("name_makkah", a.getName()));
                 o.put("madinah", b == null ? "" : PrayerAlarms.prefs(MainActivity.this).getString("name_madinah", b.getName()));
+                File t = AdhanService.adhanFile(MainActivity.this, "mytone");
+                o.put("mytone", t == null ? "" : PrayerAlarms.prefs(MainActivity.this).getString("name_mytone", t.getName()));
                 o.put("next", PrayerAlarms.prefs(MainActivity.this).getString("pending", ""));
                 return o.toString();
             } catch (Exception e) { return "{}"; }
@@ -921,7 +926,7 @@ public class MainActivity extends Activity {
         @JavascriptInterface public void openNotifSettings() {
             runOnUiThread(() -> { try { startActivity(new Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).putExtra(Settings.EXTRA_APP_PACKAGE, getPackageName())); } catch (Exception e) { openAppSettings(); } }); }
         @JavascriptInterface public void pickAdhan(String slot) {
-            if (!"makkah".equals(slot) && !"madinah".equals(slot)) return;
+            if (!"makkah".equals(slot) && !"madinah".equals(slot) && !"mytone".equals(slot)) return;
             pickSlot = slot;
             runOnUiThread(() -> { try { startActivityForResult(new Intent(Intent.ACTION_OPEN_DOCUMENT).addCategory(Intent.CATEGORY_OPENABLE).setType("audio/*"), REQ_PICK); } catch (Exception e) { js("window.__adhanPicked && window.__adhanPicked('" + slot + "','')"); } }); }
         /* Backup of the app's settings, bookmarks and notes: the person chooses where the file goes and where it comes from. */
@@ -931,6 +936,31 @@ public class MainActivity extends Activity {
         @JavascriptInterface public void openBackup() {
             runOnUiThread(() -> { try { startActivityForResult(new Intent(Intent.ACTION_OPEN_DOCUMENT).addCategory(Intent.CATEGORY_OPENABLE).setType("*/*"), REQ_OPEN); }
                 catch (Exception e) { js("window.__backupOpened && window.__backupOpened(false)"); } }); }
+        /* Sync between the person's phones and tablets (Azli, 17 Oct 2026): one file they choose in Google Drive (or any
+           cloud folder), kept by Android's document permission; the app reads and writes it, Drive keeps it the same everywhere. */
+        @JavascriptInterface public void syncPick(boolean create) {
+            runOnUiThread(() -> { try {
+                Intent i = create ? new Intent(Intent.ACTION_CREATE_DOCUMENT).addCategory(Intent.CATEGORY_OPENABLE).setType("application/json").putExtra(Intent.EXTRA_TITLE, "MyPersonalQuran-sync.json")
+                                  : new Intent(Intent.ACTION_OPEN_DOCUMENT).addCategory(Intent.CATEGORY_OPENABLE).setType("*/*");
+                i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
+                startActivityForResult(i, REQ_SYNC); } catch (Exception e) { js("window.__syncPicked && window.__syncPicked('')"); } }); }
+        @JavascriptInterface public String syncName() { return PrayerAlarms.prefs(MainActivity.this).getString("syncName", ""); }
+        @JavascriptInterface public void syncOff() {
+            String u = PrayerAlarms.prefs(MainActivity.this).getString("syncUri", "");
+            try { if (!u.isEmpty()) getContentResolver().releasePersistableUriPermission(Uri.parse(u), Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION); } catch (Exception ignored) { }
+            PrayerAlarms.prefs(MainActivity.this).edit().remove("syncUri").remove("syncName").apply(); }
+        /** The sync file's text, "" if empty, or "!error" when it cannot be read. */
+        @JavascriptInterface public String syncRead() {
+            String u = PrayerAlarms.prefs(MainActivity.this).getString("syncUri", ""); if (u.isEmpty()) return "!none";
+            try (InputStream in = getContentResolver().openInputStream(Uri.parse(u))) {
+                java.io.ByteArrayOutputStream bo = new java.io.ByteArrayOutputStream(); byte[] b = new byte[16384]; int n; long total = 0;
+                while ((n = in.read(b)) > 0) { bo.write(b, 0, n); total += n; if (total > 20_000_000) return "!too big"; }
+                return new String(bo.toByteArray(), java.nio.charset.StandardCharsets.UTF_8);
+            } catch (Exception e) { return "!" + e.getClass().getSimpleName(); } }
+        @JavascriptInterface public boolean syncWrite(String text) {
+            String u = PrayerAlarms.prefs(MainActivity.this).getString("syncUri", ""); if (u.isEmpty()) return false;
+            try (OutputStream out = getContentResolver().openOutputStream(Uri.parse(u), "wt")) { out.write(text.getBytes(java.nio.charset.StandardCharsets.UTF_8)); return true; }
+            catch (Exception e) { return false; } }
         @JavascriptInterface public String takeBackup() { String s = openedBackup; openedBackup = null; return s == null ? "" : s; }
         @JavascriptInterface public void removeAdhan(String slot) { File f = AdhanService.adhanFile(MainActivity.this, slot); if (f != null) f.delete(); }
         /** Test the alert as it will really be: it follows the phone's sound mode (returns "ring", "vibrate" or "silent"). */
@@ -1018,6 +1048,17 @@ public class MainActivity extends Activity {
         super.onActivityResult(req, res, data);
         if (req == REQ_CAM) { runScan(res == RESULT_OK ? camUri : null, scanLang); return; }
         if (req == REQ_IMG) { runScan(res == RESULT_OK && data != null ? data.getData() : null, scanLang); return; }
+        if (req == REQ_SYNC) {
+            String name = "";
+            if (res == RESULT_OK && data != null && data.getData() != null) {
+                Uri u = data.getData();
+                try { getContentResolver().takePersistableUriPermission(u, Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION); } catch (Exception ignored) { }
+                try (android.database.Cursor c = getContentResolver().query(u, null, null, null, null)) { if (c != null && c.moveToFirst()) { int i = c.getColumnIndex(android.provider.OpenableColumns.DISPLAY_NAME); if (i >= 0) name = c.getString(i); } } catch (Exception ignored) { }
+                if (name == null || name.isEmpty()) name = "sync file";
+                PrayerAlarms.prefs(this).edit().putString("syncUri", u.toString()).putString("syncName", name).apply();
+            }
+            js("window.__syncPicked && window.__syncPicked(" + JSONObject.quote(name) + ")"); return;
+        }
         if (req == REQ_SAVE) {
             boolean ok = false; String text = pendingBackup; pendingBackup = null;
             if (res == RESULT_OK && data != null && data.getData() != null && text != null) {
@@ -1064,6 +1105,30 @@ public class MainActivity extends Activity {
                 if (web.canGoBack()) web.goBack(); else MainActivity.super.onBackPressed();
             }
         });
+    }
+
+    /** Long-press text: a "Makna" (meaning) item first in the selection menu, answered inside the app (Azli, 17 Oct 2026). */
+    @Override
+    public void onActionModeStarted(ActionMode mode) {
+        super.onActionModeStarted(mode);
+        try {
+            Menu m = mode.getMenu();
+            if (m != null && m.findItem(0x4d4b) == null) {
+                MenuItem it = m.add(Menu.NONE, 0x4d4b, 0, "Makna");
+                it.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+                it.setOnMenuItemClickListener(x -> {
+                    if (web != null) web.evaluateJavascript("(function(){var t=String(window.getSelection()||'');window.__meaning&&window.__meaning(t);})()", null);
+                    mode.finish();
+                    return true;
+                });
+            }
+        } catch (Throwable ignored) { }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (web != null) web.evaluateJavascript("window.__resume && window.__resume()", null);
     }
 
     @Override
