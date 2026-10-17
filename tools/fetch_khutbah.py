@@ -30,7 +30,9 @@ def main():
         try: return datetime.datetime.strptime(x['date'], '%d %B %Y')
         except Exception: return datetime.datetime(1900, 1, 1)
     items.sort(key=key, reverse=True)
-    if not items: print('nothing found; page length', len(page)); sys.exit(1)
+    if not items:
+        print('::error::nothing found; page length %d; links %d; sample %s' % (len(page), len(links), re.sub(r'\s+',' ',page[:600]).replace('%','%%')))
+        sys.exit(1)
     out = os.path.join(os.path.dirname(__file__), '..', 'khutbah', 'latest.json')
     old = None
     try: old = json.load(open(out))
@@ -38,4 +40,8 @@ def main():
     if old and old.get('items') == items[:6]: print('unchanged'); return
     json.dump(dict(updated=datetime.datetime.utcnow().isoformat(timespec='seconds') + 'Z', items=items[:6]), open(out, 'w'), ensure_ascii=False, indent=1)
     print(json.dumps(items[:6], ensure_ascii=False, indent=1))
-main()
+    print('::notice::%d khutbah; newest: %s (%s) pdf=%s' % (len(items), items[0]['title'], items[0]['date'], bool(items[0]['pdf'])))
+try: main()
+except SystemExit: raise
+except Exception as e:
+    print('::error::%s: %s' % (type(e).__name__, str(e)[:500])); sys.exit(1)
