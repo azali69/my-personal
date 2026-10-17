@@ -34,6 +34,7 @@ def main():
         print('::error::nothing found; page length %d; links %d; sample %s' % (len(page), len(links), re.sub(r'\s+',' ',page[:600]).replace('%','%%')))
         sys.exit(1)
     out = os.path.join(os.path.dirname(__file__), '..', 'khutbah', 'latest.json')
+    os.makedirs(os.path.dirname(out), exist_ok=True)
     old = None
     try: old = json.load(open(out))
     except Exception: pass
