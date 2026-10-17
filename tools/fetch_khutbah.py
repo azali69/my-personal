@@ -25,7 +25,10 @@ def main():
         title = re.sub(r'\s*\|.*$', '', title)
         d = re.search(r'(\d{1,2} (?:%s) 20\d\d)' % MONTHS, p)
         pdfs = re.findall(r'href="([^"]+\.pdf)"', p, re.I)
-        items.append(dict(title=title, date=d.group(1) if d else '', url=u, pdf=html.unescape(pdfs[0]) if pdfs else ''))
+        pdf = html.unescape(pdfs[0]) if pdfs else ''
+        f = pdf.rsplit('/', 1)[-1][:1].upper()   # MUIS names the PDF E…, R… (Rumi Malay) or T… (Tamil)
+        lang = {'E': 'en', 'R': 'ms', 'T': 'ta'}.get(f, 'ta' if u.rstrip('/').endswith('tamil') else '')
+        items.append(dict(title=title, date=d.group(1) if d else '', url=u, pdf=pdf, lang=lang))
     def key(x):
         try: return datetime.datetime.strptime(x['date'], '%d %B %Y')
         except Exception: return datetime.datetime(1900, 1, 1)
@@ -38,9 +41,9 @@ def main():
     old = None
     try: old = json.load(open(out))
     except Exception: pass
-    if old and old.get('items') == items[:6]: print('unchanged'); return
-    json.dump(dict(updated=datetime.datetime.utcnow().isoformat(timespec='seconds') + 'Z', items=items[:6]), open(out, 'w'), ensure_ascii=False, indent=1)
-    print(json.dumps(items[:6], ensure_ascii=False, indent=1))
+    if old and old.get('items') == items[:9]: print('unchanged'); return
+    json.dump(dict(updated=datetime.datetime.utcnow().isoformat(timespec='seconds') + 'Z', items=items[:9]), open(out, 'w'), ensure_ascii=False, indent=1)
+    print(json.dumps(items[:9], ensure_ascii=False, indent=1))
     print('::notice::%d khutbah; newest: %s (%s) pdf=%s' % (len(items), items[0]['title'], items[0]['date'], bool(items[0]['pdf'])))
 try: main()
 except SystemExit: raise
