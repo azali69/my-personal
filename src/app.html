@@ -3052,7 +3052,11 @@ function showCover(){ let el=document.getElementById('cover'); if(!el){ el=docum
   el.onclick=ev=>{ const r=el.getBoundingClientRect(), x=(ev.clientX-r.left)/r.width, y=(ev.clientY-r.top)/r.height;
     if(!el.classList.contains('open') && ev.clientX && y<0.2){
       if(x<0.28){ store.set('cover',false); toast('Book cover off. Turn it on again in Settings › Home'); open(); return; }
-      if(x>0.72){ const cs=COVER_COLS.map(c=>c[0]).filter(v=>v!=='auto'), cur=coverCol(), nx=cs[(cs.indexOf(cur)+1)%cs.length]; store.set('coverCol',nx); showCover(); toast((COVER_COLS.find(c=>c[0]===nx)||[,''])[1]); return; } }
+      if(x>0.72){ const cs=COVER_COLS.map(c=>c[0]).filter(v=>v!=='auto'), cur=coverCol(), nx=cs[(cs.indexOf(cur)+1)%cs.length], all=store.get('coverAll',true);
+        // whole app (Azli, 18 Oct 2026): the cover, Home and the top and bottom bars take the same colour
+        if(all){ store.set('homeTheme',nx); store.set('coverCol','auto'); store.set('dockCol','home'); applyHomeLook(); try{ applyLook(); }catch(e){} }
+        else store.set('coverCol',nx);
+        showCover(); toast((COVER_COLS.find(c=>c[0]===nx)||[,''])[1]+(all?' · Home and bars too':'')); return; } }
     open(); };
   el.onkeydown=e=>{ if(e.key==='Enter'||e.key===' ') open(); }; }
 function applyHomeBars(){ try{ const v=getComputedStyle(document.documentElement).getPropertyValue('--h-bg').trim(); window.AndroidSpeech?.setBarColor?.(v, !['gading','biru-muda','pastel'].includes(store.get('homeTheme','hijau'))); }catch(e){} }
@@ -3188,8 +3192,10 @@ function homeSetSheet(){ openSheet('Home and colours', `
    <div class="label">Top and bottom bar colour</div>${segHtml('hmDock',DOCK_COLS,store.get('dockCol','hijau'))}
    <div class="label">Book cover when the app opens</div>${segHtml('hmCover',[[true,'Show'],[false,'Skip']],store.get('cover',true))}
    <div class="label">Book cover colour</div>${segHtml('hmCoverCol',COVER_COLS,coverColSet())}
+   <div class="label">"Tap change colour" on the book cover changes</div>${segHtml('hmCoverAll',[[true,'Whole app (cover, Home, bars)'],[false,'Book cover only']],store.get('coverAll',true))}
    <div class="actions"><button id="hmCoverPv">${ic('book')}Preview the cover</button></div>`);
   sheetB.querySelector('#hmCoverCol').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; sheetB.querySelectorAll('#hmCoverCol button').forEach(x=>x.setAttribute('aria-pressed',x===b)); store.set('coverCol',b.dataset.v); };
+  sheetB.querySelector('#hmCoverAll').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; sheetB.querySelectorAll('#hmCoverAll button').forEach(x=>x.setAttribute('aria-pressed',x===b)); store.set('coverAll',b.dataset.v==='true'); };
   sheetB.querySelector('#hmCoverPv').onclick=()=>{ closeSheet(); showCover(); };
   const on=(id,key,conv)=>{ sheetB.querySelector('#'+id).onclick=e=>{ const b=e.target.closest('button'); if(!b) return; sheetB.querySelectorAll('#'+id+' button').forEach(x=>x.setAttribute('aria-pressed',x===b)); store.set(key,conv(b.dataset.v)); applyHomeLook(); if(!document.getElementById('home')?.hidden) applyHomeBars(); }; };
   on('hmTheme','homeTheme',v=>v); on('hmDock','dockCol',v=>{ setTimeout(()=>{ if(document.getElementById('home')?.hidden!==false) applyLook(); },0); return v; }); on('hmCover','cover',v=>v==='true'); }
@@ -3895,7 +3901,7 @@ function checkShow(res, restored){ const ms=sL()==='ms', msg=document.getElement
   if(res.hDone && res.fail>0) hv+=`<p class="note">${ms?`${res.fail} kitab tidak dapat dimuatkan (tiada internet).`:`${res.fail} kitab could not be loaded (no internet).`}</p>`;
   /* Not in this app's books (or only partly): check it outside (Azli, 17 Oct 2026). The text is copied first, because
      Semak Hadis has no search link: paste it in their search box. */
-  if(res.hDone && !res.short && (!nH || !res.h.some(r=>r.sc.qc>=0.8))){ const t=encodeURIComponent((ckSt.text||'').slice(0,300));
+  if(res.hDone && !res.short){ const t=encodeURIComponent((ckSt.text||'').slice(0,300));
     hv+=`<div class="ck-out"><div class="label" style="margin-top:10px">${ms?'Semak di luar aplikasi':'Check outside the app'}</div>
      <p class="note" style="margin-top:0">${ms?'Teks anda disalin dahulu; untuk Semak Hadis, tampal di kotak cariannya.':'Your text is copied first; for Semak Hadis, paste it in its search box.'}</p>
      <div class="row2" style="gap:8px;flex-wrap:wrap"><a class="pill" data-ckx href="https://semakhadis.com/" target="_blank" rel="noopener">Semak Hadis ›</a><a class="pill" data-ckx href="https://dorar.net/hadith/search?q=${t}" target="_blank" rel="noopener">Dorar.net ›</a><a class="pill" data-ckx href="https://sunnah.com/search?q=${t}" target="_blank" rel="noopener">Sunnah.com ›</a></div>

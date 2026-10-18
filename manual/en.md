@@ -11,7 +11,7 @@ My Personal Quran is a Madinah mushaf for reading, memorising (hafazan), listeni
 **First launch**
 
 - The **book cover** appears. Tap anywhere on it to open the book; it swings open to the **Home** screen.
-- The cover comes back when you have been out of the app for more than 3 minutes (a quick trip to Google Translate or a source link does not bring it back). **Tap the top-left corner** of the cover to turn it off (turn it on again in Settings › Home); **tap the top-right corner** to change its colour. To skip it in settings: Home → settings button (top right) → **Book cover when the app opens → Skip**.
+- The cover comes back when you have been out of the app for more than 3 minutes (a quick trip to Google Translate or a source link does not bring it back). **Tap the top-left corner** of the cover to turn it off (turn it on again in Settings › Home); **tap the top-right corner** to change its colour; by default Home and the top and bottom bars change with it (Home settings → **"Tap change colour" on the book cover changes** → **Book cover only** to change just the cover). To skip it in settings: Home → settings button (top right) → **Book cover when the app opens → Skip**.
 - The cover has a gold frame, corner flowers and the medallion with القرآن الكريم, and "My Personal Quran" below. Its colour: same settings button → **Book cover colour**: **Same as home** (follows the Home background), **Madinah green**, **Black**, **Night blue**, **Light blue**, **Pastel green** or **Ivory**. **Preview the cover** shows it straight away.
 - Opening the app from a prayer notification skips the cover and goes straight to **Prayer times**.
 
