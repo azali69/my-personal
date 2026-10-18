@@ -422,11 +422,11 @@ body.immersive .dock.hz #mic{visibility:visible;pointer-events:auto}
   .cv-pm{display:none}.cv-med,.cv-ttl{display:block}
 }
 @container (min-aspect-ratio: 19/10){ .cv-med,.cv-ttl{--f:1.6} }
-.cover[data-cc="hijau"] .cv-g > :not(.cv-pm):not(.cv-ttl):not(.cover-hint), .cover[data-cc="hijau"] .cv-g img{visibility:hidden}   /* green: the picture as it is */
 .cv-g .cv-dm{display:none}
 /* Other colours: the picture's light and shade (luminosity) in the chosen colour, with its gold laid back on top. */
-.cover:not([data-cc="hijau"]) .cover-fr{background:var(--cv)}
-.cover:not([data-cc="hijau"]) .cv-b{mix-blend-mode:luminosity}
+.cover .cover-fr{background:var(--cv)}   /* every colour, green too, is the Home colour behind the cover art (Azli, 18 Oct 2026) */
+.cover .cv-b{mix-blend-mode:luminosity}
+.cover[data-cc="hijau"] .cv-b{filter:brightness(1.7)}
 .cover[data-cc="hitam"] .cv-b{filter:brightness(1.15)}
 .cover[data-cc="biru"] .cv-b{filter:brightness(1.8)}
 .cover:is([data-cc="biru-muda"],[data-cc="pastel"],[data-cc="gading"]) .cv-b{filter:invert(1) contrast(.85) brightness(1.02)}
@@ -3052,7 +3052,7 @@ function applyHomeLook(){ const r=document.documentElement; let t=store.get('hom
    folder) and laid on a background of the chosen colour, so it fits any screen shape and any of the home colours. */
 const CV_ART={dm:'%%ART:p_damask.webp%%',top:'%%ART:p_top.webp%%',mid:'%%ART:p_mid.webp%%',bot:'%%ART:p_bot.webp%%',bars:'%%ART:p_bars.webp%%',bart:'%%ART:p_bart.webp%%',barb:'%%ART:p_barb.webp%%',gtop:'%%ART:g_top.webp%%',gmid:'%%ART:g_mid.webp%%',gbot:'%%ART:g_bot.webp%%',gbars:'%%ART:g_bars.webp%%',gbart:'%%ART:g_bart.webp%%',gbarb:'%%ART:g_barb.webp%%'};
 const cvSrc=k=>'data:image/webp;base64,'+CV_ART[k];
-const COVER_BG={hijau:'#08110b',hitam:'#0d0c0a',biru:'#13233c','biru-muda':'#dcebf5',pastel:'#dcefe2',gading:'#f1e6cc'};
+const COVER_BG={hijau:'#0c3a2b',hitam:'#0d0c0a',biru:'#13233c','biru-muda':'#dcebf5',pastel:'#dcefe2',gading:'#f1e6cc'};
 const COVER_LIGHT=new Set(['biru-muda','pastel','gading']);
 const COVER_COLS=[['auto','Same as home'],['hijau','Madinah green'],['hitam','Black'],['biru','Night blue'],['biru-muda','Light blue'],['pastel','Pastel green'],['gading','Ivory']];
 function coverColSet(){ const v=store.get('coverCol','auto'); return COVER_COLS.some(c=>c[0]===v)?v:'auto'; }
