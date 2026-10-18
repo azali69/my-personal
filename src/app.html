@@ -451,6 +451,8 @@ body.immersive .dock.hz #mic{visibility:visible;pointer-events:auto}
 .home-in,.panel-in{position:relative;max-width:40rem;margin:0 auto}
 /* tablets turned sideways: the pages use the full width, as the Qur'an does (Azli, 17 Oct 2026) */
 @media (orientation:landscape) and (min-width:760px){.home-in,.panel-in{max-width:min(96vw,90rem)}}
+/* tablets in portrait (e.g. Boox Note Air, Azli 18 Oct 2026): use the whole width, not a phone-width column */
+@media (min-width:700px){.home-in,.panel-in,.top-in,.dock-in,.sheet-in,.tq-in,main,main.fit>*,.under>*{max-width:min(96vw,90rem)}}
 .home-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin:4px 2px 16px}
 .home-date b{display:block;font-family:var(--read);font-weight:500;font-size:19px;color:var(--gold-hi)}
 .home-date small{color:var(--h-mute);font-size:13px}
@@ -1289,8 +1291,10 @@ function setSheet(){
   <div class="label">English footnotes</div>${seg('fn',[[false,'Hide'],[true,'Show']],st.fn)}
   <div id="flowWrap"><div class="label">Uthmani text page</div>${seg('flow',[[false,'Fit page (15 lines)'],[true,'Larger text']],st.flow)}
   <p class="note">Fit page keeps the printed 15 lines on one screen. Larger text lets the lines run on, so you scroll to read the rest of the page.</p></div>
-  <div class="label">Arabic size</div><div class="row2"><input type="range" id="size" min="0" max="10" step="1" value="${Math.round((st.size-22)/2)}" aria-label="Arabic text size" style="flex:1"><span id="sizeL" class="note" style="min-width:4em;text-align:right"></span></div>
+  <div class="label">Arabic size</div><div class="row2"><input type="range" id="size" min="0" max="20" step="1" value="${Math.round((st.size-22)/2)}" aria-label="Arabic text size" style="flex:1"><span id="sizeL" class="note" style="min-width:4em;text-align:right"></span></div>
   <p class="note" id="sizeN"></p>
+  ${window.AndroidExtra?.setTextZoom?`<div class="label">App text size (all pages)</div>${seg('uiZoom',[[100,'100%'],[115,'115%'],[130,'130%'],[150,'150%'],[175,'175%'],[200,'200%']],store.get('uiZoom',100))}
+  <p class="note">Makes all writing in the app bigger: menus, translations, hadith, Sirah. Useful on large or e-ink screens. The fitted mushaf page keeps its own size; use Arabic size above for it.</p>`:''}
   ${micSettingsHtml()}
   <div class="label">Waqaf &amp; ibtida' blocks</div>${seg('blocks',MODES,st.blocks)}
   <p class="note" id="blkNote"></p>
@@ -1319,6 +1323,7 @@ function setSheet(){
     document.getElementById('sizeN').textContent = 'Used for translation, Hafazan'+(st.mushaf==='text'?' and Larger text.':'.')+' A fitted page always uses the largest size that fits your screen; turn the phone sideways for bigger letters.'; }; sizeLbl();
   segH('flow',v=>{ st.flow=(v==='true'); });
   segH('pscroll',v=>{ st.scroll=(v==='true'); });
+  if(sheetB.querySelector('#uiZoom')) segH('uiZoom',v=>{ store.set('uiZoom',+v); applyUiZoom(); });
   sheetB.querySelector('#size').oninput=e=>{ st.size=22+(+e.target.value)*2; applyLook(); save(); sizeLbl(); rerender(); };
   bindMicSettings();
   sheetB.querySelector('#openHist').onclick=histSheet; sheetB.querySelector('#openAbout').onclick=aboutSheet;
@@ -3084,6 +3089,8 @@ function showCover(){ let el=document.getElementById('cover'); if(!el){ el=docum
         showCover(); toast((COVER_COLS.find(c=>c[0]===nx)||[,''])[1]+(all?' · Home and bars too':'')); return; } }
     open(); };
   el.onkeydown=e=>{ if(e.key==='Enter'||e.key===' ') open(); }; }
+function applyUiZoom(){ const z=store.get('uiZoom',0); if(!z) return; try{ window.AndroidExtra?.setTextZoom?.(z); }catch(e){} }   // untouched: the phone's own font size stays in charge
+applyUiZoom();
 function applyHomeBars(){ try{ const v=getComputedStyle(document.documentElement).getPropertyValue('--h-bg').trim(); window.AndroidSpeech?.setBarColor?.(v, !['gading','biru-muda','pastel'].includes(store.get('homeTheme','hijau'))); }catch(e){} }
 const homeIc={
  read:'<path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H11v16H5.5A1.5 1.5 0 0 1 4 18.5zM20 5.5A1.5 1.5 0 0 0 18.5 4H13v16h5.5a1.5 1.5 0 0 0 1.5-1.5z"/><path d="M15 8h3M15 11h3"/>',

@@ -854,6 +854,8 @@ public class MainActivity extends Activity {
         js("window.__scanned && window.__scanned(" + ScanOcr.err("Google Lens is not on this phone. Install the Google app or Google Lens from the Play Store.") + ")");
     }
     private class ExtraBridge {
+        /** Text size of the whole app, in percent (WebView text zoom; the system font size still applies on top). */
+        @JavascriptInterface public void setTextZoom(int pct) { final int p = Math.max(80, Math.min(250, pct)); runOnUiThread(() -> web.getSettings().setTextZoom(p)); }
         @JavascriptInterface public void lens() { runOnUiThread(MainActivity.this::openLens); }
         @JavascriptInterface public String ocrReady() { return ArabicOcr.ready(MainActivity.this) ? "1" : "0"; }
         @JavascriptInterface public void ocrDownload() {

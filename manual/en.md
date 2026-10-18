@@ -332,7 +332,8 @@ All open from the **ayah menu**; they need the internet once per surah.
 | Transliteration | Under the Arabic in the translation view |
 | English footnotes | Saheeh International's notes |
 | Uthmani text page | Fit page or Larger text |
-| Arabic size | Size for translation view, Hafazan and Larger text |
+| Arabic size | Size for translation view, Hafazan and Larger text (up to 62 px) |
+| App text size (all pages) | Android app: makes all writing bigger (menus, translation, hadith, Sirah), 100% to 200%. For large or e-ink screens such as Boox |
 | Microphone (3 settings) | Quiet voice, surroundings, Bluetooth headset |
 | Waqaf & ibtida' blocks | Block shading (section 4) |
 | Back up or restore | Backup file of settings, bookmarks and notes (below) |
