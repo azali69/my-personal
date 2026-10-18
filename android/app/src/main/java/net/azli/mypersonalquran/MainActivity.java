@@ -854,14 +854,6 @@ public class MainActivity extends Activity {
         js("window.__scanned && window.__scanned(" + ScanOcr.err("Google Lens is not on this phone. Install the Google app or Google Lens from the Play Store.") + ")");
     }
     private class ExtraBridge {
-        /** Sends text to another app (e.g. Semak Hadis) with the share action; "1" sent, "0" that app is not installed or does not take text. */
-        @JavascriptInterface public String shareTo(String pkg, String text) {
-            try {
-                Intent i = new Intent(Intent.ACTION_SEND).setType("text/plain").putExtra(Intent.EXTRA_TEXT, text == null ? "" : text).setPackage(pkg).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                if (i.resolveActivity(getPackageManager()) == null) return "0";
-                startActivity(i); return "1";
-            } catch (Exception e) { return "0"; }
-        }
         @JavascriptInterface public void lens() { runOnUiThread(MainActivity.this::openLens); }
         @JavascriptInterface public String ocrReady() { return ArabicOcr.ready(MainActivity.this) ? "1" : "0"; }
         @JavascriptInterface public void ocrDownload() {

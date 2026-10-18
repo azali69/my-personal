@@ -214,7 +214,18 @@ All open from the **ayah menu**; they need the internet once per surah.
 10. **Also in** under a hadith lists the same hadith in the other books (e.g. "Muslim 113", "Abu Dawud 3692"). "(close wording)" means most, not all, of the wording matches, or only part of a longer hadith. Tap one to read it with that book's own grading, then **Open in …** to go there. They are found by comparing the Arabic text, so they help you find other narrations; they do not mean the chains or gradings are the same.
 11. Each hadith has a **bookmark** button (five colours, as for the Qur'an) and a **note** button. **Continue reading** (where you last stopped) is at the top of the Hadith page. Your bookmarks are listed below it when **Show** (beside **All**) is ticked; it is off at first.
 
-12. Each book has its own **Continue reading** at the top of its page (also Syama'il). The book's introduction folds into **About this book**; tap it to read. Under each hadith: **Maktabah Syamilah ›** (the opening words are copied; paste them in Syamilah's search, which has no link to a single hadith) and **Scholars' gradings & syarah · Dorar.net ›** (Dorar shows the verdicts of the muhaddithin, e.g. al-Albani, Ibn Hajar, adh-Dhahabi, al-Haythami, with the reason a hadith is weak, and links to its syarah). Hadith gradings show each grader's death year.
+12. Each book has its own **Continue reading** at the top of its page (also Syama'il). The book's introduction folds into **About this book**; tap it to read. Under each hadith: **Maktabah Syamilah ›** (the opening words are copied and a step-by-step guide opens; see *Searching in Maktabah Syamilah* below) and **Scholars' gradings & syarah · Dorar.net ›** (Dorar shows the verdicts of the muhaddithin, e.g. al-Albani, Ibn Hajar, adh-Dhahabi, al-Haythami, with the reason a hadith is weak, and links to its syarah). Hadith gradings show each grader's death year.
+
+**Searching in Maktabah Syamilah** (shamela.ws, for syarah, takhrij and other narrations):
+
+1. Under the hadith, tap **Maktabah Syamilah ›**. The opening words of the matn (without harakat) are copied and the guide opens.
+2. Tap **Open Maktabah Syamilah**. The search page opens at بحث في محتوى الكتب (search the contents of the books).
+3. Long-press the search box → **Paste**. Quotation marks "..." search the exact wording; without them any of the words match.
+4. Optional: بحث في نطاق محدد, then الكتب (one book, e.g. صحيح البخاري) or الأقسام (a section).
+5. Tap بحــث (Search).
+6. In نتائج البحث, filter with تصفية النتائج بالأقسام: شروح الحديث (commentaries such as Fath al-Bari, an-Nawawi's Sharh Muslim), التخريج والأطراف (takhrij and gradings), العلل والسؤلات الحديثية ('ilal), كتب السنة (other hadith books).
+7. Tap a result to open that page; note the book, volume and page as your reference.
+8. No results? Search 3 to 5 less common words without quotation marks; narrations differ in wording.
 13. **Asy-Syama'il al-Muhammadiyyah** (at-Tirmidhi) has its own **Syama'il** tile on Home, and is also the eighth book in the Hadith list: the Prophet's appearance, manners and daily life ﷺ, 400 hadith in 56 chapters, in Arabic and English (Sunnah.com). Each hadith shows the grading of **Zubair 'Ali Za'i** and, where the hadith is in al-Albani's *Mukhtasar asy-Syama'il*, **al-Albani**'s grading with his number. He left out repeated chains, so a missing grading of his does not mean weak. **Also in** shows the same hadith in the six books, with their own gradings (al-Albani, Shu'ayb al-Arna'ut, Zubair 'Ali Za'i). There is no open Malay translation of this book, so BI shows the English.
 
 **Sifat Solat Nabi ﷺ**
@@ -266,7 +277,7 @@ All open from the **ayah menu**; they need the internet once per surah.
    - The language of this page, the Sirah and Masjid & musollah follows Settings → **Language of the Sirah, Scan & check and Masjid pages** (Same as translation, Bahasa Melayu or English).
 2. Check the text in the box (the camera can misread a letter, especially in Arabic with harakat or decorated fonts), correct it if needed, and tap **Check**.
 3. **Qur'an**: green **Found in the Qur'an**, **Found: part of an ayah**, amber **Close to an ayah: there are differences**, or red **No ayah matched**. Each match shows the ayah, its translation and how much of it matched; tap it to open the ayah (the phone's **back** button returns to your check).
-4. **Check outside the app** (shown after every check): **Send to Semak Hadis app** passes your text straight to the Semak Hadis app if it is installed (otherwise the Play Store opens); also **Semak Hadis**, **Dorar.net** and **Sunnah.com**; your text is copied first (paste it in Semak Hadis's search box).
+4. **Check outside the app** (shown after every check): **Semak Hadis**, **Dorar.net** and **Sunnah.com**; your text is copied first (paste it in Semak Hadis's search box).
 5. **Hadith**: the eight books in this app are searched (the first time, every kitab is downloaded, so use Wi-Fi). Each match shows the book, number and gradings, and whether the whole text is in that hadith or **only part of it**. A red **Not found** is not proof that a hadith is fabricated: it may be in other books (such as Musnad Ahmad) or in other words. Ask a qualified teacher.
 5. How it matches: Arabic, the same letters and words (harakat, alif and hamza ignored, so the mushaf's Uthmani spelling and plain spelling compare the same, and a few misread words do not stop a match); Malay and English, the same important words. Translators word things differently, so a low percentage does not mean it is absent. Malay hadith text is compared with the Indonesian translation.
 

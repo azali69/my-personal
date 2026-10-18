@@ -435,14 +435,15 @@ body.immersive .dock.hz #mic{visibility:visible;pointer-events:auto}
 .cover[data-light] .cv-name{color:#6f5114;text-shadow:none}
 .cover-hint{position:absolute;left:0;right:0;bottom:calc(236 * var(--k));text-align:center;color:#b9a77a;font-size:12.5px;animation:hint 2.4s ease-in-out 1.2s infinite}
 .cover[data-light] .cover-hint{color:#6d5f3d}
-.cv-corner{position:absolute;top:calc(var(--sat,0px) + 6%);z-index:3;max-width:30%;padding:4px 8px;border-radius:10px;background:rgba(0,0,0,.62);font-size:12px;font-weight:700;line-height:1.25;color:#f3dc9a;pointer-events:none;transition:opacity .3s}
+.cv-corner{position:absolute;top:calc(var(--sat,0px) + 6%);z-index:3;max-width:30%;color:#d9c48a;font-size:12.5px;font-weight:600;line-height:1.3;text-shadow:0 0 3px var(--cv),0 0 6px var(--cv),0 0 10px var(--cv),0 0 14px var(--cv);pointer-events:none;animation:hint 2.4s ease-in-out 1.2s infinite;transition:opacity .3s}
+.sh-steps{padding-inline-start:20px;margin:0}.sh-steps li{margin:0 0 10px;line-height:1.55}.sh-steps .arl{display:block;font-size:20px;margin-top:4px}
 .cv-corner.l{left:6%;text-align:left}.cv-corner.r{right:6%;text-align:right}
-.cover[data-light] .cv-corner{background:rgba(255,250,235,.85);color:#5a420f}
+.cover[data-light] .cv-corner{color:#5e5133}
 .cover.open .cv-corner{opacity:0}
 @keyframes hint{50%{opacity:.35}}
 .cover.open .cover-leaf{transform:rotateY(-108deg);opacity:.0}
 .cover.open{background:transparent;pointer-events:none;transition:background .95s}
-@media (prefers-reduced-motion:reduce){.cover-leaf{transition:opacity .3s}.cover.open .cover-leaf{transform:none}.cover-hint{animation:none}}
+@media (prefers-reduced-motion:reduce){.cover-leaf{transition:opacity .3s}.cover.open .cover-leaf{transform:none}.cover-hint,.cv-corner{animation:none}}
 .home,.panel{position:fixed;inset:0;z-index:44;overflow:auto;background:var(--h-bg,#0c3a2b);color:var(--h-ink,#f3ead2);
   padding:calc(var(--sat,0px) + 14px) 16px calc(var(--sab,0px) + 28px)}
 .home[hidden],.panel[hidden]{display:none}
@@ -1730,11 +1731,35 @@ function ktCard(k,h,show,extra,sn,q){ const [n,ref,ar0,en0,idn0,gr]=h, cut=h[7]|
    result, so the opening words of the matn are copied and its search page opens: paste them there. Dorar.net searches
    by the words directly and shows the scholars' gradings and the syarah. */
 function ktExt(k,h,w){ const cut=h[7]||{}, ar=(h[2]||'').slice(cut.a||0).replace(/[\u064B-\u0652\u0670]/g,'');
-  const words=ar.split(/\s+/).filter(Boolean).slice(0,9).join(' ');
+  const words=ar.replace(/[^\u0621-\u064A\s]/g,' ').split(/\s+/).filter(Boolean).slice(0,9).join(' ');   // letters only: punctuation and quotes would spoil the search
   if(!words){ toast('No Arabic text for this hadith'); return; }
   const go=u=>{ try{ goingAway(); }catch(e){} const a=document.createElement('a'); a.href=u; a.target='_blank'; a.rel='noopener'; document.body.appendChild(a); a.click(); a.remove(); };
   if(w==='dr'){ go('https://dorar.net/hadith/search?q='+encodeURIComponent(words)); return; }
-  putClipboard(words).then(()=>{ toast(sL()==='ms'?'Awal matan disalin: tampal di kotak carian Syamilah':'Opening words copied: paste them in the Shamela search box'); go('https://shamela.ws/search'); }); }
+  putClipboard(words); shamelaHelp(words,()=>go('https://shamela.ws/search')); }
+/* How to search Maktabah Syamilah (Azli, 18 Oct 2026). Labels quoted as shamela.ws shows them (checked 18 Oct 2026). */
+function shamelaHelp(words,open){ const ms=sL()==='ms';
+  const steps = ms ? [
+    `Awal matan hadis ini (tanpa baris) sudah disalin: <span class="arl" dir="rtl">${esc(words)}</span>`,
+    `Ketik <b>Buka Maktabah Syamilah</b>. Halaman carian dibuka di bahagian <span dir="rtl">بحث في محتوى الكتب</span> (cari dalam kandungan kitab).`,
+    `Tekan lama kotak carian, pilih <b>Tampal</b>. Untuk lafaz yang tepat, letak teks dalam tanda petik "...". Tanpa tanda petik, ia mencari mana-mana perkataan.`,
+    `Pilihan: untuk kitab tertentu, pilih <span dir="rtl">بحث في نطاق محدد</span>, kemudian di <span dir="rtl">الكتب</span> pilih kitabnya (contoh: <span dir="rtl">صحيح البخاري</span>), atau di <span dir="rtl">الأقسام</span> pilih bahagian (lihat langkah 6).`,
+    `Ketik <span dir="rtl">بحــث</span> (Cari).`,
+    `Di <span dir="rtl">نتائج البحث</span> (hasil carian), tapis dengan <span dir="rtl">تصفية النتائج بالأقسام</span>: <span dir="rtl">شروح الحديث</span> untuk syarah (cth. Fath al-Bari, Syarah an-Nawawi), <span dir="rtl">التخريج والأطراف</span> untuk takhrij dan penilaian, <span dir="rtl">العلل والسؤلات الحديثية</span> untuk 'ilal, <span dir="rtl">كتب السنة</span> untuk kitab hadis lain yang meriwayatkannya.`,
+    `Ketik satu hasil untuk membuka halaman kitab itu. Catat nama kitab, jilid dan halaman sebagai rujukan.`,
+    `Tiada hasil? Lafaz riwayat berbeza-beza: padam beberapa perkataan dan cari dengan 3 hingga 5 perkataan yang jarang, tanpa tanda petik.`]
+  : [
+    `The opening words of this hadith's matn (without harakat) are copied: <span class="arl" dir="rtl">${esc(words)}</span>`,
+    `Tap <b>Open Maktabah Syamilah</b>. The search page opens at <span dir="rtl">بحث في محتوى الكتب</span> (search the contents of the books).`,
+    `Long-press the search box and choose <b>Paste</b>. For the exact wording, put the text in quotation marks "..."; without them it matches any of the words.`,
+    `Optional: to search one book, choose <span dir="rtl">بحث في نطاق محدد</span>, then under <span dir="rtl">الكتب</span> pick the book (e.g. <span dir="rtl">صحيح البخاري</span>), or under <span dir="rtl">الأقسام</span> a section (see step 6).`,
+    `Tap <span dir="rtl">بحــث</span> (Search).`,
+    `In <span dir="rtl">نتائج البحث</span> (results), filter with <span dir="rtl">تصفية النتائج بالأقسام</span>: <span dir="rtl">شروح الحديث</span> for commentaries (e.g. Fath al-Bari, an-Nawawi's Sharh Muslim), <span dir="rtl">التخريج والأطراف</span> for takhrij and gradings, <span dir="rtl">العلل والسؤلات الحديثية</span> for hidden defects ('ilal), <span dir="rtl">كتب السنة</span> for the other hadith books that narrate it.`,
+    `Tap a result to open that page of the book. Note the book, volume and page as your reference.`,
+    `No results? Narrations differ in wording: delete some words and search 3 to 5 less common words, without quotation marks.`];
+  openSheet(ms?'Cari dalam Maktabah Syamilah':'Search in Maktabah Syamilah', `<ol class="sh-steps">${steps.map(x=>`<li>${x}</li>`).join('')}</ol>
+    <button class="pill primary" id="shGo" style="width:100%;justify-content:center;margin-top:6px">${ms?'Buka Maktabah Syamilah':'Open Maktabah Syamilah'} ›</button>
+    <p class="note" style="font-size:12px">shamela.ws: ${ms?'perpustakaan kitab turath dalam talian. Teks disalin semula sebelum dibuka.':'the online library of classical works. The text is copied again before it opens.'}</p>`);
+  sheetB.querySelector('#shGo').onclick=()=>{ putClipboard(words); closeSheet(); open(); }; }
 function ktCopy(k,h){ const show=ktShow(), cut=h[7]||{}, [n,ref]=h, gr=h[5], ar=ktPart(h[2],cut.a,show), en=ktPart(h[3],cut.e,show), idn=ktPart(h[4],cut.i,show);
   const tr=[show.has('ar')?ar:'', show.has('id')?(idn||(show.has('en')?'':en)):'', show.has('en')?en:''].filter(Boolean).join('\n\n');
   const g = gr.map(([w,v])=>`${KT_GR[w]||w}: ${w==='tir'?v:ktGradeTxt(v)}`).join('; ');
@@ -3904,16 +3929,14 @@ function checkShow(res, restored){ const ms=sL()==='ms', msg=document.getElement
   if(res.hDone && !res.short){ const t=encodeURIComponent((ckSt.text||'').slice(0,300));
     hv+=`<div class="ck-out"><div class="label" style="margin-top:10px">${ms?'Semak di luar aplikasi':'Check outside the app'}</div>
      <p class="note" style="margin-top:0">${ms?'Teks anda disalin dahulu; untuk Semak Hadis, tampal di kotak cariannya.':'Your text is copied first; for Semak Hadis, paste it in its search box.'}</p>
-     <div class="row2" style="gap:8px;flex-wrap:wrap">${window.AndroidExtra?.shareTo?`<button class="pill primary" id="ckSH">${ms?'Hantar ke aplikasi Semak Hadis':'Send to Semak Hadis app'} ›</button>`:''}<a class="pill" data-ckx href="https://semakhadis.com/" target="_blank" rel="noopener">Semak Hadis ›</a><a class="pill" data-ckx href="https://dorar.net/hadith/search?q=${t}" target="_blank" rel="noopener">Dorar.net ›</a><a class="pill" data-ckx href="https://sunnah.com/search?q=${t}" target="_blank" rel="noopener">Sunnah.com ›</a></div>
+     <div class="row2" style="gap:8px;flex-wrap:wrap"><a class="pill" data-ckx href="https://semakhadis.com/" target="_blank" rel="noopener">Semak Hadis ›</a><a class="pill" data-ckx href="https://dorar.net/hadith/search?q=${t}" target="_blank" rel="noopener">Dorar.net ›</a><a class="pill" data-ckx href="https://sunnah.com/search?q=${t}" target="_blank" rel="noopener">Sunnah.com ›</a></div>
      <p class="note" style="font-size:12px">${ms?'Semak Hadis (Bahasa Melayu): semakhadis.com. Dorar.net: ensiklopedia hadis ad-Durar as-Saniyyah dengan penilaian ulama. Sunnah.com: kitab-kitab hadis dalam bahasa Inggeris.':'Semak Hadis (Malay): semakhadis.com. Dorar.net: the hadith encyclopedia of ad-Durar as-Saniyyah, with scholars\' gradings. Sunnah.com: the hadith books in English.'}</p></div>`; }
   const show=ktShow();
   hBox.innerHTML=`<div class="label">${ms?'Hadis':'Hadith'}</div>${hv}`+res.h.map((r,i)=>{ const k=(ktBooks||[]).find(x=>x.id===r.k); if(!k) return '';
     const sc=r.sc, how=res.isAr?(ms?`${ckPct(Math.max(sc.qc,sc.hc))} sama (Arab)`:`${ckPct(Math.max(sc.qc,sc.hc))} the same (Arabic)`):(ms?`${ckPct(Math.max(sc.qc,sc.hc))} perkataan sama (${sc.L==='id'?'Indonesia':'Inggeris'})`:`${ckPct(Math.max(sc.qc,sc.hc))} of words the same (${sc.L==='id'?'Indonesian':'English'})`);
     const whole=sc.qc>=0.8, part=`<div class="ck-v ${whole?'ck-ok':'ck-mid'}" style="font-size:13.5px;padding:5px 10px">${whole?(ms?'Teks itu ada dalam hadis ini':'The text is in this hadith'):(ms?'Hanya sebahagian teks itu sepadan dengan hadis ini':'Only part of the text matches this hadith')}</div>`;
     return `<div data-ck="${i}" class="ck-hd">${part}${ktCard(k,r.h,show,`<div class="row2" style="gap:6px;margin:0 0 6px"><button class="pill" data-open="${i}">${esc(KT_SHORT[k.id]||k.en)} ${r.h[0]} ›</button><small class="note" style="margin:0">${how}</small></div>`,r.sn,null)}</div>`; }).join('');
-  hBox.onclick=e=>{ if(e.target.closest('#ckSH')){ let r='0'; try{ r=window.AndroidExtra.shareTo('com.caliphstudio.semakhadis', ckSt.text||''); }catch(x){}
-      if(r!=='1'){ toast(ms?'Aplikasi Semak Hadis tiada di telefon ini. Membuka Play Store…':'The Semak Hadis app is not on this phone. Opening the Play Store…'); goingAway(); const l=document.createElement('a'); l.href='https://play.google.com/store/apps/details?id=com.caliphstudio.semakhadis'; l.target='_blank'; l.rel='noopener'; document.body.appendChild(l); l.click(); l.remove(); } else goingAway(); return; }
-    if(e.target.closest('[data-ckx]')){ putClipboard(ckSt.text||''); goingAway(); return; } const o=e.target.closest('[data-open]'); const w=e.target.closest('[data-ck]'); if(!w) return; const r=res.h[+w.dataset.ck]; if(!r) return;
+  hBox.onclick=e=>{ if(e.target.closest('[data-ckx]')){ putClipboard(ckSt.text||''); goingAway(); return; } const o=e.target.closest('[data-open]'); const w=e.target.closest('[data-ck]'); if(!w) return; const r=res.h[+w.dataset.ck]; if(!r) return;
     if(o){ ktOpenHadith(r.k,r.h[0],r.sn).then(()=>navRetSet('panel',()=>checkPanel(),ms?'Semakan':'Check')); return; }
     const k=ktBooks.find(x=>x.id===r.k); ktCardClick(e,k,n=>n===r.h[0]?{h:r.h,sn:r.sn}:null,()=>{ w.outerHTML=`<div data-ck="${w.dataset.ck}" class="ck-hd">${ktCard(k,r.h,ktShow(),'',r.sn,null)}</div>`; }); };
   msg.textContent= res.hDone ? '' : '';
