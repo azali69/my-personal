@@ -1,11 +1,14 @@
-import urllib.request, json, re, http.cookiejar
-cj=http.cookiejar.CookieJar(); op=urllib.request.build_opener(urllib.request.HTTPCookieProcessor(cj))
-UA='Mozilla/5.0 (Linux; Android 14) AppleWebKit/537.36 Chrome/126 Mobile Safari/537.36'
+import urllib.request, urllib.parse, json, re
+UA={'User-Agent':'MyPersonalQuran-probe/1.0 (azali69)'}
+def get(u): return urllib.request.urlopen(urllib.request.Request(u,headers=UA),timeout=60).read().decode('utf-8','replace')
 out=[]
-h=op.open(urllib.request.Request('https://halal.muis.gov.sg/halal/establishments',headers={'User-Agent':UA}),timeout=40).read().decode()
-tok=re.search(r'name="__RequestVerificationToken" type="hidden" value="([^"]+)"',h).group(1)
-for q in ['tampines','prata']:
-    r=op.open(urllib.request.Request('https://halal.muis.gov.sg/api/halal/establishments',data=json.dumps({'text':q}).encode(),headers={'User-Agent':UA,'Content-Type':'application/json','Accept':'application/json','X-CSRF-TOKEN':tok,'Referer':'https://halal.muis.gov.sg/halal/establishments'}),timeout=40)
-    b=json.loads(r.read().decode()); d=b.get('data',[]); out.append(f'{q}: keys={list(b)} n={len(d)} total={b.get("totalRecords") or b.get("total")}'); out.append(json.dumps(d[:2],ensure_ascii=False)[:1500])
+api='https://ar.wikisource.org/w/api.php?action=query&list=allpages&format=json&aplimit=500&apprefix='+urllib.parse.quote('البداية والنهاية/الجزء الخامس/')
+pages=[p['title'] for p in json.loads(get(api))['query']['allpages']]
+sel=[t for t in pages if re.search('أزواج|أولاد|زوجات|سراري|أمهات المؤمنين',t)]
+out.append('SEL: '+' || '.join(sel))
+for t in sel[:6]:
+    raw=get('https://ar.wikisource.org/w/index.php?action=raw&title='+urllib.parse.quote(t))
+    raw=re.sub(r'\{\{[^{}]*\}\}','',raw); raw=re.sub(r'\[\[(?:[^|\]]*\|)?([^\]]*)\]\]',r'\1',raw)
+    out.append(f'#### {t} ({len(raw)})\n'+raw[:9000])
 txt='\n'.join(out)
-for i in range(0,min(len(txt),30000),3500): print('::notice title=probe%d::'%(i//3500)+txt[i:i+3500].replace('%','%25').replace('\n','%0A'))
+for i in range(0,min(len(txt),60000),3800): print('::notice title=p%d::'%(i//3800)+txt[i:i+3800].replace('%','%25').replace('\n','%0A').replace('\r',''))
