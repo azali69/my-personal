@@ -1,17 +1,16 @@
-import urllib.request, re, json, sys
-UA={'User-Agent':'Mozilla/5.0 (Linux; Android 14) AppleWebKit/537.36 Chrome/126 Mobile Safari/537.36','Accept':'*/*'}
-def get(u):
+import urllib.request, re, json
+UA={'User-Agent':'Mozilla/5.0 (Linux; Android 14) AppleWebKit/537.36 Chrome/126 Mobile Safari/537.36','Accept':'*/*','Referer':'https://halal.muis.gov.sg/halal/establishments'}
+def get(u,data=None,ct=None):
+    h=dict(UA); 
+    if ct: h['Content-Type']=ct
     try:
-        r=urllib.request.urlopen(urllib.request.Request(u,headers=UA),timeout=30); return r.status, r.read().decode('utf-8','replace'), r.geturl()
-    except Exception as e: return 0, str(e), u
+        r=urllib.request.urlopen(urllib.request.Request(u,data=data,headers=h),timeout=40); return r.status, r.read().decode('utf-8','replace')
+    except urllib.error.HTTPError as e: return e.code, e.read().decode('utf-8','replace')[:300]
+    except Exception as e: return 0, str(e)
 out=[]
-s,h,u=get('https://halal.muis.gov.sg/halal/establishments'); out.append(f'page {s} {u} len={len(h)}')
-scripts=re.findall(r'<script[^>]+src="([^"]+)"',h); out.append('scripts: '+' '.join(scripts[:15]))
-out.append('apis in html: '+' '.join(sorted(set(re.findall(r'["\'](/?api/[^"\']{0,80}|https?://[^"\']*api[^"\']{0,80})["\']',h)))[:20]))
-for sc in scripts[:12]:
-    url=sc if sc.startswith('http') else 'https://halal.muis.gov.sg'+('' if sc.startswith('/') else '/')+sc
-    s2,j,_=get(url)
-    hits=sorted(set(re.findall(r'["\'`]([^"\'`]{0,60}(?:api|establish|Establish|search)[^"\'`]{0,60})["\'`]',j)))
-    if hits: out.append(f'{sc} -> '+' | '.join(hits[:25]))
+s,j=get('https://halal.muis.gov.sg/js/views/halal/establishments/_panel.js')
+i=j.find('/api/halal/establishments'); out.append('PANEL: '+j[max(0,i-1500):i+700])
+for u in ['https://halal.muis.gov.sg/api/halal/establishments','https://halal.muis.gov.sg/api/halal/establishments?text=&page=1']:
+    s,b=get(u); out.append(f'GET {u} -> {s} {b[:600]}')
 txt='\n'.join(out)
-for i in range(0,min(len(txt),36000),3500): print('::notice title=probe%d::'%(i//3500)+txt[i:i+3500].replace('%','%25').replace('\n','%0A'))
+for i in range(0,min(len(txt),30000),3500): print('::notice title=probe%d::'%(i//3500)+txt[i:i+3500].replace('%','%25').replace('\n','%0A'))
