@@ -1,5 +1,7 @@
 My Personal Quran ialah mushaf Madinah untuk membaca, menghafaz, mendengar bacaan dan ibadah harian. Panduan ini menerangkan setiap skrin dan butang mengikut urutan anda menemuinya. Nama butang ditulis seperti yang tertera dalam aplikasi (dalam bahasa Inggeris).
 
+> **Penafian.** My Personal Quran untuk **kegunaan peribadi sahaja**. Ia percuma, tidak dijual dan tidak boleh digunakan untuk tujuan komersial. Kandungannya milik penerbit masing-masing dan dipaparkan tanpa diubah serta dinyatakan sumbernya: teks Al-Quran daripada Kompleks Raja Fahd (KFGQPC); terjemahan dan tafsir daripada QuranEnc.com; makna kata demi kata dan transliterasi daripada Quran.com; teks hadis daripada Hadith API (fawazahmed0) dan Sunnah.com, dengan penilaian ulama yang dinamakan pada setiap hadis; syarah daripada HadeethEnc.com; Hisnul Muslim daripada hisnmuslim.com; waktu solat, khutbah dan sijil halal daripada MUIS; manakala Sirah, Sifat Solat dan Solat Jumaat ditulis untuk aplikasi ini daripada sumber klasik yang dinamakan (senarai penuh di Settings → Sources & verification). Aplikasi ini alat bantu belajar, bukan fatwa: untuk hukum, rujuk ulama yang berkelayakan.
+
 ## 1. Bermula
 
 **Memasang aplikasi (Android)**
@@ -40,7 +42,7 @@ Kembali ke Home dari mana-mana dengan **butang rumah** (atas kiri skrin bacaan) 
 | Open Qur'an | Senarai surah, juzuk dan halaman |
 | Hafazan | Kotak hafazan (bahagian 5) |
 | Listen & repeat | Qari membaca, anda mengulang dan disemak (bahagian 6) |
-| Bookmarks | Penanda buku dalam dua tab, Qur'an dan Hadith; My ruku' dan My blocks |
+| Bookmarks | Semua penanda dalam tab: Qur'an, Hadith, Sirah, Doa, Sifat Solat, Jumaat. Dibuka di atas Home; al-Quran dibuka hanya apabila anda memilih ayat |
 | Doa & zikir | Hisnul Muslim (bahagian 8) |
 | Hadith | Enam kitab hadis (Kutub as-Sittah) dan al-Muwatta Imam Malik, dengan hukum hadis (bahagian 8) |
 | Syama'il | Asy-Syama'il al-Muhammadiyyah karya at-Tirmizi, dalam jubinnya sendiri (juga kitab kelapan dalam Hadith) (bahagian 8) |
@@ -48,6 +50,7 @@ Kembali ke Home dari mana-mana dengan **butang rumah** (atas kiri skrin bacaan) 
 | Solat Jumaat | Sunnah hari Jumaat dari sebelum khutbah hingga selepas solat, isu qabliyah, rukun khutbah, dan khutbah terkini MUIS (bahagian 8) |
 | Kamus Al-Quran | Setiap perkataan al-Quran mengikut akar kata: makna, kekerapan dan tempatnya (bahagian 8) |
 | Scan & check | Semak sama ada ayat atau hadis yang dikongsi orang ada dalam Al-Quran atau kitab hadis (bahagian 8) |
+| Halal food | Cari tempat makan bersijil halal MUIS; pautan rasmi Jepun, Korea dan Thailand (bahagian 8) |
 | Masjid & musollah | Masjid dan musolla, yang paling dekat dahulu, dengan arah jalan; tambah tempat sendiri (bahagian 8) |
 | Notes | Buku nota anda: nota pada ayat, pada hadis, dan nota bebas (bahagian 8) |
 | Prayer times | Waktu solat MUIS, peringatan (bahagian 8) |
@@ -98,7 +101,7 @@ Kembali ke Home dari mana-mana dengan **butang rumah** (atas kiri skrin bacaan) 
 **Gaya halaman** (Settings → Mushaf)
 
 - **Madinah 1441H**: halaman cetakan Kompleks Raja Fahd, 15 baris. Settings → **Save all 604 pages** menyimpannya untuk bacaan tanpa internet.
-- **Madinah tajweed**: halaman yang sama dengan warna tajwid.
+- **Madinah tajweed**: halaman yang sama dengan warna tajwid. Settings → Mushaf → **Colour key** menerangkannya: merah tua Mad Lazim (6), merah jingga Mad Wajib Muttasil (4-5), jingga muda Mad 'Arid Lissukun (2/4/6), kuning Mad Asli (2), hijau dengung, biru muda qalqalah, biru tua tafkhim, kelabu huruf tidak dibaca. Izhar, idgham dan ikhfa' tidak diwarnakan. (Sumber: panduan Tarteel bagi fon ini.)
 - **Uthmani text**: teks dalam fon Raja Fahd; **Fit page** (15 baris dalam satu skrin) atau **Larger text** (tatal).
 
 **Paparan terjemahan**: setiap ayat dengan terjemahan Bahasa Melayu (Abdullah Basmeih) atau Inggeris (Saheeh International), nota kaki Inggeris dan transliterasi (pilihan). Transliterasi hanya anggaran dan sentiasa dipaparkan di bawah tulisan Arab.
@@ -257,6 +260,7 @@ Semuanya dibuka dari **menu ayat**; memerlukan internet sekali bagi setiap surah
    - **Hadis**: riwayat dalam kitab aplikasi ini, berserta hukumnya (Bukhari dan Muslim ditanda Sahih). Ketik untuk membaca hadis itu; **Open in …** membawa anda kepadanya dalam kitab.
    - **Riwayat dalam kitab lain**: riwayat daripada kitab yang tiada dalam aplikasi ini; tajuknya menamakan kitab itu (cth. Musnad Ahmad), dan setiap satu ada **Sumber** (jilid/halaman atau nombor, darjat) dan **Buka sumber ›**.
    - **Nasab Nabi ﷺ**: di bawah Kelahiran Nabi, nasab hingga 'Adnan seperti yang diberi al-Bukhari, dengan teks Arab dan sumbernya.
+   - **Keluarga Rasulullah ﷺ**: di atas senarai Sirah: isteri-isteri baginda (Ummahatul Mukminin) mengikut susunan, Mariyah dan Raihanah, anak-anak baginda, dan cucu baginda melalui Zainab, Ruqayyah dan Fatimah, daripada Zad al-Ma'ad (Ibn al-Qayyim) dan al-Bidayah wa an-Nihayah (Ibn Kathir), dengan khilaf dinyatakan.
    - **Kisah popular: semak statusnya**: kisah yang sering diceritakan tentang peristiwa itu, setiap satu dengan label berwarna: **Tiada asas yang sahih** (merah), **Lemah** (jingga), **Ulama berbeza pendapat** (kuning tua), atau **Riwayat ahli sejarah: sanad tidak disemak** (kelabu: diriwayatkan oleh Ibn Ishaq dan ahli sejarah lain, tidak disahkan dalam kitab hadis). Setiap kisah menamakan **Sumber**nya (cth. *as-Sirah an-Nabawiyyah* Ibn Hisyam, *Dala'il an-Nubuwwah* al-Baihaqi, dengan jilid/halaman jika telah disemak). **Ulama yang dirujuk dan tarikh wafat** ada di bawah halaman Sirah.
 3. Tanda **!** jingga pada garis masa bermaksud peristiwa itu ada kisah popular yang ditanda.
 4. **‹ ›** di bawah untuk ke peristiwa sebelum atau selepasnya.
@@ -280,6 +284,12 @@ Semuanya dibuka dari **menu ayat**; memerlukan internet sekali bagi setiap surah
 4. **Semak di luar aplikasi** (dipaparkan selepas setiap semakan): **Semak Hadis**, **Dorar.net** dan **Sunnah.com**; teks anda disalin dahulu (tampal di kotak carian Semak Hadis).
 5. **Hadis**: lapan kitab dalam aplikasi ini disemak (kali pertama, setiap kitab dimuat turun, jadi guna Wi-Fi). Setiap padanan menunjukkan kitab, nombor dan darjatnya, dan sama ada seluruh teks itu ada dalam hadis tersebut atau **hanya sebahagian**. Merah **Tidak dijumpai** bukan bukti hadis itu palsu: ia mungkin ada dalam kitab lain (seperti Musnad Ahmad) atau dengan lafaz lain. Tanya guru yang berkelayakan.
 5. Cara padanan: Arab, huruf dan perkataan yang sama (baris, alif dan hamzah diabaikan, jadi ejaan Uthmani mushaf dan ejaan biasa dikira sama, dan beberapa perkataan yang tersilap baca tidak menghalang padanan); Melayu dan Inggeris, perkataan penting yang sama. Penterjemah memilih perkataan berbeza, jadi peratus rendah tidak bermakna tiada. Teks hadis Bahasa Melayu dibandingkan dengan terjemahan Indonesia.
+
+**Makanan halal (Halal food)**
+
+1. Home → **Halal food**. Taip nama atau kawasan (sekurang-kurangnya 3 huruf), cth. *Tampines* atau *prata*: aplikasi mencari terus dalam **direktori halal MUIS** dan menyenaraikan setiap tempat dengan jenis, alamat dan nombor sijil, serta **Map ›**. MUIS memaparkan paling banyak 200 hasil; perincikan carian. (Aplikasi Android; perlu internet.)
+2. Sijil boleh tamat atau ditarik balik: semak sijil MUIS yang dipamerkan di premis.
+3. **Pautan rasmi** Jepun (JNTO), Korea (Korea Tourism Organization) dan Thailand (CICOT, Halal Standard Institute) dibuka dalam pelayar. Senarai Korea ada empat gred dan hanya **Halal Certified** bersijil halal; Jepun tiada badan halal kerajaan.
 
 **Masjid & musolla (Masjid & musollah)**
 
@@ -350,10 +360,10 @@ Semuanya dibuka dari **menu ayat**; memerlukan internet sekali bagi setiap surah
 
 **Selaraskan telefon dan tablet (Sync)**
 
-1. Settings → Back up or restore → **Sync with your other devices (Google Drive)…**.
-2. Di peranti pertama ketik **Create the sync file**, dan dalam pemilih fail buka menu dan pilih **Drive**; simpan di situ. Di peranti lain ketik **Choose the sync file** dan pilih fail yang sama dalam Drive.
+1. Settings → Back up or restore → **Sync with your other devices (Google Drive / OneDrive)…**.
+2. Di **peranti pertama sahaja** ketik **Create the sync file**, dan dalam pemilih fail buka menu (☰) dan pilih **Drive** atau **OneDrive** (aplikasi OneDrive mesti dipasang dan log masuk); simpan di situ. Di **setiap peranti lain** ketik **Choose the sync file** dan pilih **fail yang sama**. Jangan cipta fail sync kedua: dua fail tidak akan bertemu.
 3. Selepas itu, penanda (al-Quran, hadis, Sirah, Sifat Solat, Jumaat, Doa), nota, tempat terakhir dibaca, My ruku' dan My blocks, keputusan Hafazan dan tempat anda sendiri diselaraskan dengan sendirinya: apabila aplikasi dibuka, apabila anda kembali kepadanya, dan beberapa saat selepas sesuatu diubah. Yang dipadam di satu peranti dipadam juga di peranti lain. **Sync now** menyelaraskan serta-merta.
-4. Google Drive memerlukan internet untuk membawa perubahan dari peranti lain. Tetapan, peringatan waktu solat dan rakaman suara tidak diselaraskan.
+4. Aplikasi awan memerlukan internet untuk membawa perubahan dari peranti lain, dan mungkin mengambil beberapa minit. Tetingkap Sync menunjukkan **peranti mana yang terakhir menulis fail itu, dan bila**: jika lebih lama daripada perubahan yang baru anda buat di peranti lain, buka aplikasi Drive atau OneDrive, tarik ke bawah untuk muat semula, kemudian ketik **Sync now**. Baris merah bermaksud cubaan terakhir tidak dapat menulis fail. Tetapan, peringatan waktu solat dan rakaman suara tidak diselaraskan.
 
 ## 10. Penyelesaian masalah
 

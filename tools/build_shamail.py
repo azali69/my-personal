@@ -33,7 +33,8 @@ def zub(g):
     m=re.match(r"(Sahih|Hasan|Da'if) Isnad$",g)
     if m: return 'Isnad '+m.group(1)
     return {"Sanad Da'if Jiddan":"Isnad Very Da'if","Sanad Da'if wal-hadith Hasan":"Isnad Da'if, the hadith Hasan","Sanad Da'if wal-hadith Sahih":"Isnad Da'if, the hadith Sahih","Sahih Muttafaq 'alay":"Sahih - Agreed Upon"}.get(g,g)
-TITLE=lambda s:re.sub(r"\bRasoolullah\b","Allah's Messenger ﷺ",s).replace("Of Allah's Messenger ﷺ","of Allah's Messenger ﷺ")
+# "Sayyidina Rasoolullah" in Sunnah.com's chapter titles -> "Sayyidina Rasulullah ﷺ" (Azli, 20 Oct 2026); elsewhere "Allah's Messenger ﷺ"
+TITLE=lambda s:re.sub(r"\bRasoolullah\b","Allah's Messenger ﷺ",re.sub(r"\bSayyidina Rasoolullah\b","Sayyidina Rasulullah ﷺ",s)).replace("Of Allah's Messenger ﷺ","of Allah's Messenger ﷺ")
 os.makedirs(os.path.join(R,'kutub','shamail'),exist_ok=True); sections=[]; idx=0
 for c in C:
     recs=[]

@@ -572,6 +572,10 @@ body.immersive .navret{display:none}
 .sl-com{margin:8px 0 0;border:1px dashed color-mix(in srgb,var(--gold) 50%,transparent);border-radius:10px;padding:6px 10px}
 .sl-com summary{cursor:pointer;font-weight:600;color:var(--gold-hi)}.sl-com summary small{font-weight:400;color:var(--h-mute,#888)}
 .wf{font-style:normal;font-weight:400;opacity:.72;font-size:.86em;margin-inline-start:4px}.sl-p .wf{display:block;margin:0}
+.sr-fam{margin:6px 0;padding:10px 12px}.sr-fam p{margin:4px 0;line-height:1.55}.sr-fam-h{display:flex;justify-content:space-between;gap:8px;align-items:baseline}.sr-fam-ar{font-family:var(--ar);font-size:19px;color:var(--gold-hi)}.sr-kids{margin:2px 0;padding-inline-start:18px;line-height:1.55}.sr-kids span{font-family:var(--ar)}
+.tj-key li{display:flex;gap:10px;align-items:center;padding:8px 0}.tj-sw{flex:none;width:22px;height:22px;border-radius:6px}.tj-key .t{display:flex;flex-direction:column}
+a.tile{text-decoration:none;color:inherit}
+.hl-list li{display:flex;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid color-mix(in srgb,var(--gold) 20%,transparent)}.hl-list .t{flex:1;display:flex;flex-direction:column;gap:2px}.hl-list small{opacity:.85}
 .sr-ulama{margin-top:14px}.sr-ulama ul{margin:6px 0;padding-inline-start:18px;line-height:1.5}.sr-ulama li{margin:4px 0}
 .kt-ext{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 0}.kt-xl{font:inherit;font-size:12.5px;padding:4px 10px;border-radius:14px;border:1px solid color-mix(in srgb,var(--gold) 50%,transparent);background:none;color:var(--gold-hi)}
 .sl-cp{margin:8px 0;line-height:1.5;font-size:14.5px}.sl-ref{color:var(--h-mute,#888);font-size:12.5px}.sl-src{display:inline-block;font-size:12.5px;color:var(--gold-hi);margin-top:2px}.sl-cp b{color:var(--gold-hi)}
@@ -760,8 +764,11 @@ async function syncNow(manual){ if(!syncOn()||syncBusy) return; syncBusy=true;
     if(changed.length){ window.__syncApplying=true; try{ changed.forEach(k=>store.set(k,out[k].v)); } finally{ window.__syncApplying=false; }
       try{ localStorage.setItem('mpq.__syncT',JSON.stringify(Object.assign(LT,outT))); }catch(e){}
       syncAfter(changed); }
-    window.AndroidExtra.syncWrite(JSON.stringify({app:'My Personal Quran',kind:'sync',at:Date.now(),keys:out,del:DEL}));
-    store.set('syncAt',Date.now()); if(manual) toast(changed.length?`Synced: ${changed.length} updated from your other device`:'Synced');
+    if(R && R.at) store.set('syncFrom',{at:R.at,dev:R.dev||''});   // what the other device last wrote, shown in the Sync window
+    const dev=(()=>{ try{ return window.AndroidExtra.deviceName?.()||''; }catch(e){ return ''; } })();
+    const ok=window.AndroidExtra.syncWrite(JSON.stringify({app:'My Personal Quran',kind:'sync',at:Date.now(),dev,keys:out,del:DEL}));
+    if(!ok){ store.set('syncErr',Date.now()); if(manual) toast('Could not write the sync file. Open the Drive or OneDrive app once, then try again.'); return; }
+    store.set('syncErr',0); store.set('syncAt',Date.now()); if(manual) toast(changed.length?`Synced: ${changed.length} updated from your other device`:'Synced');
   }catch(e){ if(manual) toast('Sync failed'); } finally{ syncBusy=false; } }
 function syncAfter(ks){ try{
   if(ks.includes('bm')){ st.bm=store.get('bm',{}); }
@@ -771,11 +778,12 @@ function syncAfter(ks){ try{
 function syncSheet(){ const name=window.AndroidExtra?.syncName?.()||'', at=store.get('syncAt',0);
   if(!window.AndroidExtra?.syncPick){ openSheet('Sync with your other devices','<p class="note">Sync works in the Android app.</p>'); return; }
   openSheet('Sync with your other devices', `
-   <p class="note" style="margin-top:0">Keep your bookmarks, notes and last-read places the same on your phone and tablet, through one file in your Google Drive. On the first device, <b>create</b> the sync file in Google Drive; on the other device, <b>choose that same file</b>. After that the app syncs on its own when it opens, when it returns, and a few seconds after you change something.</p>
+   <p class="note" style="margin-top:0">Keep your bookmarks, notes and last-read places the same on your phone and tablet, through one file in your Google Drive or OneDrive. On the first device, <b>create</b> the sync file there; on every other device, <b>choose that same file</b> (do not create a second one). After that the app syncs on its own when it opens, when it returns, and a few seconds after you change something.</p>
    ${name?`<p class="note">Sync file: <b>${esc(name)}</b>${at?` · last synced ${new Date(at).toLocaleString()}`:''}</p>
+     ${(()=>{ const f=store.get('syncFrom',null), er=store.get('syncErr',0); return (f&&f.at?`<p class="note">The file was last written ${f.dev?'by <b>'+esc(f.dev)+'</b> ':''}at ${new Date(f.at).toLocaleString()}. If that is older than a change you made on the other device, the cloud app has not brought the new copy yet: open the Drive or OneDrive app, pull down to refresh, then tap Sync now.</p>`:'')+(er?`<p class="note" style="color:var(--danger,#b3261e)">The last attempt could not write the file (${new Date(er).toLocaleString()}).</p>`:''); })()}
      <div class="actions"><button id="syNow">${ic('hist')}Sync now</button><button id="syOff">${ic('trash')}Stop syncing on this device</button></div>`
    :`<div class="actions"><button id="syNew">${ic('note')}Create the sync file (first device)</button><button id="syOpen">${ic('book')}Choose the sync file (other devices)</button></div>`}
-   <p class="note" style="font-size:12px">In the file picker, open the menu and choose Drive (or another cloud folder). The file stays in your own Drive; nothing goes to anyone else. Google Drive needs the internet to bring a change made on the other device, so give it a moment. Settings, prayer alerts and voice recordings are not synced.</p>`);
+   <p class="note" style="font-size:12px">In the file picker, open the menu (☰) and choose <b>Drive</b> or <b>OneDrive</b> (the OneDrive app must be installed and signed in). The file stays in your own Drive; nothing goes to anyone else. The cloud app needs the internet to bring a change made on the other device, so give it a moment. Settings, prayer alerts and voice recordings are not synced.</p>`);
   const pick=c=>{ window.__syncPicked=n=>{ window.__syncPicked=null; if(!n){ toast('No file chosen'); return; } toast('Sync file: '+n); syncNow(true).then(()=>syncSheet()); }; goingAway(); window.AndroidExtra.syncPick(c); };
   sheetB.querySelector('#syNew')?.addEventListener('click',()=>pick(true)); sheetB.querySelector('#syOpen')?.addEventListener('click',()=>pick(false));
   sheetB.querySelector('#syNow')?.addEventListener('click',()=>syncNow(true).then(()=>syncSheet()));
@@ -1318,9 +1326,9 @@ function setSheet(){
   const segH=(id,fn)=>sheetB.querySelector('#'+id).onclick=e=>{ const b=e.target.closest('button'); if(!b) return; sheetB.querySelectorAll('#'+id+' button').forEach(x=>x.setAttribute('aria-pressed',x===b)); fn(b.dataset.v); rerender(); };
   const mNote=()=>{ document.getElementById('mNote').innerHTML = st.mushaf==='text'
      ? 'Unicode text in the King Fahd Complex font.'
-     : 'The printed King Fahd Complex page, one drawn word at a time, the same fonts Quran.com uses. Pages download the first time you open them'+(IS_ANDROID_APP?' and are then kept on the phone.':'.')+(st.mushaf==='v4t'?' Colours show tajweed rules.':'');
+     : 'The printed King Fahd Complex page, one drawn word at a time, the same fonts Quran.com uses. Pages download the first time you open them'+(IS_ANDROID_APP?' and are then kept on the phone.':'.')+(st.mushaf==='v4t'?' Colours show tajweed rules: <button class="pill" id="tjKey" style="margin-top:6px">Colour key</button>':'');
     document.getElementById('offWrap').innerHTML = st.mushaf==='text'?'' : `<div class="actions"><button id="offBtn">${ic('copy')}Save all 604 pages for offline reading</button></div><p class="note" id="offMsg"></p>`;
-    const ob=document.getElementById('offBtn'); if(ob) ob.onclick=()=>saveOffline(st.mushaf); };
+    const ob=document.getElementById('offBtn'); if(ob) ob.onclick=()=>saveOffline(st.mushaf); const tk=document.getElementById('tjKey'); if(tk) tk.onclick=tajweedKey; };
   mNote();
   segH('mushaf',v=>{ st.mushaf=v; mNote(); sizeLbl(); });
   segH('lang',v=>st.lang=v); segH('uiLang',v=>store.set('uiLang',v)); segH('tl',v=>{ st.tl=v; if(v!=='off') tlLoad(v); }); segH('wtap',v=>store.set('wordTap',v==='true')); sheetB.querySelector('#openHomeSet').onclick=homeSetSheet; sheetB.querySelector('#openManual').onclick=()=>{ closeSheet(); manualPanel(); }; sheetB.querySelector('#openBackup').onclick=backupSheet; segH('sname',v=>st.sname=v); segH('fn',v=>st.fn=(v==='true')); segH('blocks',v=>{ if(v!=='off') store.set('lastBlocks',v); st.blocks=v; note(); });
@@ -1908,7 +1916,7 @@ function backupSummary(data){ const g=(k,d)=>{ try{ return data[k]==null? d : JS
 function backupSheet(){ const now=backupCollect();
   openSheet('Backup and restore', `
    <p class="note" style="margin-top:0">One file with everything you set and saved in the app: ${esc(backupSummary(now.data))}.</p>
-   <div class="actions"><button id="bkSave">${ic('copy')}Save a backup file</button><button id="bkLoad">${ic('hist')}Restore from a backup file</button><button id="bkSync">${ic('hist')}Sync with your other devices (Google Drive)…</button></div>
+   <div class="actions"><button id="bkSave">${ic('copy')}Save a backup file</button><button id="bkLoad">${ic('hist')}Restore from a backup file</button><button id="bkSync">${ic('hist')}Sync with your other devices (Google Drive / OneDrive)…</button></div>
    <p class="note">Save it somewhere safe, e.g. Google Drive or email it to yourself. Restoring replaces what is in the app now with the backup.</p>
    <p class="note" style="font-size:12px">Not in the backup: your Hafazan voice recordings and the adhan sound files you chose (pick those again), and the downloaded tafsir, hadith and word-by-word texts, which download again when needed.</p>
    <input type="file" id="bkFile" accept="application/json,.json" hidden>`);
@@ -2975,7 +2983,8 @@ function bmSheet(filter,tab){
   // two tabs: Qur'an bookmarks and hadith bookmarks (Azli, 11 Oct 2026); the last tab used is remembered
   tab = tab || store.get('bmTab','q'); store.set('bmTab',tab);
   const hn=Object.keys(ktBmAll()).length;
-  const sn0=Object.keys(sirahBmAll()).length, tabsOf=t=>`<div class="seg" id="bmTab" style="margin-bottom:10px"><button data-tab="q" aria-pressed="${t==='q'}">Qur'an · ${Object.keys(st.bm).length}</button><button data-tab="h" aria-pressed="${t==='h'}">Hadith · ${hn}</button><button data-tab="s" aria-pressed="${t==='s'}">Sirah · ${sn0}</button></div>`;
+  const sn0=Object.keys(sirahBmAll()).length, XB=bmExtra(), tabsOf=t=>`<div class="seg" id="bmTab" style="margin-bottom:10px;flex-wrap:wrap"><button data-tab="q" aria-pressed="${t==='q'}">Qur'an · ${Object.keys(st.bm).length}</button><button data-tab="h" aria-pressed="${t==='h'}">Hadith · ${hn}</button><button data-tab="s" aria-pressed="${t==='s'}">Sirah · ${sn0}</button>${XB.map(x=>`<button data-tab="${x.tab}" aria-pressed="${t===x.tab}">${x.label} · ${Object.keys(x.get()).length}</button>`).join('')}</div>`;
+  { const x=XB.find(z=>z.tab===tab); if(x) return bmSheetX(x, tabsOf(tab)); }
   if(tab==='h') return bmSheetH(filter, tabsOf('h'));
   if(tab==='s') return bmSheetS(tabsOf('s'));
   const all=Object.entries(st.bm).map(([g,b])=>({g:+g,...b})).sort((x,y)=>x.g-y.g);
@@ -2988,7 +2997,7 @@ function bmSheet(filter,tab){
   sheetB.onclick=e=>{ const tb=e.target.closest('#bmTab [data-tab]'); if(tb){ sheetB.onclick=null; bmSheet(null,tb.dataset.tab); return; }
     const f=e.target.closest('#bmF button'); if(f){ sheetB.onclick=null; bmSheet(f.dataset.c||null); return; }
     const d=e.target.closest('[data-del]'); if(d){ delete st.bm[d.dataset.del]; store.set('bm',st.bm); sheetB.onclick=null; bmSheet(filter); renderReader(); return; }
-    const go=e.target.closest('.go'); if(go){ sheetB.onclick=null; closeSheet(); goAyah(+go.dataset.g); } };
+    const go=e.target.closest('.go'); if(go){ sheetB.onclick=null; closeSheet(); document.querySelectorAll('.panel').forEach(p=>p.hidden=true); hideHome(); goAyah(+go.dataset.g); } };
 }
 function bmSheetH(filter,tabs){
   const KN={bukhari:'Sahih al-Bukhari',muslim:'Sahih Muslim',abudawud:'Sunan Abi Dawud',tirmidhi:"Jami' at-Tirmidhi",nasai:"Sunan an-Nasa'i",ibnmajah:'Sunan Ibn Majah',malik:'Muwatta Malik',shamail:"Asy-Syama'il al-Muhammadiyyah"};
@@ -3024,6 +3033,7 @@ async function sha(s){ const b=await crypto.subtle.digest('SHA-256', new TextEnc
 function aboutSheet(){
   openSheet('Sources & verification', `
   <p class="note" style="margin-top:0"><b>My Personal Quran v%%VERSION%%.</b> The Qur'an text is shown exactly as published by its source. The app never edits it.</p>
+  <div class="card" style="padding:10px 12px;margin:8px 0"><b>${sL()==='ms'?'Penafian':'Disclaimer'}</b><p class="note" style="margin:4px 0 0">${sL()==='ms'?'Untuk kegunaan peribadi sahaja: percuma, tidak dijual dan tidak boleh digunakan secara komersial. Kandungan milik penerbit masing-masing (disenaraikan di bawah) dan dipaparkan tanpa diubah. Sirah, Sifat Solat dan Solat Jumaat ditulis untuk aplikasi ini daripada sumber yang dinamakan. Ini alat bantu belajar, bukan fatwa: rujuk ulama yang berkelayakan untuk hukum.':'For personal use only: free, not for sale, and not to be used commercially. The contents belong to their publishers (listed below) and are shown unchanged. The Sirah, Sifat Solat and Solat Jumaat are written for this app from the sources named in them. This is a study aid, not a fatwa: ask a qualified scholar for rulings.'}</p></div>
   <p id="integ" class="note">Checking the text in this copy of the app…</p>
   <ul class="src">
    <li><b>Qur'an text, waqf signs, pages and juz</b>King Fahd Glorious Qur'an Printing Complex (KFGQPC), Madinah. Uthmanic Hafs data v2.0: riwayah Hafs 'an 'Asim, 604-page Madinah Mushaf. <a href="https://qurancomplex.gov.sa" target="_blank" rel="noopener">qurancomplex.gov.sa</a></li>
@@ -3109,7 +3119,8 @@ const homeIc={
  kamus:'<path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/><path d="M5 17a3 3 0 0 1 3-3h11"/><path d="M10 8h5M10 11h3"/>',
  jumuah:'<path d="M4 21V11l8-6 8 6v10"/><path d="M9 21v-5a3 3 0 0 1 6 0v5"/><path d="M12 2v3M3 21h18"/>',
  check:'<path d="M4 8V5a1 1 0 0 1 1-1h3M16 4h3a1 1 0 0 1 1 1v3M20 16v3a1 1 0 0 1-1 1h-3M8 20H5a1 1 0 0 1-1-1v-3"/><path d="m8 12 3 3 5-6"/>',
- masjid:'<path d="M12 3c-3 2-5 4-5 7h10c0-3-2-5-5-7zM12 1.8v1.4M5 21V10.5M19 21V10.5M3.8 10.5h2.4M17.8 10.5h2.4M7 21v-7h10v7M3 21h18M10.5 21v-3a1.5 1.5 0 0 1 3 0v3"/>',
+ halal:'<path d="M4 11h16a8 8 0 0 1-16 0zM8 7c0-2 1.5-3 1.5-4M12 7c0-2 1.5-3 1.5-4M16 7c0-2 1.5-3 1.5-4M3 21h18"/>',
+masjid:'<path d="M12 3c-3 2-5 4-5 7h10c0-3-2-5-5-7zM12 1.8v1.4M5 21V10.5M19 21V10.5M3.8 10.5h2.4M17.8 10.5h2.4M7 21v-7h10v7M3 21h18M10.5 21v-3a1.5 1.5 0 0 1 3 0v3"/>',
  dua:'<path d="M8 13c-2-1-3-3-3-5 1 0 3 1 4 3M16 13c2-1 3-3 3-5-1 0-3 1-4 3M9 21v-5a3 3 0 0 1 6 0v5"/><circle cx="12" cy="6" r="2.5"/>',
  pray:'<path d="M12 3a6 6 0 0 0 6 6 7 7 0 1 1-6-6z"/><path d="M17 3v3M15.5 4.5h3"/>',
  qibla:'<circle cx="12" cy="12" r="8.5"/><path d="M12 4.5l2.5 7.5L12 19.5 9.5 12z"/><rect x="10.6" y="10.6" width="2.8" height="2.8" fill="currentColor"/>',
@@ -3187,6 +3198,7 @@ function renderHome(){ const el=document.getElementById('home'); const g=pageSta
     <button class="tile" data-t="kamus">${hic('kamus')}<b>Kamus Al-Quran</b><small>Every word of the Qur'an by root: meanings, counts and where it occurs</small></button>
     <button class="tile" data-t="jumuah">${hic('jumuah')}<b>Solat Jumaat</b><small>The sunnah of Friday, the khutbah, qabliyyah, and MUIS's latest khutbah</small></button>
     <button class="tile" data-t="check">${hic('check')}<b>Scan &amp; check</b><small>Is this ayah or hadith valid? Camera, share or paste</small></button>
+    <button class="tile" data-t="halal">${hic('halal')}<b>${sL()==='ms'?'Makanan halal':'Halal food'}</b><small>${sL()==='ms'?'Carian sijil halal MUIS; Jepun, Korea, Thailand':'MUIS halal-certified search; Japan, Korea, Thailand'}</small></button>
     <button class="tile" data-t="masjid">${hic('masjid')}<b>Masjid &amp; musollah</b><small>Nearest first, directions, add your own</small></button>
     <button class="tile" data-t="notes">${hic('notes')}<b>Notes</b><small>Your notepad, on ayat and hadith</small></button>
     <button class="tile" data-t="pray">${hic('pray')}<b>Prayer times</b><small>MUIS timetable, alerts</small></button>
@@ -3201,7 +3213,7 @@ function renderHome(){ const el=document.getElementById('home'); const g=pageSta
     else if(t==='open'){ hideHome(); renderReader(); navSheet(); }
     else if(t==='hz'){ hideHome(); renderReader(); hzSheet(); }
     else if(t==='tq'){ hideHome(); renderReader(); startTq(st.sel??pageStart[st.page]); }
-    else if(t==='bm'){ hideHome(); renderReader(); bmSheet(null); }
+    else if(t==='bm'){ bmSheet(null); }   // over Home: the Qur'an opens only when a bookmark is chosen (Azli, 20 Oct 2026)
     else if(t==='kutub'){ ktPanel(); }
     else if(t==='notes'){ notesPanel(); }
     else if(t==='sirah'){ sirahPanel(); }
@@ -3211,6 +3223,7 @@ function renderHome(){ const el=document.getElementById('home'); const g=pageSta
     else if(t==='jumuah'){ solatPanel('jumuah'); }
     else if(t==='kamus'){ kamusPanel(); }
     else if(t==='masjid'){ mqPanel(); }
+    else if(t==='halal'){ halalPanel(); }
     else if(t==='dua'){ typeof duaPanel==='function' ? duaPanel() : toast('Coming soon'); }
     else if(t==='pray'){ typeof prayerPanel==='function' ? prayerPanel() : toast('Coming soon'); }
     else if(t==='qibla'){ typeof qiblaPanel==='function' ? qiblaPanel() : toast('Coming soon'); }
@@ -3699,11 +3712,59 @@ async function sirahPanel(){ const b=openPanel('sirah','Sirah',`<p class="note">
     body.innerHTML=`${le?`<button class="tile wide sr-cont" data-e="${le.id}"><span style="flex:1"><small>${ms?'Sambung bacaan':'Continue reading'}</small><br><b>${esc(sT(le.title))}</b></span>›</button>`:''}
      ${bmTopHtml('sr',bms.map(e=>({key:e.id,c:sirahBmAll()[e.id].c||'2',t:sirahBmAll()[e.id].t,label:sT(e.title),note:!!noteGet('s:'+e.id)})).sort((x,y)=>y.t-x.t),ms)}
      <p class="note" style="margin:10px 0 6px">${ms?'Sirah Nabawiyyah dari sebelum kenabian hingga kewafatan baginda ﷺ. Ketik tajuk bahagian untuk membuka atau menutupnya.':'The life of the Prophet ﷺ from before prophethood to his death. Tap a part to open or close it.'}</p>
+     ${D.family?`<details class="du-cat sr-era" data-era="fam"${openEra.has('fam')?' open':''}><summary><b>${ms?'Keluarga Rasulullah ﷺ':'The Prophet\'s family ﷺ'}</b><small>${ms?'isteri, anak, cucu':'wives, children, grandchildren'}</small></summary>${sirahFamilyHtml(D,ms)}</details>`:''}
      ${['pre','mak','mad'].map(era=>{ const es=D.events.filter(e=>e.era===era); return `<details class="du-cat sr-era" data-era="${era}"${openEra.has(era)?' open':''}><summary><b>${SIRAH_ERA[era][ms?1:0]}</b><small>${es.length} ${ms?'peristiwa':'events'}</small></summary><ol class="sr-list">${es.map(row).join('')}</ol></details>`; }).join('')}`; };
   draw(); q0.oninput=draw;
   body.addEventListener('toggle',ev=>{ const d=ev.target.closest?.('.sr-era'); if(!d) return; d.open?openEra.add(d.dataset.era):openEra.delete(d.dataset.era); store.set('sirahOpen',[...openEra]); },true);
   window.sirahRedraw=draw; document.getElementById('sirah').__redraw=()=>{ if(!q0.value.trim()) draw(); };
   b.onclick=e=>{ if(bmTopClick(e,draw,k=>sirahEvent(k))) return; const r=e.target.closest('[data-e]'); if(r) sirahEvent(r.dataset.e); }; }
+/* The Prophet's family ﷺ (Azli, 20 Oct 2026): from Zad al-Ma'ad and al-Bidayah wa an-Nihayah (sources on each entry; texts kept in tools/sources/). */
+function sirahFamilyHtml(D,ms){ const L=ms?'ms':'en', grp={w:ms?'Isteri (Ummahatul Mukminin)':'Wives (Mothers of the Believers)',s:ms?'Hamba milik (umm walad)':'Concubines',c:ms?'Anak dan cucu':'Children and grandchildren'};
+  const one=f=>`<div class="card sr-fam"><div class="sr-fam-h"><b>${esc(f.name)}</b><span dir="rtl" lang="ar" class="sr-fam-ar">${esc(f.ar)}</span></div><p>${esc(f[L])}</p>
+    ${f.kids?`<div class="label" style="margin:6px 0 2px">${ms?'Anak-anak (cucu Rasulullah ﷺ)':'Children (the Prophet\'s grandchildren)'}</div><ul class="sr-kids">${f.kids.map(k=>`<li>${esc(k[L])} <span dir="rtl" lang="ar">${esc(k.ar)}</span></li>`).join('')}</ul>`:''}
+    <p class="note" style="font-size:12px;margin:6px 0 0">${ms?'Sumber':'Source'}: ${f.src.map(x=>x.u?`<a href="${esc(x.u)}" target="_blank" rel="noopener">${esc(x.t)}</a>`:esc(x.t)).join(' · ')}</p></div>`;
+  return `<p class="note" style="margin:6px 0">${esc((D.familyNote||{})[L]||'')}</p>`+['w','s','c'].map(g=>`<div class="label">${grp[g]}</div>`+D.family.filter(f=>f.grp===g).map(one).join('')).join(''); }
+/* Madinah tajweed colour key (Azli, 20 Oct 2026). The printed tajweed pages are the KFGQPC V4 tajweed fonts published by QUL
+   (Tarteel); the key is Tarteel's own guide to those colours, https://support.tarteel.ai/en/articles/14936922 (checked 20 Oct 2026). */
+const TAJWEED_KEY=[['#9b1c1c',"Madd Lazim (necessary prolongation): 6 counts","Mad Lazim (wajib dipanjangkan): 6 harakat",'الضَّآلِّينَ'],
+ ['#e04a2b',"Madd Wajib Muttasil (obligatory): 4-5 counts; madd letter followed by hamzah in the same word","Mad Wajib Muttasil: 4-5 harakat; huruf mad diikuti hamzah dalam satu kalimah",'السَّمَآءِ'],
+ ['#f2994a',"Madd 'Arid li as-Sukun (permissible): 2, 4 or 6 counts, usually when stopping at the end of an ayah","Mad 'Arid Lissukun (harus): 2, 4 atau 6 harakat, biasanya ketika berhenti di hujung ayat",'الْعَٰلَمِينَ'],
+ ['#d4a017',"Madd Tabi'i (natural prolongation): 2 counts","Mad Asli / Tabi'i: 2 harakat",'قَالَ'],
+ ['#2e8b57',"Ghunnah (nasal sound) on nun and mim: 2 counts","Dengung (ghunnah) pada nun dan mim: 2 harakat",'مِن نِّعْمَةٍ'],
+ ['#3fa7d6',"Qalqalah: ق ط ب ج د with sukun","Qalqalah: ق ط ب ج د bersukun",'أَحَدٌ'],
+ ['#1f4e9c',"Tafkhim (heavy): ra' when heavy, and the letters خ ص ض غ ط ق ظ","Tafkhim (tebal): ra' yang ditebalkan, dan huruf خ ص ض غ ط ق ظ",'الْحَرَامِ'],
+ ['#9a9a9a',"Silent letter: written, not pronounced","Huruf tidak dibaca: ditulis, tidak disebut",'']];
+function tajweedKey(){ const ms=sL()==='ms';
+  openSheet(ms?'Kod warna tajwid (Madinah tajweed)':'Tajweed colour key (Madinah tajweed)', `<ul class="list tj-key">${TAJWEED_KEY.map(([c,en,m,ex])=>`<li><span class="tj-sw" style="background:${c}"></span><span class="t"><b>${esc(ms?m:en)}</b>${ex?`<small dir="rtl" lang="ar" style="font-family:var(--ar);font-size:18px">${ex}</small>`:''}</span></li>`).join('')}</ul>
+   <p class="note">${ms?'Izhar, idgham dan ikhfa\' tidak diwarnakan. Warna di skrin mungkin sedikit berbeza mengikut tema (gelap/terang). Rujukan: panduan warna tajwid Tarteel, penerbit fon halaman tajwid ini (QUL).':'Izhar, idgham and ikhfa\' are not coloured. On screen the shades can differ slightly with the theme (dark or light). Source: Tarteel\'s guide to the tajweed colours; Tarteel\'s QUL publishes these tajweed page fonts.'} <a href="https://support.tarteel.ai/en/articles/14936922-understanding-tajweed-colors-in-the-tarteel-mushaf" target="_blank" rel="noopener">support.tarteel.ai ›</a></p>`); }
+/* ============================ HALAL FOOD (Azli, 20 Oct 2026) ============================
+   Singapore: MUIS's own halal directory (halal.muis.gov.sg/halal/establishments), searched live from the phone by the
+   Android app in the same way the MUIS page does (name, address, certificate number, scheme). Results are MUIS's, not
+   kept or changed. Other countries: their official tourism or halal bodies, opened in the browser. */
+const HALAL_LINKS=[
+ ['Singapore','MUIS Halal Directory (official)','https://halal.muis.gov.sg/halal/establishments','The official list of MUIS halal-certified eating places and caterers.','Senarai rasmi tempat makan dan katering bersijil halal MUIS.'],
+ ['Japan','JNTO: Muslim travelers (Japan National Tourism Organization)','https://www.japan.travel/en/plan/muslim-travelers/','Japan has no government halal authority; restaurants are certified by private bodies or are only "Muslim-friendly". Check the certificate or ask.','Jepun tiada badan halal kerajaan; restoran disijilkan oleh badan swasta atau sekadar "mesra Muslim". Semak sijil atau tanya.'],
+ ['Korea','Korea Tourism Organization: Muslim-friendly travel','https://english.visitkorea.or.kr/svc/thingsToDo/subMuslimFriendly.do','Four grades: Halal Certified (e.g. Korea Muslim Federation), Self-certified (by Muslim owners), Muslim Friendly (some halal dishes, may sell alcohol), Pork free (no halal menu). Only the first is certified halal.','Empat gred: Halal Certified (cth. Korea Muslim Federation), Self-certified (oleh pemilik Muslim), Muslim Friendly (sebahagian hidangan halal, mungkin menjual arak), Pork free (tiada menu halal). Hanya yang pertama bersijil halal.'],
+ ['Thailand','Central Islamic Council of Thailand (CICOT)','https://www.cicot.or.th/','CICOT is Thailand\'s halal certification authority.','CICOT ialah badan pensijilan halal Thailand.'],
+ ['Thailand','Halal Standard Institute of Thailand','https://www.halal.or.th/','Thailand\'s halal standards institute (under CICOT).','Institut piawaian halal Thailand (di bawah CICOT).']];
+let halalSeq=0;
+function halalPanel(){ const ms=sL()==='ms', app=!!window.AndroidExtra?.halalSearch;
+  const b=openPanel('halal', ms?'Makanan halal':'Halal food', `
+   <div class="label" style="margin-top:0">Singapore · MUIS</div>
+   ${app?`<input class="field" id="hlQ" type="search" placeholder="${ms?'Nama kedai atau kawasan, cth. Tampines, prata (sekurang-kurangnya 3 huruf)':'Name or area, e.g. Tampines, prata (3 letters or more)'}" style="width:100%">
+   <div id="hlR"><p class="note">${ms?'Carian terus dalam direktori halal MUIS. Perlu internet.':'Searches the MUIS halal directory directly. Needs the internet.'}</p></div>`
+   :`<p class="note">${ms?'Carian dalam aplikasi ada pada aplikasi Android. Di sini, buka direktori MUIS:':'In-app search is in the Android app. Here, open the MUIS directory:'}</p>`}
+   <div class="label">${ms?'Pautan rasmi':'Official links'}</div>
+   ${HALAL_LINKS.map(([c,t,u,en,m])=>`<a class="tile wide sr-cont" href="${u}" target="_blank" rel="noopener"><span style="flex:1"><small>${esc(c)}</small><br><b>${esc(t)}</b><br><small>${esc(ms?m:en)}</small></span>›</a>`).join('')}
+   <p class="note" style="font-size:12px">${ms?'Sijil boleh tamat atau ditarik balik: semak sijil MUIS yang dipamerkan di premis. Senarai luar negara bukan dari MUIS.':'Certificates can expire or be withdrawn: check the MUIS certificate displayed at the premises. The lists for other countries are not from MUIS.'}</p>`);
+  const q=b.querySelector('#hlQ'); if(!q) return; const R=b.querySelector('#hlR'); let tm=0;
+  const show=(j)=>{ const d=(j&&j.data)||[]; if(j&&j.error){ R.innerHTML=`<p class="note">${ms?'Tidak dapat menghubungi MUIS. Semak internet, atau buka direktori MUIS di bawah.':'Could not reach MUIS. Check the internet, or open the MUIS directory below.'}</p>`; return; }
+    if(!d.length){ R.innerHTML=`<p class="note">${ms?'Tiada yang sepadan dalam direktori MUIS.':'Nothing matching in the MUIS directory.'}</p>`; return; }
+    R.innerHTML=`<div class="label">${d.length}${d.length>=200?'+':''} ${ms?'dijumpai':'found'}</div><ul class="list hl-list">${d.map(x=>`<li><div class="t"><b>${esc(x.name||'')}</b><small>${esc([x.schemeText,x.subSchemeText].filter(Boolean).join(' · '))}</small><small>${esc(x.address||'')}</small><small>${ms?'No. sijil':'Certificate'} ${esc(x.number||'')}</small></div><a class="pill" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent((x.name||'')+' '+(x.address||''))}" target="_blank" rel="noopener">${ms?'Peta':'Map'} ›</a></li>`).join('')}</ul>${d.length>=200?`<p class="note">${ms?'MUIS memaparkan 200 yang pertama; perincikan carian.':'MUIS shows the first 200; narrow the search.'}</p>`:''}`; };
+  const go=()=>{ const t=q.value.trim(); if(t.length<3){ return; } const id=String(++halalSeq); R.innerHTML=`<p class="note">${ms?'Mencari…':'Searching…'}</p>`;
+    window.__halal=(rid,txt)=>{ if(rid!==String(halalSeq)) return; let j=null; try{ j=JSON.parse(txt); }catch(e){ j={error:'parse'}; } show(j); };
+    try{ window.AndroidExtra.halalSearch(id,t); }catch(e){ show({error:'bridge'}); } };
+  q.oninput=()=>{ clearTimeout(tm); tm=setTimeout(go,700); }; q.onkeydown=e=>{ if(e.key==='Enter'){ clearTimeout(tm); go(); } }; }
 function sirahCopy(e){ const ms=sL()==='ms', L=[];
   L.push(sT(e.title), `${sT(e.when)} · ${sCE(e.ce)}`, '', sT(e.sum));
   if((e.q||[]).length){ L.push('', ms?'Al-Quran:':"Qur'an:"); (e.q||[]).forEach(([su,a,bb,ne,nm])=>L.push(`• ${S[su-1][1]} ${su}:${a}${bb>a?'–'+bb:''}: ${ms?(nm||ne):ne}`)); }
@@ -3743,8 +3804,18 @@ async function sirahEvent(id){ const D=sirahD; const i=D.events.findIndex(e=>e.i
   await sirahBooks();
   (e.h||[]).forEach(async([bk,n,sn],k)=>{ try{ const j=await ktGet(`${bk}/${sn}.json`); const hd=j.h.find(x=>x[0]===n); const el=b.querySelector(`.sr-gr[data-g="${k}"]`); if(!el||!hd) return;
     const gr=hd[5]||[]; el.innerHTML=gr.length?gr.map(([w,v])=>`<span class="kt-g ${ktGradeCls(v)}"><small>${esc(KT_GR[w]||w)}${grWaf(w)}</small> <b${w==='tir'?' dir="rtl" lang="ar" style="font-family:var(--ar);font-weight:400"':''}>${esc(w==='tir'?v:ktGradeTxt(v))}</b></span>`).join(''):(bk==='bukhari'||bk==='muslim')?`<span class="kt-g g-s"><b>Sahih</b></span>`:''; }catch(_){} }); }
+/* Doa & zikir, Sifat Solat and Solat Jumaat bookmarks in the same window (Azli, 20 Oct 2026). */
+function bmExtra(){ return [{tab:'d',label:'Doa',get:duaBmAll,key:'duaBm',np:'d'},{tab:'p',label:'Sifat Solat',get:()=>store.get('solatBm',{}),key:'solatBm',np:'p'},{tab:'j',label:'Jumaat',get:()=>store.get('jumBm',{}),key:'jumBm',np:'j'}]; }
+async function bmSheetX(x,tabs){ const ms=sL()==='ms'; if(x.tab==='d'){ try{ await hisnLoad(); }catch(e){} }
+  if(x.tab!=='d'){ try{ await solatLoad(x.tab==='p'?'solat':'jumuah'); }catch(e){} }
+  const m=x.get(), ids=Object.keys(m).sort((a,b)=>(m[b].t||0)-(m[a].t||0));
+  openSheet(ms?'Penanda':'Bookmarks', tabs+(ids.length?`<ul class="list bml">${ids.map(id=>`<li><button class="go" data-x="${esc(id)}"><span class="dot" style="--c:var(--bm${m[id].c||'1'})"></span><span class="t"><b>${esc(noteTitle(x.np+':'+id))}</b><small>${m[id].t?new Date(m[id].t).toLocaleDateString():''}${noteGet(x.np+':'+id)?' · note':''}</small></span><span class="a"></span></button><button class="x" data-delx="${esc(id)}" aria-label="Remove">${ic('trash')}</button></li>`).join('')}</ul>`
+   :`<p class="empty">${ms?'Belum ada penanda di sini.':'No bookmarks here yet.'}</p>`));
+  sheetB.onclick=e=>{ const tb=e.target.closest('#bmTab [data-tab]'); if(tb){ sheetB.onclick=null; bmSheet(null,tb.dataset.tab); return; }
+    const d=e.target.closest('[data-delx]'); if(d){ const mm=x.get(); delete mm[d.dataset.delx]; store.set(x.key,mm); sheetB.onclick=null; bmSheet(null,x.tab); return; }
+    const go=e.target.closest('[data-x]'); if(go){ sheetB.onclick=null; closeSheet(); noteOpenTarget(x.np+':'+go.dataset.x); } }; }
 function bmSheetS(tabs){ const ms=sL()==='ms', m=sirahBmAll(), ids=Object.keys(m).sort((x,y)=>m[y].t-m[x].t);
-  openSheet(ms?'Penanda':'Bookmarks', tabs+(ids.length?`<ul class="list bml">${ids.map(id=>`<li><button class="go" data-s="${id}"><span class="t"><b>${esc(sirahTitleOf(id))}</b><small>${new Date(m[id].t).toLocaleDateString()}${noteGet('s:'+id)?' · note':''}</small></span></button><button class="ib" data-dels="${id}" aria-label="Remove">${ic('trash')}</button></li>`).join('')}</ul>`
+  openSheet(ms?'Penanda':'Bookmarks', tabs+(ids.length?`<ul class="list bml">${ids.map(id=>`<li><button class="go" data-s="${id}"><span class="t"><b>${esc(sirahTitleOf(id))}</b><small>${new Date(m[id].t).toLocaleDateString()}${noteGet('s:'+id)?' · note':''}</small></span></button><button class="x" data-dels="${id}" aria-label="Remove">${ic('trash')}</button></li>`).join('')}</ul>`
    :`<p class="empty">${ms?'Belum ada penanda Sirah. Buka satu peristiwa dan ketik Penanda.':'No Sirah bookmarks yet. Open an event and tap Bookmark.'}</p>`));
   sheetB.onclick=e=>{ const tb=e.target.closest('#bmTab [data-tab]'); if(tb){ sheetB.onclick=null; bmSheet(null,tb.dataset.tab); return; }
     const d=e.target.closest('[data-dels]'); if(d){ const m=sirahBmAll(); delete m[d.dataset.dels]; store.set('sirahBm',m); sheetB.onclick=null; bmSheet(null,'s'); return; }

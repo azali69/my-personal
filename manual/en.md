@@ -1,5 +1,7 @@
 My Personal Quran is a Madinah mushaf for reading, memorising (hafazan), listening and daily worship. This manual explains every screen and button, in the order you meet them.
 
+> **Disclaimer.** My Personal Quran is for **personal use only**. It is free, not for sale, and must not be used commercially. Its contents belong to their publishers and are shown unchanged with credit: the Qur'an text from the King Fahd Complex (KFGQPC); translations and tafsir from QuranEnc.com; word by word and transliteration from Quran.com; hadith texts from the Hadith API (fawazahmed0) and Sunnah.com, with the gradings of the scholars named on each hadith; explanations from HadeethEnc.com; Hisnul Muslim from hisnmuslim.com; prayer times, khutbah and halal certificates from MUIS; and the Sirah, Sifat Solat and Solat Jumaat written for this app from named classical sources (Settings → Sources & verification lists them all). The app is a study aid, not a fatwa: for rulings, ask a qualified scholar.
+
 ## 1. Getting started
 
 **Install (Android)**
@@ -40,7 +42,7 @@ Return to Home from anywhere with the **house button** (top left of the reading 
 | Open Qur'an | The surah, juz and page list |
 | Hafazan | The Hafazan box (section 5) |
 | Listen & repeat | The reciter reads, you repeat and get checked (section 6) |
-| Bookmarks | Bookmarks in two tabs, Qur'an and Hadith; My ruku' and My blocks |
+| Bookmarks | All your bookmarks in tabs: Qur'an, Hadith, Sirah, Doa, Sifat Solat, Jumaat. Opens over Home; the Qur'an opens only when you choose an ayah |
 | Doa & zikir | Hisnul Muslim (section 8) |
 | Hadith | The six books (Kutub as-Sittah) and the Muwatta of Imam Malik, with gradings (section 8) |
 | Syama'il | Asy-Syama'il al-Muhammadiyyah of at-Tirmidhi, on its own tile (also the eighth book in Hadith) (section 8) |
@@ -48,6 +50,7 @@ Return to Home from anywhere with the **house button** (top left of the reading 
 | Solat Jumaat | The sunnah of Friday from before the khutbah to after the prayer, the qabliyyah question, the pillars of the khutbah, and MUIS's latest khutbah (section 8) |
 | Kamus Al-Quran | Every word of the Qur'an by root: meanings, how often and where it occurs (section 8) |
 | Scan & check | Check whether a posted ayah or hadith is in the Qur'an or the hadith books (section 8) |
+| Halal food | Search MUIS's halal-certified eating places; official links for Japan, Korea and Thailand (section 8) |
 | Masjid & musollah | Mosques and musollahs, nearest first, with directions; add your own (section 8) |
 | Notes | Your notepad: notes on ayat, on hadith, and free notes (section 8) |
 | Prayer times | MUIS times, alerts and reminders (section 8) |
@@ -98,7 +101,7 @@ Return to Home from anywhere with the **house button** (top left of the reading 
 **Page styles** (Settings → Mushaf)
 
 - **Madinah 1441H**: the printed King Fahd Complex page, 15 lines. Settings → **Save all 604 pages** keeps them for offline reading.
-- **Madinah tajweed**: the same page with tajweed colours.
+- **Madinah tajweed**: the same page with tajweed colours. Settings → Mushaf → **Colour key** explains them: dark red Madd Lazim (6), orange-red Madd Wajib Muttasil (4-5), light orange Madd 'Arid li as-Sukun (2/4/6), yellow Madd Tabi'i (2), green ghunnah, light blue qalqalah, dark blue tafkhim, grey silent letters. Izhar, idgham and ikhfa' are not coloured. (Source: Tarteel's guide to these fonts.)
 - **Uthmani text**: text in the King Fahd font; **Fit page** (15 lines on screen) or **Larger text** (scroll).
 
 **Translation view**: each ayah with Bahasa Melayu (Abdullah Basmeih) or English (Saheeh International), optional English footnotes and transliteration. Transliteration is approximate and always shown under the Arabic.
@@ -257,6 +260,7 @@ All open from the **ayah menu**; they need the internet once per surah.
    - **Hadith**: the narrations in this app's books, with their gradings (Bukhari and Muslim are marked Sahih). Tap to read the hadith; **Open in …** takes you to it in the book.
    - **Reports in other books**: narrations from books not in this app; the heading names the books (e.g. Musnad Ahmad), and each has its **Source** (volume/page or number, grading) and **Open source ›**.
    - **Lineage**: under Birth of the Prophet, the nasab up to 'Adnan as al-Bukhari gives it, with the Arabic and the sources.
+   - **The Prophet's family ﷺ**: at the top of the Sirah list: his wives (the Mothers of the Believers) in order, Mariyah and Rayhanah, his children, and his grandchildren through Zaynab, Ruqayyah and Fatimah, from Ibn al-Qayyim's Zad al-Ma'ad and Ibn Kathir's al-Bidayah wa an-Nihayah, with disagreements stated.
    - **Popular stories: check their status**: stories often told about the event, each with a coloured label: **No authentic basis** (red), **Weak** (orange), **Scholars differ** (amber), or **Historians' report: no checked chain** (grey: told by Ibn Ishaq and other historians, not authenticated in the hadith books). Each story names its **Source** (e.g. Ibn Hisham's *as-Sirah an-Nabawiyyah*, al-Bayhaqi's *Dala'il an-Nubuwwah*, with volume/page where checked). **Scholars cited, with their death dates** is at the bottom of the Sirah page.
 3. An orange **!** in the timeline means the event has marked popular stories.
 4. **‹ ›** at the bottom move to the previous or next event.
@@ -280,6 +284,12 @@ All open from the **ayah menu**; they need the internet once per surah.
 4. **Check outside the app** (shown after every check): **Semak Hadis**, **Dorar.net** and **Sunnah.com**; your text is copied first (paste it in Semak Hadis's search box).
 5. **Hadith**: the eight books in this app are searched (the first time, every kitab is downloaded, so use Wi-Fi). Each match shows the book, number and gradings, and whether the whole text is in that hadith or **only part of it**. A red **Not found** is not proof that a hadith is fabricated: it may be in other books (such as Musnad Ahmad) or in other words. Ask a qualified teacher.
 5. How it matches: Arabic, the same letters and words (harakat, alif and hamza ignored, so the mushaf's Uthmani spelling and plain spelling compare the same, and a few misread words do not stop a match); Malay and English, the same important words. Translators word things differently, so a low percentage does not mean it is absent. Malay hadith text is compared with the Indonesian translation.
+
+**Halal food**
+
+1. Home → **Halal food**. Type a name or area (3 letters or more), e.g. *Tampines* or *prata*: the app searches **MUIS's halal directory** directly and lists each place with its type, address and certificate number, and **Map ›**. MUIS shows at most 200 results; narrow the search. (Android app; needs the internet.)
+2. Certificates can expire or be withdrawn: check the MUIS certificate displayed at the premises.
+3. **Official links** for Japan (JNTO), Korea (Korea Tourism Organization) and Thailand (CICOT, Halal Standard Institute) open in the browser. Korea's list has four grades and only **Halal Certified** is certified halal; Japan has no government halal body.
 
 **Masjid & musollah**
 
@@ -350,10 +360,10 @@ All open from the **ayah menu**; they need the internet once per surah.
 
 **Sync between your phone and tablet**
 
-1. Settings → Back up or restore → **Sync with your other devices (Google Drive)…**.
-2. On the first device tap **Create the sync file**, and in the picker open the menu and choose **Drive**; save it there. On the other device tap **Choose the sync file** and pick that same file in Drive.
+1. Settings → Back up or restore → **Sync with your other devices (Google Drive / OneDrive)…**.
+2. On the **first device only** tap **Create the sync file**, and in the picker open the menu (☰) and choose **Drive** or **OneDrive** (the OneDrive app must be installed and signed in); save it there. On **every other device** tap **Choose the sync file** and pick **that same file**. Do not create a second sync file: two files never meet.
 3. After that, bookmarks (Qur'an, hadith, Sirah, Sifat Solat, Jumaat, Doa), notes, last-read places, My ruku' and My blocks, Hafazan results and your own places sync on their own: when the app opens, when you come back to it, and a few seconds after a change. A deletion on one device is deleted on the other. **Sync now** forces it.
-4. Google Drive needs the internet to bring a change from the other device. Settings, prayer alerts and voice recordings are not synced.
+4. The cloud app needs the internet to bring a change from the other device, and may take a few minutes. The Sync window shows **which device last wrote the file, and when**: if that is older than a change you just made on the other device, open the Drive or OneDrive app, pull down to refresh, then tap **Sync now**. A red line means the last attempt could not write the file. Settings, prayer alerts and voice recordings are not synced.
 
 ## 10. Troubleshooting
 

@@ -782,6 +782,8 @@ public class MainActivity extends Activity {
     private String pickSlot = null;
     private SensorManager sm; private SensorEventListener compassL; private float decl = 0f; private long lastCompass = 0;
 
+    private static String readAll(InputStream in) throws java.io.IOException {
+        try (InputStream i = in) { java.io.ByteArrayOutputStream bo = new java.io.ByteArrayOutputStream(); byte[] b = new byte[16384]; int n; while ((n = i.read(b)) > 0) bo.write(b, 0, n); return new String(bo.toByteArray(), java.nio.charset.StandardCharsets.UTF_8); } }
     private void js(final String code) { runOnUiThread(() -> web.evaluateJavascript(code, null)); }
 
     /* Opened from a prayer notification: the page goes straight to the prayer times. */
@@ -947,15 +949,50 @@ public class MainActivity extends Activity {
         /** The sync file's text, "" if empty, or "!error" when it cannot be read. */
         @JavascriptInterface public String syncRead() {
             String u = PrayerAlarms.prefs(MainActivity.this).getString("syncUri", ""); if (u.isEmpty()) return "!none";
+            // ask the cloud app (Google Drive, OneDrive) for its newest copy first, so a change from the other device is seen
+            try { if (Build.VERSION.SDK_INT >= 26) getContentResolver().refresh(Uri.parse(u), null, null); } catch (Exception ignored) { }
             try (InputStream in = getContentResolver().openInputStream(Uri.parse(u))) {
                 java.io.ByteArrayOutputStream bo = new java.io.ByteArrayOutputStream(); byte[] b = new byte[16384]; int n; long total = 0;
                 while ((n = in.read(b)) > 0) { bo.write(b, 0, n); total += n; if (total > 20_000_000) return "!too big"; }
                 return new String(bo.toByteArray(), java.nio.charset.StandardCharsets.UTF_8);
             } catch (Exception e) { return "!" + e.getClass().getSimpleName(); } }
+        /** Writes the sync file. Cloud apps differ in the write modes they accept (Google Drive refuses "wt" on some phones), so "wt", "w" and "rwt" are tried in turn. */
         @JavascriptInterface public boolean syncWrite(String text) {
             String u = PrayerAlarms.prefs(MainActivity.this).getString("syncUri", ""); if (u.isEmpty()) return false;
-            try (OutputStream out = getContentResolver().openOutputStream(Uri.parse(u), "wt")) { out.write(text.getBytes(java.nio.charset.StandardCharsets.UTF_8)); return true; }
-            catch (Exception e) { return false; } }
+            byte[] data = text.getBytes(java.nio.charset.StandardCharsets.UTF_8);
+            for (String mode : new String[]{"wt", "w", "rwt"}) {
+                try (OutputStream out = getContentResolver().openOutputStream(Uri.parse(u), mode)) { if (out == null) continue; out.write(data); out.flush(); return true; }
+                catch (Exception ignored) { }
+            }
+            return false; }
+        /** MUIS halal directory search (Azli, 20 Oct 2026): the same request halal.muis.gov.sg/halal/establishments makes
+         *  (open the page for its anti-forgery token and cookies, then POST {"text": ...}). The reply goes to window.__halal(id, json). */
+        @JavascriptInterface public void halalSearch(final String id, final String text) {
+            new Thread(() -> {
+                String out;
+                try {
+                    java.net.CookieManager cm = new java.net.CookieManager();
+                    String ua = "Mozilla/5.0 (Linux; Android " + Build.VERSION.RELEASE + ") AppleWebKit/537.36 Chrome/126 Mobile Safari/537.36";
+                    java.net.URL pu = new java.net.URL("https://halal.muis.gov.sg/halal/establishments");
+                    java.net.HttpURLConnection c = (java.net.HttpURLConnection) pu.openConnection();
+                    c.setRequestProperty("User-Agent", ua); c.setConnectTimeout(15000); c.setReadTimeout(20000);
+                    String page = readAll(c.getInputStream());
+                    java.util.List<String> sc = c.getHeaderFields().get("Set-Cookie"); if (sc != null) for (String h : sc) for (java.net.HttpCookie hc : java.net.HttpCookie.parse(h)) cm.getCookieStore().add(pu.toURI(), hc);
+                    java.util.regex.Matcher m = java.util.regex.Pattern.compile("name=\"__RequestVerificationToken\" type=\"hidden\" value=\"([^\"]+)\"").matcher(page);
+                    if (!m.find()) throw new Exception("token");
+                    StringBuilder ck = new StringBuilder(); for (java.net.HttpCookie hc : cm.getCookieStore().getCookies()) { if (ck.length() > 0) ck.append("; "); ck.append(hc.getName()).append('=').append(hc.getValue()); }
+                    java.net.HttpURLConnection p = (java.net.HttpURLConnection) new java.net.URL("https://halal.muis.gov.sg/api/halal/establishments").openConnection();
+                    p.setRequestMethod("POST"); p.setDoOutput(true); p.setConnectTimeout(15000); p.setReadTimeout(25000);
+                    p.setRequestProperty("User-Agent", ua); p.setRequestProperty("Content-Type", "application/json"); p.setRequestProperty("Accept", "application/json");
+                    p.setRequestProperty("X-CSRF-TOKEN", m.group(1)); p.setRequestProperty("Referer", pu.toString()); p.setRequestProperty("Cookie", ck.toString());
+                    JSONObject body = new JSONObject(); body.put("text", text == null ? "" : text);
+                    try (OutputStream os = p.getOutputStream()) { os.write(body.toString().getBytes(java.nio.charset.StandardCharsets.UTF_8)); }
+                    if (p.getResponseCode() != 200) throw new Exception("HTTP " + p.getResponseCode());
+                    out = readAll(p.getInputStream());
+                } catch (Exception e) { out = "{\"error\":" + JSONObject.quote(e.getClass().getSimpleName() + " " + (e.getMessage() == null ? "" : e.getMessage())) + "}"; }
+                js("window.__halal && window.__halal(" + JSONObject.quote(id) + "," + JSONObject.quote(out) + ")");
+            }, "halal").start(); }
+        @JavascriptInterface public String deviceName() { return Build.MANUFACTURER + " " + Build.MODEL; }
         @JavascriptInterface public String takeBackup() { String s = openedBackup; openedBackup = null; return s == null ? "" : s; }
         @JavascriptInterface public void removeAdhan(String slot) { File f = AdhanService.adhanFile(MainActivity.this, slot); if (f != null) f.delete(); }
         /** Test the alert as it will really be: it follows the phone's sound mode (returns "ring", "vibrate" or "silent"). */
