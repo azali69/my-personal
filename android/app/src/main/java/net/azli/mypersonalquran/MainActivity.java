@@ -256,8 +256,11 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        openTarget = getIntent() == null ? null : getIntent().getStringExtra("open");
-        takeShare(getIntent());
+        // Android may rebuild the screen after a file picker (backup, sync) or from Recents: it then hands back the intent the app
+        // was first opened with, so an old share would open Scan & check again. Only a fresh launch takes the share and the "open" target.
+        boolean fresh = savedInstanceState == null && (getIntent() == null || (getIntent().getFlags() & Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY) == 0);
+        openTarget = fresh && getIntent() != null ? getIntent().getStringExtra("open") : null;
+        if (fresh) takeShare(getIntent());
         if (Build.VERSION.SDK_INT >= 28) {
             WindowManager.LayoutParams lp = getWindow().getAttributes();
             lp.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
@@ -928,6 +931,8 @@ public class MainActivity extends Activity {
             runOnUiThread(() -> { try { startActivityForResult(new Intent(Intent.ACTION_OPEN_DOCUMENT).addCategory(Intent.CATEGORY_OPENABLE).setType("audio/*"), REQ_PICK); } catch (Exception e) { js("window.__adhanPicked && window.__adhanPicked('" + slot + "','')"); } }); }
         /* Backup of the app's settings, bookmarks and notes: the person chooses where the file goes and where it comes from. */
         @JavascriptInterface public void saveBackup(String name, String json) { pendingBackup = json;
+            // kept on disk too: if Android rebuilds the screen while the file picker is open, the field is lost
+            try (OutputStream o = new FileOutputStream(new File(getCacheDir(), "pending-backup.json"))) { o.write(json.getBytes(java.nio.charset.StandardCharsets.UTF_8)); } catch (Exception ignored) { }
             runOnUiThread(() -> { try { startActivityForResult(new Intent(Intent.ACTION_CREATE_DOCUMENT).addCategory(Intent.CATEGORY_OPENABLE).setType("application/json").putExtra(Intent.EXTRA_TITLE, name), REQ_SAVE); }
                 catch (Exception e) { pendingBackup = null; js("window.__backupSaved && window.__backupSaved(false)"); } }); }
         @JavascriptInterface public void openBackup() {
@@ -1093,6 +1098,9 @@ public class MainActivity extends Activity {
         }
         if (req == REQ_SAVE) {
             boolean ok = false; String text = pendingBackup; pendingBackup = null;
+            File pf = new File(getCacheDir(), "pending-backup.json");
+            if (text == null && pf.exists()) { try { text = readAll(new java.io.FileInputStream(pf)); } catch (Exception ignored) { } }
+            pf.delete();
             if (res == RESULT_OK && data != null && data.getData() != null && text != null) {
                 try (OutputStream out = getContentResolver().openOutputStream(data.getData(), "wt")) { out.write(text.getBytes(java.nio.charset.StandardCharsets.UTF_8)); ok = true; } catch (Exception e) { ok = false; }
             }

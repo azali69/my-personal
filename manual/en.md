@@ -289,7 +289,7 @@ All open from the **ayah menu**; they need the internet once per surah.
 
 1. Home → **Halal food**. Type a name or area (3 letters or more), e.g. *Tampines* or *prata*: the app searches **MUIS's halal directory** directly and lists each place with its type, address and certificate number, and **Map ›**. MUIS shows at most 200 results; narrow the search. (Android app; needs the internet.)
 2. Certificates can expire or be withdrawn: check the MUIS certificate displayed at the premises.
-3. **Official links** for Japan (JNTO), Korea (Korea Tourism Organization) and Thailand (CICOT, Halal Standard Institute) open in the browser. Korea's list has four grades and only **Halal Certified** is certified halal; Japan has no government halal body.
+3. **Official links** for Japan (JNTO's guide for Muslim travelers and its Muslim Welcome Guide, plus Halal Gourmet Japan, a private directory JNTO points to), Korea (Korea Tourism Organization) and Thailand (CICOT, Halal Standard Institute) open in the browser. Korea's list has four grades and only **Halal Certified** is certified halal; Japan has no government halal body.
 
 **Masjid & musollah**
 

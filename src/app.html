@@ -454,9 +454,9 @@ body.immersive .dock.hz #mic{visibility:visible;pointer-events:auto}
 /* tablets in portrait (e.g. Boox Note Air, Azli 18 Oct 2026): use the whole width, not a phone-width column */
 @media (min-width:700px){.home-in,.panel-in,.top-in,.dock-in,.sheet-in,.tq-in,main,main.fit>*,.under>*{max-width:min(96vw,90rem)}}
 /* App size (Azli, 18 Oct 2026): the whole interface scaled by --uiz; widths divided by it so nothing runs off the screen. The fitted mushaf page (main.fit) sizes itself. */
-.uiz .home-in,.uiz .panel-in,.uiz .top-in,.uiz .dock-in,.uiz .sheet-in,.uiz .tq-in,.uiz main:not(.fit),.uiz .selbar-in,.uiz .pbar-in,.uiz .toast{zoom:var(--uiz)}
+.uiz .home-in,.uiz .panel-in,.uiz .top-in,.uiz .dock-in,.uiz .sheet-in,.uiz .tq-in,.uiz main:not(.fit):not(.scrollv),.uiz .selbar-in,.uiz .pbar-in,.uiz .toast{zoom:var(--uiz)}
 .uiz .home-in,.uiz .panel-in{max-width:calc(min(100vw - 32px, 90rem) / var(--uiz))}
-.uiz .top-in,.uiz .dock-in,.uiz .sheet-in,.uiz .tq-in,.uiz main:not(.fit){max-width:calc(min(100vw, 90rem) / var(--uiz))}
+.uiz .top-in,.uiz .dock-in,.uiz .sheet-in,.uiz .tq-in,.uiz main:not(.fit):not(.scrollv){max-width:calc(min(100vw, 90rem) / var(--uiz))}
 @media (max-width:699px){.uiz .top-in,.uiz .dock-in{zoom:1;max-width:46rem}}   /* phone width: the bars' buttons already fill it */
 .uiz .kt-head,.uiz .kt-show{margin-inline:calc(-16px / var(--uiz));padding-inline:calc(16px / var(--uiz))}   /* they reach the panel's edge, whose padding is not zoomed */
 .home-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin:4px 2px 16px}
@@ -1008,7 +1008,9 @@ function pageBox(pg){
 function lineContentWidth(line){ const a=line.firstElementChild, b=line.lastElementChild; if(!a) return 0;
   const r1=a.getBoundingClientRect(), r2=b.getBoundingClientRect(); return Math.max(r1.right,r2.right)-Math.min(r1.left,r2.left); }
 function squeeze(pg){ for(const line of pg.children){ line.style.transform=''; line.classList.remove('sq');
-    const need=Math.max(line.scrollWidth, lineContentWidth(line)), have=line.clientWidth;
+    // getBoundingClientRect is in screen pixels, clientWidth in the line's own: under App size (CSS zoom) they differ
+    const zr=line.getBoundingClientRect().width/line.clientWidth, z=(isFinite(zr)&&zr>0)?zr:1;
+    const need=Math.max(line.scrollWidth, lineContentWidth(line)/z), have=line.clientWidth;
     if(need>have+0.5){ line.classList.add('sq'); line.style.transform=`scaleX(${(have/need*0.995).toFixed(4)})`; } } }
 
 /* ---- Printed pages: KFGQPC V4 (1441H) page fonts as published by QUL, one glyph per word ---- */
@@ -1090,7 +1092,7 @@ function spageInner(p){ const g0=pageStart[p], g1=pageStart[p+1]-1;
   if(st.mushaf!=='text' && !glyphOff) return null;          // printed page: drawn once its font is in
   return buildMushaf(g0,g1)+pageFoot(p); }
 function spageSize(sec){ const pg=sec.querySelector('.mpage'); if(!pg) return; const k=textZoom(), fs=pg.clientWidth/G_EM*0.985;
-  pg.style.fontSize=(fs/k)+'px'; pg.style.setProperty('--lh',(fs*1.85)+'px'); squeeze(pg); }
+  pg.style.fontSize=(fs/k)+'px'; pg.style.setProperty('--lh',(fs*1.85)+'px'); squeeze(pg); requestAnimationFrame(()=>{ if(pg.isConnected) squeeze(pg); }); }   // squeezed again once the page font has laid out
 function spageMake(p){ const sec=document.createElement('section'); sec.className='spage'; sec.dataset.p=p;
   const h=spageInner(p); if(h!=null){ sec.innerHTML=h; return sec; }
   const set=st.mushaf, my=scrSeq; sec.innerHTML='<p class="loadmsg" style="min-height:70vh">Loading page…</p>';
@@ -3743,7 +3745,9 @@ function tajweedKey(){ const ms=sL()==='ms';
    kept or changed. Other countries: their official tourism or halal bodies, opened in the browser. */
 const HALAL_LINKS=[
  ['Singapore','MUIS Halal Directory (official)','https://halal.muis.gov.sg/halal/establishments','The official list of MUIS halal-certified eating places and caterers.','Senarai rasmi tempat makan dan katering bersijil halal MUIS.'],
- ['Japan','JNTO: Muslim travelers (Japan National Tourism Organization)','https://www.japan.travel/en/plan/muslim-travelers/','Japan has no government halal authority; restaurants are certified by private bodies or are only "Muslim-friendly". Check the certificate or ask.','Jepun tiada badan halal kerajaan; restoran disijilkan oleh badan swasta atau sekadar "mesra Muslim". Semak sijil atau tanya.'],
+ ['Japan','JNTO: guide for Muslim travelers','https://www.japan.travel/en/guide/muslim-travelers/','JNTO (Japan National Tourism Organization): "there is no central agency for halal accreditation" in Japan, so check each place\'s certificate; many dishes contain mirin, sake or gelatin.','JNTO (Pertubuhan Pelancongan Kebangsaan Jepun): Jepun "tiada agensi pusat untuk pensijilan halal", jadi semak sijil setiap tempat; banyak hidangan mengandungi mirin, sake atau gelatin.'],
+ ['Japan','JNTO: Japan Welcome Guide for Muslim Travelers','https://muslimguide.jnto.go.jp/','JNTO\'s own guide for Muslim visitors (restaurants, prayer places).','Panduan rasmi JNTO untuk pelawat Muslim (restoran, tempat solat).'],
+ ['Japan','Halal Gourmet Japan (private directory, listed by JNTO)','https://halalgourmet.jp/','A private restaurant search that JNTO points to; it shows each place\'s halal status as given by the restaurant.','Carian restoran swasta yang dirujuk oleh JNTO; ia memaparkan status halal setiap tempat seperti yang dinyatakan oleh restoran.'],
  ['Korea','Korea Tourism Organization: Muslim-friendly travel','https://english.visitkorea.or.kr/svc/thingsToDo/subMuslimFriendly.do','Four grades: Halal Certified (e.g. Korea Muslim Federation), Self-certified (by Muslim owners), Muslim Friendly (some halal dishes, may sell alcohol), Pork free (no halal menu). Only the first is certified halal.','Empat gred: Halal Certified (cth. Korea Muslim Federation), Self-certified (oleh pemilik Muslim), Muslim Friendly (sebahagian hidangan halal, mungkin menjual arak), Pork free (tiada menu halal). Hanya yang pertama bersijil halal.'],
  ['Thailand','Central Islamic Council of Thailand (CICOT)','https://www.cicot.or.th/','CICOT is Thailand\'s halal certification authority.','CICOT ialah badan pensijilan halal Thailand.'],
  ['Thailand','Halal Standard Institute of Thailand','https://www.halal.or.th/','Thailand\'s halal standards institute (under CICOT).','Institut piawaian halal Thailand (di bawah CICOT).']];

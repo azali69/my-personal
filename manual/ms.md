@@ -289,7 +289,7 @@ Semuanya dibuka dari **menu ayat**; memerlukan internet sekali bagi setiap surah
 
 1. Home → **Halal food**. Taip nama atau kawasan (sekurang-kurangnya 3 huruf), cth. *Tampines* atau *prata*: aplikasi mencari terus dalam **direktori halal MUIS** dan menyenaraikan setiap tempat dengan jenis, alamat dan nombor sijil, serta **Map ›**. MUIS memaparkan paling banyak 200 hasil; perincikan carian. (Aplikasi Android; perlu internet.)
 2. Sijil boleh tamat atau ditarik balik: semak sijil MUIS yang dipamerkan di premis.
-3. **Pautan rasmi** Jepun (JNTO), Korea (Korea Tourism Organization) dan Thailand (CICOT, Halal Standard Institute) dibuka dalam pelayar. Senarai Korea ada empat gred dan hanya **Halal Certified** bersijil halal; Jepun tiada badan halal kerajaan.
+3. **Pautan rasmi** Jepun (panduan JNTO untuk pelawat Muslim dan Muslim Welcome Guide JNTO, serta Halal Gourmet Japan, direktori swasta yang dirujuk JNTO), Korea (Korea Tourism Organization) dan Thailand (CICOT, Halal Standard Institute) dibuka dalam pelayar. Senarai Korea ada empat gred dan hanya **Halal Certified** bersijil halal; Jepun tiada badan halal kerajaan.
 
 **Masjid & musolla (Masjid & musollah)**
 
