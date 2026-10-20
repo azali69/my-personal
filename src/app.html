@@ -751,7 +751,7 @@ function syncMergeMap(L,R,del){ const out={}; L=L||{}; R=R||{}; del=del||{};
 async function syncNow(manual){ if(!syncOn()||syncBusy) return; syncBusy=true;
   try{ const raw=window.AndroidExtra.syncRead(); let R=null;
     if(raw && raw[0]!=='!'){ try{ R=JSON.parse(raw); }catch(e){} }
-    if(raw && raw[0]==='!' && raw!=='!none'){ if(manual) toast('Could not read the sync file ('+raw.slice(1)+')'); return; }
+    if(raw && raw[0]==='!' && raw!=='!none'){ store.set('syncErr',Date.now()); if(manual) toast(raw==='!sign in again'?'Google sign-in has expired: open Sync and sign in again':'Could not read the sync data ('+raw.slice(1,120)+')'); return; }
     const LT=syncTimes(), RK=(R&&R.app==='My Personal Quran'&&R.kind==='sync'&&R.keys)||{}, out={}, outT={}; let changed=[];
     const LD=syncDels(), RD=(R&&R.del)||{}, DEL={}; new Set([...Object.keys(LD),...Object.keys(RD)]).forEach(k=>{ DEL[k]=Object.assign({},RD[k]||{}); Object.entries(LD[k]||{}).forEach(([id,t])=>{ if(!(DEL[k][id]>=t)) DEL[k][id]=t; }); });
     try{ localStorage.setItem('mpq.__syncDel',JSON.stringify(DEL)); }catch(e){}
@@ -767,7 +767,7 @@ async function syncNow(manual){ if(!syncOn()||syncBusy) return; syncBusy=true;
     if(R && R.at) store.set('syncFrom',{at:R.at,dev:R.dev||''});   // what the other device last wrote, shown in the Sync window
     const dev=(()=>{ try{ return window.AndroidExtra.deviceName?.()||''; }catch(e){ return ''; } })();
     const ok=window.AndroidExtra.syncWrite(JSON.stringify({app:'My Personal Quran',kind:'sync',at:Date.now(),dev,keys:out,del:DEL}));
-    if(!ok){ store.set('syncErr',Date.now()); if(manual) toast('Could not write the sync file. Open the Drive or OneDrive app once, then try again.'); return; }
+    if(!ok){ store.set('syncErr',Date.now()); if(manual) toast(window.AndroidExtra.gAccount?.()?'Could not save to Google Drive. Check the internet and try again.':'Could not write the sync file. Open the Drive or OneDrive app once, then try again.'); return; }
     store.set('syncErr',0); store.set('syncAt',Date.now()); if(manual) toast(changed.length?`Synced: ${changed.length} updated from your other device`:'Synced');
   }catch(e){ if(manual) toast('Sync failed'); } finally{ syncBusy=false; } }
 function syncAfter(ks){ try{
@@ -775,19 +775,27 @@ function syncAfter(ks){ try{
   if(ks.includes('page')){ const p=store.get('page',st.page); if(p!==st.page && document.getElementById('home')?.hidden===false){ st.page=p; } }
   if(ks.some(k=>k==='bm'||k==='page'||k==='myb'||k==='myr') && document.getElementById('home')?.hidden!==false) renderReader();
   const t=topPanel(); t&&t.__redraw&&t.__redraw(); if(document.getElementById('kt')?.hidden===false) ktDrawTop(); }catch(e){} }
-function syncSheet(){ const name=window.AndroidExtra?.syncName?.()||'', at=store.get('syncAt',0);
-  if(!window.AndroidExtra?.syncPick){ openSheet('Sync with your other devices','<p class="note">Sync works in the Android app.</p>'); return; }
+function syncSheet(){ const X=window.AndroidExtra, name=X?.syncName?.()||'', at=store.get('syncAt',0), g=X?.gAccount?.()||'';
+  if(!X?.syncPick){ openSheet('Sync with your other devices','<p class="note">Sync works in the Android app.</p>'); return; }
+  const status=()=>{ const f=store.get('syncFrom',null), er=store.get('syncErr',0);
+    return (f&&f.at?`<p class="note">Last written ${f.dev?'by <b>'+esc(f.dev)+'</b> ':''}at ${new Date(f.at).toLocaleString()}.</p>`:'')+(er?`<p class="note" style="color:var(--danger,#b3261e)">The last attempt failed (${new Date(er).toLocaleString()}). Check the internet and tap Sync now.</p>`:''); };
   openSheet('Sync with your other devices', `
-   <p class="note" style="margin-top:0">Keep your bookmarks, notes and last-read places the same on your phone and tablet, through one file in your Google Drive or OneDrive. On the first device, <b>create</b> the sync file there; on every other device, <b>choose that same file</b> (do not create a second one). After that the app syncs on its own when it opens, when it returns, and a few seconds after you change something.</p>
-   ${name?`<p class="note">Sync file: <b>${esc(name)}</b>${at?` · last synced ${new Date(at).toLocaleString()}`:''}</p>
-     ${(()=>{ const f=store.get('syncFrom',null), er=store.get('syncErr',0); return (f&&f.at?`<p class="note">The file was last written ${f.dev?'by <b>'+esc(f.dev)+'</b> ':''}at ${new Date(f.at).toLocaleString()}. If that is older than a change you made on the other device, the cloud app has not brought the new copy yet: open the Drive or OneDrive app, pull down to refresh, then tap Sync now.</p>`:'')+(er?`<p class="note" style="color:var(--danger,#b3261e)">The last attempt could not write the file (${new Date(er).toLocaleString()}).</p>`:''); })()}
-     <div class="actions"><button id="syNow">${ic('hist')}Sync now</button><button id="syOff">${ic('trash')}Stop syncing on this device</button></div>`
-   :`<div class="actions"><button id="syNew">${ic('note')}Create the sync file (first device)</button><button id="syOpen">${ic('book')}Choose the sync file (other devices)</button></div>`}
-   <p class="note" style="font-size:12px">In the file picker, open the menu (☰) and choose <b>Drive</b> or <b>OneDrive</b> (the OneDrive app must be installed and signed in). The file stays in your own Drive; nothing goes to anyone else. The cloud app needs the internet to bring a change made on the other device, so give it a moment. Settings, prayer alerts and voice recordings are not synced.</p>`);
-  const pick=c=>{ window.__syncPicked=n=>{ window.__syncPicked=null; if(!n){ toast('No file chosen'); return; } toast('Sync file: '+n); syncNow(true).then(()=>syncSheet()); }; goingAway(); window.AndroidExtra.syncPick(c); };
+   <p class="note" style="margin-top:0">Keeps your bookmarks, notes and last-read places the same on all your devices, both ways: whichever device you change, the others get it at the next sync. The app syncs when it opens, when you return to it, and a few seconds after a change; <b>Sync now</b> does it at once.</p>
+   ${name?`<p class="note">Syncing with: <b>${esc(name)}</b>${at?` · last synced ${new Date(at).toLocaleString()}`:''}</p>${status()}
+     <div class="actions"><button id="syNow">${ic('hist')}Sync now</button><button id="syOff">${ic('trash')}${g?'Sign out (stop syncing on this device)':'Stop syncing on this device'}</button></div>`
+   :`<p class="note"><b>Recommended:</b> sign in with the same Google account on every device. The data is kept in a hidden folder of this app in your own Google Drive; the app cannot see your other Drive files.</p>
+     <div class="actions"><button id="syG">${ic('hist')}Sign in with Google</button></div>
+     <details><summary class="note">Other way: a file in Drive or OneDrive (less reliable)</summary>
+     <p class="note">On the first device <b>create</b> the sync file; on the others <b>choose that same file</b>. In the picker open the menu (☰) and choose Drive or OneDrive.</p>
+     <div class="actions"><button id="syNew">${ic('note')}Create the sync file</button><button id="syOpen">${ic('book')}Choose the sync file</button></div></details>`}
+   <p class="note" style="font-size:12px">Settings, prayer alerts and voice recordings are not synced.</p>`);
+  const pick=c=>{ window.__syncPicked=n=>{ window.__syncPicked=null; if(!n){ toast('No file chosen'); return; } toast('Sync file: '+n); syncNow(true).then(()=>syncSheet()); }; goingAway(); X.syncPick(c); };
+  sheetB.querySelector('#syG')?.addEventListener('click',()=>{ window.__gSigned=m=>{ window.__gSigned=null;
+      if(!m){ toast('Sign-in cancelled'); return; } if(m[0]==='!'){ toast('Google sign-in failed: '+m.slice(1)); return; }
+      toast('Signed in: '+m); syncNow(true).then(()=>syncSheet()); }; goingAway(); X.gSignIn(); });
   sheetB.querySelector('#syNew')?.addEventListener('click',()=>pick(true)); sheetB.querySelector('#syOpen')?.addEventListener('click',()=>pick(false));
   sheetB.querySelector('#syNow')?.addEventListener('click',()=>syncNow(true).then(()=>syncSheet()));
-  sheetB.querySelector('#syOff')?.addEventListener('click',()=>{ window.AndroidExtra.syncOff(); toast('Syncing stopped on this device'); syncSheet(); }); }
+  sheetB.querySelector('#syOff')?.addEventListener('click',()=>{ X.syncOff(); toast('Syncing stopped on this device'); syncSheet(); }); }
 const st = {
   page: store.get('page', 1), tr: store.get('tr', false), lang: store.get('lang','ms'),
   bg: store.get('bg','auto'), sname: store.get('sname','lat'), size: store.get('tsize', 0)||28, flow: store.get('flow', store.get('tsize',0)>0), scroll: store.get('pscroll', false), mushaf: store.get('mushaf','v4'), blocks: store.get('blocks','off'),
@@ -1918,7 +1926,7 @@ function backupSummary(data){ const g=(k,d)=>{ try{ return data[k]==null? d : JS
 function backupSheet(){ const now=backupCollect();
   openSheet('Backup and restore', `
    <p class="note" style="margin-top:0">One file with everything you set and saved in the app: ${esc(backupSummary(now.data))}.</p>
-   <div class="actions"><button id="bkSave">${ic('copy')}Save a backup file</button><button id="bkLoad">${ic('hist')}Restore from a backup file</button><button id="bkSync">${ic('hist')}Sync with your other devices (Google Drive / OneDrive)…</button></div>
+   <div class="actions"><button id="bkSave">${ic('copy')}Save a backup file</button><button id="bkLoad">${ic('hist')}Restore from a backup file</button><button id="bkSync">${ic('hist')}Sync with your other devices (Google)…</button></div>
    <p class="note">Save it somewhere safe, e.g. Google Drive or email it to yourself. Restoring replaces what is in the app now with the backup.</p>
    <p class="note" style="font-size:12px">Not in the backup: your Hafazan voice recordings and the adhan sound files you chose (pick those again), and the downloaded tafsir, hadith and word-by-word texts, which download again when needed.</p>
    <input type="file" id="bkFile" accept="application/json,.json" hidden>`);

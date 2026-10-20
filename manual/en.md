@@ -360,10 +360,10 @@ All open from the **ayah menu**; they need the internet once per surah.
 
 **Sync between your phone and tablet**
 
-1. Settings → Back up or restore → **Sync with your other devices (Google Drive / OneDrive)…**.
-2. On the **first device only** tap **Create the sync file**, and in the picker open the menu (☰) and choose **Drive** or **OneDrive** (the OneDrive app must be installed and signed in); save it there. On **every other device** tap **Choose the sync file** and pick **that same file**. Do not create a second sync file: two files never meet.
+1. Settings → Back up or restore → **Sync with your other devices (Google)…**.
+2. Tap **Sign in with Google** on **every device**, with the **same Google account**. The data is kept in a hidden folder of this app in your own Google Drive (the app cannot see your other Drive files). The first time, Google warns that the app is unverified (it is your own, in testing): tap **Continue**. Google may ask you to sign in again about once a week. (A device without Google services can still use the older way under *Other way*: one file in Drive or OneDrive, created on the first device and chosen on the others.)
 3. After that, bookmarks (Qur'an, hadith, Sirah, Sifat Solat, Jumaat, Doa), notes, last-read places, My ruku' and My blocks, Hafazan results and your own places sync on their own: when the app opens, when you come back to it, and a few seconds after a change. A deletion on one device is deleted on the other. **Sync now** forces it.
-4. The cloud app needs the internet to bring a change from the other device, and may take a few minutes. The Sync window shows **which device last wrote the file, and when**: if that is older than a change you just made on the other device, open the Drive or OneDrive app, pull down to refresh, then tap **Sync now**. A red line means the last attempt could not write the file. Settings, prayer alerts and voice recordings are not synced.
+4. It is two-way: whichever device you change, the others get it at their next sync. The Sync window shows **which device last wrote, and when**. A red line means the last attempt failed (usually no internet). Settings, prayer alerts and voice recordings are not synced.
 
 ## 10. Troubleshooting
 

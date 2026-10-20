@@ -780,7 +780,7 @@ public class MainActivity extends Activity {
 
 
     /* ---------------- Prayer alerts, adhan files, location, compass ---------------- */
-    private static final int REQ_NOTIF = 21, REQ_LOC = 22, REQ_PICK = 23, REQ_SAVE = 24, REQ_OPEN = 25, REQ_SYNC = 26;
+    private static final int REQ_NOTIF = 21, REQ_LOC = 22, REQ_PICK = 23, REQ_SAVE = 24, REQ_OPEN = 25, REQ_SYNC = 28, REQ_GAUTH = 29;   // 26/27 are the camera and image scans
     private String pendingBackup = null, openedBackup = null;   // backup file text: to be written / just read
     private String pickSlot = null;
     private SensorManager sm; private SensorEventListener compassL; private float decl = 0f; private long lastCompass = 0;
@@ -940,19 +940,32 @@ public class MainActivity extends Activity {
                 catch (Exception e) { js("window.__backupOpened && window.__backupOpened(false)"); } }); }
         /* Sync between the person's phones and tablets (Azli, 17 Oct 2026): one file they choose in Google Drive (or any
            cloud folder), kept by Android's document permission; the app reads and writes it, Drive keeps it the same everywhere. */
+        /* Google Drive sync (Azli, 20 Oct 2026): sign in with Google and keep one file in the app's hidden Drive folder
+           (scope drive.appdata: the app sees only its own folder, nothing else in Drive). The OAuth client is the Android
+           client 787421539161-pskuco9b997q2tri0g6ndcujfudm990l, matched by package name and signing SHA-1. */
+        @JavascriptInterface public void gSignIn() {
+            runOnUiThread(() -> { try {
+                com.google.android.gms.auth.api.identity.Identity.getAuthorizationClient(MainActivity.this).authorize(gReq())
+                  .addOnSuccessListener(r -> { if (r.hasResolution() && r.getPendingIntent() != null) {
+                        try { startIntentSenderForResult(r.getPendingIntent().getIntentSender(), REQ_GAUTH, null, 0, 0, 0); } catch (Exception e) { js("window.__gSigned && window.__gSigned('')"); } }
+                      else gAfterAuth(r.getAccessToken()); })
+                  .addOnFailureListener(e -> js("window.__gSigned && window.__gSigned('!'+" + JSONObject.quote(String.valueOf(e.getMessage())) + ")"));
+            } catch (Exception e) { js("window.__gSigned && window.__gSigned('!'+" + JSONObject.quote(String.valueOf(e.getMessage())) + ")"); } }); }
+        @JavascriptInterface public String gAccount() { return PrayerAlarms.prefs(MainActivity.this).getString("gsync", ""); }
         @JavascriptInterface public void syncPick(boolean create) {
             runOnUiThread(() -> { try {
                 Intent i = create ? new Intent(Intent.ACTION_CREATE_DOCUMENT).addCategory(Intent.CATEGORY_OPENABLE).setType("application/json").putExtra(Intent.EXTRA_TITLE, "MyPersonalQuran-sync.json")
                                   : new Intent(Intent.ACTION_OPEN_DOCUMENT).addCategory(Intent.CATEGORY_OPENABLE).setType("*/*");
                 i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
                 startActivityForResult(i, REQ_SYNC); } catch (Exception e) { js("window.__syncPicked && window.__syncPicked('')"); } }); }
-        @JavascriptInterface public String syncName() { return PrayerAlarms.prefs(MainActivity.this).getString("syncName", ""); }
+        @JavascriptInterface public String syncName() { String g = gAccount(); return g.isEmpty() ? PrayerAlarms.prefs(MainActivity.this).getString("syncName", "") : "Google Drive (" + g + ")"; }
         @JavascriptInterface public void syncOff() {
             String u = PrayerAlarms.prefs(MainActivity.this).getString("syncUri", "");
             try { if (!u.isEmpty()) getContentResolver().releasePersistableUriPermission(Uri.parse(u), Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION); } catch (Exception ignored) { }
-            PrayerAlarms.prefs(MainActivity.this).edit().remove("syncUri").remove("syncName").apply(); }
+            PrayerAlarms.prefs(MainActivity.this).edit().remove("syncUri").remove("syncName").remove("gsync").remove("gfile").apply(); }
         /** The sync file's text, "" if empty, or "!error" when it cannot be read. */
         @JavascriptInterface public String syncRead() {
+            if (!gAccount().isEmpty()) return gRead();
             String u = PrayerAlarms.prefs(MainActivity.this).getString("syncUri", ""); if (u.isEmpty()) return "!none";
             // ask the cloud app (Google Drive, OneDrive) for its newest copy first, so a change from the other device is seen
             try { if (Build.VERSION.SDK_INT >= 26) getContentResolver().refresh(Uri.parse(u), null, null); } catch (Exception ignored) { }
@@ -963,6 +976,7 @@ public class MainActivity extends Activity {
             } catch (Exception e) { return "!" + e.getClass().getSimpleName(); } }
         /** Writes the sync file. Cloud apps differ in the write modes they accept (Google Drive refuses "wt" on some phones), so "wt", "w" and "rwt" are tried in turn. */
         @JavascriptInterface public boolean syncWrite(String text) {
+            if (!gAccount().isEmpty()) return gWrite(text);
             String u = PrayerAlarms.prefs(MainActivity.this).getString("syncUri", ""); if (u.isEmpty()) return false;
             byte[] data = text.getBytes(java.nio.charset.StandardCharsets.UTF_8);
             for (String mode : new String[]{"wt", "w", "rwt"}) {
@@ -1080,11 +1094,63 @@ public class MainActivity extends Activity {
         } catch (Exception e) { sendLoc(fallback); }
     }
 
+    private static final String G_SCOPE = "https://www.googleapis.com/auth/drive.appdata", G_FILE = "MyPersonalQuran-sync.json";
+    private com.google.android.gms.auth.api.identity.AuthorizationRequest gReq() {
+        return com.google.android.gms.auth.api.identity.AuthorizationRequest.builder()
+            .setRequestedScopes(java.util.Collections.singletonList(new com.google.android.gms.common.api.Scope(G_SCOPE))).build(); }
+    /** After sign-in: find the account's e-mail (Drive "about"), remember it, and tell the page. */
+    private void gAfterAuth(String token) {
+        new Thread(() -> { String mail = "";
+            try { JSONObject o = new JSONObject(gHttp("GET", "https://www.googleapis.com/drive/v3/about?fields=user(emailAddress)", token, null, null));
+                  mail = o.getJSONObject("user").optString("emailAddress", ""); } catch (Exception ignored) { }
+            if (mail.isEmpty()) mail = "Google account";
+            PrayerAlarms.prefs(this).edit().putString("gsync", mail).remove("gfile").apply();
+            js("window.__gSigned && window.__gSigned(" + JSONObject.quote(mail) + ")"); }).start(); }
+    /** A fresh access token without showing anything; null when the person must sign in again. Called off the main thread. */
+    private String gToken() {
+        try { com.google.android.gms.auth.api.identity.AuthorizationResult r = com.google.android.gms.tasks.Tasks.await(
+                  com.google.android.gms.auth.api.identity.Identity.getAuthorizationClient(this).authorize(gReq()), 30, java.util.concurrent.TimeUnit.SECONDS);
+              return r.hasResolution() ? null : r.getAccessToken(); } catch (Exception e) { return null; } }
+    private static String gHttp(String method, String url, String token, String type, byte[] body) throws Exception {
+        java.net.HttpURLConnection c = (java.net.HttpURLConnection) new java.net.URL(url).openConnection();
+        if ("PATCH".equals(method)) { c.setRequestMethod("POST"); c.setRequestProperty("X-HTTP-Method-Override", "PATCH"); } else c.setRequestMethod(method);
+        c.setRequestProperty("Authorization", "Bearer " + token); c.setConnectTimeout(15000); c.setReadTimeout(30000); c.setUseCaches(false);
+        if (body != null) { c.setDoOutput(true); c.setRequestProperty("Content-Type", type); try (OutputStream o = c.getOutputStream()) { o.write(body); } }
+        int code = c.getResponseCode();
+        if (code >= 300) { String err = ""; try { err = readAll(c.getErrorStream()); } catch (Exception ignored) { } throw new Exception("HTTP " + code + " " + err); }
+        return readAll(c.getInputStream()); }
+    /** The sync file's id in the hidden app folder (newest if two devices ever created one each), or "" if none yet. */
+    private String gFileId(String token) throws Exception {
+        String q = java.net.URLEncoder.encode("name='" + G_FILE + "' and trashed=false", "UTF-8");
+        org.json.JSONArray a = new JSONObject(gHttp("GET", "https://www.googleapis.com/drive/v3/files?spaces=appDataFolder&orderBy=modifiedTime%20desc&fields=files(id)&q=" + q, token, null, null)).getJSONArray("files");
+        return a.length() > 0 ? a.getJSONObject(0).getString("id") : ""; }
+    private String gRead() {
+        String token = gToken(); if (token == null) return "!sign in again";
+        try { String id = gFileId(token); if (id.isEmpty()) return "";
+              return gHttp("GET", "https://www.googleapis.com/drive/v3/files/" + id + "?alt=media", token, null, null); }
+        catch (Exception e) { return "!" + e.getMessage(); } }
+    private boolean gWrite(String text) {
+        String token = gToken(); if (token == null) return false;
+        try { byte[] data = text.getBytes(java.nio.charset.StandardCharsets.UTF_8); String id = gFileId(token);
+              if (!id.isEmpty()) { gHttp("PATCH", "https://www.googleapis.com/upload/drive/v3/files/" + id + "?uploadType=media", token, "application/json", data); return true; }
+              String b = "mpqboundary", meta = "{\"name\":\"" + G_FILE + "\",\"parents\":[\"appDataFolder\"]}";
+              java.io.ByteArrayOutputStream bo = new java.io.ByteArrayOutputStream();
+              bo.write(("--" + b + "\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n" + meta + "\r\n--" + b + "\r\nContent-Type: application/json\r\n\r\n").getBytes(java.nio.charset.StandardCharsets.UTF_8));
+              bo.write(data); bo.write(("\r\n--" + b + "--").getBytes(java.nio.charset.StandardCharsets.UTF_8));
+              gHttp("POST", "https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart", token, "multipart/related; boundary=" + b, bo.toByteArray()); return true; }
+        catch (Exception e) { return false; } }
+
     @Override
     protected void onActivityResult(int req, int res, Intent data) {
         super.onActivityResult(req, res, data);
         if (req == REQ_CAM) { runScan(res == RESULT_OK ? camUri : null, scanLang); return; }
         if (req == REQ_IMG) { runScan(res == RESULT_OK && data != null ? data.getData() : null, scanLang); return; }
+        if (req == REQ_GAUTH) {
+            if (res != RESULT_OK || data == null) { js("window.__gSigned && window.__gSigned('')"); return; }
+            try { gAfterAuth(com.google.android.gms.auth.api.identity.Identity.getAuthorizationClient(this).getAuthorizationResultFromIntent(data).getAccessToken()); }
+            catch (Exception e) { js("window.__gSigned && window.__gSigned('!'+" + JSONObject.quote(String.valueOf(e.getMessage())) + ")"); }
+            return;
+        }
         if (req == REQ_SYNC) {
             String name = "";
             if (res == RESULT_OK && data != null && data.getData() != null) {

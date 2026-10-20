@@ -360,10 +360,10 @@ Semuanya dibuka dari **menu ayat**; memerlukan internet sekali bagi setiap surah
 
 **Selaraskan telefon dan tablet (Sync)**
 
-1. Settings → Back up or restore → **Sync with your other devices (Google Drive / OneDrive)…**.
-2. Di **peranti pertama sahaja** ketik **Create the sync file**, dan dalam pemilih fail buka menu (☰) dan pilih **Drive** atau **OneDrive** (aplikasi OneDrive mesti dipasang dan log masuk); simpan di situ. Di **setiap peranti lain** ketik **Choose the sync file** dan pilih **fail yang sama**. Jangan cipta fail sync kedua: dua fail tidak akan bertemu.
+1. Settings → Back up or restore → **Sync with your other devices (Google)…**.
+2. Ketik **Sign in with Google** di **setiap peranti**, dengan **akaun Google yang sama**. Data disimpan dalam folder tersembunyi aplikasi ini di Google Drive anda sendiri (aplikasi tidak dapat melihat fail Drive anda yang lain). Kali pertama, Google memberi amaran bahawa aplikasi belum disahkan (ia milik anda sendiri, dalam ujian): ketik **Continue**. Google mungkin meminta log masuk semula kira-kira seminggu sekali. (Peranti tanpa perkhidmatan Google masih boleh guna cara lama di bawah *Other way*: satu fail dalam Drive atau OneDrive, dicipta di peranti pertama dan dipilih di peranti lain.)
 3. Selepas itu, penanda (al-Quran, hadis, Sirah, Sifat Solat, Jumaat, Doa), nota, tempat terakhir dibaca, My ruku' dan My blocks, keputusan Hafazan dan tempat anda sendiri diselaraskan dengan sendirinya: apabila aplikasi dibuka, apabila anda kembali kepadanya, dan beberapa saat selepas sesuatu diubah. Yang dipadam di satu peranti dipadam juga di peranti lain. **Sync now** menyelaraskan serta-merta.
-4. Aplikasi awan memerlukan internet untuk membawa perubahan dari peranti lain, dan mungkin mengambil beberapa minit. Tetingkap Sync menunjukkan **peranti mana yang terakhir menulis fail itu, dan bila**: jika lebih lama daripada perubahan yang baru anda buat di peranti lain, buka aplikasi Drive atau OneDrive, tarik ke bawah untuk muat semula, kemudian ketik **Sync now**. Baris merah bermaksud cubaan terakhir tidak dapat menulis fail. Tetapan, peringatan waktu solat dan rakaman suara tidak diselaraskan.
+4. Ia dua hala: peranti mana pun yang anda ubah, peranti lain menerimanya pada penyelarasan seterusnya. Tetingkap Sync menunjukkan **peranti mana yang terakhir menulis, dan bila**. Baris merah bermaksud cubaan terakhir gagal (biasanya tiada internet). Tetapan, peringatan waktu solat dan rakaman suara tidak diselaraskan.
 
 ## 10. Penyelesaian masalah
 

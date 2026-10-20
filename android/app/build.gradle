@@ -31,6 +31,7 @@ android {
 dependencies {
     implementation 'androidx.webkit:webkit:1.11.0'
     implementation 'androidx.core:core:1.13.1'
+    implementation 'com.google.android.gms:play-services-auth:21.2.0'   // Google sign-in for Drive sync
     implementation platform('org.jetbrains.kotlin:kotlin-bom:1.8.22')
     implementation 'com.google.mlkit:text-recognition:16.0.1'
     implementation 'com.microsoft.onnxruntime:onnxruntime-android:1.20.0'
