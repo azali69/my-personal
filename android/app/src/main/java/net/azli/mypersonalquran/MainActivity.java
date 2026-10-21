@@ -951,6 +951,14 @@ public class MainActivity extends Activity {
                       else gAfterAuth(r.getAccessToken()); })
                   .addOnFailureListener(e -> js("window.__gSigned && window.__gSigned('!'+" + JSONObject.quote(String.valueOf(e.getMessage())) + ")"));
             } catch (Exception e) { js("window.__gSigned && window.__gSigned('!'+" + JSONObject.quote(String.valueOf(e.getMessage())) + ")"); } }); }
+        /* Sync reads and writes go over the network (Drive) or through the cloud app, which can take seconds: run them on a
+           background thread and answer through window.__syncDone(id, result), so the page never waits (Azli, 21 Oct 2026: touch lagged). */
+        @JavascriptInterface public void syncReadAsync(final String id) {
+            new Thread(() -> { String r; try { r = syncRead(); } catch (Exception e) { r = "!" + e.getMessage(); }
+                js("window.__syncDone && window.__syncDone(" + JSONObject.quote(id) + "," + JSONObject.quote(r) + ")"); }).start(); }
+        @JavascriptInterface public void syncWriteAsync(final String id, final String text) {
+            new Thread(() -> { boolean ok; try { ok = syncWrite(text); } catch (Exception e) { ok = false; }
+                js("window.__syncDone && window.__syncDone(" + JSONObject.quote(id) + "," + (ok ? "'1'" : "''") + ")"); }).start(); }
         @JavascriptInterface public String gAccount() { return PrayerAlarms.prefs(MainActivity.this).getString("gsync", ""); }
         @JavascriptInterface public void syncPick(boolean create) {
             runOnUiThread(() -> { try {

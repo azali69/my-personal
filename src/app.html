@@ -736,7 +736,9 @@ const SYNC_KEYS=new Set(['bm','ktBm','sirahBm','duaBm','solatBm','jumBm','notes'
 const SYNC_MAPS=new Set(['bm','ktBm','sirahBm','duaBm','solatBm','jumBm','notes','ktLastBy']);
 let syncTm=0, syncBusy=false;
 function syncTimes(){ try{ return JSON.parse(localStorage.getItem('mpq.__syncT')||'{}'); }catch(e){ return {}; } }
-function syncTouch(k){ if(window.__syncApplying) return; const t=syncTimes(); t[k]=Date.now(); try{ localStorage.setItem('mpq.__syncT',JSON.stringify(t)); }catch(e){} clearTimeout(syncTm); syncTm=setTimeout(()=>syncNow(false),4000); }
+function syncTouch(k){ if(window.__syncApplying) return; const t=syncTimes(); t[k]=Date.now(); try{ localStorage.setItem('mpq.__syncT',JSON.stringify(t)); }catch(e){} const d=(k==='page'||k==='hist'||/Last/.test(k))?60000:4000;   // reading moves the page often: do not sync on every turn
+  if(syncTm && d>=syncDue-Date.now()) return; clearTimeout(syncTm); syncDue=Date.now()+d; syncTm=setTimeout(()=>{ syncTm=0; syncNow(false); },d); }
+let syncDue=0;
 const syncOn=()=>!!(window.AndroidExtra?.syncRead && window.AndroidExtra.syncName());
 const syncEntT=e=>{ if(!e||typeof e!=='object') return 0; for(const f of ['u','t','c']) if(typeof e[f]==='number') return e[f]; return 0; };
 /* A removed bookmark or note leaves a dated "tombstone", so the other device removes it too instead of bringing it back. */
@@ -748,8 +750,15 @@ function syncMergeMap(L,R,del){ const out={}; L=L||{}; R=R||{}; del=del||{};
   new Set([...Object.keys(L),...Object.keys(R)]).forEach(id=>{ const a=L[id], b=R[id]; const e=a&&b?(syncEntT(b)>syncEntT(a)?b:a):(a||b);
     if(!(del[id] && del[id]>=syncEntT(e))) out[id]=e; });
   return out; }
+const syncCalls={}; let syncSeq=0;
+window.__syncDone=(id,v)=>{ const f=syncCalls[id]; delete syncCalls[id]; f&&f(v); };
+/* Read / write the sync data off the page's thread (older app builds only have the blocking calls). */
+function syncIO(op,text){ const X=window.AndroidExtra;
+  if(!X[op+'Async']) return Promise.resolve(op==='syncRead'?X.syncRead():(X.syncWrite(text)?'1':''));
+  return new Promise(res=>{ const id='s'+(++syncSeq); const tm=setTimeout(()=>{ delete syncCalls[id]; res(op==='syncRead'?'!timeout':''); },60000);
+    syncCalls[id]=v=>{ clearTimeout(tm); res(v); }; op==='syncRead'?X.syncReadAsync(id):X.syncWriteAsync(id,text); }); }
 async function syncNow(manual){ if(!syncOn()||syncBusy) return; syncBusy=true;
-  try{ const raw=window.AndroidExtra.syncRead(); let R=null;
+  try{ if(manual) toast('Syncing…'); const raw=await syncIO('syncRead'); let R=null;
     if(raw && raw[0]!=='!'){ try{ R=JSON.parse(raw); }catch(e){} }
     if(raw && raw[0]==='!' && raw!=='!none'){ store.set('syncErr',Date.now()); if(manual) toast(raw==='!sign in again'?'Google sign-in has expired: open Sync and sign in again':'Could not read the sync data ('+raw.slice(1,120)+')'); return; }
     const LT=syncTimes(), RK=(R&&R.app==='My Personal Quran'&&R.kind==='sync'&&R.keys)||{}, out={}, outT={}; let changed=[];
@@ -766,7 +775,7 @@ async function syncNow(manual){ if(!syncOn()||syncBusy) return; syncBusy=true;
       syncAfter(changed); }
     if(R && R.at) store.set('syncFrom',{at:R.at,dev:R.dev||''});   // what the other device last wrote, shown in the Sync window
     const dev=(()=>{ try{ return window.AndroidExtra.deviceName?.()||''; }catch(e){ return ''; } })();
-    const ok=window.AndroidExtra.syncWrite(JSON.stringify({app:'My Personal Quran',kind:'sync',at:Date.now(),dev,keys:out,del:DEL}));
+    const ok=!!(await syncIO('syncWrite',JSON.stringify({app:'My Personal Quran',kind:'sync',at:Date.now(),dev,keys:out,del:DEL})));
     if(!ok){ store.set('syncErr',Date.now()); if(manual) toast(window.AndroidExtra.gAccount?.()?'Could not save to Google Drive. Check the internet and try again.':'Could not write the sync file. Open the Drive or OneDrive app once, then try again.'); return; }
     store.set('syncErr',0); store.set('syncAt',Date.now()); if(manual) toast(changed.length?`Synced: ${changed.length} updated from your other device`:'Synced');
   }catch(e){ if(manual) toast('Sync failed'); } finally{ syncBusy=false; } }
