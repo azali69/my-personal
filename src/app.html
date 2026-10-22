@@ -686,7 +686,6 @@ a.tile{text-decoration:none;color:inherit}
 .np-paper{background:#fffdf5;color:#1f2a22;border-radius:12px;border:1px solid var(--gold);overflow:hidden}
 .np-page{position:relative;min-height:60vh}
 .np-ed{position:relative;z-index:1;min-height:60vh;padding:16px 18px;outline:none;font-size:18px;line-height:1.7;word-break:break-word;unicode-bidi:plaintext;-webkit-user-select:text;user-select:text}
-.np-ed.np-empty:before{content:attr(data-ph);color:#8a8776;pointer-events:none}
 .np-c{position:absolute;left:0;top:0;width:100%;height:100%;z-index:2;pointer-events:none}
 .np-page.draw .np-c{pointer-events:auto;touch-action:none;cursor:crosshair}
 .np-ed div,.np-ed p,.np-ed li,.np-ed h3,.np-ed blockquote{unicode-bidi:plaintext}
@@ -1995,7 +1994,7 @@ function notepadOpen(k,onDone){ const n=noteGet(k);
      <div class="np-pg"><button id="npPrev" aria-label="Previous page">‹</button><span id="npPn"></span><button id="npNext" aria-label="Next page">›</button><button id="npAdd" aria-label="Add a page" title="Add a page">＋</button></div><i></i>
      <div class="np-tools" id="npTools"></div></div>
     <div class="np-col" id="npCol" hidden></div></div>
-   <div class="np-paper"><div class="np-page" id="npPage"><div id="npEd" class="np-ed" contenteditable="true" spellcheck="true" data-ph="Start typing. Tap ✎ Draw to write over the page with your S Pen or finger."></div><canvas id="npC" class="np-c"></canvas></div></div>
+   <div class="np-paper"><div class="np-page" id="npPage"><div id="npEd" class="np-ed" contenteditable="true" spellcheck="true"></div><canvas id="npC" class="np-c"></canvas></div></div>
    <p class="note" id="npS" style="margin:6px 2px"></p>
    <div class="row2" style="gap:8px"><button class="pill" id="npDelP" style="flex:none">Delete this page</button><button class="pill" id="npDel" style="color:var(--bad);flex:none">${ic('trash')}Delete note</button><button class="pill primary" id="npOk" style="min-width:110px">Done</button></div>`);
   const $=s=>b.querySelector(s), ed=$('#npEd'), tools=$('#npTools'), col=$('#npCol'), S=$('#npS'), page=$('#npPage'), cv=$('#npC'), g=cv.getContext('2d'), top=$('#npTop');
@@ -2015,12 +2014,19 @@ function notepadOpen(k,onDone){ const n=noteGet(k);
     if(e.pointerType==='touch'&&penOnly){ scrollY=e.clientY; liveId=e.pointerId; try{ cv.setPointerCapture(e.pointerId); }catch(x){} return; }
     if(e.pointerType==='pen'&&!penSeen){ penSeen=true; if(!penOnly){ penOnly=true; drawTools(); toast('Pen only is on: fingers scroll the page. Tap Pen only to draw with a finger.'); } }
     e.preventDefault(); try{ cv.setPointerCapture(e.pointerId); }catch(x){} liveId=e.pointerId;
-    const er=erase||(e.pointerType==='pen'&&(e.buttons&32)); live={c:color,w:size,e:er?1:0,pen:e.pointerType==='pen'?1:0,p:[...pt(e)]}; strokes.push(live); seg(live,0); });
-  cv.addEventListener('pointermove',e=>{ if(e.pointerId!==liveId) return;
+    const er=erase||(e.pointerType==='pen'&&(e.buttons&34)); textGone=false;   /* S Pen side button (2) or eraser end (32): erase */ live={c:color,w:size,e:er?1:0,pen:e.pointerType==='pen'?1:0,p:[...pt(e)]}; strokes.push(live); seg(live,0); if(er) eraseText(e.clientX,e.clientY); });
+  /* Erasing also removes typed words under the pen (Azli, 22 Oct 2026: press the S Pen button to erase the writing and the text). */
+  let textGone=false;
+  const eraseText=(x,y)=>{ if(!document.caretRangeFromPoint) return; cv.style.pointerEvents='none'; let r=null; try{ r=document.caretRangeFromPoint(x,y); }catch(e){} cv.style.pointerEvents='';
+    if(!r) return; const nd=r.startContainer; if(nd.nodeType!==3||!ed.contains(nd)) return; const s=nd.data, i=r.startOffset;
+    const hit=j=>{ if(j<0||j>=s.length||/\s/.test(s[j])) return false; const q=document.createRange(); q.setStart(nd,j); q.setEnd(nd,j+1); const b=q.getBoundingClientRect(); return x>=b.left-3&&x<=b.right+3&&y>=b.top-3&&y<=b.bottom+3; };
+    const j=hit(i)?i:hit(i-1)?i-1:-1; if(j<0) return; let a=j,b=j+1; while(a>0&&!/\s/.test(s[a-1])) a--; while(b<s.length&&!/\s/.test(s[b])) b++;
+    if(b<s.length&&/[ \u00a0]/.test(s[b])) b++; else if(a>0&&/[ \u00a0]/.test(s[a-1])) a--; nd.deleteData(a,b-a); textGone=true; };
+  window.addEventListener('pointermove',e=>{ if(e.pointerId!==liveId) return;
     if(scrollY!=null){ const pn=document.getElementById('notepad'); pn.scrollTop-= (e.clientY-scrollY); scrollY=e.clientY; return; }
-    if(!live) return; e.preventDefault(); (e.getCoalescedEvents?e.getCoalescedEvents():[e]).forEach(ev=>{ const q=pt(ev), n=live.p.length; if(Math.abs(q[0]-live.p[n-3])+Math.abs(q[1]-live.p[n-2])<1.2) return; live.p.push(...q); seg(live,live.p.length/3-1); }); });
-  const up=e=>{ if(e.pointerId!==liveId) return; live=null; liveId=null; scrollY=null; schedule(); };
-  cv.addEventListener('pointerup',up); cv.addEventListener('pointercancel',up); cv.addEventListener('contextmenu',e=>e.preventDefault());
+    if(!live) return; e.preventDefault(); (e.getCoalescedEvents?e.getCoalescedEvents():[e]).forEach(ev=>{ const q=pt(ev), n=live.p.length; if(Math.abs(q[0]-live.p[n-3])+Math.abs(q[1]-live.p[n-2])<1.2) return; live.p.push(...q); seg(live,live.p.length/3-1); if(live.e) eraseText(ev.clientX,ev.clientY); }); });
+  const up=e=>{ if(e.pointerId!==liveId) return; live=null; liveId=null; scrollY=null; if(textGone){ textGone=false; mark(); } schedule(); };
+  window.addEventListener('pointerup',up); window.addEventListener('pointercancel',up); cv.addEventListener('contextmenu',e=>e.preventDefault());
   /* ---- text ---- */
   const txt=()=>(ed.innerText||'').replace(/​/g,'').trim();
   const mark=()=>ed.classList.toggle('np-empty',!txt()&&!ed.querySelector('img'));
