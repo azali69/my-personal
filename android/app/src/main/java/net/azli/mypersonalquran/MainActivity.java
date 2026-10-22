@@ -1153,7 +1153,7 @@ public class MainActivity extends Activity {
        touches, and the page is told the button is held (window.__penBtn) so the Notepad erases. Other phones report the
        button in the button state, or the pen's eraser end as its own tool. */
     private boolean penBtn = false;
-    private void setPenBtn(boolean b) { if (b != penBtn) { penBtn = b; js("window.__penBtn=" + (b ? 1 : 0)); } }
+    private void setPenBtn(boolean b) { if (b != penBtn) { penBtn = b; js("window.__penBtn=" + (b ? 1 : 0) + ";window.__penBtnSet&&window.__penBtnSet(" + (b ? 1 : 0) + ")"); } }
     private void penState(android.view.MotionEvent ev) {
         boolean b = (ev.getButtonState() & (android.view.MotionEvent.BUTTON_STYLUS_PRIMARY | android.view.MotionEvent.BUTTON_STYLUS_SECONDARY)) != 0;
         for (int i = 0; i < ev.getPointerCount(); i++) if (ev.getToolType(i) == android.view.MotionEvent.TOOL_TYPE_ERASER) b = true;

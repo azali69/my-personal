@@ -334,7 +334,7 @@ All open from the **ayah menu**; they need the internet once per surah.
 **Qibla**
 
 1. Home → **Qibla**; allow location.
-2. Hold the phone flat and turn until it says **Facing the qibla**: the compass then glows green. The arrow on the dial points to the qibla; the Ka'bah at the top is the direction your phone faces. Turn until the arrow points to the Ka'bah.
+2. Hold the phone flat and turn until it says **Facing the qibla**: the compass then glows green. The red end of the needle points to the qibla; the Ka'bah at the top is the direction your phone faces. Turn until the red needle points to the Ka'bah.
 3. If asked, move the phone in a figure 8 to calibrate. Keep away from metal and magnetic cases.
 
 ## 9. Settings

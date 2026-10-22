@@ -334,7 +334,7 @@ Semuanya dibuka dari **menu ayat**; memerlukan internet sekali bagi setiap surah
 **Kiblat**
 
 1. Home → **Qibla**; benarkan lokasi.
-2. Pegang telefon secara mendatar dan pusing sehingga tertera **Facing the qibla**: kompas akan bercahaya hijau. Anak panah pada dail menunjuk ke kiblat; Kaabah di atas ialah arah yang dihadap telefon anda. Pusing sehingga anak panah menunjuk ke Kaabah.
+2. Pegang telefon secara mendatar dan pusing sehingga tertera **Facing the qibla**: kompas akan bercahaya hijau. Hujung merah jarum menunjuk ke kiblat; Kaabah di atas ialah arah yang dihadap telefon anda. Pusing sehingga jarum merah menunjuk ke Kaabah.
 3. Jika diminta, gerakkan telefon membentuk angka 8 untuk menentukur kompas. Jauhkan daripada logam dan sarung bermagnet.
 
 ## 9. Tetapan (Settings)
