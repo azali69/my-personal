@@ -704,7 +704,7 @@ a.tile{text-decoration:none;color:inherit}
 <header class="top"><div class="top-in">
   <button class="ib" id="btnHome" aria-label="Home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11.5 12 5l8 6.5V20h-5v-5h-6v5H4z"/></svg></button>
   <button class="ib" id="btnNav" aria-label="Surahs and pages"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg></button>
-  <button class="where" id="where"><b id="whereT">My Personal Quran</b><small id="whereS">v1.0.0.79</small></button>
+  <button class="where" id="where"><b id="whereT">My Personal Quran</b><small id="whereS">v1.0.0.80</small></button>
   <button class="ib" id="btnBlk" aria-label="Waqaf and ibtida' colours" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="4" y="5" width="16" height="5" rx="1.5" fill="currentColor" fill-opacity=".25"/><rect x="4" y="14" width="16" height="5" rx="1.5"/></svg></button>
   <button class="ib" id="btnBm" aria-label="Bookmarks"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M7 4h10v16l-5-3.5L7 20z"/></svg></button>
   <button class="ib" id="btnSearch" aria-label="Search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/></svg></button>
@@ -2014,7 +2014,7 @@ function notepadOpen(k,onDone){ const n=noteGet(k);
     if(e.pointerType==='touch'&&penOnly){ scrollY=e.clientY; liveId=e.pointerId; try{ cv.setPointerCapture(e.pointerId); }catch(x){} return; }
     if(e.pointerType==='pen'&&!penSeen){ penSeen=true; if(!penOnly){ penOnly=true; drawTools(); toast('Pen only is on: fingers scroll the page. Tap Pen only to draw with a finger.'); } }
     e.preventDefault(); try{ cv.setPointerCapture(e.pointerId); }catch(x){} liveId=e.pointerId;
-    const er=erase||(e.pointerType==='pen'&&(e.buttons&34)); textGone=false;   /* S Pen side button (2) or eraser end (32): erase */ live={c:color,w:size,e:er?1:0,pen:e.pointerType==='pen'?1:0,p:[...pt(e)]}; strokes.push(live); seg(live,0); if(er) eraseText(e.clientX,e.clientY); });
+    const er=erase||(e.pointerType==='pen'&&((e.buttons&34)||window.__penBtn)); textGone=false;   /* S Pen side button (2) or eraser end (32): erase */ live={c:color,w:size,e:er?1:0,pen:e.pointerType==='pen'?1:0,p:[...pt(e)]}; strokes.push(live); seg(live,0); if(er) eraseText(e.clientX,e.clientY); });
   /* Erasing also removes typed words under the pen (Azli, 22 Oct 2026: press the S Pen button to erase the writing and the text). */
   let textGone=false;
   const eraseText=(x,y)=>{ if(!document.caretRangeFromPoint) return; cv.style.pointerEvents='none'; let r=null; try{ r=document.caretRangeFromPoint(x,y); }catch(e){} cv.style.pointerEvents='';
@@ -2024,7 +2024,9 @@ function notepadOpen(k,onDone){ const n=noteGet(k);
     if(b<s.length&&/[ \u00a0]/.test(s[b])) b++; else if(a>0&&/[ \u00a0]/.test(s[a-1])) a--; nd.deleteData(a,b-a); textGone=true; };
   window.addEventListener('pointermove',e=>{ if(e.pointerId!==liveId) return;
     if(scrollY!=null){ const pn=document.getElementById('notepad'); pn.scrollTop-= (e.clientY-scrollY); scrollY=e.clientY; return; }
-    if(!live) return; e.preventDefault(); (e.getCoalescedEvents?e.getCoalescedEvents():[e]).forEach(ev=>{ const q=pt(ev), n=live.p.length; if(Math.abs(q[0]-live.p[n-3])+Math.abs(q[1]-live.p[n-2])<1.2) return; live.p.push(...q); seg(live,live.p.length/3-1); if(live.e) eraseText(ev.clientX,ev.clientY); }); });
+    if(!live) return; e.preventDefault();
+    if(live.pen&&!live.e&&(window.__penBtn||(e.buttons&34))){ const q=pt(e); live={c:color,w:size,e:1,pen:1,p:[...q]}; strokes.push(live); textGone=textGone||false; }   /* the button pressed during a stroke: erase from here */
+    (e.getCoalescedEvents?e.getCoalescedEvents():[e]).forEach(ev=>{ const q=pt(ev), n=live.p.length; if(Math.abs(q[0]-live.p[n-3])+Math.abs(q[1]-live.p[n-2])<1.2) return; live.p.push(...q); seg(live,live.p.length/3-1); if(live.e) eraseText(ev.clientX,ev.clientY); }); });
   const up=e=>{ if(e.pointerId!==liveId) return; live=null; liveId=null; scrollY=null; if(textGone){ textGone=false; mark(); } schedule(); };
   window.addEventListener('pointerup',up); window.addEventListener('pointercancel',up); cv.addEventListener('contextmenu',e=>e.preventDefault());
   /* ---- text ---- */
@@ -3215,7 +3217,7 @@ function histSheet(){
 async function sha(s){ const b=await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s)); return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join(''); }
 function aboutSheet(){
   openSheet('Sources & verification', `
-  <p class="note" style="margin-top:0"><b>My Personal Quran v1.0.0.79.</b> The Qur'an text is shown exactly as published by its source. The app never edits it.</p>
+  <p class="note" style="margin-top:0"><b>My Personal Quran v1.0.0.80.</b> The Qur'an text is shown exactly as published by its source. The app never edits it.</p>
   <div class="card" style="padding:10px 12px;margin:8px 0"><b>${sL()==='ms'?'Penafian':'Disclaimer'}</b><p class="note" style="margin:4px 0 0">${sL()==='ms'?'Untuk kegunaan peribadi sahaja: percuma, tidak dijual dan tidak boleh digunakan secara komersial. Kandungan milik penerbit masing-masing (disenaraikan di bawah) dan dipaparkan tanpa diubah. Sirah, Sifat Solat dan Solat Jumaat ditulis untuk aplikasi ini daripada sumber yang dinamakan. Ini alat bantu belajar, bukan fatwa: rujuk ulama yang berkelayakan untuk hukum.':'For personal use only: free, not for sale, and not to be used commercially. The contents belong to their publishers (listed below) and are shown unchanged. The Sirah, Sifat Solat and Solat Jumaat are written for this app from the sources named in them. This is a study aid, not a fatwa: ask a qualified scholar for rulings.'}</p></div>
   <p id="integ" class="note">Checking the text in this copy of the app…</p>
   <ul class="src">

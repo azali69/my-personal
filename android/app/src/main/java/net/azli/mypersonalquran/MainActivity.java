@@ -1148,6 +1148,25 @@ public class MainActivity extends Activity {
               gHttp("POST", "https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart", token, "multipart/related; boundary=" + b, bo.toByteArray()); return true; }
         catch (Exception e) { return false; } }
 
+    /* S Pen side button (Azli, 22 Oct 2026). Samsung reports a touch made while the button is held with its own actions
+       (211 down, 212 up, 213 move) that the WebView ignores, so the pen drew nothing. They are turned back into ordinary
+       touches, and the page is told the button is held (window.__penBtn) so the Notepad erases. Other phones report the
+       button in the button state, or the pen's eraser end as its own tool. */
+    private boolean penBtn = false;
+    private void setPenBtn(boolean b) { if (b != penBtn) { penBtn = b; js("window.__penBtn=" + (b ? 1 : 0)); } }
+    private void penState(android.view.MotionEvent ev) {
+        boolean b = (ev.getButtonState() & (android.view.MotionEvent.BUTTON_STYLUS_PRIMARY | android.view.MotionEvent.BUTTON_STYLUS_SECONDARY)) != 0;
+        for (int i = 0; i < ev.getPointerCount(); i++) if (ev.getToolType(i) == android.view.MotionEvent.TOOL_TYPE_ERASER) b = true;
+        if (ev.getToolType(0) == android.view.MotionEvent.TOOL_TYPE_STYLUS || ev.getToolType(0) == android.view.MotionEvent.TOOL_TYPE_ERASER) setPenBtn(b); }
+    @Override public boolean dispatchTouchEvent(android.view.MotionEvent ev) {
+        int a = ev.getActionMasked();
+        if (a == 211 || a == 212 || a == 213) {
+            android.view.MotionEvent c = android.view.MotionEvent.obtain(ev);
+            c.setAction(a == 211 ? android.view.MotionEvent.ACTION_DOWN : a == 212 ? android.view.MotionEvent.ACTION_UP : android.view.MotionEvent.ACTION_MOVE);
+            setPenBtn(true); boolean r = super.dispatchTouchEvent(c); c.recycle(); return r; }
+        penState(ev); return super.dispatchTouchEvent(ev); }
+    @Override public boolean dispatchGenericMotionEvent(android.view.MotionEvent ev) { penState(ev); return super.dispatchGenericMotionEvent(ev); }
+
     @Override
     protected void onActivityResult(int req, int res, Intent data) {
         super.onActivityResult(req, res, data);
