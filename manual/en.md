@@ -301,10 +301,18 @@ All open from the **ayah menu**; they need the internet once per surah.
 
 **Notes**
 
-1. Home → **Notes**: all your notes, newest first. Filter by **Qur'an**, **Hadith** or **Free notes**, or search.
-2. **New note** writes a free note. For an ayah, long-press it → **Write a note**; for a hadith, tap its note button. Notes save as you type.
+1. Home → **Notes**: all your notes, newest first. Filter by **Qur'an**, **Hadith**, **Notepad** (your own free notes) and so on, or search.
+2. **New note** opens the **Notepad**, a full page for typing and handwriting (see below). For an ayah, long-press it → **Write a note**; for a hadith, tap its note button. Notes save as you type.
 3. Tap a note to edit it; **Delete** removes it (after you confirm); **Open the ayah / Open the hadith** takes you there.
-4. Notes are kept on the phone only. **Copy all notes** copies them all, so you can keep a copy elsewhere.
+4. Notes sync between your devices once you sign in to Sync. **Copy all notes** copies the text of all of them; **Back up** keeps everything including drawings.
+
+**The Notepad (free notes)**
+
+1. The bar at the top has: undo and redo, **B** bold, *I* italic, U underline, S strikethrough, **H** heading, bullet and numbered lists, ❝ quote, alignment (tap to cycle left, centre, right), **A−** and **A+** for text size, **A** text colour, highlighter, **Tx** clear formatting, and **✎** to draw.
+2. Type as usual, Arabic included; each line takes its own direction. Pasting keeps the text only.
+3. **✎** opens a drawing page: write or draw with the S Pen or your finger, choose the colour and thickness, use **Eraser**, **Undo** or **Clear**, then **Done**. The drawing is placed in your note where the cursor was. Tap a drawing in the note to edit it again, or **Delete** it in the drawing page.
+4. With a pen the line is thicker when you press harder. The first time the pen touches, **Pen only** turns on so your palm and fingers are ignored; tap **Pen only** to draw with a finger.
+5. Notes save as you type. Keep drawings few: a note with many drawings becomes large and may not sync.
 
 **Prayer times**
 
@@ -325,7 +333,7 @@ All open from the **ayah menu**; they need the internet once per surah.
 **Qibla**
 
 1. Home → **Qibla**; allow location.
-2. Hold the phone flat and turn until it says **Facing the qibla**.
+2. Hold the phone flat and turn until it says **Facing the qibla**: the compass then glows green. The gold Ka'bah on the dial points to the qibla; the gold marker at the top is the direction your phone faces.
 3. If asked, move the phone in a figure 8 to calibrate. Keep away from metal and magnetic cases.
 
 ## 9. Settings

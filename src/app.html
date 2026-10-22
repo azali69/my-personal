@@ -665,6 +665,38 @@ a.tile{text-decoration:none;color:inherit}
 .dock .pill.primary{background:linear-gradient(180deg,var(--gold-hi),var(--gold));color:#1d1707;border-color:var(--gold-lo);box-shadow:none}
 .dock .pill[aria-pressed="true"]{background:var(--gold);color:#1d1707}
 .dock .mic{background:var(--dock-bg);color:var(--gold-hi);border:2px solid var(--gold)}
+
+/* Notepad (Azli, 22 Oct 2026): toolbar, paper and the full-screen drawing page */
+.np-bar{position:sticky;top:0;z-index:5;display:flex;gap:2px;overflow-x:auto;padding:6px;margin:0 0 8px;border-radius:14px;background:color-mix(in srgb,var(--h-bg2) 94%,transparent);border:1px solid color-mix(in srgb,var(--gold) 45%,transparent);scrollbar-width:none}
+.np-bar::-webkit-scrollbar{display:none}
+.np-bar button{flex:none;min-width:42px;height:42px;border-radius:10px;border:1px solid transparent;background:transparent;color:var(--h-ink);font-size:17px;font-weight:700;padding:0 6px}
+.np-bar button[aria-pressed="true"]{background:var(--gold);color:#1b1608}
+.np-bar i{flex:none;width:1px;background:color-mix(in srgb,var(--gold) 45%,transparent);margin:6px 4px}
+.np-col{display:flex;gap:10px;flex-wrap:wrap;padding:8px 10px;margin:-2px 0 8px;border-radius:12px;border:1px solid color-mix(in srgb,var(--gold) 45%,transparent);background:color-mix(in srgb,var(--h-bg2) 94%,transparent)}
+.np-col button{width:36px;height:36px;border-radius:50%;border:2px solid var(--gold)}
+.np-paper{background:#fffdf5;color:#1f2a22;border-radius:12px;border:1px solid var(--gold);padding:14px 16px;min-height:52vh}
+.np-ed{min-height:48vh;outline:none;font-size:18px;line-height:1.7;word-break:break-word;unicode-bidi:plaintext;-webkit-user-select:text;user-select:text}
+.np-ed.np-empty:before{content:attr(data-ph);color:#8a8776;pointer-events:none}
+.np-ed div,.np-ed p,.np-ed li,.np-ed h3,.np-ed blockquote{unicode-bidi:plaintext}
+.np-ed h3{font-size:1.3em;margin:.4em 0 .2em}.np-ed blockquote{margin:.4em 0;padding:.1em .9em;border-inline-start:3px solid #b8860b;color:#4c4a3d}
+.np-ed ul,.np-ed ol{margin:.3em 0;padding-inline-start:1.5em}
+.np-ed .np-ink{margin:8px 0;line-height:0;border:1px dashed #cfc59f;border-radius:8px}.np-ed .np-ink img{width:100%;height:auto;display:block}
+.npd{position:fixed;inset:0;z-index:90;display:flex;flex-direction:column;gap:8px;padding:calc(8px + var(--sat)) calc(10px + var(--sar)) calc(10px + var(--sab)) calc(10px + var(--sal));background:var(--h-bg,#0c3a2b);color:var(--h-ink,#f3ead2)}
+.npd-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.npd button{min-height:40px;padding:0 12px;border-radius:10px;border:1px solid color-mix(in srgb,var(--gold) 55%,transparent);background:transparent;color:inherit;font-weight:600;font-size:15px}
+.npd button.pri,.npd button[aria-pressed="true"]:not(.npd-c){background:var(--gold);color:#1b1608;border-color:var(--gold)}
+.npd-tools{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.npd-tools button{flex:none}.npd-tools i{flex:none;width:1px;height:26px;background:color-mix(in srgb,var(--gold) 45%,transparent)}
+.npd .npd-c{width:36px;min-width:36px;min-height:36px;height:36px;border-radius:50%;padding:0;border:3px solid transparent}.npd .npd-c[aria-pressed="true"]{border-color:var(--gold-hi,#ecd593);box-shadow:0 0 0 2px var(--h-bg,#0c3a2b) inset}
+.npd-stage{flex:1;min-height:0;display:flex;align-items:center;justify-content:center}
+.npd-stage canvas{background:#fffdf5;border-radius:10px;border:1px solid var(--gold);touch-action:none;max-width:100%;max-height:100%;width:auto;height:auto;cursor:crosshair}
+/* Qibla compass */
+#qbWrap{position:relative;width:calc(min(84vw,360px) / var(--uiz,1));aspect-ratio:1;margin:14px auto 0}
+#qbWrap svg{filter:drop-shadow(0 6px 14px rgba(0,0,0,.35));transition:filter .25s}
+#qbWrap.on svg{filter:drop-shadow(0 0 12px #5fd08a) drop-shadow(0 6px 14px rgba(0,0,0,.35))}
+#qbWrap .qb-lub{position:absolute;left:50%;top:-12px;transform:translateX(-50%);width:0;height:0;border-left:10px solid transparent;border-right:10px solid transparent;border-top:17px solid var(--gold-hi);filter:drop-shadow(0 2px 2px rgba(0,0,0,.4))}
+#qbMsg{display:block;width:fit-content;margin:14px auto 4px;padding:8px 20px;border-radius:999px;font-size:19px;text-align:center;min-height:1.5em;background:color-mix(in srgb,var(--h-bg2) 70%,transparent);border:1px solid color-mix(in srgb,var(--gold) 55%,transparent)}
+#qbMsg.on{background:#1f6b45;border-color:#5fd08a;color:#fff}
 </style>
 
 <header class="top"><div class="top-in">
@@ -1908,19 +1940,122 @@ function notesPanel(){ const draw=()=>{ const all=notesAll(), f=store.get('notes
   const b=openPanel('notes','Notes',`
    <div class="row2" style="gap:8px"><button class="pill primary" id="nNew">${ic('note')}New note</button><button class="pill" id="nCopy">${ic('copy')}Copy all notes</button></div>
    <input class="field" id="nQ" type="search" placeholder="Search notes" style="width:100%;margin-top:10px">
-   <div style="margin:10px 0">${segHtml('nF',[['all','All'],['q',"Qur'an"],['h','Hadith'],['s','Sirah'],['p','Solat'],['j','Jumaat'],['d','Doa'],['f','Free notes']],store.get('notesF','all'))}</div>
+   <div style="margin:10px 0">${segHtml('nF',[['all','All'],['q',"Qur'an"],['h','Hadith'],['s','Sirah'],['p','Solat'],['j','Jumaat'],['d','Doa'],['f','Notepad']],store.get('notesF','all'))}</div>
    <div id="nList"></div>
    <p class="note" style="font-size:12px">Notes are kept on this phone only; clearing the app's data or uninstalling it deletes them. <a href="#" id="nBk">Back up everything</a> (notes, bookmarks and settings) to a file, or use Copy all notes to paste them somewhere.</p>`);
   b.querySelector('#nBk').onclick=e=>{ e.preventDefault(); backupSheet(); };
   draw();
   b.querySelector('#nQ').oninput=draw;
   b.querySelector('#nF').onclick=e=>{ const x=e.target.closest('button'); if(!x) return; b.querySelectorAll('#nF button').forEach(y=>y.setAttribute('aria-pressed',y===x)); store.set('notesF',x.dataset.v); draw(); };
-  b.querySelector('#nNew').onclick=()=>noteSheet('f:'+Date.now(),null,draw);
+  b.querySelector('#nNew').onclick=()=>notepadOpen('f:'+Date.now(),draw);
   b.querySelector('#nCopy').onclick=()=>{ const all=notesAll(), ks=Object.keys(all).sort((x,y)=>all[x].c-all[y].c);
     if(!ks.length){ toast('No notes yet'); return; }
     putClipboard(ks.map(k=>`${noteTitle(k)} (${new Date(all[k].u).toLocaleDateString()})\n${all[k].t}`).join('\n\n———\n\n')).then(ok=>toast(ok?`${ks.length} notes copied`:'Could not copy')); };
   b.querySelector('#nList').onclick=e=>{ const x=e.target.closest('[data-k]'); if(!x) return; const k=x.dataset.k;
-    noteSheet(k, k[0]==='f'? null : {label: k[0]==='q'?'Open the ayah':k[0]==='h'?'Open the hadith':'Open', open:()=>noteOpenTarget(k)}, draw); }; }
+    if(k[0]==='f'){ notepadOpen(k,draw); return; }
+    noteSheet(k, {label: k[0]==='q'?'Open the ayah':k[0]==='h'?'Open the hadith':'Open', open:()=>noteOpenTarget(k)}, draw); }; }
+/* ---- NOTEPAD (Azli, 22 Oct 2026): a free note is a full page: typed text with formatting tools, and drawing / handwriting
+   blocks for the S Pen or a finger. Stored as the note's h (HTML, cleaned on load and on save) beside t (plain text, used by
+   search, the list and Copy all notes). A drawing is a PNG inside the text, so it stays where it was put. ---- */
+const NP_TAGS=new Set(['B','STRONG','I','EM','U','S','STRIKE','BR','DIV','P','UL','OL','LI','H2','H3','SPAN','FONT','MARK','BLOCKQUOTE','IMG']);
+const NP_CSS=new Set(['color','background-color','text-align','font-weight','font-style','text-decoration','text-decoration-line','font-size']);
+function npClean(html){ const d=new DOMParser().parseFromString('<body>'+html+'</body>','text/html').body;
+  (function walk(n){ [...n.childNodes].forEach(c=>{ if(c.nodeType===3) return; if(c.nodeType!==1){ c.remove(); return; }
+    if(!NP_TAGS.has(c.tagName)){ if(/^(SCRIPT|STYLE|IFRAME|OBJECT|EMBED|LINK|META|SVG|MATH|FORM|INPUT|BUTTON|TEXTAREA|SELECT|VIDEO|AUDIO)$/.test(c.tagName)){ c.remove(); return; } walk(c); c.replaceWith(...c.childNodes); return; }
+    [...c.attributes].forEach(a=>{ const nm=a.name.toLowerCase(), v=a.value;
+      if(nm==='style'){ const keep=[]; for(let i=0;i<c.style.length;i++){ const p=c.style[i], pv=c.style.getPropertyValue(p); if(NP_CSS.has(p)&&/^[#a-z0-9(),.\s%-]+$/i.test(pv)) keep.push(p+':'+pv); } if(keep.length) c.setAttribute('style',keep.join(';')); else c.removeAttribute('style'); }
+      else if(nm==='class'&&v==='np-ink'&&c.tagName==='DIV'){}
+      else if(nm==='contenteditable'&&v==='false'&&c.tagName==='DIV'){}
+      else if(c.tagName==='FONT'&&(nm==='size'&&/^[1-7]$/.test(v)||nm==='color'&&/^#[0-9a-f]{3,8}$/i.test(v))){}
+      else if(c.tagName==='IMG'&&nm==='src'&&/^data:image\/png;base64,[A-Za-z0-9+/=]+$/.test(v)){}
+      else c.removeAttribute(a.name); });
+    if(c.tagName==='IMG'&&!c.getAttribute('src')){ c.remove(); return; }
+    walk(c); }); })(d);
+  return d.innerHTML; }
+function noteSetRich(k,t,h){ const all=notesAll(); t=(t||'').replace(/\s+$/,'');
+  if(!t){ delete all[k]; } else { const o=all[k]||{c:Date.now()}; o.t=t; o.h=h; o.u=Date.now(); all[k]=o; } store.set('notes',all); }
+let npFlush=null;
+const NP_INK=['#1f2a22','#1f4fa8','#b2402f','#2f7a4f','#8a5cc0','#b8860b'], NP_HI=['#fff2a8','#cfeccf','#cfe3f5','#f6d5d5','#e5d6f3'];
+function notepadOpen(k,onDone){ const n=noteGet(k);
+  const bt=(c,l,t)=>`<button data-c="${c}" title="${t}" aria-label="${t}">${l}</button>`;
+  const b=openPanel('notepad','Notepad',`
+   <div class="np-bar" id="npBar">${bt('undo','↶','Undo')}${bt('redo','↷','Redo')}<i></i>${bt('bold','<b>B</b>','Bold')}${bt('italic','<i style="font-family:serif">I</i>','Italic')}${bt('underline','<u>U</u>','Underline')}${bt('strikeThrough','<s>S</s>','Strikethrough')}<i></i>${bt('head','H','Heading')}${bt('insertUnorderedList','•≡','Bullet list')}${bt('insertOrderedList','1.','Numbered list')}${bt('quote','❝','Quote')}<i></i>${bt('align','≡','Align: left, centre, right')}${bt('smaller','A−','Smaller text')}${bt('bigger','A+','Bigger text')}${bt('color','<span style="color:#b2402f">A</span>','Text colour')}${bt('hilite','<span style="background:#fff2a8;color:#1f2a22;padding:0 4px;border-radius:3px">A</span>','Highlight')}<i></i>${bt('clear','Tx','Clear formatting')}${bt('sketch','✎','Draw or handwrite')}</div>
+   <div class="np-col" id="npCol" hidden></div>
+   <div class="np-paper"><div id="npEd" class="np-ed" contenteditable="true" spellcheck="true" data-ph="Start typing, or tap ✎ above to draw or handwrite with your S Pen or finger…"></div></div>
+   <p class="note" id="npS" style="margin:6px 2px"></p>
+   <div class="row2" style="gap:8px"><button class="pill" id="npDel" style="color:var(--bad)">${ic('trash')}Delete</button><button class="pill primary" id="npOk">Done</button></div>`);
+  const ed=b.querySelector('#npEd'), bar=b.querySelector('#npBar'), col=b.querySelector('#npCol'), S=b.querySelector('#npS');
+  ed.innerHTML= n? (n.h? npClean(n.h) : esc(n.t).replace(/\n/g,'<br>')) : '';
+  ed.querySelectorAll('.np-ink').forEach(x=>x.setAttribute('contenteditable','false'));
+  try{ document.execCommand('styleWithCSS',false,true); document.execCommand('defaultParagraphSeparator',false,'div'); }catch(e){}
+  const hasInk=()=>!!ed.querySelector('img'), txt=()=>{ let t=(ed.innerText||'').replace(/​/g,'').trim(); if(!t&&hasInk()) t='✎ Drawing'; return t; };
+  const mark=()=>ed.classList.toggle('np-empty',!txt());
+  let tm=0, gone=false; const save=()=>{ if(gone) return; clearTimeout(tm); const t=txt(); noteSetRich(k,t,t?npClean(ed.innerHTML):''); S.textContent=t?'Saved '+new Date().toLocaleTimeString():'Empty notes are not kept.';
+    if(t && ed.innerHTML.length>1.5e6) toast('This note is large; it may not sync. Use fewer drawings.'); };
+  npFlush=save;
+  ed.oninput=()=>{ mark(); clearTimeout(tm); tm=setTimeout(save,600); }; mark();
+  ed.addEventListener('paste',e=>{ e.preventDefault(); const t=(e.clipboardData||window.clipboardData)?.getData('text/plain')||''; document.execCommand('insertText',false,t); });
+  // the toolbar must not take the keyboard or the selection away from the text
+  b.addEventListener('mousedown',e=>{ if(e.target.closest('#npBar,#npCol')) e.preventDefault(); });
+  let rng=null; document.addEventListener('selectionchange',npSel); function npSel(){ const s=getSelection(); if(s.rangeCount&&ed.contains(s.anchorNode)) rng=s.getRangeAt(0).cloneRange();
+    if(!document.getElementById('notepad')||document.getElementById('notepad').hidden) return;
+    ['bold','italic','underline','strikeThrough','insertUnorderedList','insertOrderedList'].forEach(c=>{ const x=bar.querySelector(`[data-c="${c}"]`); try{ x&&x.setAttribute('aria-pressed',document.queryCommandState(c)); }catch(e){} }); }
+  const back=()=>{ ed.focus(); if(rng){ const s=getSelection(); s.removeAllRanges(); s.addRange(rng); } };
+  const run=(c,v)=>{ back(); document.execCommand(c,false,v); ed.oninput(); };
+  const swatches=(list,cmd,none)=>{ col.innerHTML=list.map(c=>`<button data-v="${c}" style="background:${c}" aria-label="${c}"></button>`).join('')+(none?`<button data-v="none" aria-label="No highlight" style="background:#fff;font-size:16px;color:#1f2a22">⌀</button>`:''); col.hidden=false; col.dataset.cmd=cmd; };
+  col.onclick=e=>{ const x=e.target.closest('[data-v]'); if(!x) return; const cmd=col.dataset.cmd; col.hidden=true;
+    if(cmd==='foreColor') run('foreColor',x.dataset.v); else run('hiliteColor',x.dataset.v==='none'?'transparent':x.dataset.v); };
+  let al=0;
+  bar.onclick=e=>{ const x=e.target.closest('[data-c]'); if(!x) return; const c=x.dataset.c; if(c!=='color'&&c!=='hilite') col.hidden=true;
+    if(c==='head'){ back(); const cur=document.queryCommandValue('formatBlock'); document.execCommand('formatBlock',false,/h3/i.test(cur)?'div':'h3'); ed.oninput(); }
+    else if(c==='quote'){ back(); const cur=document.queryCommandValue('formatBlock'); document.execCommand('formatBlock',false,/blockquote/i.test(cur)?'div':'blockquote'); ed.oninput(); }
+    else if(c==='align'){ al=(al+1)%3; const cm=['justifyLeft','justifyCenter','justifyRight'][al]; x.textContent=['≡','☰','≣'][al]; run(cm); toast(['Left','Centre','Right'][al]); }
+    else if(c==='smaller'||c==='bigger'){ back(); let v=+document.queryCommandValue('fontSize')||3; v=Math.max(1,Math.min(7,v+(c==='bigger'?1:-1))); document.execCommand('fontSize',false,v); ed.oninput(); }
+    else if(c==='color') swatches(NP_INK,'foreColor',false);
+    else if(c==='hilite') swatches(NP_HI,'hiliteColor',true);
+    else if(c==='clear'){ back(); document.execCommand('removeFormat'); document.execCommand('formatBlock',false,'div'); ed.oninput(); }
+    else if(c==='sketch'){ back(); npDraw(null,html=>{ back(); document.execCommand('insertHTML',false,html+'<div><br></div>'); ed.querySelectorAll('.np-ink').forEach(z=>z.setAttribute('contenteditable','false')); ed.oninput(); save(); }); }
+    else run(c); };
+  ed.addEventListener('click',e=>{ const im=e.target.closest('.np-ink img'); if(!im) return;
+    npDraw(im.src,html=>{ if(html===null){ im.closest('.np-ink').remove(); } else { im.src=/src="([^"]+)"/.exec(html)[1]; } ed.oninput(); save(); }); });
+  b.querySelector('#npOk').onclick=()=>closePanel('notepad');
+  b.querySelector('#npDel').onclick=()=>appConfirm('Delete this note?','Delete',true).then(yes=>{ if(!yes) return; gone=true; clearTimeout(tm); noteSet(k,''); closePanel('notepad'); toast('Note deleted'); });
+  document.getElementById('notepad').addEventListener('closed',()=>{ save(); gone=true; npFlush=null; document.removeEventListener('selectionchange',npSel); onDone&&onDone(); },{once:true});
+  S.textContent= n? 'Saved '+new Date(n.u).toLocaleString() : 'Saved as you type.'; }
+/* The drawing page: a full-screen canvas. Pen pressure changes the line width; "Pen only" ignores fingers and palm. */
+let npdEl=null;
+function npDraw(src,onDone){ if(npdEl) return; const W=1000, H=750;
+  const el=npdEl=document.createElement('div'); el.className='npd'; el.id='npd';
+  const sw=NP_INK.map((c,i)=>`<button class="npd-c" data-c="${c}" style="background:${c}" aria-pressed="${i===0}" aria-label="Colour ${i+1}"></button>`).join('');
+  el.innerHTML=`<div class="npd-top"><button id="npdX">Cancel</button><b>Draw or handwrite</b><button id="npdOk" class="pri">Done</button></div>
+   <div class="npd-tools">${sw}<i></i><button data-s="2.5" aria-pressed="false">Thin</button><button data-s="5" aria-pressed="true">Medium</button><button data-s="10" aria-pressed="false">Thick</button><i></i><button id="npdEr" aria-pressed="false">Eraser</button><button id="npdUn">Undo</button><button id="npdCl">Clear</button><i></i><button id="npdPen" aria-pressed="false">Pen only</button>${src?'<button id="npdDel" style="color:#ff9d8a">Delete</button>':''}</div>
+   <div class="npd-stage"><canvas id="npdC" width="${W}" height="${H}"></canvas></div>`;
+  document.body.appendChild(el);
+  const c=el.querySelector('#npdC'), g=c.getContext('2d'); let dirty=false, color=NP_INK[0], size=5, erase=false, penOnly=false, strokes=[], cur=null, curId=null, base=null;
+  const redraw=()=>{ g.clearRect(0,0,W,H); if(base) g.drawImage(base,0,0,W,H); strokes.forEach(s=>{ for(let i=1;i<s.p.length;i++) seg(s,i); if(s.p.length===1) seg(s,0); }); };
+  const seg=(s,i)=>{ const a=s.p[i-1]||s.p[i], b=s.p[i], pr=(a[2]+b[2])/2; g.globalCompositeOperation=s.e?'destination-out':'source-over'; g.strokeStyle=s.c; g.lineCap='round'; g.lineJoin='round';
+    g.lineWidth=(s.e?s.w*4:s.w)*(s.pen&&pr>0?.35+pr*1.3:1); g.beginPath(); g.moveTo(a[0],a[1]); g.lineTo(b[0]+(a===b?.01:0),b[1]); g.stroke(); g.globalCompositeOperation='source-over'; };
+  if(src){ base=new Image(); base.onload=redraw; base.src=src; }
+  const pt=e=>{ const r=c.getBoundingClientRect(); return [(e.clientX-r.left)*W/r.width,(e.clientY-r.top)*H/r.height,e.pressure||0]; };
+  c.addEventListener('pointerdown',e=>{ if(cur) return; if(e.pointerType==='touch'&&penOnly) return; if(e.pointerType==='pen'&&!penOnly&&!el.__penSeen){ el.__penSeen=true; penOnly=true; el.querySelector('#npdPen').setAttribute('aria-pressed','true'); toast('Pen only is on: fingers are ignored. Tap Pen only to allow them.'); }
+    e.preventDefault(); try{ c.setPointerCapture(e.pointerId); }catch(x){} curId=e.pointerId; cur={c:color,w:size,e:erase,pen:e.pointerType==='pen',p:[pt(e)]}; strokes.push(cur); dirty=true; seg(cur,0); });
+  c.addEventListener('pointermove',e=>{ if(!cur||e.pointerId!==curId) return; e.preventDefault(); (e.getCoalescedEvents?e.getCoalescedEvents():[e]).forEach(ev=>{ cur.p.push(pt(ev)); seg(cur,cur.p.length-1); }); });
+  const up=e=>{ if(cur&&e.pointerId===curId){ cur=null; curId=null; } }; c.addEventListener('pointerup',up); c.addEventListener('pointercancel',up);
+  c.addEventListener('contextmenu',e=>e.preventDefault());
+  el.querySelector('.npd-tools').onclick=e=>{ const x=e.target.closest('button'); if(!x) return;
+    if(x.dataset.c){ color=x.dataset.c; erase=false; el.querySelectorAll('.npd-c').forEach(y=>y.setAttribute('aria-pressed',y===x)); el.querySelector('#npdEr').setAttribute('aria-pressed','false'); }
+    else if(x.dataset.s){ size=+x.dataset.s; el.querySelectorAll('[data-s]').forEach(y=>y.setAttribute('aria-pressed',y===x)); }
+    else if(x.id==='npdEr'){ erase=!erase; x.setAttribute('aria-pressed',erase); }
+    else if(x.id==='npdUn'){ if(strokes.length){ strokes.pop(); dirty=true; redraw(); } }
+    else if(x.id==='npdCl'){ appConfirm('Clear the whole drawing?','Clear',true).then(y=>{ if(y){ strokes=[]; base=null; dirty=true; redraw(); } }); }
+    else if(x.id==='npdPen'){ penOnly=!penOnly; el.__penSeen=true; x.setAttribute('aria-pressed',penOnly); }
+    else if(x.id==='npdDel'){ appConfirm('Delete this drawing?','Delete',true).then(y=>{ if(y){ close(); onDone(null); } }); } };
+  const close=()=>{ el.remove(); npdEl=null; };
+  window.__npdClose=()=>{ finish(); };
+  const finish=()=>{ if(!dirty){ close(); return; }
+    if(!strokes.length&&!base){ close(); if(src) onDone(null); return; }   // everything cleared: a new page is dropped, an old one is removed
+    const png=c.toDataURL('image/png'); close(); onDone(`<div class="np-ink" contenteditable="false"><img src="${png}"></div>`); };
+  el.querySelector('#npdOk').onclick=finish; el.querySelector('#npdX').onclick=close; }
 /* ============================ BACKUP AND RESTORE ============================
    Everything the app keeps in its own storage (keys starting mpq.): settings, Home and colours, prayer settings and alerts,
    microphone, Qur'an and hadith bookmarks, My ruku' and My blocks, notes, Hafazan history, last read places.
@@ -3482,18 +3617,28 @@ function qbStart(){ qbHead=null; try{ window.AndroidExtra?.startCompass?.(qbLoc.
 function qbWebOri(e){ if(e.alpha==null) return; window.__compass((360-e.alpha)%360,2); }
 function qbStop(){ try{ window.AndroidExtra?.stopCompass?.(); }catch(e){} window.removeEventListener('deviceorientationabsolute',qbWebOri); }
 function qbRender(){ const B=qiblaBearing(qbLoc.lat,qbLoc.lng), km=qiblaDistance(qbLoc.lat,qbLoc.lng);
-  const ticks=[...Array(72)].map((_,i)=>{ const a=i*5, long=a%30===0; return `<line x1="100" y1="${long?8:11}" x2="100" y2="16" transform="rotate(${a} 100 100)" stroke="currentColor" stroke-width="${long?1.6:.8}" opacity="${long?.9:.5}"/>`; }).join('');
+  const ticks=[...Array(72)].map((_,i)=>{ const a=i*5, long=a%30===0, mid=a%10===0; return `<line x1="100" y1="${long?9:mid?11:12}" x2="100" y2="16" transform="rotate(${a} 100 100)" stroke="${long?'var(--gold-hi)':'currentColor'}" stroke-width="${long?1.8:.9}" opacity="${long?1:mid?.6:.35}" stroke-linecap="round"/>`; }).join('');
+  const star='<polygon points="100,52 109,71 128,72 114,85 119,104 100,94 81,104 86,85 72,72 91,71" fill="none"/>';
   const b=openPanel('qibla','Qibla',`
-   <div style="position:relative;width:min(84vw,360px);aspect-ratio:1;margin:8px auto 0">
+   <div id="qbWrap">
     <svg id="qbDial" viewBox="0 0 200 200" style="width:100%;height:100%;transition:transform .12s linear;color:var(--h-ink)">
-     <circle cx="100" cy="100" r="96" fill="none" stroke="var(--gold)" stroke-width="1.6"/>${ticks}
-     ${['N','E','S','W'].map((t,i)=>`<text x="100" y="31" text-anchor="middle" font-size="13" font-weight="700" fill="${i===0?'var(--gold-hi)':'currentColor'}" transform="rotate(${i*90} 100 100)">${t}</text>`).join('')}
-     <g transform="rotate(${B} 100 100)"><path d="M100 22 L108 44 L100 39 L92 44 Z" fill="var(--gold)"/><line x1="100" y1="40" x2="100" y2="100" stroke="var(--gold)" stroke-width="2.4" stroke-linecap="round"/>
-      <rect x="93" y="44" width="14" height="14" rx="1.5" fill="#111" stroke="var(--gold)" stroke-width="1.2" transform="translate(0 -26)"/></g>
-     <circle cx="100" cy="100" r="4" fill="var(--gold)"/></svg>
-    <div style="position:absolute;left:50%;top:-6px;transform:translateX(-50%);width:0;height:0;border-left:9px solid transparent;border-right:9px solid transparent;border-top:14px solid var(--h-ink)"></div>
+     <defs><radialGradient id="qbG" cx="50%" cy="42%" r="70%"><stop offset="0" style="stop-color:var(--h-bg)"/><stop offset="1" style="stop-color:var(--h-bg2)"/></radialGradient>
+      <linearGradient id="qbR" x1="0" y1="0" x2="1" y2="1"><stop offset="0" style="stop-color:var(--gold-hi)"/><stop offset=".5" style="stop-color:var(--gold)"/><stop offset="1" style="stop-color:var(--gold-lo)"/></linearGradient></defs>
+     <circle cx="100" cy="100" r="99" fill="url(#qbR)"/><circle cx="100" cy="100" r="94" fill="url(#qbG)"/><circle cx="100" cy="100" r="94" fill="none" stroke="var(--gold-lo)" stroke-width=".8"/>
+     <circle cx="100" cy="100" r="60" fill="var(--gold)" opacity=".06"/><circle cx="100" cy="100" r="60" fill="none" stroke="var(--gold)" stroke-width=".6" opacity=".35"/>
+     <g fill="none" stroke="var(--gold)" stroke-width=".8" opacity=".5"><rect x="72" y="72" width="56" height="56" rx="2"/><rect x="72" y="72" width="56" height="56" rx="2" transform="rotate(45 100 100)"/><circle cx="100" cy="100" r="19" stroke-dasharray="2 3"/></g>
+     ${ticks}
+     ${[45,135,225,315].map(a=>`<path d="M100 31 l3 4 -3 4 -3 -4z" fill="var(--gold)" opacity=".8" transform="rotate(${a} 100 100)"/>`).join('')}
+     ${['N','E','S','W'].map((t,i)=>`<text x="100" y="${i===0?37:36}" text-anchor="middle" font-size="${i===0?17:14}" font-weight="700" fill="${i===0?'var(--gold-hi)':'currentColor'}" transform="rotate(${i*90} 100 100)">${t}</text>`).join('')}
+     <g transform="rotate(${B} 100 100)">
+      <circle cx="100" cy="30" r="17" fill="var(--gold)" opacity=".18"/>
+      <line x1="100" y1="93" x2="100" y2="52" stroke="var(--gold-hi)" stroke-width="2.6" stroke-linecap="round"/>
+      <path d="M100 46 L107 60 L100 56 L93 60 Z" fill="var(--gold-hi)"/>
+      <rect x="91" y="21" width="18" height="18" rx="2" fill="#15110c" stroke="var(--gold-hi)" stroke-width="1.3"/><rect x="91" y="25.5" width="18" height="3.6" fill="var(--gold)"/><rect x="97.6" y="31" width="4.8" height="8" rx=".8" fill="var(--gold)"/></g>
+     <circle cx="100" cy="100" r="8" fill="url(#qbR)"/><circle cx="100" cy="100" r="3" style="fill:var(--h-bg2)"/></svg>
+    <div class="qb-lub"></div>
    </div>
-   <div id="qbMsg" style="text-align:center;font-size:18px;margin-top:8px;min-height:1.5em"></div>
+   <div id="qbMsg"></div>
    <div class="card"><b>Qibla: ${B.toFixed(1)}° from true north</b><br><span class="note">${esc(qbLoc.name||'Your location')} (${qbLoc.lat.toFixed(3)}, ${qbLoc.lng.toFixed(3)}) · ${Math.round(km).toLocaleString('en')} km to the Ka'bah</span></div>
    <div id="qbCal"></div>
    <p class="note">Hold the phone flat, away from metal, magnets and speakers; a magnetic phone case also pulls the compass. Phone compasses are usually within 5–10°, so for a masjid or a permanent sajadah direction, check with a fixed reference (the masjid's qibla, or the sun's position at a known time).</p>
@@ -3507,7 +3652,8 @@ window.__compass=(h,acc)=>{ const dial=document.getElementById('qbDial'); if(!di
   if(qbHead==null) qbHead=h; else { let d=((h-qbHead+540)%360)-180; qbHead=(qbHead+d*0.25+360)%360; }
   dial.style.transform=`rotate(${-qbHead}deg)`;
   const B=qiblaBearing(qbLoc.lat,qbLoc.lng), off=((B-qbHead+540)%360)-180;
-  msg.innerHTML = Math.abs(off)<=3 ? '<b style="color:var(--gold-hi)">Facing the qibla</b>' : `Turn ${off>0?'right':'left'} ${Math.abs(off).toFixed(0)}°`;
+  const facing=Math.abs(off)<=3; msg.classList.toggle('on',facing); document.getElementById('qbWrap')?.classList.toggle('on',facing);
+  msg.innerHTML = facing ? '<b>✓ Facing the qibla</b>' : `${off>0?'↻ Turn right':'↺ Turn left'} ${Math.abs(off).toFixed(0)}°`;
   const cal=document.getElementById('qbCal'); if(cal && acc!==qbAcc){ qbAcc=acc; cal.innerHTML = acc<2 ? '<p class="note" style="color:var(--gold-hi)">The compass needs calibrating: move the phone in a figure 8 a few times.</p>' : ''; } };
 /* ============================ DOA & ZIKIR: HISNUL MUSLIM ============================
    Hisn al-Muslim by Sa'id ibn Wahf al-Qahtani, from hisnmuslim.com: Arabic, English translation, transliteration,
@@ -4233,7 +4379,8 @@ document.getElementById('next').onclick=()=>turnPage(1);
 document.getElementById('prev').onclick=()=>turnPage(-1);
 window.matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change',applyLook);
 
-window.__back=()=>{ if(sheet.classList.contains('open')){ closeSheet(); return true; }
+window.__back=()=>{ if(npdEl){ window.__npdClose&&window.__npdClose(); return true; }
+  if(sheet.classList.contains('open')){ closeSheet(); return true; }
   if(tq){ tqClose(); return true; } if(navRet&&navRet.kind==='panel'&&topPanel()?.id===navRet.pid) return navRetGo(); { const p=topPanel(); if(p){ closePanel(p.id); return true; } }
   { const c=document.getElementById('cover'); if(c && !c.hidden) return false; } if(document.body.classList.contains('immersive')){ setImmersive(false); return true; } if(hz){ if(rec) stopListen(false); hz=null; renderReader(); return true; }
   if(navRet&&navRet.kind==='reader'&&!topPanel()) return navRetGo();
@@ -4247,7 +4394,7 @@ window.__pausedAt=0;
 function coverOnLeave(){ window.__pausedAt=Date.now(); }
 function coverOnReturn(){ const t=window.__pausedAt; window.__pausedAt=0; if(!t) return;
   if(store.get('cover',true) && !hz && !tq && Date.now()-t>180000 && t-window.__away>5000){ const c=document.getElementById('cover'); if(!c||c.hidden||c.classList.contains('open')) showCover(); } }
-window.__pause=()=>{ if(rec) stopListen(false); coverOnLeave(); if(syncTm){ clearTimeout(syncTm); syncTm=0; syncNow(false); } };
+window.__pause=()=>{ try{ npFlush&&npFlush(); }catch(e){} if(rec) stopListen(false); coverOnLeave(); if(syncTm){ clearTimeout(syncTm); syncTm=0; syncNow(false); } };
 window.__resume=()=>{ coverOnReturn(); setTimeout(()=>syncNow(false),800); };
 document.addEventListener('visibilitychange',()=>{ if(document.hidden){ if(!window.__pausedAt) window.__pausedAt=Date.now(); } else coverOnReturn(); });
 document.addEventListener('visibilitychange',()=>{ if(document.hidden && pl){ cancelAnimationFrame(plFadeRaf); plEls.forEach(a=>{ try{ a.volume=1; }catch(e){} }); } });

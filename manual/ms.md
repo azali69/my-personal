@@ -301,10 +301,18 @@ Semuanya dibuka dari **menu ayat**; memerlukan internet sekali bagi setiap surah
 
 **Nota (Notes)**
 
-1. Home → **Notes**: semua nota anda, yang terbaru dahulu. Tapis mengikut **Qur'an**, **Hadith** atau **Free notes**, atau cari.
-2. **New note** untuk nota bebas. Untuk ayat, tekan lama ayat itu → **Write a note**; untuk hadis, ketik butang notanya. Nota disimpan semasa anda menaip.
+1. Home → **Notes**: semua nota anda, yang terbaru dahulu. Tapis mengikut **Qur'an**, **Hadith** atau **Notepad** (nota bebas anda) dan seterusnya, atau cari.
+2. **New note** membuka **Notepad**, satu halaman penuh untuk menaip dan menulis tangan (lihat di bawah). Untuk ayat, tekan lama ayat itu → **Write a note**; untuk hadis, ketik butang notanya. Nota disimpan semasa anda menaip.
 3. Ketik nota untuk menyuntingnya; **Delete** memadamnya (selepas anda sahkan); **Open the ayah / Open the hadith** membawa anda ke sana.
-4. Nota disimpan dalam telefon sahaja. **Copy all notes** menyalin semuanya supaya anda boleh simpan salinan di tempat lain.
+4. Nota diselaraskan antara peranti anda selepas anda log masuk Sync. **Copy all notes** menyalin teks semua nota; **Back up** menyimpan segalanya termasuk lukisan.
+
+**Notepad (nota bebas)**
+
+1. Bar di atas mempunyai: buat asal dan ulang, **B** tebal, *I* condong, U garis bawah, S garis tengah, **H** tajuk, senarai berpeluru dan bernombor, ❝ petikan, penjajaran (ketik untuk tukar kiri, tengah, kanan), **A−** dan **A+** untuk saiz teks, **A** warna teks, penyerlah, **Tx** buang format, dan **✎** untuk melukis.
+2. Taip seperti biasa, termasuk tulisan Arab; setiap baris mengikut arahnya sendiri. Tampalan hanya mengekalkan teks.
+3. **✎** membuka halaman lukisan: tulis atau lukis dengan S Pen atau jari, pilih warna dan ketebalan, guna **Eraser**, **Undo** atau **Clear**, kemudian **Done**. Lukisan diletakkan dalam nota anda di tempat kursor. Ketik lukisan dalam nota untuk menyuntingnya semula, atau **Delete** di halaman lukisan.
+4. Dengan pen, garisan lebih tebal apabila ditekan lebih kuat. Kali pertama pen menyentuh skrin, **Pen only** dihidupkan supaya tapak tangan dan jari diabaikan; ketik **Pen only** untuk melukis dengan jari.
+5. Nota disimpan semasa anda menaip. Jangan letak terlalu banyak lukisan: nota yang banyak lukisan menjadi besar dan mungkin tidak diselaraskan.
 
 **Waktu solat**
 
@@ -325,7 +333,7 @@ Semuanya dibuka dari **menu ayat**; memerlukan internet sekali bagi setiap surah
 **Kiblat**
 
 1. Home → **Qibla**; benarkan lokasi.
-2. Pegang telefon secara mendatar dan pusing sehingga tertera **Facing the qibla**.
+2. Pegang telefon secara mendatar dan pusing sehingga tertera **Facing the qibla**: kompas akan bercahaya hijau. Kaabah emas pada dail menunjuk ke kiblat; penanda emas di atas ialah arah yang dihadap telefon anda.
 3. Jika diminta, gerakkan telefon membentuk angka 8 untuk menentukur kompas. Jauhkan daripada logam dan sarung bermagnet.
 
 ## 9. Tetapan (Settings)
