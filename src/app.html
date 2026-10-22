@@ -666,30 +666,31 @@ a.tile{text-decoration:none;color:inherit}
 .dock .pill[aria-pressed="true"]{background:var(--gold);color:#1d1707}
 .dock .mic{background:var(--dock-bg);color:var(--gold-hi);border:2px solid var(--gold)}
 
-/* Notepad (Azli, 22 Oct 2026): toolbar, paper and the full-screen drawing page */
-.np-bar{position:sticky;top:0;z-index:5;display:flex;gap:2px;overflow-x:auto;padding:6px;margin:0 0 8px;border-radius:14px;background:color-mix(in srgb,var(--h-bg2) 94%,transparent);border:1px solid color-mix(in srgb,var(--gold) 45%,transparent);scrollbar-width:none}
-.np-bar::-webkit-scrollbar{display:none}
-.np-bar button{flex:none;min-width:42px;height:42px;border-radius:10px;border:1px solid transparent;background:transparent;color:var(--h-ink);font-size:17px;font-weight:700;padding:0 6px}
-.np-bar button[aria-pressed="true"]{background:var(--gold);color:#1b1608}
-.np-bar i{flex:none;width:1px;background:color-mix(in srgb,var(--gold) 45%,transparent);margin:6px 4px}
-.np-col{display:flex;gap:10px;flex-wrap:wrap;padding:8px 10px;margin:-2px 0 8px;border-radius:12px;border:1px solid color-mix(in srgb,var(--gold) 45%,transparent);background:color-mix(in srgb,var(--h-bg2) 94%,transparent)}
-.np-col button{width:36px;height:36px;border-radius:50%;border:2px solid var(--gold)}
-.np-paper{background:#fffdf5;color:#1f2a22;border-radius:12px;border:1px solid var(--gold);padding:14px 16px;min-height:52vh}
-.np-ed{min-height:48vh;outline:none;font-size:18px;line-height:1.7;word-break:break-word;unicode-bidi:plaintext;-webkit-user-select:text;user-select:text}
+/* Notepad (Azli, 22 Oct 2026): pages with the text and the pen on one sheet; collapsible tool bar */
+.np-top{position:sticky;top:0;z-index:5;margin:0 0 8px;padding:6px;border-radius:14px;background:color-mix(in srgb,var(--h-bg2) 96%,transparent);border:1px solid color-mix(in srgb,var(--gold) 45%,transparent)}
+.np-row1{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.np-mode,.np-pg{display:flex;gap:2px;align-items:center}.np-pg span{min-width:54px;text-align:center;font-weight:600;font-variant-numeric:tabular-nums}
+.np-top button{flex:none;min-width:42px;height:42px;border-radius:10px;border:1px solid transparent;background:transparent;color:var(--h-ink);font-size:17px;font-weight:700;padding:0 8px}
+.np-top button:disabled{opacity:.35}
+.np-mode button{border-color:color-mix(in srgb,var(--gold) 55%,transparent);font-size:15px}
+.np-top button[aria-pressed="true"]{background:var(--gold);color:#1b1608}
+.np-tog{margin-inline-start:auto;border-color:color-mix(in srgb,var(--gold) 55%,transparent)!important}
+.np-tools{display:flex;gap:2px;align-items:center;flex-wrap:wrap;margin-top:6px;padding-top:6px;border-top:1px solid color-mix(in srgb,var(--gold) 30%,transparent)}
+.np-tools i{flex:none;width:1px;height:26px;background:color-mix(in srgb,var(--gold) 45%,transparent);margin:0 4px}
+.np-top.min .np-tools,.np-top.min .np-col{display:none}
+.np-top .np-sw{width:34px;min-width:34px;height:34px;border-radius:50%;border:3px solid transparent;padding:0;margin:0 3px}.np-top .np-sw[aria-pressed="true"]{border-color:var(--gold-hi);background-clip:padding-box;box-shadow:0 0 0 2px var(--h-bg2) inset}
+.np-col{display:flex;gap:10px;flex-wrap:wrap;padding:8px 6px 2px}
+.np-top .np-col button{width:36px;min-width:36px;height:36px;border-radius:50%;border:2px solid var(--gold);padding:0}
+.np-paper{background:#fffdf5;color:#1f2a22;border-radius:12px;border:1px solid var(--gold);overflow:hidden}
+.np-page{position:relative;min-height:60vh}
+.np-ed{position:relative;z-index:1;min-height:60vh;padding:16px 18px;outline:none;font-size:18px;line-height:1.7;word-break:break-word;unicode-bidi:plaintext;-webkit-user-select:text;user-select:text}
 .np-ed.np-empty:before{content:attr(data-ph);color:#8a8776;pointer-events:none}
+.np-c{position:absolute;left:0;top:0;width:100%;height:100%;z-index:2;pointer-events:none}
+.np-page.draw .np-c{pointer-events:auto;touch-action:none;cursor:crosshair}
 .np-ed div,.np-ed p,.np-ed li,.np-ed h3,.np-ed blockquote{unicode-bidi:plaintext}
 .np-ed h3{font-size:1.3em;margin:.4em 0 .2em}.np-ed blockquote{margin:.4em 0;padding:.1em .9em;border-inline-start:3px solid #b8860b;color:#4c4a3d}
 .np-ed ul,.np-ed ol{margin:.3em 0;padding-inline-start:1.5em}
-.np-ed .np-ink{margin:8px 0;line-height:0;border:1px dashed #cfc59f;border-radius:8px}.np-ed .np-ink img{width:100%;height:auto;display:block}
-.npd{position:fixed;inset:0;z-index:90;display:flex;flex-direction:column;gap:8px;padding:calc(8px + var(--sat)) calc(10px + var(--sar)) calc(10px + var(--sab)) calc(10px + var(--sal));background:var(--h-bg,#0c3a2b);color:var(--h-ink,#f3ead2)}
-.npd-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
-.npd button{min-height:40px;padding:0 12px;border-radius:10px;border:1px solid color-mix(in srgb,var(--gold) 55%,transparent);background:transparent;color:inherit;font-weight:600;font-size:15px}
-.npd button.pri,.npd button[aria-pressed="true"]:not(.npd-c){background:var(--gold);color:#1b1608;border-color:var(--gold)}
-.npd-tools{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
-.npd-tools button{flex:none}.npd-tools i{flex:none;width:1px;height:26px;background:color-mix(in srgb,var(--gold) 45%,transparent)}
-.npd .npd-c{width:36px;min-width:36px;min-height:36px;height:36px;border-radius:50%;padding:0;border:3px solid transparent}.npd .npd-c[aria-pressed="true"]{border-color:var(--gold-hi,#ecd593);box-shadow:0 0 0 2px var(--h-bg,#0c3a2b) inset}
-.npd-stage{flex:1;min-height:0;display:flex;align-items:center;justify-content:center}
-.npd-stage canvas{background:#fffdf5;border-radius:10px;border:1px solid var(--gold);touch-action:none;max-width:100%;max-height:100%;width:auto;height:auto;cursor:crosshair}
+.np-ed .np-ink{margin:8px 0;line-height:0}.np-ed .np-ink img{width:100%;height:auto;display:block}
 /* Qibla compass */
 #qbWrap{position:relative;width:calc(min(84vw,360px) / var(--uiz,1));aspect-ratio:1;margin:14px auto 0}
 #qbWrap svg{filter:drop-shadow(0 6px 14px rgba(0,0,0,.35));transition:filter .25s}
@@ -1972,90 +1973,110 @@ function npClean(html){ const d=new DOMParser().parseFromString('<body>'+html+'<
     if(c.tagName==='IMG'&&!c.getAttribute('src')){ c.remove(); return; }
     walk(c); }); })(d);
   return d.innerHTML; }
-function noteSetRich(k,t,h){ const all=notesAll(); t=(t||'').replace(/\s+$/,'');
-  if(!t){ delete all[k]; } else { const o=all[k]||{c:Date.now()}; o.t=t; o.h=h; o.u=Date.now(); all[k]=o; } store.set('notes',all); }
+function noteSetRich(k,t,pg){ const all=notesAll(); t=(t||'').replace(/\s+$/,'');
+  if(!t){ delete all[k]; } else { const o=all[k]||{c:Date.now()}; o.t=t; o.pg=pg; delete o.h; o.u=Date.now(); all[k]=o; } store.set('notes',all); }
 let npFlush=null;
 const NP_INK=['#1f2a22','#1f4fa8','#b2402f','#2f7a4f','#8a5cc0','#b8860b'], NP_HI=['#fff2a8','#cfeccf','#cfe3f5','#f6d5d5','#e5d6f3'];
+/* A note is pages. Each page is a sheet of paper with the text and the pen on it together: the text is typed in Type mode and
+   the S Pen (or a finger) writes over it in Draw mode. A page's pen strokes are kept as numbers (x, y, pressure; x and y in
+   thousandths of the page width), so they stay sharp on any screen size. */
+function npPlain(html){ const d=document.createElement('div'); d.style.cssText='position:fixed;left:-9999px;top:0;width:300px;white-space:pre-wrap'; d.innerHTML=html; document.body.appendChild(d); const t=(d.innerText||'').replace(/​/g,'').trim(); d.remove(); return t; }
 function notepadOpen(k,onDone){ const n=noteGet(k);
+  const clean=h=>npClean(h||'');
+  const pgs=(n&&n.pg&&n.pg.length)? n.pg.map(p=>({h:clean(p.h),ink:Array.isArray(p.ink)?p.ink:[]})) : [{h:n? (n.h? clean(n.h) : esc(n.t).replace(/\n/g,'<br>')) : '',ink:[]}];
+  pgs.forEach(p=>p.t=npPlain(p.h));
+  let cur=0, mode='type', color=NP_INK[0], size=2.4, erase=false, penOnly=false, penSeen=false, gone=false, tm=0, rng=null, al=0;
   const bt=(c,l,t)=>`<button data-c="${c}" title="${t}" aria-label="${t}">${l}</button>`;
   const b=openPanel('notepad','Notepad',`
-   <div class="np-bar" id="npBar">${bt('undo','↶','Undo')}${bt('redo','↷','Redo')}<i></i>${bt('bold','<b>B</b>','Bold')}${bt('italic','<i style="font-family:serif">I</i>','Italic')}${bt('underline','<u>U</u>','Underline')}${bt('strikeThrough','<s>S</s>','Strikethrough')}<i></i>${bt('head','H','Heading')}${bt('insertUnorderedList','•≡','Bullet list')}${bt('insertOrderedList','1.','Numbered list')}${bt('quote','❝','Quote')}<i></i>${bt('align','≡','Align: left, centre, right')}${bt('smaller','A−','Smaller text')}${bt('bigger','A+','Bigger text')}${bt('color','<span style="color:#b2402f">A</span>','Text colour')}${bt('hilite','<span style="background:#fff2a8;color:#1f2a22;padding:0 4px;border-radius:3px">A</span>','Highlight')}<i></i>${bt('clear','Tx','Clear formatting')}${bt('sketch','✎','Draw or handwrite')}</div>
-   <div class="np-col" id="npCol" hidden></div>
-   <div class="np-paper"><div id="npEd" class="np-ed" contenteditable="true" spellcheck="true" data-ph="Start typing, or tap ✎ above to draw or handwrite with your S Pen or finger…"></div></div>
+   <div class="np-top" id="npTop"><div class="np-row1">
+     <div class="np-mode" id="npMode"><button data-m="type" aria-pressed="true">⌨ Type</button><button data-m="draw" aria-pressed="false">✎ Draw</button></div>
+     <div class="np-pg"><button id="npPrev" aria-label="Previous page">‹</button><span id="npPn"></span><button id="npNext" aria-label="Next page">›</button><button id="npAdd" aria-label="Add a page" title="Add a page">＋</button></div>
+     <button id="npTog" class="np-tog" aria-label="Show or hide the tools" title="Show or hide the tools">▴</button></div>
+    <div class="np-tools" id="npTools"></div><div class="np-col" id="npCol" hidden></div></div>
+   <div class="np-paper"><div class="np-page" id="npPage"><div id="npEd" class="np-ed" contenteditable="true" spellcheck="true" data-ph="Start typing. Tap ✎ Draw to write over the page with your S Pen or finger."></div><canvas id="npC" class="np-c"></canvas></div></div>
    <p class="note" id="npS" style="margin:6px 2px"></p>
-   <div class="row2" style="gap:8px"><button class="pill" id="npDel" style="color:var(--bad)">${ic('trash')}Delete</button><button class="pill primary" id="npOk">Done</button></div>`);
-  const ed=b.querySelector('#npEd'), bar=b.querySelector('#npBar'), col=b.querySelector('#npCol'), S=b.querySelector('#npS');
-  ed.innerHTML= n? (n.h? npClean(n.h) : esc(n.t).replace(/\n/g,'<br>')) : '';
-  ed.querySelectorAll('.np-ink').forEach(x=>x.setAttribute('contenteditable','false'));
+   <div class="row2" style="gap:8px"><button class="pill" id="npDelP" style="flex:none">Delete this page</button><button class="pill" id="npDel" style="color:var(--bad);flex:none">${ic('trash')}Delete note</button><button class="pill primary" id="npOk" style="min-width:110px">Done</button></div>`);
+  const $=s=>b.querySelector(s), ed=$('#npEd'), tools=$('#npTools'), col=$('#npCol'), S=$('#npS'), page=$('#npPage'), cv=$('#npC'), g=cv.getContext('2d'), top=$('#npTop');
+  let strokes=pgs[0].ink;
   try{ document.execCommand('styleWithCSS',false,true); document.execCommand('defaultParagraphSeparator',false,'div'); }catch(e){}
-  const hasInk=()=>!!ed.querySelector('img'), txt=()=>{ let t=(ed.innerText||'').replace(/​/g,'').trim(); if(!t&&hasInk()) t='✎ Drawing'; return t; };
-  const mark=()=>ed.classList.toggle('np-empty',!txt());
-  let tm=0, gone=false; const save=()=>{ if(gone) return; clearTimeout(tm); const t=txt(); noteSetRich(k,t,t?npClean(ed.innerHTML):''); S.textContent=t?'Saved '+new Date().toLocaleTimeString():'Empty notes are not kept.';
-    if(t && ed.innerHTML.length>1.5e6) toast('This note is large; it may not sync. Use fewer drawings.'); };
-  npFlush=save;
-  ed.oninput=()=>{ mark(); clearTimeout(tm); tm=setTimeout(save,600); }; mark();
+  /* ---- the pen layer ---- */
+  const seg=(s,i)=>{ const p=s.p, a=i>0?i-1:0, ax=p[a*3], ay=p[a*3+1], bx=p[i*3], by=p[i*3+1], pr=(p[a*3+2]+p[i*3+2])/200, sc=cv.width/1000, pxs=cv.width/(page.getBoundingClientRect().width||1);
+    g.globalCompositeOperation=s.e?'destination-out':'source-over'; g.strokeStyle=s.c; g.lineCap='round'; g.lineJoin='round';
+    g.lineWidth=(s.e?s.w*5:s.w)*pxs*(s.pen&&pr>0?.4+pr*1.2:1); g.beginPath(); g.moveTo(ax*sc,ay*sc); g.lineTo(bx*sc+(a===i?.01:0),by*sc); g.stroke(); g.globalCompositeOperation='source-over'; };
+  const redraw=()=>{ g.clearRect(0,0,cv.width,cv.height); strokes.forEach(s=>{ const m=s.p.length/3; for(let i=0;i<m;i++) seg(s,i); }); };
+  const fit=()=>{ const r=page.getBoundingClientRect(); if(!r.width) return; const mh=Math.round(page.clientWidth*1.4); if(parseInt(page.style.minHeight||0)!==mh) page.style.minHeight=mh+'px';
+    const dpr=Math.min(window.devicePixelRatio||1,2), bw=Math.round(Math.min(r.width*dpr,2400)), bh=Math.round(r.height*bw/r.width); if(cv.width!==bw||cv.height!==bh){ cv.width=bw; cv.height=bh; redraw(); } };
+  const ro=window.ResizeObserver? new ResizeObserver(fit):null; ro&&ro.observe(page);
+  const pt=e=>{ const r=cv.getBoundingClientRect(); return [Math.round((e.clientX-r.left)*10000/r.width)/10, Math.round((e.clientY-r.top)*10000/r.width)/10, Math.round((e.pressure||0)*100)]; };
+  let live=null, liveId=null, scrollY=null;
+  cv.addEventListener('pointerdown',e=>{ if(mode!=='draw'||live||scrollY!=null) return;
+    if(e.pointerType==='touch'&&penOnly){ scrollY=e.clientY; liveId=e.pointerId; try{ cv.setPointerCapture(e.pointerId); }catch(x){} return; }
+    if(e.pointerType==='pen'&&!penSeen){ penSeen=true; if(!penOnly){ penOnly=true; drawTools(); toast('Pen only is on: fingers scroll the page. Tap Pen only to draw with a finger.'); } }
+    e.preventDefault(); try{ cv.setPointerCapture(e.pointerId); }catch(x){} liveId=e.pointerId;
+    const er=erase||(e.pointerType==='pen'&&(e.buttons&32)); live={c:color,w:size,e:er?1:0,pen:e.pointerType==='pen'?1:0,p:[...pt(e)]}; strokes.push(live); seg(live,0); });
+  cv.addEventListener('pointermove',e=>{ if(e.pointerId!==liveId) return;
+    if(scrollY!=null){ const pn=document.getElementById('notepad'); pn.scrollTop-= (e.clientY-scrollY); scrollY=e.clientY; return; }
+    if(!live) return; e.preventDefault(); (e.getCoalescedEvents?e.getCoalescedEvents():[e]).forEach(ev=>{ const q=pt(ev), n=live.p.length; if(Math.abs(q[0]-live.p[n-3])+Math.abs(q[1]-live.p[n-2])<1.2) return; live.p.push(...q); seg(live,live.p.length/3-1); }); });
+  const up=e=>{ if(e.pointerId!==liveId) return; live=null; liveId=null; scrollY=null; schedule(); };
+  cv.addEventListener('pointerup',up); cv.addEventListener('pointercancel',up); cv.addEventListener('contextmenu',e=>e.preventDefault());
+  /* ---- text ---- */
+  const txt=()=>(ed.innerText||'').replace(/​/g,'').trim();
+  const mark=()=>ed.classList.toggle('np-empty',!txt()&&!ed.querySelector('img'));
+  const flushPage=()=>{ const p=pgs[cur]; p.h=clean(ed.innerHTML); p.t=txt(); p.ink=strokes; };
+  const label=()=>{ $('#npPn').textContent=(cur+1)+' / '+pgs.length; $('#npPrev').disabled=cur===0; $('#npNext').disabled=cur===pgs.length-1; };
+  const save=()=>{ if(gone) return; clearTimeout(tm); tm=0; flushPage();
+    const hasInk=pgs.some(p=>p.ink.length||/<img/.test(p.h)); let t=pgs.map(p=>p.t).filter(Boolean).join('\n\n'); if(!t&&hasInk) t='✎ Drawing';
+    noteSetRich(k,t,t?pgs.map(p=>({h:p.h,ink:p.ink})):[]); S.textContent=t?'Saved '+new Date().toLocaleTimeString():'Empty notes are not kept.';
+    if(t&&JSON.stringify(pgs).length>1.5e6) toast('This note is large and may not sync. Use fewer pages or less ink.'); };
+  const schedule=()=>{ clearTimeout(tm); tm=setTimeout(save,700); }; npFlush=save;
+  ed.oninput=()=>{ mark(); schedule(); };
   ed.addEventListener('paste',e=>{ e.preventDefault(); const t=(e.clipboardData||window.clipboardData)?.getData('text/plain')||''; document.execCommand('insertText',false,t); });
-  // the toolbar must not take the keyboard or the selection away from the text
-  b.addEventListener('mousedown',e=>{ if(e.target.closest('#npBar,#npCol')) e.preventDefault(); });
-  let rng=null; document.addEventListener('selectionchange',npSel); function npSel(){ const s=getSelection(); if(s.rangeCount&&ed.contains(s.anchorNode)) rng=s.getRangeAt(0).cloneRange();
-    if(!document.getElementById('notepad')||document.getElementById('notepad').hidden) return;
-    ['bold','italic','underline','strikeThrough','insertUnorderedList','insertOrderedList'].forEach(c=>{ const x=bar.querySelector(`[data-c="${c}"]`); try{ x&&x.setAttribute('aria-pressed',document.queryCommandState(c)); }catch(e){} }); }
+  const show=(i,skip)=>{ if(!skip) flushPage(); cur=i; ed.innerHTML=pgs[i].h; strokes=pgs[i].ink; label(); mark(); fit(); redraw(); document.getElementById('notepad').scrollTop=0; };
+  ed.innerHTML=pgs[0].h; label(); mark();
+  /* ---- tools ---- */
+  const typeTools=()=>{ tools.innerHTML=`${bt('undo','↶','Undo')}${bt('redo','↷','Redo')}<i></i>${bt('bold','<b>B</b>','Bold')}${bt('italic','<i style="font-family:serif">I</i>','Italic')}${bt('underline','<u>U</u>','Underline')}${bt('strikeThrough','<s>S</s>','Strikethrough')}<i></i>${bt('head','H','Heading')}${bt('insertUnorderedList','•≡','Bullet list')}${bt('insertOrderedList','1.','Numbered list')}${bt('quote','❝','Quote')}<i></i>${bt('align',['≡','☰','≣'][al],'Align: left, centre, right')}${bt('smaller','A−','Smaller text')}${bt('bigger','A+','Bigger text')}${bt('color','<span style="color:#b2402f">A</span>','Text colour')}${bt('hilite','<span style="background:#fff2a8;color:#1f2a22;padding:0 4px;border-radius:3px">A</span>','Highlight')}<i></i>${bt('clear','Tx','Clear formatting')}`; };
+  const drawTools=()=>{ tools.innerHTML=NP_INK.map(c=>`<button class="np-sw" data-ink="${c}" style="background:${c}" aria-pressed="${!erase&&c===color}" aria-label="Pen colour ${c}"></button>`).join('')+`<i></i>`
+    +[['Thin',1.4],['Medium',2.4],['Thick',5]].map(([l,v])=>`<button data-sz="${v}" aria-pressed="${size===v}">${l}</button>`).join('')+`<i></i><button data-c="erase" aria-pressed="${erase}">Eraser</button><button data-c="inkUndo">Undo</button><button data-c="inkClear">Clear ink</button><i></i><button data-c="penOnly" aria-pressed="${penOnly}">Pen only</button>`; };
+  const setMode=m=>{ mode=m; col.hidden=true; page.classList.toggle('draw',m==='draw'); ed.contentEditable=m==='type'; if(m==='draw') ed.blur();
+    b.querySelectorAll('#npMode button').forEach(x=>x.setAttribute('aria-pressed',x.dataset.m===m)); (m==='type'?typeTools:drawTools)(); };
+  setMode('type');
+  const min=!!store.get('npMin',false); top.classList.toggle('min',min); $('#npTog').textContent=min?'▾':'▴';
+  $('#npTog').onclick=()=>{ const v=!top.classList.contains('min'); top.classList.toggle('min',v); $('#npTog').textContent=v?'▾':'▴'; col.hidden=true; store.set('npMin',v); };
+  $('#npMode').onclick=e=>{ const x=e.target.closest('[data-m]'); if(x) setMode(x.dataset.m); };
+  $('#npPrev').onclick=()=>{ if(cur>0) show(cur-1); }; $('#npNext').onclick=()=>{ if(cur<pgs.length-1) show(cur+1); };
+  $('#npAdd').onclick=()=>{ flushPage(); pgs.splice(cur+1,0,{h:'',t:'',ink:[]}); show(cur+1); toast('Page '+(cur+1)+' added'); save(); };
+  $('#npDelP').onclick=()=>appConfirm(pgs.length>1?'Delete this page?':'Clear this page?','Delete',true).then(yes=>{ if(!yes) return;
+    if(pgs.length>1){ pgs.splice(cur,1); show(Math.min(cur,pgs.length-1),true); }
+    else { ed.innerHTML=''; strokes.length=0; pgs[0].ink=strokes; mark(); redraw(); } save(); });
+  b.addEventListener('mousedown',e=>{ if(e.target.closest('#npTop button')) e.preventDefault(); });   // keep the keyboard and selection while using the tools
+  document.addEventListener('selectionchange',npSel); function npSel(){ const s=getSelection(); if(s.rangeCount&&ed.contains(s.anchorNode)) rng=s.getRangeAt(0).cloneRange();
+    if(mode!=='type'||document.getElementById('notepad')?.hidden) return;
+    ['bold','italic','underline','strikeThrough','insertUnorderedList','insertOrderedList'].forEach(c=>{ const x=tools.querySelector(`[data-c="${c}"]`); try{ x&&x.setAttribute('aria-pressed',document.queryCommandState(c)); }catch(e){} }); }
   const back=()=>{ ed.focus(); if(rng){ const s=getSelection(); s.removeAllRanges(); s.addRange(rng); } };
   const run=(c,v)=>{ back(); document.execCommand(c,false,v); ed.oninput(); };
   const swatches=(list,cmd,none)=>{ col.innerHTML=list.map(c=>`<button data-v="${c}" style="background:${c}" aria-label="${c}"></button>`).join('')+(none?`<button data-v="none" aria-label="No highlight" style="background:#fff;font-size:16px;color:#1f2a22">⌀</button>`:''); col.hidden=false; col.dataset.cmd=cmd; };
-  col.onclick=e=>{ const x=e.target.closest('[data-v]'); if(!x) return; const cmd=col.dataset.cmd; col.hidden=true;
-    if(cmd==='foreColor') run('foreColor',x.dataset.v); else run('hiliteColor',x.dataset.v==='none'?'transparent':x.dataset.v); };
-  let al=0;
-  bar.onclick=e=>{ const x=e.target.closest('[data-c]'); if(!x) return; const c=x.dataset.c; if(c!=='color'&&c!=='hilite') col.hidden=true;
-    if(c==='head'){ back(); const cur=document.queryCommandValue('formatBlock'); document.execCommand('formatBlock',false,/h3/i.test(cur)?'div':'h3'); ed.oninput(); }
-    else if(c==='quote'){ back(); const cur=document.queryCommandValue('formatBlock'); document.execCommand('formatBlock',false,/blockquote/i.test(cur)?'div':'blockquote'); ed.oninput(); }
-    else if(c==='align'){ al=(al+1)%3; const cm=['justifyLeft','justifyCenter','justifyRight'][al]; x.textContent=['≡','☰','≣'][al]; run(cm); toast(['Left','Centre','Right'][al]); }
+  col.onclick=e=>{ const x=e.target.closest('[data-v]'); if(!x) return; const cmd=col.dataset.cmd; col.hidden=true; if(cmd==='foreColor') run('foreColor',x.dataset.v); else run('hiliteColor',x.dataset.v==='none'?'transparent':x.dataset.v); };
+  tools.onclick=e=>{ const x=e.target.closest('button'); if(!x) return;
+    if(x.dataset.ink){ color=x.dataset.ink; erase=false; drawTools(); return; }
+    if(x.dataset.sz){ size=+x.dataset.sz; drawTools(); return; }
+    const c=x.dataset.c; if(!c) return; if(c!=='color'&&c!=='hilite') col.hidden=true;
+    if(c==='erase'){ erase=!erase; drawTools(); }
+    else if(c==='inkUndo'){ if(strokes.length){ strokes.pop(); redraw(); schedule(); } }
+    else if(c==='inkClear'){ if(strokes.length) appConfirm('Clear all pen writing on this page? (The typed text stays.)','Clear',true).then(y=>{ if(y){ strokes.length=0; redraw(); schedule(); } }); }
+    else if(c==='penOnly'){ penOnly=!penOnly; penSeen=true; drawTools(); }
+    else if(c==='head'){ back(); const v=document.queryCommandValue('formatBlock'); document.execCommand('formatBlock',false,/h3/i.test(v)?'div':'h3'); ed.oninput(); }
+    else if(c==='quote'){ back(); const v=document.queryCommandValue('formatBlock'); document.execCommand('formatBlock',false,/blockquote/i.test(v)?'div':'blockquote'); ed.oninput(); }
+    else if(c==='align'){ al=(al+1)%3; x.textContent=['≡','☰','≣'][al]; run(['justifyLeft','justifyCenter','justifyRight'][al]); toast(['Left','Centre','Right'][al]); }
     else if(c==='smaller'||c==='bigger'){ back(); let v=+document.queryCommandValue('fontSize')||3; v=Math.max(1,Math.min(7,v+(c==='bigger'?1:-1))); document.execCommand('fontSize',false,v); ed.oninput(); }
     else if(c==='color') swatches(NP_INK,'foreColor',false);
     else if(c==='hilite') swatches(NP_HI,'hiliteColor',true);
     else if(c==='clear'){ back(); document.execCommand('removeFormat'); document.execCommand('formatBlock',false,'div'); ed.oninput(); }
-    else if(c==='sketch'){ back(); npDraw(null,html=>{ back(); document.execCommand('insertHTML',false,html+'<div><br></div>'); ed.querySelectorAll('.np-ink').forEach(z=>z.setAttribute('contenteditable','false')); ed.oninput(); save(); }); }
     else run(c); };
-  ed.addEventListener('click',e=>{ const im=e.target.closest('.np-ink img'); if(!im) return;
-    npDraw(im.src,html=>{ if(html===null){ im.closest('.np-ink').remove(); } else { im.src=/src="([^"]+)"/.exec(html)[1]; } ed.oninput(); save(); }); });
-  b.querySelector('#npOk').onclick=()=>closePanel('notepad');
-  b.querySelector('#npDel').onclick=()=>appConfirm('Delete this note?','Delete',true).then(yes=>{ if(!yes) return; gone=true; clearTimeout(tm); noteSet(k,''); closePanel('notepad'); toast('Note deleted'); });
-  document.getElementById('notepad').addEventListener('closed',()=>{ save(); gone=true; npFlush=null; document.removeEventListener('selectionchange',npSel); onDone&&onDone(); },{once:true});
-  S.textContent= n? 'Saved '+new Date(n.u).toLocaleString() : 'Saved as you type.'; }
-/* The drawing page: a full-screen canvas. Pen pressure changes the line width; "Pen only" ignores fingers and palm. */
-let npdEl=null;
-function npDraw(src,onDone){ if(npdEl) return; const W=1000, H=750;
-  const el=npdEl=document.createElement('div'); el.className='npd'; el.id='npd';
-  const sw=NP_INK.map((c,i)=>`<button class="npd-c" data-c="${c}" style="background:${c}" aria-pressed="${i===0}" aria-label="Colour ${i+1}"></button>`).join('');
-  el.innerHTML=`<div class="npd-top"><button id="npdX">Cancel</button><b>Draw or handwrite</b><button id="npdOk" class="pri">Done</button></div>
-   <div class="npd-tools">${sw}<i></i><button data-s="2.5" aria-pressed="false">Thin</button><button data-s="5" aria-pressed="true">Medium</button><button data-s="10" aria-pressed="false">Thick</button><i></i><button id="npdEr" aria-pressed="false">Eraser</button><button id="npdUn">Undo</button><button id="npdCl">Clear</button><i></i><button id="npdPen" aria-pressed="false">Pen only</button>${src?'<button id="npdDel" style="color:#ff9d8a">Delete</button>':''}</div>
-   <div class="npd-stage"><canvas id="npdC" width="${W}" height="${H}"></canvas></div>`;
-  document.body.appendChild(el);
-  const c=el.querySelector('#npdC'), g=c.getContext('2d'); let dirty=false, color=NP_INK[0], size=5, erase=false, penOnly=false, strokes=[], cur=null, curId=null, base=null;
-  const redraw=()=>{ g.clearRect(0,0,W,H); if(base) g.drawImage(base,0,0,W,H); strokes.forEach(s=>{ for(let i=1;i<s.p.length;i++) seg(s,i); if(s.p.length===1) seg(s,0); }); };
-  const seg=(s,i)=>{ const a=s.p[i-1]||s.p[i], b=s.p[i], pr=(a[2]+b[2])/2; g.globalCompositeOperation=s.e?'destination-out':'source-over'; g.strokeStyle=s.c; g.lineCap='round'; g.lineJoin='round';
-    g.lineWidth=(s.e?s.w*4:s.w)*(s.pen&&pr>0?.35+pr*1.3:1); g.beginPath(); g.moveTo(a[0],a[1]); g.lineTo(b[0]+(a===b?.01:0),b[1]); g.stroke(); g.globalCompositeOperation='source-over'; };
-  if(src){ base=new Image(); base.onload=redraw; base.src=src; }
-  const pt=e=>{ const r=c.getBoundingClientRect(); return [(e.clientX-r.left)*W/r.width,(e.clientY-r.top)*H/r.height,e.pressure||0]; };
-  c.addEventListener('pointerdown',e=>{ if(cur) return; if(e.pointerType==='touch'&&penOnly) return; if(e.pointerType==='pen'&&!penOnly&&!el.__penSeen){ el.__penSeen=true; penOnly=true; el.querySelector('#npdPen').setAttribute('aria-pressed','true'); toast('Pen only is on: fingers are ignored. Tap Pen only to allow them.'); }
-    e.preventDefault(); try{ c.setPointerCapture(e.pointerId); }catch(x){} curId=e.pointerId; cur={c:color,w:size,e:erase,pen:e.pointerType==='pen',p:[pt(e)]}; strokes.push(cur); dirty=true; seg(cur,0); });
-  c.addEventListener('pointermove',e=>{ if(!cur||e.pointerId!==curId) return; e.preventDefault(); (e.getCoalescedEvents?e.getCoalescedEvents():[e]).forEach(ev=>{ cur.p.push(pt(ev)); seg(cur,cur.p.length-1); }); });
-  const up=e=>{ if(cur&&e.pointerId===curId){ cur=null; curId=null; } }; c.addEventListener('pointerup',up); c.addEventListener('pointercancel',up);
-  c.addEventListener('contextmenu',e=>e.preventDefault());
-  el.querySelector('.npd-tools').onclick=e=>{ const x=e.target.closest('button'); if(!x) return;
-    if(x.dataset.c){ color=x.dataset.c; erase=false; el.querySelectorAll('.npd-c').forEach(y=>y.setAttribute('aria-pressed',y===x)); el.querySelector('#npdEr').setAttribute('aria-pressed','false'); }
-    else if(x.dataset.s){ size=+x.dataset.s; el.querySelectorAll('[data-s]').forEach(y=>y.setAttribute('aria-pressed',y===x)); }
-    else if(x.id==='npdEr'){ erase=!erase; x.setAttribute('aria-pressed',erase); }
-    else if(x.id==='npdUn'){ if(strokes.length){ strokes.pop(); dirty=true; redraw(); } }
-    else if(x.id==='npdCl'){ appConfirm('Clear the whole drawing?','Clear',true).then(y=>{ if(y){ strokes=[]; base=null; dirty=true; redraw(); } }); }
-    else if(x.id==='npdPen'){ penOnly=!penOnly; el.__penSeen=true; x.setAttribute('aria-pressed',penOnly); }
-    else if(x.id==='npdDel'){ appConfirm('Delete this drawing?','Delete',true).then(y=>{ if(y){ close(); onDone(null); } }); } };
-  const close=()=>{ el.remove(); npdEl=null; };
-  window.__npdClose=()=>{ finish(); };
-  const finish=()=>{ if(!dirty){ close(); return; }
-    if(!strokes.length&&!base){ close(); if(src) onDone(null); return; }   // everything cleared: a new page is dropped, an old one is removed
-    const png=c.toDataURL('image/png'); close(); onDone(`<div class="np-ink" contenteditable="false"><img src="${png}"></div>`); };
-  el.querySelector('#npdOk').onclick=finish; el.querySelector('#npdX').onclick=close; }
+  $('#npOk').onclick=()=>closePanel('notepad');
+  $('#npDel').onclick=()=>appConfirm('Delete this whole note?','Delete',true).then(yes=>{ if(!yes) return; gone=true; clearTimeout(tm); noteSet(k,''); closePanel('notepad'); toast('Note deleted'); });
+  document.getElementById('notepad').addEventListener('closed',()=>{ save(); gone=true; npFlush=null; ro&&ro.disconnect(); document.removeEventListener('selectionchange',npSel); onDone&&onDone(); },{once:true});
+  S.textContent= n? 'Saved '+new Date(n.u).toLocaleString() : 'Saved as you type.';
+  requestAnimationFrame(fit); }
 /* ============================ BACKUP AND RESTORE ============================
    Everything the app keeps in its own storage (keys starting mpq.): settings, Home and colours, prayer settings and alerts,
    microphone, Qur'an and hadith bookmarks, My ruku' and My blocks, notes, Hafazan history, last read places.
@@ -3617,25 +3638,34 @@ function qbStart(){ qbHead=null; try{ window.AndroidExtra?.startCompass?.(qbLoc.
 function qbWebOri(e){ if(e.alpha==null) return; window.__compass((360-e.alpha)%360,2); }
 function qbStop(){ try{ window.AndroidExtra?.stopCompass?.(); }catch(e){} window.removeEventListener('deviceorientationabsolute',qbWebOri); }
 function qbRender(){ const B=qiblaBearing(qbLoc.lat,qbLoc.lng), km=qiblaDistance(qbLoc.lat,qbLoc.lng);
-  const ticks=[...Array(72)].map((_,i)=>{ const a=i*5, long=a%30===0, mid=a%10===0; return `<line x1="100" y1="${long?9:mid?11:12}" x2="100" y2="16" transform="rotate(${a} 100 100)" stroke="${long?'var(--gold-hi)':'currentColor'}" stroke-width="${long?1.8:.9}" opacity="${long?1:mid?.6:.35}" stroke-linecap="round"/>`; }).join('');
-  const star='<polygon points="100,52 109,71 128,72 114,85 119,104 100,94 81,104 86,85 72,72 91,71" fill="none"/>';
+  const ticks=[...Array(72)].map((_,i)=>{ const a=i*5, long=a%30===0, mid=a%10===0; return `<line x1="100" y1="${long?8:mid?10:12}" x2="100" y2="16" transform="rotate(${a} 100 100)" stroke="${long?'var(--gold-hi)':'#e9e3cf'}" stroke-width="${long?2:1}" opacity="${long?1:mid?.7:.4}" stroke-linecap="round"/>`; }).join('');
+  const rot=(a,x)=>`<g transform="rotate(${a} 100 100)">${x}</g>`;
+  const leaf='<path d="M100 86 C105 78 105 68 100 62 C95 68 95 78 100 86Z"/>', bigleaf='<path d="M100 84 C108 74 108 60 100 52 C92 60 92 74 100 84Z"/>';
+  const orn=`
+   <g fill="none" stroke="var(--gold)" stroke-width=".9"><circle cx="100" cy="100" r="64" opacity=".7"/><circle cx="100" cy="100" r="42" opacity=".8"/><circle cx="100" cy="100" r="29" stroke-width="1.4" stroke-dasharray="1 2.6" stroke-linecap="round"/></g>
+   ${[0,90,180,270].map(a=>rot(a,`<g fill="#2f7a52" stroke="var(--gold)" stroke-width=".6">${bigleaf}</g><g fill="var(--gold)" opacity=".9"><path d="M100 70 C103 66 103 62 100 58 C97 62 97 66 100 70Z"/></g><path d="M100 58 q-9 -6 -17 -2 M100 58 q9 -6 17 -2" fill="none" stroke="var(--gold)" stroke-width=".8"/>`)).join('')}
+   ${[45,135,225,315].map(a=>rot(a,`<g fill="#1f6b46" stroke="var(--gold)" stroke-width=".5">${leaf}</g><circle cx="100" cy="56" r="3.2" fill="var(--gold)"/><circle cx="100" cy="56" r="1.2" fill="#0d3d2c"/>`)).join('')}
+   ${[22.5,67.5,112.5,157.5,202.5,247.5,292.5,337.5].map(a=>rot(a,'<path d="M100 74 q5 -5 3 -11 M100 74 q-5 -5 -3 -11" fill="none" stroke="var(--gold)" stroke-width=".7"/><circle cx="100" cy="62" r="1.6" fill="var(--gold-hi)"/>')).join('')}
+   ${[22.5,67.5,112.5,157.5,202.5,247.5,292.5,337.5,0,45,90,135,180,225,270,315].map((a,i)=>i<8?rot(a,'<g transform="translate(100 47)"><g fill="var(--gold)" stroke="var(--gold-lo)" stroke-width=".4">'+[0,72,144,216,288].map(q=>`<ellipse cx="0" cy="-3.6" rx="1.9" ry="3.2" transform="rotate(${q})"/>`).join('')+'</g><circle r="1.5" fill="#0b3a2a"/></g>'):'').join('')}
+   ${[0,45,90,135,180,225,270,315].map(a=>rot(a,'<path d="M96 60 C84 56 78 48 80 40 M104 60 C116 56 122 48 120 40" fill="none" stroke="var(--gold)" stroke-width=".7" opacity=".8"/><g fill="#2f7a52" stroke="var(--gold)" stroke-width=".4"><path d="M82 50 q-6 -2 -6 -7 q6 0 6 7z"/><path d="M118 50 q6 -2 6 -7 q-6 0 -6 7z"/></g>')).join('')}
+   ${[0,45,90,135,180,225,270,315].map(a=>rot(a,'<path d="M100 98 C106 92 106 84 100 76 C94 84 94 92 100 98Z" fill="var(--gold)" stroke="var(--gold-lo)" stroke-width=".5"/>')).join('')}
+   ${[22.5,67.5,112.5,157.5,202.5,247.5,292.5,337.5].map(a=>rot(a,'<path d="M100 98 C103 94 103 90 100 86 C97 90 97 94 100 98Z" fill="var(--gold-hi)" opacity=".85"/>')).join('')}`;
+  const letters=['N','E','S','W'].map((t,i)=>rot(i*90,`<circle cx="100" cy="44" r="11.5" fill="#07261b" stroke="${i===0?'#ff7a66':'var(--gold-hi)'}" stroke-width="1.8"/><text x="100" y="${i===0?50.2:49.6}" text-anchor="middle" font-size="${i===0?16:14.5}" font-weight="800" fill="${i===0?'#ff9a88':'#fff'}">${t}</text>`)).join('');
   const b=openPanel('qibla','Qibla',`
    <div id="qbWrap">
     <svg id="qbDial" viewBox="0 0 200 200" style="width:100%;height:100%;transition:transform .12s linear;color:var(--h-ink)">
      <defs><radialGradient id="qbG" cx="50%" cy="42%" r="70%"><stop offset="0" style="stop-color:var(--h-bg)"/><stop offset="1" style="stop-color:var(--h-bg2)"/></radialGradient>
       <linearGradient id="qbR" x1="0" y1="0" x2="1" y2="1"><stop offset="0" style="stop-color:var(--gold-hi)"/><stop offset=".5" style="stop-color:var(--gold)"/><stop offset="1" style="stop-color:var(--gold-lo)"/></linearGradient></defs>
-     <circle cx="100" cy="100" r="99" fill="url(#qbR)"/><circle cx="100" cy="100" r="94" fill="url(#qbG)"/><circle cx="100" cy="100" r="94" fill="none" stroke="var(--gold-lo)" stroke-width=".8"/>
-     <circle cx="100" cy="100" r="60" fill="var(--gold)" opacity=".06"/><circle cx="100" cy="100" r="60" fill="none" stroke="var(--gold)" stroke-width=".6" opacity=".35"/>
-     <g fill="none" stroke="var(--gold)" stroke-width=".8" opacity=".5"><rect x="72" y="72" width="56" height="56" rx="2"/><rect x="72" y="72" width="56" height="56" rx="2" transform="rotate(45 100 100)"/><circle cx="100" cy="100" r="19" stroke-dasharray="2 3"/></g>
-     ${ticks}
-     ${[45,135,225,315].map(a=>`<path d="M100 31 l3 4 -3 4 -3 -4z" fill="var(--gold)" opacity=".8" transform="rotate(${a} 100 100)"/>`).join('')}
-     ${['N','E','S','W'].map((t,i)=>`<text x="100" y="${i===0?37:36}" text-anchor="middle" font-size="${i===0?17:14}" font-weight="700" fill="${i===0?'var(--gold-hi)':'currentColor'}" transform="rotate(${i*90} 100 100)">${t}</text>`).join('')}
+     <circle cx="100" cy="100" r="99" fill="url(#qbR)"/><circle cx="100" cy="100" r="95" fill="#0b3a2a"/><circle cx="100" cy="100" r="94" fill="url(#qbG)"/><circle cx="100" cy="100" r="94" fill="none" stroke="var(--gold-lo)" stroke-width=".8"/>
+     ${orn}${ticks}
+     ${[45,135,225,315].map(a=>rot(a,'<path d="M100 27 l3.6 4.6 -3.6 4.6 -3.6 -4.6z" fill="var(--gold-hi)"/>')).join('')}
+     ${letters}
      <g transform="rotate(${B} 100 100)">
-      <circle cx="100" cy="30" r="17" fill="var(--gold)" opacity=".18"/>
-      <line x1="100" y1="93" x2="100" y2="52" stroke="var(--gold-hi)" stroke-width="2.6" stroke-linecap="round"/>
-      <path d="M100 46 L107 60 L100 56 L93 60 Z" fill="var(--gold-hi)"/>
-      <rect x="91" y="21" width="18" height="18" rx="2" fill="#15110c" stroke="var(--gold-hi)" stroke-width="1.3"/><rect x="91" y="25.5" width="18" height="3.6" fill="var(--gold)"/><rect x="97.6" y="31" width="4.8" height="8" rx=".8" fill="var(--gold)"/></g>
-     <circle cx="100" cy="100" r="8" fill="url(#qbR)"/><circle cx="100" cy="100" r="3" style="fill:var(--h-bg2)"/></svg>
+      <circle cx="100" cy="25" r="15.5" fill="#07261b" stroke="var(--gold-hi)" stroke-width="1.6"/>
+      <rect x="90" y="15" width="20" height="20" rx="2" fill="#15110c" stroke="var(--gold-hi)" stroke-width="1.4"/><rect x="90" y="20" width="20" height="4" fill="var(--gold-hi)"/><rect x="96.5" y="26" width="7" height="9" rx="1" fill="var(--gold-hi)"/>
+      <line x1="100" y1="92" x2="100" y2="50" stroke="#07261b" stroke-width="7.5" stroke-linecap="round"/><path d="M100 38 L111 56 L100 51 L89 56 Z" fill="#07261b" stroke="#07261b" stroke-width="4" stroke-linejoin="round"/>
+      <line x1="100" y1="92" x2="100" y2="50" stroke="#fff3c4" stroke-width="4.2" stroke-linecap="round"/><path d="M100 38 L111 56 L100 51 L89 56 Z" fill="#fff3c4" stroke="var(--gold-hi)" stroke-width="1.2" stroke-linejoin="round"/></g>
+     <circle cx="100" cy="100" r="9.5" fill="url(#qbR)" stroke="#07261b" stroke-width="1.6"/><circle cx="100" cy="100" r="3.4" fill="#07261b"/></svg>
     <div class="qb-lub"></div>
    </div>
    <div id="qbMsg"></div>
@@ -4379,8 +4409,7 @@ document.getElementById('next').onclick=()=>turnPage(1);
 document.getElementById('prev').onclick=()=>turnPage(-1);
 window.matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change',applyLook);
 
-window.__back=()=>{ if(npdEl){ window.__npdClose&&window.__npdClose(); return true; }
-  if(sheet.classList.contains('open')){ closeSheet(); return true; }
+window.__back=()=>{ if(sheet.classList.contains('open')){ closeSheet(); return true; }
   if(tq){ tqClose(); return true; } if(navRet&&navRet.kind==='panel'&&topPanel()?.id===navRet.pid) return navRetGo(); { const p=topPanel(); if(p){ closePanel(p.id); return true; } }
   { const c=document.getElementById('cover'); if(c && !c.hidden) return false; } if(document.body.classList.contains('immersive')){ setImmersive(false); return true; } if(hz){ if(rec) stopListen(false); hz=null; renderReader(); return true; }
   if(navRet&&navRet.kind==='reader'&&!topPanel()) return navRetGo();

@@ -308,11 +308,12 @@ All open from the **ayah menu**; they need the internet once per surah.
 
 **The Notepad (free notes)**
 
-1. The bar at the top has: undo and redo, **B** bold, *I* italic, U underline, S strikethrough, **H** heading, bullet and numbered lists, ❝ quote, alignment (tap to cycle left, centre, right), **A−** and **A+** for text size, **A** text colour, highlighter, **Tx** clear formatting, and **✎** to draw.
-2. Type as usual, Arabic included; each line takes its own direction. Pasting keeps the text only.
-3. **✎** opens a drawing page: write or draw with the S Pen or your finger, choose the colour and thickness, use **Eraser**, **Undo** or **Clear**, then **Done**. The drawing is placed in your note where the cursor was. Tap a drawing in the note to edit it again, or **Delete** it in the drawing page.
-4. With a pen the line is thicker when you press harder. The first time the pen touches, **Pen only** turns on so your palm and fingers are ignored; tap **Pen only** to draw with a finger.
-5. Notes save as you type. Keep drawings few: a note with many drawings becomes large and may not sync.
+1. A note is made of **pages**. Each page is a sheet where you can **type** and **write with the S Pen at the same time**. Switch with **⌨ Type** and **✎ Draw** at the top.
+2. **Type:** the tools are undo and redo, **B** bold, *I* italic, U underline, S strikethrough, **H** heading, bullet and numbered lists, ❝ quote, alignment (tap to cycle), **A−** and **A+** text size, **A** text colour, the highlighter and **Tx** clear formatting. Arabic works, and each line takes its own direction. Pasting keeps the text only.
+3. **Draw:** write or draw over the page with the S Pen or a finger. Choose the colour and thickness, **Eraser**, **Undo** (last stroke) or **Clear ink** (the typed text stays). With the pen, pressing harder makes the line thicker. The first time the pen touches, **Pen only** turns on: palm and fingers do not draw, and a finger drag scrolls the page. Tap **Pen only** to draw with a finger.
+4. **Pages:** **‹ ›** move between pages, **＋** adds a page after this one, and **Delete this page** removes it.
+5. **▴ / ▾** (top right) hides or shows the tool bar to give the page more room; the page buttons stay.
+6. Notes save as you type and sync with your other devices. A note with many pages of writing becomes large and may not sync.
 
 **Prayer times**
 

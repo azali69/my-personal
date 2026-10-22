@@ -308,11 +308,12 @@ Semuanya dibuka dari **menu ayat**; memerlukan internet sekali bagi setiap surah
 
 **Notepad (nota bebas)**
 
-1. Bar di atas mempunyai: buat asal dan ulang, **B** tebal, *I* condong, U garis bawah, S garis tengah, **H** tajuk, senarai berpeluru dan bernombor, ❝ petikan, penjajaran (ketik untuk tukar kiri, tengah, kanan), **A−** dan **A+** untuk saiz teks, **A** warna teks, penyerlah, **Tx** buang format, dan **✎** untuk melukis.
-2. Taip seperti biasa, termasuk tulisan Arab; setiap baris mengikut arahnya sendiri. Tampalan hanya mengekalkan teks.
-3. **✎** membuka halaman lukisan: tulis atau lukis dengan S Pen atau jari, pilih warna dan ketebalan, guna **Eraser**, **Undo** atau **Clear**, kemudian **Done**. Lukisan diletakkan dalam nota anda di tempat kursor. Ketik lukisan dalam nota untuk menyuntingnya semula, atau **Delete** di halaman lukisan.
-4. Dengan pen, garisan lebih tebal apabila ditekan lebih kuat. Kali pertama pen menyentuh skrin, **Pen only** dihidupkan supaya tapak tangan dan jari diabaikan; ketik **Pen only** untuk melukis dengan jari.
-5. Nota disimpan semasa anda menaip. Jangan letak terlalu banyak lukisan: nota yang banyak lukisan menjadi besar dan mungkin tidak diselaraskan.
+1. Satu nota terdiri daripada **halaman**. Setiap halaman ialah helaian di mana anda boleh **menaip** dan **menulis dengan S Pen serentak**. Tukar dengan **⌨ Type** dan **✎ Draw** di atas.
+2. **Type:** alat ialah buat asal dan ulang, **B** tebal, *I* condong, U garis bawah, S garis tengah, **H** tajuk, senarai berpeluru dan bernombor, ❝ petikan, penjajaran (ketik untuk tukar), **A−** dan **A+** saiz teks, **A** warna teks, penyerlah dan **Tx** buang format. Tulisan Arab boleh digunakan, dan setiap baris mengikut arahnya sendiri. Tampalan hanya mengekalkan teks.
+3. **Draw:** tulis atau lukis di atas halaman dengan S Pen atau jari. Pilih warna dan ketebalan, **Eraser**, **Undo** (garisan terakhir) atau **Clear ink** (teks yang ditaip kekal). Dengan pen, tekanan lebih kuat menjadikan garisan lebih tebal. Kali pertama pen menyentuh skrin, **Pen only** dihidupkan: tapak tangan dan jari tidak melukis, dan seretan jari menatal halaman. Ketik **Pen only** untuk melukis dengan jari.
+4. **Halaman:** **‹ ›** bergerak antara halaman, **＋** menambah halaman selepas yang ini, dan **Delete this page** memadamnya.
+5. **▴ / ▾** (kanan atas) menyembunyikan atau menunjukkan bar alat supaya halaman lebih luas; butang halaman kekal.
+6. Nota disimpan semasa anda menaip dan diselaraskan dengan peranti lain. Nota yang banyak halaman tulisan menjadi besar dan mungkin tidak diselaraskan.
 
 **Waktu solat**
 
