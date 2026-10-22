@@ -667,19 +667,21 @@ a.tile{text-decoration:none;color:inherit}
 .dock .mic{background:var(--dock-bg);color:var(--gold-hi);border:2px solid var(--gold)}
 
 /* Notepad (Azli, 22 Oct 2026): pages with the text and the pen on one sheet; collapsible tool bar */
-.np-top{position:sticky;top:0;z-index:5;margin:0 0 8px;padding:6px;border-radius:14px;background:color-mix(in srgb,var(--h-bg2) 96%,transparent);border:1px solid color-mix(in srgb,var(--gold) 45%,transparent)}
-.np-row1{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.np-mode,.np-pg{display:flex;gap:2px;align-items:center}.np-pg span{min-width:54px;text-align:center;font-weight:600;font-variant-numeric:tabular-nums}
-.np-top button{flex:none;min-width:42px;height:42px;border-radius:10px;border:1px solid transparent;background:transparent;color:var(--h-ink);font-size:17px;font-weight:700;padding:0 8px}
+.np-top{position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:4px;margin:0 0 8px;padding:4px;border-radius:12px;background:color-mix(in srgb,var(--h-bg2) 96%,transparent);border:1px solid color-mix(in srgb,var(--gold) 45%,transparent)}
+.np-strip{flex:1;min-width:0;display:flex;align-items:center;gap:2px;overflow-x:auto;scrollbar-width:none}.np-strip::-webkit-scrollbar{display:none}
+.np-strip i{flex:none;width:1px;height:24px;background:color-mix(in srgb,var(--gold) 45%,transparent);margin:0 4px}
+.np-mode,.np-pg,.np-tools{flex:none;display:flex;gap:2px;align-items:center}.np-pg span{min-width:46px;text-align:center;font-weight:600;font-variant-numeric:tabular-nums}
+.np-top button{flex:none;min-width:38px;height:38px;border-radius:9px;border:1px solid transparent;background:transparent;color:var(--h-ink);font-size:16px;font-weight:700;padding:0 7px}
 .np-top button:disabled{opacity:.35}
-.np-mode button{border-color:color-mix(in srgb,var(--gold) 55%,transparent);font-size:15px}
+.np-mode button{border-color:color-mix(in srgb,var(--gold) 55%,transparent);font-size:14px}
 .np-top button[aria-pressed="true"]{background:var(--gold);color:#1b1608}
-.np-tog{margin-inline-start:auto;border-color:color-mix(in srgb,var(--gold) 55%,transparent)!important}
-.np-tools{display:flex;gap:2px;align-items:center;flex-wrap:wrap;margin-top:6px;padding-top:6px;border-top:1px solid color-mix(in srgb,var(--gold) 30%,transparent)}
-.np-tools i{flex:none;width:1px;height:26px;background:color-mix(in srgb,var(--gold) 45%,transparent);margin:0 4px}
-.np-top.min .np-tools,.np-top.min .np-col{display:none}
-.np-top .np-sw{width:34px;min-width:34px;height:34px;border-radius:50%;border:3px solid transparent;padding:0;margin:0 3px}.np-top .np-sw[aria-pressed="true"]{border-color:var(--gold-hi);background-clip:padding-box;box-shadow:0 0 0 2px var(--h-bg2) inset}
-.np-col{display:flex;gap:10px;flex-wrap:wrap;padding:8px 6px 2px}
+.np-tools i{flex:none;width:1px;height:24px;background:color-mix(in srgb,var(--gold) 45%,transparent);margin:0 4px}
+.np-tog{border-color:color-mix(in srgb,var(--gold) 55%,transparent)!important;font-size:14px!important}
+.np-top.min{display:inline-flex;padding:0;border:0;background:transparent}.np-top.min .np-strip,.np-top.min .np-col{display:none}
+.np-top.min .np-tog{background:color-mix(in srgb,var(--h-bg2) 96%,transparent)}
+.np-top .np-sw{width:30px;min-width:30px;height:30px;border-radius:50%;border:3px solid transparent;padding:0;margin:0 2px}.np-top .np-sw[aria-pressed="true"]{border-color:var(--gold-hi);background-clip:padding-box;box-shadow:0 0 0 2px var(--h-bg2) inset}
+.np-col{position:absolute;left:0;right:0;top:calc(100% + 4px);display:flex;gap:10px;flex-wrap:wrap;padding:8px 10px;border-radius:12px;background:var(--h-bg2);border:1px solid color-mix(in srgb,var(--gold) 45%,transparent)}
+.np-col[hidden]{display:none}
 .np-top .np-col button{width:36px;min-width:36px;height:36px;border-radius:50%;border:2px solid var(--gold);padding:0}
 .np-paper{background:#fffdf5;color:#1f2a22;border-radius:12px;border:1px solid var(--gold);overflow:hidden}
 .np-page{position:relative;min-height:60vh}
@@ -692,10 +694,10 @@ a.tile{text-decoration:none;color:inherit}
 .np-ed ul,.np-ed ol{margin:.3em 0;padding-inline-start:1.5em}
 .np-ed .np-ink{margin:8px 0;line-height:0}.np-ed .np-ink img{width:100%;height:auto;display:block}
 /* Qibla compass */
-#qbWrap{position:relative;width:calc(min(84vw,360px) / var(--uiz,1));aspect-ratio:1;margin:14px auto 0}
-#qbWrap svg{filter:drop-shadow(0 6px 14px rgba(0,0,0,.35));transition:filter .25s}
-#qbWrap.on svg{filter:drop-shadow(0 0 12px #5fd08a) drop-shadow(0 6px 14px rgba(0,0,0,.35))}
-#qbWrap .qb-lub{position:absolute;left:50%;top:-12px;transform:translateX(-50%);width:0;height:0;border-left:10px solid transparent;border-right:10px solid transparent;border-top:17px solid var(--gold-hi);filter:drop-shadow(0 2px 2px rgba(0,0,0,.4))}
+#qbWrap{position:relative;width:calc(min(84vw,360px) / var(--uiz,1));aspect-ratio:1;margin:40px auto 0}
+#qbWrap #qbDial{filter:drop-shadow(0 6px 14px rgba(0,0,0,.35));transition:filter .25s}
+#qbWrap.on #qbDial{filter:drop-shadow(0 0 12px #5fd08a) drop-shadow(0 6px 14px rgba(0,0,0,.35))}
+#qbWrap .qb-kaaba{position:absolute;left:50%;top:-34px;transform:translateX(-50%);width:13%;height:auto;z-index:2;filter:drop-shadow(0 3px 4px rgba(0,0,0,.5))}
 #qbMsg{display:block;width:fit-content;margin:14px auto 4px;padding:8px 20px;border-radius:999px;font-size:19px;text-align:center;min-height:1.5em;background:color-mix(in srgb,var(--h-bg2) 70%,transparent);border:1px solid color-mix(in srgb,var(--gold) 55%,transparent)}
 #qbMsg.on{background:#1f6b45;border-color:#5fd08a;color:#fff}
 </style>
@@ -1988,11 +1990,11 @@ function notepadOpen(k,onDone){ const n=noteGet(k);
   let cur=0, mode='type', color=NP_INK[0], size=2.4, erase=false, penOnly=false, penSeen=false, gone=false, tm=0, rng=null, al=0;
   const bt=(c,l,t)=>`<button data-c="${c}" title="${t}" aria-label="${t}">${l}</button>`;
   const b=openPanel('notepad','Notepad',`
-   <div class="np-top" id="npTop"><div class="np-row1">
-     <div class="np-mode" id="npMode"><button data-m="type" aria-pressed="true">⌨ Type</button><button data-m="draw" aria-pressed="false">✎ Draw</button></div>
-     <div class="np-pg"><button id="npPrev" aria-label="Previous page">‹</button><span id="npPn"></span><button id="npNext" aria-label="Next page">›</button><button id="npAdd" aria-label="Add a page" title="Add a page">＋</button></div>
-     <button id="npTog" class="np-tog" aria-label="Show or hide the tools" title="Show or hide the tools">▴</button></div>
-    <div class="np-tools" id="npTools"></div><div class="np-col" id="npCol" hidden></div></div>
+   <div class="np-top" id="npTop"><button id="npTog" class="np-tog" aria-label="Hide or show the tools">▴</button>
+    <div class="np-strip" id="npStrip"><div class="np-mode" id="npMode"><button data-m="type" aria-pressed="true">⌨ Type</button><button data-m="draw" aria-pressed="false">✎ Draw</button></div><i></i>
+     <div class="np-pg"><button id="npPrev" aria-label="Previous page">‹</button><span id="npPn"></span><button id="npNext" aria-label="Next page">›</button><button id="npAdd" aria-label="Add a page" title="Add a page">＋</button></div><i></i>
+     <div class="np-tools" id="npTools"></div></div>
+    <div class="np-col" id="npCol" hidden></div></div>
    <div class="np-paper"><div class="np-page" id="npPage"><div id="npEd" class="np-ed" contenteditable="true" spellcheck="true" data-ph="Start typing. Tap ✎ Draw to write over the page with your S Pen or finger."></div><canvas id="npC" class="np-c"></canvas></div></div>
    <p class="note" id="npS" style="margin:6px 2px"></p>
    <div class="row2" style="gap:8px"><button class="pill" id="npDelP" style="flex:none">Delete this page</button><button class="pill" id="npDel" style="color:var(--bad);flex:none">${ic('trash')}Delete note</button><button class="pill primary" id="npOk" style="min-width:110px">Done</button></div>`);
@@ -2040,8 +2042,8 @@ function notepadOpen(k,onDone){ const n=noteGet(k);
   const setMode=m=>{ mode=m; col.hidden=true; page.classList.toggle('draw',m==='draw'); ed.contentEditable=m==='type'; if(m==='draw') ed.blur();
     b.querySelectorAll('#npMode button').forEach(x=>x.setAttribute('aria-pressed',x.dataset.m===m)); (m==='type'?typeTools:drawTools)(); };
   setMode('type');
-  const min=!!store.get('npMin',false); top.classList.toggle('min',min); $('#npTog').textContent=min?'▾':'▴';
-  $('#npTog').onclick=()=>{ const v=!top.classList.contains('min'); top.classList.toggle('min',v); $('#npTog').textContent=v?'▾':'▴'; col.hidden=true; store.set('npMin',v); };
+  const min=!!store.get('npMin',false); top.classList.toggle('min',min); $('#npTog').textContent=min?'☰ Tools':'▴';
+  $('#npTog').onclick=()=>{ const v=!top.classList.contains('min'); top.classList.toggle('min',v); $('#npTog').textContent=v?'☰ Tools':'▴'; col.hidden=true; store.set('npMin',v); };
   $('#npMode').onclick=e=>{ const x=e.target.closest('[data-m]'); if(x) setMode(x.dataset.m); };
   $('#npPrev').onclick=()=>{ if(cur>0) show(cur-1); }; $('#npNext').onclick=()=>{ if(cur<pgs.length-1) show(cur+1); };
   $('#npAdd').onclick=()=>{ flushPage(); pgs.splice(cur+1,0,{h:'',t:'',ink:[]}); show(cur+1); toast('Page '+(cur+1)+' added'); save(); };
@@ -3638,35 +3640,26 @@ function qbStart(){ qbHead=null; try{ window.AndroidExtra?.startCompass?.(qbLoc.
 function qbWebOri(e){ if(e.alpha==null) return; window.__compass((360-e.alpha)%360,2); }
 function qbStop(){ try{ window.AndroidExtra?.stopCompass?.(); }catch(e){} window.removeEventListener('deviceorientationabsolute',qbWebOri); }
 function qbRender(){ const B=qiblaBearing(qbLoc.lat,qbLoc.lng), km=qiblaDistance(qbLoc.lat,qbLoc.lng);
-  const ticks=[...Array(72)].map((_,i)=>{ const a=i*5, long=a%30===0, mid=a%10===0; return `<line x1="100" y1="${long?8:mid?10:12}" x2="100" y2="16" transform="rotate(${a} 100 100)" stroke="${long?'var(--gold-hi)':'#e9e3cf'}" stroke-width="${long?2:1}" opacity="${long?1:mid?.7:.4}" stroke-linecap="round"/>`; }).join('');
+  const ticks=[...Array(72)].map((_,i)=>{ const a=i*5, long=a%30===0, mid=a%10===0; return `<line x1="100" y1="${long?9:mid?10.5:11.5}" x2="100" y2="${long?16.5:15.5}" transform="rotate(${a} 100 100)" stroke="${long?'#f3d98f':'#d9dccb'}" stroke-width="${long?2:1}" opacity="${long?1:mid?.75:.45}" stroke-linecap="round"/>`; }).join('');
   const rot=(a,x)=>`<g transform="rotate(${a} 100 100)">${x}</g>`;
-  const leaf='<path d="M100 86 C105 78 105 68 100 62 C95 68 95 78 100 86Z"/>', bigleaf='<path d="M100 84 C108 74 108 60 100 52 C92 60 92 74 100 84Z"/>';
-  const orn=`
-   <g fill="none" stroke="var(--gold)" stroke-width=".9"><circle cx="100" cy="100" r="64" opacity=".7"/><circle cx="100" cy="100" r="42" opacity=".8"/><circle cx="100" cy="100" r="29" stroke-width="1.4" stroke-dasharray="1 2.6" stroke-linecap="round"/></g>
-   ${[0,90,180,270].map(a=>rot(a,`<g fill="#2f7a52" stroke="var(--gold)" stroke-width=".6">${bigleaf}</g><g fill="var(--gold)" opacity=".9"><path d="M100 70 C103 66 103 62 100 58 C97 62 97 66 100 70Z"/></g><path d="M100 58 q-9 -6 -17 -2 M100 58 q9 -6 17 -2" fill="none" stroke="var(--gold)" stroke-width=".8"/>`)).join('')}
-   ${[45,135,225,315].map(a=>rot(a,`<g fill="#1f6b46" stroke="var(--gold)" stroke-width=".5">${leaf}</g><circle cx="100" cy="56" r="3.2" fill="var(--gold)"/><circle cx="100" cy="56" r="1.2" fill="#0d3d2c"/>`)).join('')}
-   ${[22.5,67.5,112.5,157.5,202.5,247.5,292.5,337.5].map(a=>rot(a,'<path d="M100 74 q5 -5 3 -11 M100 74 q-5 -5 -3 -11" fill="none" stroke="var(--gold)" stroke-width=".7"/><circle cx="100" cy="62" r="1.6" fill="var(--gold-hi)"/>')).join('')}
-   ${[22.5,67.5,112.5,157.5,202.5,247.5,292.5,337.5,0,45,90,135,180,225,270,315].map((a,i)=>i<8?rot(a,'<g transform="translate(100 47)"><g fill="var(--gold)" stroke="var(--gold-lo)" stroke-width=".4">'+[0,72,144,216,288].map(q=>`<ellipse cx="0" cy="-3.6" rx="1.9" ry="3.2" transform="rotate(${q})"/>`).join('')+'</g><circle r="1.5" fill="#0b3a2a"/></g>'):'').join('')}
-   ${[0,45,90,135,180,225,270,315].map(a=>rot(a,'<path d="M96 60 C84 56 78 48 80 40 M104 60 C116 56 122 48 120 40" fill="none" stroke="var(--gold)" stroke-width=".7" opacity=".8"/><g fill="#2f7a52" stroke="var(--gold)" stroke-width=".4"><path d="M82 50 q-6 -2 -6 -7 q6 0 6 7z"/><path d="M118 50 q6 -2 6 -7 q-6 0 -6 7z"/></g>')).join('')}
-   ${[0,45,90,135,180,225,270,315].map(a=>rot(a,'<path d="M100 98 C106 92 106 84 100 76 C94 84 94 92 100 98Z" fill="var(--gold)" stroke="var(--gold-lo)" stroke-width=".5"/>')).join('')}
-   ${[22.5,67.5,112.5,157.5,202.5,247.5,292.5,337.5].map(a=>rot(a,'<path d="M100 98 C103 94 103 90 100 86 C97 90 97 94 100 98Z" fill="var(--gold-hi)" opacity=".85"/>')).join('')}`;
-  const letters=['N','E','S','W'].map((t,i)=>rot(i*90,`<circle cx="100" cy="44" r="11.5" fill="#07261b" stroke="${i===0?'#ff7a66':'var(--gold-hi)'}" stroke-width="1.8"/><text x="100" y="${i===0?50.2:49.6}" text-anchor="middle" font-size="${i===0?16:14.5}" font-weight="800" fill="${i===0?'#ff9a88':'#fff'}">${t}</text>`)).join('');
+  /* The dial follows Azli's picture (22 Oct 2026): the floral centre is taken from it; the letters, ticks and arrow are drawn
+     here so they stay sharp and stand out. The Ka'bah at the top is fixed: turn until the arrow points to it. */
+  const letters=['N','E','S','W'].map((t,i)=>rot(i*90,`<text x="100" y="38.5" text-anchor="middle" font-size="17" font-weight="800" fill="${i===0?'#ffd77a':'#fff'}" stroke="#02160d" stroke-width="3.2" paint-order="stroke" stroke-linejoin="round">${t}</text>`)).join('');
   const b=openPanel('qibla','Qibla',`
    <div id="qbWrap">
-    <svg id="qbDial" viewBox="0 0 200 200" style="width:100%;height:100%;transition:transform .12s linear;color:var(--h-ink)">
-     <defs><radialGradient id="qbG" cx="50%" cy="42%" r="70%"><stop offset="0" style="stop-color:var(--h-bg)"/><stop offset="1" style="stop-color:var(--h-bg2)"/></radialGradient>
-      <linearGradient id="qbR" x1="0" y1="0" x2="1" y2="1"><stop offset="0" style="stop-color:var(--gold-hi)"/><stop offset=".5" style="stop-color:var(--gold)"/><stop offset="1" style="stop-color:var(--gold-lo)"/></linearGradient></defs>
-     <circle cx="100" cy="100" r="99" fill="url(#qbR)"/><circle cx="100" cy="100" r="95" fill="#0b3a2a"/><circle cx="100" cy="100" r="94" fill="url(#qbG)"/><circle cx="100" cy="100" r="94" fill="none" stroke="var(--gold-lo)" stroke-width=".8"/>
-     ${orn}${ticks}
-     ${[45,135,225,315].map(a=>rot(a,'<path d="M100 27 l3.6 4.6 -3.6 4.6 -3.6 -4.6z" fill="var(--gold-hi)"/>')).join('')}
+    <svg class="qb-kaaba" viewBox="0 0 40 46" aria-hidden="true"><path d="M20 46 L14 37 L26 37 Z" fill="#f3d98f"/><rect x="3" y="3" width="34" height="32" rx="3" fill="#16110b" stroke="#f3d98f" stroke-width="2.2"/><rect x="3" y="10" width="34" height="5.5" fill="#d9b25a"/><rect x="16" y="19" width="8" height="16" rx="1.2" fill="#d9b25a"/></svg>
+    <svg id="qbDial" viewBox="0 0 200 200" style="width:100%;height:100%;transition:transform .12s linear">
+     <defs><radialGradient id="qbG" cx="50%" cy="45%" r="60%"><stop offset="0" stop-color="#0a3d27"/><stop offset="1" stop-color="#01241a"/></radialGradient>
+      <linearGradient id="qbR" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f6dc93"/><stop offset=".45" stop-color="#d4ad57"/><stop offset="1" stop-color="#8f6b26"/></linearGradient></defs>
+     <circle cx="100" cy="100" r="99.5" fill="url(#qbR)"/><circle cx="100" cy="100" r="94.6" fill="#7a5a1d"/><circle cx="100" cy="100" r="94" fill="url(#qbG)"/>
+     <image href="data:image/webp;base64,%%ART:qibla-face.webp%%" x="41.6" y="41.6" width="116.8" height="116.8"/>
+     ${ticks}
+     ${[45,135,225,315].map(a=>rot(a,'<path d="M100 29.5 l3.4 4.4 -3.4 4.4 -3.4 -4.4z" fill="#e6c36c"/>')).join('')}
      ${letters}
      <g transform="rotate(${B} 100 100)">
-      <circle cx="100" cy="25" r="15.5" fill="#07261b" stroke="var(--gold-hi)" stroke-width="1.6"/>
-      <rect x="90" y="15" width="20" height="20" rx="2" fill="#15110c" stroke="var(--gold-hi)" stroke-width="1.4"/><rect x="90" y="20" width="20" height="4" fill="var(--gold-hi)"/><rect x="96.5" y="26" width="7" height="9" rx="1" fill="var(--gold-hi)"/>
-      <line x1="100" y1="92" x2="100" y2="50" stroke="#07261b" stroke-width="7.5" stroke-linecap="round"/><path d="M100 38 L111 56 L100 51 L89 56 Z" fill="#07261b" stroke="#07261b" stroke-width="4" stroke-linejoin="round"/>
-      <line x1="100" y1="92" x2="100" y2="50" stroke="#fff3c4" stroke-width="4.2" stroke-linecap="round"/><path d="M100 38 L111 56 L100 51 L89 56 Z" fill="#fff3c4" stroke="var(--gold-hi)" stroke-width="1.2" stroke-linejoin="round"/></g>
-     <circle cx="100" cy="100" r="9.5" fill="url(#qbR)" stroke="#07261b" stroke-width="1.6"/><circle cx="100" cy="100" r="3.4" fill="#07261b"/></svg>
-    <div class="qb-lub"></div>
+      <line x1="100" y1="96" x2="100" y2="30" stroke="#02160d" stroke-width="7.2" stroke-linecap="round"/><path d="M100 16.5 L110.5 33 L100 28.5 L89.5 33 Z" fill="#02160d" stroke="#02160d" stroke-width="3.6" stroke-linejoin="round"/>
+      <line x1="100" y1="96" x2="100" y2="30" stroke="#fff6d2" stroke-width="4" stroke-linecap="round"/><path d="M100 16.5 L110.5 33 L100 28.5 L89.5 33 Z" fill="#fff6d2" stroke="#e8c66e" stroke-width="1" stroke-linejoin="round"/></g>
+     <circle cx="100" cy="100" r="10" fill="url(#qbR)" stroke="#02160d" stroke-width="1.6"/><circle cx="100" cy="100" r="3.6" fill="#02160d"/></svg>
    </div>
    <div id="qbMsg"></div>
    <div class="card"><b>Qibla: ${B.toFixed(1)}° from true north</b><br><span class="note">${esc(qbLoc.name||'Your location')} (${qbLoc.lat.toFixed(3)}, ${qbLoc.lng.toFixed(3)}) · ${Math.round(km).toLocaleString('en')} km to the Ka'bah</span></div>

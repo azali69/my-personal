@@ -312,7 +312,7 @@ Semuanya dibuka dari **menu ayat**; memerlukan internet sekali bagi setiap surah
 2. **Type:** alat ialah buat asal dan ulang, **B** tebal, *I* condong, U garis bawah, S garis tengah, **H** tajuk, senarai berpeluru dan bernombor, ❝ petikan, penjajaran (ketik untuk tukar), **A−** dan **A+** saiz teks, **A** warna teks, penyerlah dan **Tx** buang format. Tulisan Arab boleh digunakan, dan setiap baris mengikut arahnya sendiri. Tampalan hanya mengekalkan teks.
 3. **Draw:** tulis atau lukis di atas halaman dengan S Pen atau jari. Pilih warna dan ketebalan, **Eraser**, **Undo** (garisan terakhir) atau **Clear ink** (teks yang ditaip kekal). Dengan pen, tekanan lebih kuat menjadikan garisan lebih tebal. Kali pertama pen menyentuh skrin, **Pen only** dihidupkan: tapak tangan dan jari tidak melukis, dan seretan jari menatal halaman. Ketik **Pen only** untuk melukis dengan jari.
 4. **Halaman:** **‹ ›** bergerak antara halaman, **＋** menambah halaman selepas yang ini, dan **Delete this page** memadamnya.
-5. **▴ / ▾** (kanan atas) menyembunyikan atau menunjukkan bar alat supaya halaman lebih luas; butang halaman kekal.
+5. Semua alat berada pada **satu jalur** di atas; leret ke tepi untuk melihat yang lain. **▴** menyembunyikan jalur supaya halaman lebih luas, dan **☰ Tools** memaparkannya semula.
 6. Nota disimpan semasa anda menaip dan diselaraskan dengan peranti lain. Nota yang banyak halaman tulisan menjadi besar dan mungkin tidak diselaraskan.
 
 **Waktu solat**
@@ -334,7 +334,7 @@ Semuanya dibuka dari **menu ayat**; memerlukan internet sekali bagi setiap surah
 **Kiblat**
 
 1. Home → **Qibla**; benarkan lokasi.
-2. Pegang telefon secara mendatar dan pusing sehingga tertera **Facing the qibla**: kompas akan bercahaya hijau. Kaabah emas pada dail menunjuk ke kiblat; penanda emas di atas ialah arah yang dihadap telefon anda.
+2. Pegang telefon secara mendatar dan pusing sehingga tertera **Facing the qibla**: kompas akan bercahaya hijau. Anak panah pada dail menunjuk ke kiblat; Kaabah di atas ialah arah yang dihadap telefon anda. Pusing sehingga anak panah menunjuk ke Kaabah.
 3. Jika diminta, gerakkan telefon membentuk angka 8 untuk menentukur kompas. Jauhkan daripada logam dan sarung bermagnet.
 
 ## 9. Tetapan (Settings)

@@ -312,7 +312,7 @@ All open from the **ayah menu**; they need the internet once per surah.
 2. **Type:** the tools are undo and redo, **B** bold, *I* italic, U underline, S strikethrough, **H** heading, bullet and numbered lists, ❝ quote, alignment (tap to cycle), **A−** and **A+** text size, **A** text colour, the highlighter and **Tx** clear formatting. Arabic works, and each line takes its own direction. Pasting keeps the text only.
 3. **Draw:** write or draw over the page with the S Pen or a finger. Choose the colour and thickness, **Eraser**, **Undo** (last stroke) or **Clear ink** (the typed text stays). With the pen, pressing harder makes the line thicker. The first time the pen touches, **Pen only** turns on: palm and fingers do not draw, and a finger drag scrolls the page. Tap **Pen only** to draw with a finger.
 4. **Pages:** **‹ ›** move between pages, **＋** adds a page after this one, and **Delete this page** removes it.
-5. **▴ / ▾** (top right) hides or shows the tool bar to give the page more room; the page buttons stay.
+5. All the tools are on **one strip** at the top; slide it sideways to see the rest. **▴** hides the strip to give the page all the room, and **☰ Tools** brings it back.
 6. Notes save as you type and sync with your other devices. A note with many pages of writing becomes large and may not sync.
 
 **Prayer times**
@@ -334,7 +334,7 @@ All open from the **ayah menu**; they need the internet once per surah.
 **Qibla**
 
 1. Home → **Qibla**; allow location.
-2. Hold the phone flat and turn until it says **Facing the qibla**: the compass then glows green. The gold Ka'bah on the dial points to the qibla; the gold marker at the top is the direction your phone faces.
+2. Hold the phone flat and turn until it says **Facing the qibla**: the compass then glows green. The arrow on the dial points to the qibla; the Ka'bah at the top is the direction your phone faces. Turn until the arrow points to the Ka'bah.
 3. If asked, move the phone in a figure 8 to calibrate. Keep away from metal and magnetic cases.
 
 ## 9. Settings
