@@ -256,6 +256,8 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // the BOOX pen SDK calls hidden Android methods (as in My Personal eReader)
+        if (isOnyx() && Build.VERSION.SDK_INT >= 30) { try { org.lsposed.hiddenapibypass.HiddenApiBypass.addHiddenApiExemptions(""); } catch (Throwable ignored) { } }
         // Android may rebuild the screen after a file picker (backup, sync) or from Recents: it then hands back the intent the app
         // was first opened with, so an old share would open Scan & check again. Only a fresh launch takes the share and the "open" target.
         boolean fresh = savedInstanceState == null && (getIntent() == null || (getIntent().getFlags() & Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY) == 0);
@@ -959,6 +961,29 @@ public class MainActivity extends Activity {
         @JavascriptInterface public void syncWriteAsync(final String id, final String text) {
             new Thread(() -> { boolean ok; try { ok = syncWrite(text); } catch (Exception e) { ok = false; }
                 js("window.__syncDone && window.__syncDone(" + JSONObject.quote(id) + "," + (ok ? "'1'" : "''") + ")"); }).start(); }
+        /* BOOX fast pen for the Notepad (Azli, 22 Oct 2026; the same Onyx pen SDK as My Personal eReader): the e-ink screen shows the
+           stroke at once, as in BOOX Notes, and the finished stroke goes to the page (window.__boox). Area in fractions of the screen. */
+        @JavascriptInterface public boolean booxAvailable() { return isOnyx(); }
+        @JavascriptInterface public void booxStart(final double l, final double t, final double r, final double b, final double cssW, final double width, final String color) {
+            runOnUiThread(() -> { try {
+                int vw = web.getWidth(), vh = web.getHeight(); bxDensity = vw / (float) Math.max(1d, cssW);
+                android.graphics.Rect lim = new android.graphics.Rect((int) Math.round(l * vw), (int) Math.round(t * vh), (int) Math.round(r * vw), (int) Math.round(b * vh));
+                if (bxHelper == null) bxHelper = com.onyx.android.sdk.pen.TouchHelper.create(web, bxCb);
+                bxHelper.setStrokeWidth(Math.max(1f, (float) width * bxDensity));
+                bxHelper.setLimitRect(lim, new java.util.ArrayList<android.graphics.Rect>());
+                if (!bxOpened) { bxHelper.openRawDrawing(); bxOpened = true; }
+                bxHelper.setStrokeStyle(com.onyx.android.sdk.pen.TouchHelper.STROKE_STYLE_PENCIL);
+                try { bxHelper.setStrokeColor(Color.parseColor(color)); } catch (Throwable ignored) { }
+                bxHelper.setRawDrawingEnabled(true);
+                try { bxHelper.setRawInputReaderEnable(true); } catch (Throwable ignored) { }
+                try { bxHelper.forceSetRawDrawingEnabled(true); } catch (Throwable ignored) { }
+                js("window.__booxOk && window.__booxOk(1," + vw + ")");
+            } catch (Throwable e) { js("window.__booxOk && window.__booxOk(0," + JSONObject.quote(String.valueOf(e)) + ")"); } }); }
+        @JavascriptInterface public void booxEnable(final boolean on) {
+            runOnUiThread(() -> { try { if (bxHelper != null && bxOpened) { bxHelper.setRawDrawingEnabled(on); try { bxHelper.setRawInputReaderEnable(on); } catch (Throwable ignored) { }
+                if (on) { try { bxHelper.forceSetRawDrawingEnabled(true); } catch (Throwable ignored) { } } } } catch (Throwable ignored) { } }); }
+        @JavascriptInterface public void booxStop() {
+            runOnUiThread(() -> { try { if (bxHelper != null && bxOpened) { bxHelper.setRawDrawingEnabled(false); bxHelper.closeRawDrawing(); } } catch (Throwable ignored) { } bxOpened = false; }); }
         @JavascriptInterface public String gAccount() { return PrayerAlarms.prefs(MainActivity.this).getString("gsync", ""); }
         @JavascriptInterface public void syncPick(boolean create) {
             runOnUiThread(() -> { try {
@@ -1102,6 +1127,27 @@ public class MainActivity extends Activity {
         } catch (Exception e) { sendLoc(fallback); }
     }
 
+    static boolean isOnyx() {
+        String m = Build.MANUFACTURER == null ? "" : Build.MANUFACTURER.toLowerCase(), b = Build.BRAND == null ? "" : Build.BRAND.toLowerCase();
+        return m.contains("onyx") || b.contains("onyx") || b.contains("boox"); }
+    private com.onyx.android.sdk.pen.TouchHelper bxHelper; private boolean bxOpened = false; private float bxDensity = 1f, bxMaxP = 0f;
+    private void bxSend(String ev, com.onyx.android.sdk.pen.data.TouchPointList list) {
+        if (list == null || list.getPoints() == null || list.getPoints().isEmpty()) return;
+        if (bxMaxP <= 0f) { try { bxMaxP = com.onyx.android.sdk.api.device.epd.EpdController.getMaxTouchPressure(); } catch (Throwable t) { bxMaxP = 4096f; } if (bxMaxP <= 0f) bxMaxP = 4096f; }
+        StringBuilder sb = new StringBuilder("[");
+        for (com.onyx.android.sdk.data.note.TouchPoint p : list.getPoints()) { if (sb.length() > 1) sb.append(','); sb.append('[').append(Math.round(p.x * 10) / 10f).append(',').append(Math.round(p.y * 10) / 10f).append(',').append(Math.round(Math.max(0.05f, Math.min(1f, p.pressure / bxMaxP)) * 100) / 100f).append(']'); }
+        sb.append(']');
+        js("window.__boox && window.__boox('" + ev + "'," + sb + "," + web.getWidth() + ")"); }
+    private final com.onyx.android.sdk.pen.RawInputCallback bxCb = new com.onyx.android.sdk.pen.RawInputCallback() {
+        @Override public void onBeginRawDrawing(boolean b, com.onyx.android.sdk.data.note.TouchPoint p) { }
+        @Override public void onEndRawDrawing(boolean b, com.onyx.android.sdk.data.note.TouchPoint p) { }
+        @Override public void onRawDrawingTouchPointMoveReceived(com.onyx.android.sdk.data.note.TouchPoint p) { }
+        @Override public void onRawDrawingTouchPointListReceived(com.onyx.android.sdk.pen.data.TouchPointList l) { bxSend("stroke", l); }
+        @Override public void onBeginRawErasing(boolean b, com.onyx.android.sdk.data.note.TouchPoint p) { }
+        @Override public void onEndRawErasing(boolean b, com.onyx.android.sdk.data.note.TouchPoint p) { }
+        @Override public void onRawErasingTouchPointMoveReceived(com.onyx.android.sdk.data.note.TouchPoint p) { }
+        @Override public void onRawErasingTouchPointListReceived(com.onyx.android.sdk.pen.data.TouchPointList l) { bxSend("erase", l); }
+    };
     private static final String G_SCOPE = "https://www.googleapis.com/auth/drive.appdata", G_FILE = "MyPersonalQuran-sync.json";
     private com.google.android.gms.auth.api.identity.AuthorizationRequest gReq() {
         return com.google.android.gms.auth.api.identity.AuthorizationRequest.builder()
@@ -1271,6 +1317,7 @@ public class MainActivity extends Activity {
         stopPump();
         recStandaloneStop();
         btRouteOff();
+        try { if (bxHelper != null && bxOpened) bxHelper.setRawDrawingEnabled(false); } catch (Throwable ignored) { }
         web.evaluateJavascript("window.__pause && window.__pause()", null);
     }
 

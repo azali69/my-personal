@@ -2014,7 +2014,9 @@ function notepadOpen(k,onDone){ const n=noteGet(k);
     if(e.pointerType==='touch'&&penOnly){ scrollY=e.clientY; liveId=e.pointerId; try{ cv.setPointerCapture(e.pointerId); }catch(x){} return; }
     if(e.pointerType==='pen'&&!penSeen){ penSeen=true; if(!penOnly){ penOnly=true; drawTools(); toast('Pen only is on: fingers scroll the page. Tap Pen only to draw with a finger.'); } }
     e.preventDefault(); try{ cv.setPointerCapture(e.pointerId); }catch(x){} liveId=e.pointerId;
-    const er=erase||(e.pointerType==='pen'&&((e.buttons&34)||window.__penBtn)); textGone=false;   /* S Pen side button (2) or eraser end (32): erase */ live={c:color,w:size,e:er?1:0,pen:e.pointerType==='pen'?1:0,p:[...pt(e)]}; strokes.push(live); seg(live,0); if(er) eraseText(e.clientX,e.clientY); });
+    const er=erase||(e.pointerType==='pen'&&((e.buttons&34)||window.__penBtn)); textGone=false;   /* S Pen side button (2) or eraser end (32): erase */
+    if(BX.on&&!er&&e.pointerType==='pen'){ live={c:color,w:size,e:0,pen:1,ghost:Date.now(),p:[...pt(e)]}; return; }   /* the BOOX fast pen draws this one; kept only in case it does not arrive */
+    live={c:color,w:size,e:er?1:0,pen:e.pointerType==='pen'?1:0,p:[...pt(e)]}; strokes.push(live); seg(live,0); if(er) eraseText(e.clientX,e.clientY); });
   /* Erasing also removes typed words under the pen (Azli, 22 Oct 2026: press the S Pen button to erase the writing and the text). */
   let textGone=false;
   const eraseText=(x,y)=>{ if(!document.caretRangeFromPoint) return; cv.style.pointerEvents='none'; let r=null; try{ r=document.caretRangeFromPoint(x,y); }catch(e){} cv.style.pointerEvents='';
@@ -2025,10 +2027,35 @@ function notepadOpen(k,onDone){ const n=noteGet(k);
   window.addEventListener('pointermove',e=>{ if(e.pointerId!==liveId) return;
     if(scrollY!=null){ const pn=document.getElementById('notepad'); pn.scrollTop-= (e.clientY-scrollY); scrollY=e.clientY; return; }
     if(!live) return; e.preventDefault();
-    if(live.pen&&!live.e&&(window.__penBtn||(e.buttons&34))){ const q=pt(e); live={c:color,w:size,e:1,pen:1,p:[...q]}; strokes.push(live); textGone=textGone||false; }   /* the button pressed during a stroke: erase from here */
-    (e.getCoalescedEvents?e.getCoalescedEvents():[e]).forEach(ev=>{ const q=pt(ev), n=live.p.length; if(Math.abs(q[0]-live.p[n-3])+Math.abs(q[1]-live.p[n-2])<1.2) return; live.p.push(...q); seg(live,live.p.length/3-1); if(live.e) eraseText(ev.clientX,ev.clientY); }); });
-  const up=e=>{ if(e.pointerId!==liveId) return; live=null; liveId=null; scrollY=null; if(textGone){ textGone=false; mark(); } schedule(); };
+    if(live.pen&&!live.e&&!live.ghost&&(window.__penBtn||(e.buttons&34))){ const q=pt(e); live={c:color,w:size,e:1,pen:1,p:[...q]}; strokes.push(live); textGone=textGone||false; }   /* the button pressed during a stroke: erase from here */
+    ((e.getCoalescedEvents&&e.getCoalescedEvents().length)?e.getCoalescedEvents():[e]).forEach(ev=>{ const q=pt(ev), n=live.p.length; if(Math.abs(q[0]-live.p[n-3])+Math.abs(q[1]-live.p[n-2])<1.2) return; live.p.push(...q); if(live.ghost) return; seg(live,live.p.length/3-1); if(live.e) eraseText(ev.clientX,ev.clientY); }); });
+  const up=e=>{ if(e.pointerId!==liveId) return;
+    if(live&&live.ghost){ const gh=live; setTimeout(()=>{ if(BX.lastAt>=gh.ghost||gh.p.length<6) return; delete gh.ghost; strokes.push(gh); redraw(); schedule(); },700); }
+    live=null; liveId=null; scrollY=null; if(textGone){ textGone=false; mark(); } schedule(); };
   window.addEventListener('pointerup',up); window.addEventListener('pointercancel',up); cv.addEventListener('contextmenu',e=>e.preventDefault());
+  /* ---- BOOX fast pen (Azli, 22 Oct 2026: writing lagged on the Note Air 5C). On BOOX the Onyx pen SDK draws the stroke on the
+     e-ink screen at once, like BOOX Notes, and hands the finished stroke to the page. The e-ink screen does not refresh under
+     it, so it pauses while the page scrolls or the tools are used. ---- */
+  const BX={avail:false,on:false,paused:false,state:'',lastAt:0,rt:0};
+  try{ BX.avail=!!window.AndroidExtra?.booxAvailable?.(); }catch(e){}
+  const bxWanted=()=>BX.avail&&store.get('npBoox',true)&&mode==='draw'&&!erase&&!BX.paused&&!gone&&document.getElementById('notepad')?.hidden===false&&!document.querySelector('.sheet.open');
+  const bxSync=()=>{ if(!BX.avail) return;
+    if(!bxWanted()){ if(BX.on){ BX.on=false; BX.state=''; try{ window.AndroidExtra.booxEnable(false); }catch(e){} } return; }
+    const r=page.getBoundingClientRect(), tb=top.getBoundingClientRect().bottom, W=innerWidth, H=innerHeight;
+    const t0=Math.max(r.top,tb+2,0), b0=Math.min(r.bottom,H); if(b0-t0<40){ if(BX.on){ BX.on=false; BX.state=''; try{ window.AndroidExtra.booxEnable(false); }catch(e){} } return; }
+    const o=[Math.max(0,r.left)/W,t0/H,Math.min(W,r.right)/W,b0/H].map(v=>+v.toFixed(4)), key=JSON.stringify([o,size,color]);
+    if(BX.on&&key===BX.state) return; BX.state=key; BX.on=true;
+    try{ window.AndroidExtra.booxStart(o[0],o[1],o[2],o[3],W,size,color); }catch(e){ BX.on=false; } };
+  window.__booxOk=(ok,v)=>{ if(!ok){ BX.avail=false; BX.on=false; toast('BOOX fast pen did not start; using the normal pen.'); } };
+  const bxPause=ms=>{ if(!BX.avail) return; clearTimeout(BX.rt); if(!BX.paused){ BX.paused=true; bxSync(); } BX.rt=setTimeout(()=>{ BX.paused=false; bxSync(); },ms||900); };
+  window.__boox=(ev,raw,vw)=>{ if(gone||!raw||!raw.length) return; BX.lastAt=Date.now(); const k=innerWidth/(vw||innerWidth*(devicePixelRatio||1)), r=cv.getBoundingClientRect();
+    const er=ev==='erase', st={c:color,w:size,e:er?1:0,pen:1,p:[]};
+    raw.forEach(q=>{ const x=q[0]*k, y=q[1]*k; st.p.push(Math.round((x-r.left)*10000/r.width)/10, Math.round((y-r.top)*10000/r.width)/10, Math.round((q[2]||.5)*100)); if(er) eraseText(x,y); });
+    strokes.push(st); const m=st.p.length/3; for(let i=0;i<m;i++) seg(st,i); if(er&&textGone){ textGone=false; mark(); } schedule(); };
+  const pnl=document.getElementById('notepad');
+  document.addEventListener('visibilitychange',()=>{ if(gone||!BX.avail) return; if(document.hidden){ BX.on=false; BX.state=''; } else setTimeout(bxSync,300); });   /* the app turns the fast pen off when it goes to the background */
+  pnl.addEventListener('scroll',()=>{ if(BX.on||BX.paused) bxPause(700); });
+  pnl.addEventListener('touchstart',e=>{ if(mode==='draw'&&(e.touches.length>1||e.target.closest('#npTop,.row2'))) bxPause(1200); },{capture:true,passive:true});
   /* ---- text ---- */
   const txt=()=>(ed.innerText||'').replace(/​/g,'').trim();
   const mark=()=>ed.classList.toggle('np-empty',!txt()&&!ed.querySelector('img'));
@@ -2044,14 +2071,14 @@ function notepadOpen(k,onDone){ const n=noteGet(k);
   const schedule=()=>{ clearTimeout(tm); tm=setTimeout(save,700); }; npFlush=save;
   ed.oninput=()=>{ mark(); schedule(); };
   ed.addEventListener('paste',e=>{ e.preventDefault(); const t=(e.clipboardData||window.clipboardData)?.getData('text/plain')||''; document.execCommand('insertText',false,t); });
-  const show=(i,skip)=>{ if(!skip) flushPage(); cur=i; ed.innerHTML=pgs[i].h; strokes=pgs[i].ink; label(); mark(); fit(); redraw(); document.getElementById('notepad').scrollTop=0; };
+  const show=(i,skip)=>{ if(!skip) flushPage(); cur=i; ed.innerHTML=pgs[i].h; strokes=pgs[i].ink; label(); mark(); fit(); redraw(); document.getElementById('notepad').scrollTop=0; bxPause(600); };
   ed.innerHTML=pgs[0].h; label(); mark();
   /* ---- tools ---- */
   const typeTools=()=>{ tools.innerHTML=`${bt('undo','↶','Undo')}${bt('redo','↷','Redo')}<i></i>${bt('bold','<b>B</b>','Bold')}${bt('italic','<i style="font-family:serif">I</i>','Italic')}${bt('underline','<u>U</u>','Underline')}${bt('strikeThrough','<s>S</s>','Strikethrough')}<i></i>${bt('head','H','Heading')}${bt('insertUnorderedList','•≡','Bullet list')}${bt('insertOrderedList','1.','Numbered list')}${bt('quote','❝','Quote')}<i></i>${bt('align',['≡','☰','≣'][al],'Align: left, centre, right')}${bt('smaller','A−','Smaller text')}${bt('bigger','A+','Bigger text')}${bt('color','<span style="color:#b2402f">A</span>','Text colour')}${bt('hilite','<span style="background:#fff2a8;color:#1f2a22;padding:0 4px;border-radius:3px">A</span>','Highlight')}<i></i>${bt('clear','Tx','Clear formatting')}`; };
   const drawTools=()=>{ tools.innerHTML=NP_INK.map(c=>`<button class="np-sw" data-ink="${c}" style="background:${c}" aria-pressed="${!erase&&c===color}" aria-label="Pen colour ${c}"></button>`).join('')+`<i></i>`
-    +[['Thin',1.4],['Medium',2.4],['Thick',5]].map(([l,v])=>`<button data-sz="${v}" aria-pressed="${size===v}">${l}</button>`).join('')+`<i></i><button data-c="erase" aria-pressed="${erase}">Eraser</button><button data-c="inkUndo">Undo</button><button data-c="inkClear">Clear ink</button><i></i><button data-c="penOnly" aria-pressed="${penOnly}">Pen only</button>`; };
+    +[['Thin',1.4],['Medium',2.4],['Thick',5]].map(([l,v])=>`<button data-sz="${v}" aria-pressed="${size===v}">${l}</button>`).join('')+`<i></i><button data-c="erase" aria-pressed="${erase}">Eraser</button><button data-c="inkUndo">Undo</button><button data-c="inkClear">Clear ink</button><i></i><button data-c="penOnly" aria-pressed="${penOnly}">Pen only</button>${BX.avail?`<button data-c="bxFast" aria-pressed="${store.get('npBoox',true)}" title="BOOX fast pen: writing appears at once. Turn off if writing misbehaves.">Fast pen</button>`:''}`; setTimeout(bxSync,60); };
   const setMode=m=>{ mode=m; store.set('npMode',m); col.hidden=true; page.classList.toggle('draw',m==='draw'); ed.contentEditable=m==='type'; if(m==='draw') ed.blur();
-    b.querySelectorAll('#npMode button').forEach(x=>x.setAttribute('aria-pressed',x.dataset.m===m)); (m==='type'?typeTools:drawTools)(); };
+    b.querySelectorAll('#npMode button').forEach(x=>x.setAttribute('aria-pressed',x.dataset.m===m)); (m==='type'?typeTools:drawTools)(); setTimeout(bxSync,60); };
   setMode(mode);
   window.__penBtnSet=v=>{ window.__penBtn=v; if(v&&mode!=='draw'&&document.getElementById('notepad')?.hidden===false) setMode('draw'); };   /* the pen button always means erase: go to Draw */
   const min=!!store.get('npMin',false); top.classList.toggle('min',min); $('#npTog').textContent=min?'☰ Tools':'▴';
@@ -2076,8 +2103,9 @@ function notepadOpen(k,onDone){ const n=noteGet(k);
     const c=x.dataset.c; if(!c) return; if(c!=='color'&&c!=='hilite') col.hidden=true;
     if(c==='erase'){ erase=!erase; drawTools(); }
     else if(c==='inkUndo'){ if(strokes.length){ strokes.pop(); redraw(); schedule(); } }
-    else if(c==='inkClear'){ if(strokes.length) appConfirm('Clear all pen writing on this page? (The typed text stays.)','Clear',true).then(y=>{ if(y){ strokes.length=0; redraw(); schedule(); } }); }
+    else if(c==='inkClear'){ if(strokes.length){ bxPause(4000); } if(strokes.length) appConfirm('Clear all pen writing on this page? (The typed text stays.)','Clear',true).then(y=>{ if(y){ strokes.length=0; redraw(); schedule(); } }); }
     else if(c==='penOnly'){ penOnly=!penOnly; penSeen=true; drawTools(); }
+    else if(c==='bxFast'){ store.set('npBoox',!store.get('npBoox',true)); drawTools(); }
     else if(c==='head'){ back(); const v=document.queryCommandValue('formatBlock'); document.execCommand('formatBlock',false,/h3/i.test(v)?'div':'h3'); ed.oninput(); }
     else if(c==='quote'){ back(); const v=document.queryCommandValue('formatBlock'); document.execCommand('formatBlock',false,/blockquote/i.test(v)?'div':'blockquote'); ed.oninput(); }
     else if(c==='align'){ al=(al+1)%3; x.textContent=['≡','☰','≣'][al]; run(['justifyLeft','justifyCenter','justifyRight'][al]); toast(['Left','Centre','Right'][al]); }
@@ -2088,7 +2116,7 @@ function notepadOpen(k,onDone){ const n=noteGet(k);
     else run(c); };
   $('#npOk').onclick=()=>closePanel('notepad');
   $('#npDel').onclick=()=>appConfirm('Delete this whole note?','Delete',true).then(yes=>{ if(!yes) return; gone=true; clearTimeout(tm); noteSet(k,''); closePanel('notepad'); toast('Note deleted'); });
-  document.getElementById('notepad').addEventListener('closed',()=>{ save(); gone=true; npFlush=null; ro&&ro.disconnect(); document.removeEventListener('selectionchange',npSel); window.__penBtnSet=null; onDone&&onDone(); },{once:true});
+  document.getElementById('notepad').addEventListener('closed',()=>{ save(); gone=true; npFlush=null; ro&&ro.disconnect(); document.removeEventListener('selectionchange',npSel); window.__penBtnSet=null; window.__boox=null; if(BX.avail){ try{ window.AndroidExtra.booxStop(); }catch(e){} } onDone&&onDone(); },{once:true});
   S.textContent= n? 'Saved '+new Date(n.u).toLocaleString() : 'Saved as you type.';
   requestAnimationFrame(fit); }
 /* ============================ BACKUP AND RESTORE ============================
