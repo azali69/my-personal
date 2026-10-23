@@ -860,7 +860,42 @@ public class MainActivity extends Activity {
         if (l != null && tryStart(l)) return;
         js("window.__scanned && window.__scanned(" + ScanOcr.err("Google Lens is not on this phone. Install the Google app or Google Lens from the Play Store.") + ")");
     }
+    /** Solat Jumaat (Azli, 23 Oct 2026): a PDF (e.g. MUIS's khutbah) is saved to the cache and handed to the reader app
+        he picks, instead of the browser. A saved copy is reused, so it also opens offline. */
+    private void openPdf(String url, String name) {
+        new Thread(() -> {
+            try {
+                String key = Integer.toHexString(url.hashCode()) + "_" + url.length();
+                String nm = (name == null ? "" : name).replaceAll("[\\\\/:*?\"<>|\\p{Cntrl}]", " ").trim();
+                if (nm.isEmpty()) nm = "document";
+                if (nm.length() > 80) nm = nm.substring(0, 80).trim();
+                File dir = new File(getCacheDir(), "pdf/" + key); dir.mkdirs();
+                File f = new File(dir, nm + ".pdf");
+                if (!f.exists() || f.length() == 0) {
+                    js("window.__pdf && window.__pdf({state:'loading'})");
+                    HttpURLConnection c = (HttpURLConnection) new URL(url).openConnection();
+                    c.setConnectTimeout(20000); c.setReadTimeout(60000); c.setInstanceFollowRedirects(true);
+                    if (c.getResponseCode() / 100 != 2) throw new Exception("HTTP " + c.getResponseCode());
+                    File tmp = new File(dir, "dl.tmp");
+                    try (InputStream in = c.getInputStream(); OutputStream out = new FileOutputStream(tmp)) {
+                        byte[] buf = new byte[65536]; int n; while ((n = in.read(buf)) > 0) out.write(buf, 0, n);
+                    } finally { c.disconnect(); }
+                    if (tmp.length() == 0 || !tmp.renameTo(f)) throw new Exception("save failed");
+                }
+                final File pf = f;
+                runOnUiThread(() -> {
+                    Uri u = androidx.core.content.FileProvider.getUriForFile(this, getPackageName() + ".files", pf);
+                    Intent v = new Intent(Intent.ACTION_VIEW).setDataAndType(u, "application/pdf")
+                            .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
+                    v.setClipData(android.content.ClipData.newRawUri("", u));
+                    Intent ch = Intent.createChooser(v, "Open the PDF with…").addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    js(tryStart(ch) ? "window.__pdf && window.__pdf({state:'done'})" : "window.__pdf && window.__pdf({state:'noapp'})");
+                });
+            } catch (Exception e) { js("window.__pdf && window.__pdf({state:'error'})"); }
+        }, "pdf-open").start();
+    }
     private class ExtraBridge {
+        @JavascriptInterface public void openPdf(String url, String name) { MainActivity.this.openPdf(url, name); }
         @JavascriptInterface public void lens() { runOnUiThread(MainActivity.this::openLens); }
         @JavascriptInterface public String ocrReady() { return ArabicOcr.ready(MainActivity.this) ? "1" : "0"; }
         @JavascriptInterface public void ocrDownload() {

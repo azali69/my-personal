@@ -243,7 +243,8 @@ Semuanya dibuka dari **menu ayat**; memerlukan internet sekali bagi setiap surah
 
 1. Home → **Solat Jumaat**: 7 langkah, susunan yang sama dengan Sifat Solat: persiapan (mandi, bersugi, wangian), pergi awal dan apa yang dilakukan sementara menunggu, **solat sunat qabliyah Jumaat?**, khutbah (mendengar, tahiyyatul masjid, **rukun khutbah** empat mazhab), **duduk antara dua khutbah**, solat, dan selepasnya.
 2. **Qabliyah**: pada zaman Nabi ﷺ hanya ada satu azan, ketika imam duduk di atas mimbar, lalu khutbah terus menyusul (al-Bukhari 912); tiada riwayat sahih yang menunjukkan Baginda atau para Sahabat solat selepas azan Jumaat. Pendapat empat mazhab (Syafi'i dan Hanafi: ada; Maliki: tiada sunat tetap; Hanbali: dua riwayat) dan ulama lain (Ibn Taimiyyah, Ibn Hajar, Dar al-Ifta' Mesir, Mufti Wilayah Persekutuan) diberi dengan rujukannya; hadis "empat rakaat sebelum Jumaat" (Ibn Majah 1129) sangat lemah.
-3. **Khutbah Jumaat MUIS**: khutbah terkini dari laman MUIS (Melayu atau Inggeris mengikut bahasa anda, dengan PDF), disemak setiap petang Khamis dan pagi Jumaat, serta pautan ke semua khutbah MUIS.
+3. **Khutbah Jumaat MUIS**: khutbah terkini dari laman MUIS (Melayu atau Inggeris mengikut bahasa anda, dengan PDF), disemak setiap petang Khamis dan pagi Jumaat, serta pautan ke semua khutbah MUIS. Dalam aplikasi Android, **PDF ›** bertanya cara membukanya: **Buka dengan aplikasi pembaca…** menyimpan PDF itu dan membiarkan anda memilih aplikasinya (cth. My Personal Reader atau NeoReader; selepas itu ia boleh dibuka semula tanpa internet), atau **Buka dalam pelayar**.
+4. **Skrin sentiasa hidup**: di bahagian atas Solat Jumaat dan pada setiap langkah. Apabila dihidupkan, skrin tidak padam selagi halaman Solat Jumaat dibuka; ia padam seperti biasa sebaik anda keluar. Tetapan ini diingati.
 
 **Kamus Al-Quran**
 
