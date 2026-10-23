@@ -700,6 +700,7 @@ a.tile{text-decoration:none;color:inherit}
 #qbMsg{display:block;width:fit-content;margin:14px auto 4px;padding:8px 20px;border-radius:999px;font-size:19px;text-align:center;min-height:1.5em;background:color-mix(in srgb,var(--h-bg2) 70%,transparent);border:1px solid color-mix(in srgb,var(--gold) 55%,transparent)}
 #qbMsg.on{background:#1f6b45;border-color:#5fd08a;color:#fff}
 .man-q{margin:10px 0;padding:10px 14px;border-inline-start:3px solid var(--gold,#b8913f);border-radius:8px;background:color-mix(in srgb,var(--gold,#b8913f) 10%,transparent)}
+.langtile{cursor:default}.langpick{display:flex;flex-direction:column;gap:6px;margin-top:8px;width:100%}.langpick button{display:flex;align-items:center;gap:8px;min-height:40px;border-radius:10px;border:1px solid color-mix(in srgb,var(--gold) 55%,transparent);background:transparent;color:inherit;font-weight:600;padding:0 10px;text-align:left}.langpick button[aria-pressed="true"]{background:color-mix(in srgb,var(--gold) 22%,transparent)}.langpick .cb{display:inline-grid;place-items:center;width:20px;height:20px;border-radius:5px;border:2px solid currentColor;font-size:14px;line-height:1}
 </style>
 
 <header class="top"><div class="top-in">
@@ -763,6 +764,51 @@ const store = {
   get(k,d){ try{ const v=localStorage.getItem('mpq.'+k); return v===null?d:JSON.parse(v);}catch(e){return d;} },
   set(k,v){ if(SYNC_MAPS.has(k) && !window.__syncApplying) syncTomb(k,v); try{ localStorage.setItem('mpq.'+k, JSON.stringify(v)); }catch(e){} if(SYNC_KEYS.has(k)) syncTouch(k); }
 };
+
+/* ============================ INTERFACE LANGUAGE (Azli, 23 Oct 2026) ============================
+   English (default) or Bahasa Melayu for the app's own words: buttons, titles, settings, messages. The Qur'an, its translations,
+   hadith, tafsir, doa, Sirah texts and the user manual are not touched (the Sirah, Sifat Solat, Jumaat, Scan & check and
+   Masjid pages have their own Malay, which now follows this choice; the manual keeps its own choice).
+   The Malay words are in src/i18n_ms.json; whatever is not there stays in English. Every text the app shows is passed through
+   the table as it appears on screen. */
+const APP_LANG=store.get('appLang','en'), I18N_MS=%%I18N_MS%%;
+const I18N_DAYS={Monday:'Isnin',Tuesday:'Selasa',Wednesday:'Rabu',Thursday:'Khamis',Friday:'Jumaat',Saturday:'Sabtu',Sunday:'Ahad'};
+const I18N_MON={January:'Januari',February:'Februari',March:'Mac',April:'April',May:'Mei',June:'Jun',July:'Julai',August:'Ogos',September:'September',October:'Oktober',November:'November',December:'Disember'};
+const I18N_TABS={"Qur'an":'Al-Quran',Hadith:'Hadis',Sirah:'Sirah','Sifat Solat':'Sifat Solat',Jumaat:'Jumaat',Doa:'Doa'};
+const I18N_RX=[
+ [/^([\d,]+) hadith · (\d+) kitab$/,'$1 hadis · $2 kitab'],[/^Juz (\d+) · Page (\d+)$/,'Juzuk $1 · Halaman $2'],[/^(.+) · page (\d+)$/,'$1 · halaman $2'],
+ [/^(\d+) words · Page (\d+)$/,'$1 perkataan · Halaman $2'],[/^in (.+) · MUIS timetable$/,'dalam $1 · jadual MUIS'],[/^Next: (.+)$/,'Seterusnya: $1'],
+ [/^This page \((.+)\)$/,'Halaman ini ($1)'],[/^Saved (.+)$/,'Disimpan $1'],[/^(\d+) found(.*)$/,'$1 dijumpai$2'],[/^Search · (.+)$/,'Cari · $1'],
+ [/^Open in (.+)$/,'Buka dalam $1'],[/^(.+) · ([\d,]+) hadith \((.+)\) · tap the title to change kitab$/,'$1 · $2 hadis ($3) · ketik tajuk untuk menukar kitab'],
+ [/^↺ Turn left (\d+)°$/,'↺ Pusing ke kiri $1°'],[/^↻ Turn right (\d+)°$/,'↻ Pusing ke kanan $1°'],[/^Qibla: ([\d.]+)° from true north$/,'Kiblat: $1° dari utara benar'],
+ [/^(.+) · ([\d,]+) km to the Ka'bah$/,'$1 · $2 km ke Kaabah'],[/^Bookmarked (.+)$/,'Ditanda: $1'],[/^Bookmark · (.+)$/,'Penanda · $1'],
+ [/^(Qur'an|Hadith|Sirah|Sifat Solat|Jumaat|Doa) · (\d+)$/,(m,a,b)=>I18N_TABS[a]+' · '+b],[/^Tafsir · (.+)$/,'Tafsir · $1'],[/^Hadith · (.+)$/,'Hadis · $1'],
+ [/^No hadith with that number$/,'Tiada hadis dengan nombor itu'],[/^Google sign-in failed: (.*)$/,'Log masuk Google gagal: $1'],[/^Signed in: (.*)$/,'Log masuk: $1'],
+ [/^Sync file: (.*)$/,'Fail selaras: $1'],[/^No Sahih Muslim hadith numbered (.*)$/,'Tiada hadis Sahih Muslim bernombor $1'],[/^no\. (\d+) in this list$/,'no. $1 dalam senarai ini'],
+ [/^kitab (\d+), no\. (\d+)$/,'kitab $1, no. $2'],[/^Narrated by (.+)$/,'Diriwayatkan oleh $1'],[/^Page (\d+) added$/,'Halaman $1 ditambah'],
+ [/^One file with everything you set and saved in the app: (.+) saved settings in all\.$/,m=>m.replace('One file with everything you set and saved in the app:','Satu fail dengan semua yang anda tetapkan dan simpan dalam aplikasi:').replace("Qur'an bookmarks",'penanda Al-Quran').replace('hadith bookmarks','penanda hadis').replace('Sirah bookmarks','penanda Sirah').replace(' notes',' nota').replace("My ruku' and My blocks","Ruku' saya dan Blok saya").replace('Hafazan results','keputusan Hafazan').replace('own places (Masjid & musollah)','tempat sendiri (Masjid & musolla)').replace('saved settings in all.','tetapan disimpan kesemuanya.')],[/^Erased (.+)$/,m=>m.replace('Erased','Dipadam').replace(' strokes',' garisan').replace(' stroke',' garisan').replace(' and typed words',' dan perkataan ditaip').replace('typed words','perkataan ditaip').replace('(Undo brings strokes back)','(Buat asal mengembalikan garisan)')],
+ [/^(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday), (\d{1,2}) (January|February|March|April|May|June|July|August|September|October|November|December)( \d{4})?$/,(m,d,n,mo,y)=>`${I18N_DAYS[d]}, ${n} ${I18N_MON[mo]}${y||''}`],
+ [/^(\d{1,2}) (January|February|March|April|May|June|July|August|September|October|November|December) (\d{4})$/,(m,n,mo,y)=>`${n} ${I18N_MON[mo]} ${y}`],
+];
+const tr=t=>{ if(APP_LANG!=='ms'||!t||t.length>700) return t; const k=t.trim(); if(!k||/[؀-ۿ]/.test(k)) return t;
+  let v=I18N_MS[k]; if(v==null){ for(const [re,rep] of I18N_RX){ if(re.test(k)){ v=k.replace(re,rep); break; } } }
+  return v==null||v===k ? t : t.replace(k,v); };
+/* Not translated: the Qur'an and its translations, hadith, tafsir, doa and dictionary texts, notes, the manual, lists of names. */
+const I18N_SKIP='script,style,svg,textarea,input,[contenteditable=true],[lang=ar],.arl,.np-paper,#manBody,.man,.kt-ar,.kt-tr,.kt-idn,.kt-en,.hd-ar,.hd-tr,.wbw,#navL,#ktKs,#duaList,#duaC,#mqL,#kmB,#hdBox,#srBody,#sirahE,[data-notr],main .ay,main .tr';
+function i18nNode(n){ const p=n.parentElement; if(!p||p.closest(I18N_SKIP)) return; const v=tr(n.nodeValue); if(v!==n.nodeValue) n.nodeValue=v; }
+function i18nAttrs(e){ for(const a of ['placeholder','aria-label','title']){ const v=e.getAttribute&&e.getAttribute(a); if(v){ const w=tr(v); if(w!==v) e.setAttribute(a,w); } } }
+const I18N_SKIP_A=I18N_SKIP.replace('textarea,input,','');   /* placeholders of search boxes are translated */
+function i18nApply(root){ if(APP_LANG!=='ms'||!root) return; if(root.nodeType===3){ i18nNode(root); return; } if(root.nodeType!==1) return; if(root.closest(I18N_SKIP)){ if(!root.closest(I18N_SKIP_A)) i18nAttrs(root); return; }
+  i18nAttrs(root); root.querySelectorAll('[placeholder],[aria-label],[title]').forEach(e=>{ if(!e.closest(I18N_SKIP_A)) i18nAttrs(e); });
+  const w=document.createTreeWalker(root,NodeFilter.SHOW_ELEMENT|NodeFilter.SHOW_TEXT,{acceptNode:n=>n.nodeType===1?(n.matches(I18N_SKIP)?NodeFilter.FILTER_REJECT:NodeFilter.FILTER_SKIP):NodeFilter.FILTER_ACCEPT});
+  let n; while((n=w.nextNode())){ const v=tr(n.nodeValue); if(v!==n.nodeValue) n.nodeValue=v; } }
+if(APP_LANG==='ms'){ document.documentElement.lang='ms';
+  new MutationObserver(rs=>{ for(const r of rs){ if(r.type==='childList') r.addedNodes.forEach(i18nApply); else if(r.type==='characterData') i18nNode(r.target); else if(r.type==='attributes'&&!r.target.closest(I18N_SKIP_A)) i18nAttrs(r.target); } })
+    .observe(document.body,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:['placeholder','aria-label','title']});
+  setTimeout(()=>i18nApply(document.body),0); }
+function setAppLang(l){ if(l===APP_LANG) return; store.set('appLang',l); try{ sessionStorage.setItem('mpq.noCover','1'); }catch(e){} location.reload(); }
+document.addEventListener('click',e=>{ const b=e.target.closest('[data-al]'); if(!b) return; e.preventDefault(); e.stopPropagation(); setAppLang(b.dataset.al); },true);
+const langPick=()=>`<div class="langpick" data-notr>${[['en','English'],['ms','Bahasa Melayu']].map(([v,l])=>`<button data-al="${v}" aria-pressed="${APP_LANG===v}"><span class="cb">${APP_LANG===v?'✓':''}</span>${l}</button>`).join('')}</div>`;
 /* ============================ SYNC BETWEEN DEVICES (Azli, 17 Oct 2026) ============================
    Bookmarks, notes and last-read places are kept the same on the person's phone and tablet through one file they choose
    in Google Drive (Android keeps the app's permission to it). Each item carries the time it was changed, so the newer one
@@ -1192,7 +1238,7 @@ function appConfirm(msg,yes='OK',danger=false){ return new Promise(res=>{ const 
   o.querySelector('p').textContent=msg; o.querySelector('[data-a="1"]').textContent=yes;
   const done=v=>{ o.remove(); res(v); }; o.onclick=e=>{ const b=e.target.closest('[data-a]'); if(b) done(b.dataset.a==='1'); else if(e.target===o) done(false); };
   document.body.append(o); o.querySelector('[data-a="1"]').focus(); }); }
-function toast(m){ toastEl.textContent=m; toastEl.classList.add('show'); clearTimeout(tT); tT=setTimeout(()=>toastEl.classList.remove('show'),2200); }
+function toast(m){ toastEl.textContent=tr(String(m)); toastEl.classList.add('show'); clearTimeout(tT); tT=setTimeout(()=>toastEl.classList.remove('show'),2200); }
 
 /* Surah list / go to */
 function navSheet(){
@@ -1340,6 +1386,7 @@ const BGV={kertas:['#f4efe2','#2b2a24'],daun:['#e8efe6','#1f2a22'],kabus:['#e7ed
 function setSheet(){
   const seg=(id,opts,cur)=>`<div class="seg" id="${id}">${opts.map(([v,l])=>`<button data-v="${v}" aria-pressed="${String(cur)===String(v)}">${l}</button>`).join('')}</div>`;
   openSheet('Settings', `
+  <div class="label">Interface language</div>${langPick()}<p class="note" style="margin:4px 0 0">App language: English or Bahasa Melayu. The Qur'an, hadith and other texts stay in their own languages; the user manual has its own choice.</p>
   <div class="label">Background</div>
   <div class="swatches" id="bgs">${BGS.map(([v,l])=>{ const c=BGV[v]; const sty=c?`background:${c[0]};color:${c[1]}`:'background:linear-gradient(90deg,#f4efe2 50%,#141a17 50%);color:#888';
     return `<button class="sw" data-v="${v}" aria-pressed="${st.bg===v}"><div class="chip" style="${sty}">بِسۡمِ</div><span>${l}</span></button>`; }).join('')}</div>
@@ -1354,7 +1401,7 @@ function setSheet(){
   <p class="note">Keep screen on: the screen does not turn off while a mushaf page is showing. It sleeps as usual on Home and the other pages. Uses more battery.</p>
   <div class="label">Surah name, juz and page</div>${seg('sname',[['lat','Latin (At-Takwīr · Juz 30)'],['ar','Arabic (سورة التكوير · الجزء ٣٠)']],st.sname)}
   <div class="label">Translation language</div>${seg('lang',[['ms','Bahasa Melayu'],['en','English']],st.lang)}
-  <div class="label">Language of the Sirah, Scan &amp; check and Masjid pages</div>${seg('uiLang',[['auto','Same as translation'],['ms','Bahasa Melayu'],['en','English']],store.get('uiLang','auto'))}
+  <div class="label">Language of the Sirah, Scan &amp; check and Masjid pages</div>${seg('uiLang',[['auto','Same as the app language'],['ms','Bahasa Melayu'],['en','English']],store.get('uiLang','auto'))}
   <div class="label">Home and colours</div><div class="actions"><button id="openHomeSet">${ic('blk')}Home background, bottom bar colour, book cover</button></div>
   <div class="label">Tap a word twice: meaning and sound</div>${seg('wtap',[[false,'Off'],[true,'On']],store.get('wordTap',false))}
   <p class="note">Tapping once always shows or hides the bars. When this is On, tapping a word twice quickly shows its meaning word by word, with a button to hear it (in the text and translation views, tapping an ayah twice lists its words); tap twice again to close it.</p>
@@ -1587,12 +1634,19 @@ const KT_GR={tir:'at-Tirmidhi',alb:'al-Albani',arn:"Shu'ayb al-Arna'ut",zub:"Zub
    standard biographies. Living scholars have none. */
 const ULAMA_D={tir:[279,892],alb:[1420,1999],arn:[1438,2016],zub:[1435,2013],
   ibnhajar:[852,1449],hanafi:[150,767,'Abu Hanifah'],maliki:[179,795,'Malik'],shafii:[204,820,"asy-Syafi'i"],hanbali:[241,855,'Ahmad ibn Hanbal'],
-  nawawi:[676,1277],taymiyyah:[728,1328],shatibi:[790,1388],albani:[1420,1999],ibnbaz:[1420,1999],uthaymin:[1421,2001],arnaut:[1438,2016]};
-const wafTxt=k=>{ const d=ULAMA_D[k]; if(!d) return ''; const ms=sL()==='ms'; return (d[2]?(ms?'Imam ':'Imam ')+d[2]+', ':'')+(ms?`w. ${d[0]} H / ${d[1]} M`:`d. ${d[0]} AH / ${d[1]} CE`); };
-const grWaf=k=>ULAMA_D[k]?`<i class="wf">${esc(wafTxt(k))}</i>`:'';
+  nawawi:[676,1277],taymiyyah:[728,1328],shatibi:[790,1388],albani:[1420,1999],ibnbaz:[1420,1999],uthaymin:[1421,2001],arnaut:[1438,2016],
+  /* the compilers of the hadith books (adh-Dhahabi, Siyar A'lam an-Nubala'), the translators and authors credited in the app
+     (23 Oct 2026). Salim al-Hilali (b. 1957) is living, so he has none. */
+  bukhari:[256,870,'al-Bukhari'],muslim:[261,875,'Muslim'],abudawud:[275,889,'Abu Dawud'],tirmidhi:[279,892,'at-Tirmidhi'],nasai:[303,915,"an-Nasa'i"],
+  ibnmajah:[273,887,'Ibn Majah'],malik:[179,795,'Malik'],shamail:[279,892,'at-Tirmidhi'],
+  saadi:[1376,1956,"as-Sa'di"],basmeih:[1417,1996,'Abdullah Basmeih'],qahtani:[1440,2018,"Sa'id ibn Wahf al-Qahtani"],fuad:[1388,1968,"Muhammad Fu'ad 'Abd al-Baqi"]};
+const LIVING={hil:1};
+const IMAM_K=new Set(['hanafi','maliki','shafii','hanbali','bukhari','muslim','abudawud','tirmidhi','nasai','ibnmajah','malik','shamail']);
+const wafTxt=k=>{ const d=ULAMA_D[k]; if(!d) return LIVING[k]?(sL()==='ms'?'masih hidup':'living'):''; const ms=sL()==='ms'; return (d[2]?(IMAM_K.has(k)?'Imam ':'')+d[2]+', ':'')+(ms?`w. ${d[0]} H / ${d[1]} M`:`d. ${d[0]} AH / ${d[1]} CE`); };
+const grWaf=k=>(ULAMA_D[k]||LIVING[k])?`<i class="wf">${esc(wafTxt(k))}</i>`:'';
 const KT_NOTE={
   bukhari:"Every hadith with its full chain in Sahih al-Bukhari is accepted as sahih by the scholars, so no grading is listed per hadith.",
-  muslim:"Every hadith with its full chain in Sahih Muslim is accepted as sahih by the scholars, so no grading is listed per hadith.",
+  muslim:"Every hadith with its full chain in Sahih Muslim is accepted as sahih by the scholars, so no grading is listed per hadith. Numbers follow Muhammad Fu'ad 'Abd al-Baqi (d. 1388 AH / 1968 CE), with a, b, c for further chains, as on sunnah.com.",
   abudawud:"This book has sahih, hasan and da'if hadith. Each hadith shows the gradings of al-Albani, Shu'ayb al-Arna'ut and Zubair 'Ali Za'i where the source has them.",
   tirmidhi:"This book has sahih, hasan and da'if hadith. Each hadith shows at-Tirmidhi's own verdict (from his text) and the gradings of al-Albani and Zubair 'Ali Za'i where the source has them.",
   nasai:"This book has sahih, hasan and da'if hadith. Each hadith shows the gradings of al-Albani and Zubair 'Ali Za'i where the source has them.",
@@ -1624,7 +1678,7 @@ async function ktPanel(){ const b=openPanel('kt','Hadith',`<p class="note">Loadi
    <form id="ktAllF" class="row2" style="gap:8px;margin:0 0 8px"><input class="field" id="ktAllQ" type="search" placeholder="Search all eight books" aria-label="Search all the hadith books (Arabic, English, Indonesian)" style="flex:1 1 auto;min-width:0"><button class="pill primary" type="submit" style="flex:0 0 auto">Search</button></form>
    ${ktShowHtml()}
    <div id="ktTop"></div>
-   <div style="margin-top:12px">${ktBooks.map(k=>`<button class="tile wide" data-b="${k.id}" style="width:100%;text-align:left;margin-bottom:8px;min-height:0;padding:12px 14px"><span style="flex:1"><b>${esc(k.en)}</b><br><small>${k.count.toLocaleString()} hadith · ${k.sections.length} kitab</small></span><span class="ar" style="font-size:22px">${esc(k.ar)}</span></button>`).join('')}</div>
+   <div style="margin-top:12px">${ktBooks.map(k=>`<button class="tile wide" data-b="${k.id}" style="width:100%;text-align:left;margin-bottom:8px;min-height:0;padding:12px 14px"><span style="flex:1"><b>${esc(k.en)}</b><br><small>${k.count.toLocaleString()} hadith · ${k.sections.length} kitab</small>${ULAMA_D[k.id]?`<br><small class="wf">${esc(wafTxt(k.id))}</small>`:''}<small></span><span class="ar" style="font-size:22px">${esc(k.ar)}</span></button>`).join('')}</div>
    <p class="note" style="font-size:12px">Arabic, English and Indonesian texts from the Hadith API by fawazahmed0 (public domain). Gradings: al-Albani, Shu'ayb al-Arna'ut, Zubair 'Ali Za'i, at-Tirmidhi's own verdict, and Salim al-Hilali for the Muwatta. The Indonesian translation names no translator and is missing for some hadith; English is shown there. Kitab names are in English as in the source.</p>`;
   ktBindShow(b);
   pinHead(b,[b.querySelector('.kt-ttl'),b.querySelector('#ktAllF'),b.querySelector('.kt-show')]);
@@ -2026,14 +2080,40 @@ function notepadOpen(k,onDone){ const n=noteGet(k);
     e.preventDefault(); try{ cv.setPointerCapture(e.pointerId); }catch(x){} liveId=e.pointerId;
     const er=erase||(e.pointerType==='pen'&&((e.buttons&34)||window.__penBtn)); textGone=false;   /* S Pen side button (2) or eraser end (32): erase */
     if(BX.on&&!er&&e.pointerType==='pen'){ live={c:color,w:size,e:0,pen:1,ghost:Date.now(),p:[...pt(e)]}; return; }   /* the BOOX fast pen draws this one; kept only in case it does not arrive */
-    live={c:color,w:size,e:er?1:0,pen:e.pointerType==='pen'?1:0,p:[...pt(e)]}; strokes.push(live); seg(live,0); if(er) eraseText(e.clientX,e.clientY); });
+    live={c:color,w:size,e:er?1:0,pen:e.pointerType==='pen'?1:0,p:[...pt(e)]}; snap(); strokes.push(live); seg(live,0); if(er) eraseText(e.clientX,e.clientY); });
+  /* Undo: a copy of the page's stroke list is kept before each change (a stroke, a scribble erase, Clear ink). */
+  const hist=()=>pgs[cur].hist||(pgs[cur].hist=[]);
+  const snap=()=>{ const h=hist(); h.push(strokes.slice()); if(h.length>80) h.shift(); };
+  /* Scribble to erase (as in My Personal eReader and BOOX): a quick back-and-forth scrawl over writing removes the strokes it
+     covers and the typed words under it; then the scribble itself is not kept. Points are in thousandths of the page width. */
+  const isScribble=p=>{ const n=p.length/3; if(n<10) return false; const xs=[],ys=[]; for(let i=0;i<n;i++){ xs.push(p[i*3]); ys.push(p[i*3+1]); }
+    const w=Math.max(...xs)-Math.min(...xs), h=Math.max(...ys)-Math.min(...ys), big=Math.max(w,h); if(big<15||big>600) return false;
+    let len=0; for(let i=1;i<n;i++) len+=Math.hypot(xs[i]-xs[i-1],ys[i]-ys[i-1]);
+    const turns=a=>{ let dir=0,hi=a[0],lo=a[0],k=0; const thr=Math.max(4,big*.15);
+      for(const v of a){ if(dir===0){ hi=Math.max(hi,v); lo=Math.min(lo,v); if(hi-v>thr){ dir=-1; lo=v; } else if(v-lo>thr){ dir=1; hi=v; } }
+        else if(dir===1){ if(v>hi) hi=v; else if(hi-v>thr){ k++; dir=-1; lo=v; } } else { if(v<lo) lo=v; else if(v-lo>thr){ k++; dir=1; hi=v; } } } return k; };
+    return turns(w>=h?xs:ys)>=3 && len>2.5*big; };
+  const scribbleErase=st=>{ const p=st.p, n=p.length/3, xs=[], ys=[]; for(let i=0;i<n;i++){ xs.push(p[i*3]); ys.push(p[i*3+1]); }
+    const pad=6, X0=Math.min(...xs)-pad, X1=Math.max(...xs)+pad, Y0=Math.min(...ys)-pad, Y1=Math.max(...ys)+pad;
+    const covered=o=>{ if(o===st||o.e) return false; const m=o.p.length/3; let k=0; for(let i=0;i<m;i++){ const x=o.p[i*3], y=o.p[i*3+1]; if(x>=X0&&x<=X1&&y>=Y0&&y<=Y1) k++; } return k>=Math.min(2,m)&&(k/m>=.25||k>=4); };
+    const gone=strokes.filter(covered); const r=cv.getBoundingClientRect(); textGone=false;
+    for(let i=0;i<n;i++) eraseText(r.left+xs[i]*r.width/1000, r.top+ys[i]*r.width/1000);
+    const words=flushWords(); if(!gone.length&&!words) return false;
+    const keep=strokes.filter(o=>o!==st&&!gone.includes(o)); strokes.length=0; strokes.push(...keep); redraw(); if(words){ textGone=false; mark(); } schedule();
+    toast(`Erased ${gone.length?gone.length+' stroke'+(gone.length>1?'s':''):''}${gone.length&&words?' and ':''}${words?'typed words':''}${gone.length?' (Undo brings strokes back)':''}`); return true; };
   /* Erasing also removes typed words under the pen (Azli, 22 Oct 2026: press the S Pen button to erase the writing and the text). */
   let textGone=false;
   const eraseText=(x,y)=>{ if(!document.caretRangeFromPoint) return; cv.style.pointerEvents='none'; let r=null; try{ r=document.caretRangeFromPoint(x,y); }catch(e){} cv.style.pointerEvents='';
     if(!r) return; const nd=r.startContainer; if(nd.nodeType!==3||!ed.contains(nd)) return; const s=nd.data, i=r.startOffset;
     const hit=j=>{ if(j<0||j>=s.length||/\s/.test(s[j])) return false; const q=document.createRange(); q.setStart(nd,j); q.setEnd(nd,j+1); const b=q.getBoundingClientRect(); return x>=b.left-3&&x<=b.right+3&&y>=b.top-3&&y<=b.bottom+3; };
     const j=hit(i)?i:hit(i-1)?i-1:-1; if(j<0) return; let a=j,b=j+1; while(a>0&&!/\s/.test(s[a-1])) a--; while(b<s.length&&!/\s/.test(s[b])) b++;
-    if(b<s.length&&/[ \u00a0]/.test(s[b])) b++; else if(a>0&&/[ \u00a0]/.test(s[a-1])) a--; nd.deleteData(a,b-a); textGone=true; };
+    if(b<s.length&&/[ \u00a0]/.test(s[b])) b++; else if(a>0&&/[ \u00a0]/.test(s[a-1])) a--; pend.push([nd,a,b]); };
+  /* Words are collected while the pen moves and removed when it lifts, so the text does not slide under the pen meanwhile. */
+  let pend=[];
+  const flushWords=()=>{ if(!pend.length) return false; const seen=new Set(), L=pend.filter(([nd,a])=>{ const k=a+'|'+(nd.__k||(nd.__k=Math.random())); if(seen.has(k)) return false; seen.add(k); return true; });
+    pend=[]; L.sort((x,y)=>x[0]===y[0]?y[1]-x[1]:0); const byNode=new Map(); L.forEach(w=>{ if(!byNode.has(w[0])) byNode.set(w[0],[]); byNode.get(w[0]).push(w); });
+    byNode.forEach((ws,nd)=>{ ws.sort((x,y)=>y[1]-x[1]); let lastA=Infinity; ws.forEach(([,a,b])=>{ if(b>lastA) b=lastA; if(b>a&&nd.isConnected){ nd.deleteData(a,b-a); lastA=a; } }); });
+    textGone=true; return true; };
   const offs=[]; const on=(t,ev,fn)=>{ t.addEventListener(ev,fn); offs.push(()=>t.removeEventListener(ev,fn)); };   /* removed when the Notepad closes */
   on(window,'pointermove',e=>{ if(e.pointerId!==liveId) return;
     if(scrollY!=null){ const pn=document.getElementById('notepad'); pn.scrollTop-= (e.clientY-scrollY); scrollY=e.clientY; return; }
@@ -2041,8 +2121,9 @@ function notepadOpen(k,onDone){ const n=noteGet(k);
     if(live.pen&&!live.e&&!live.ghost&&(window.__penBtn||(e.buttons&34))){ const q=pt(e); live={c:color,w:size,e:1,pen:1,p:[...q]}; strokes.push(live); textGone=textGone||false; }   /* the button pressed during a stroke: erase from here */
     ((e.getCoalescedEvents&&e.getCoalescedEvents().length)?e.getCoalescedEvents():[e]).forEach(ev=>{ const q=pt(ev), n=live.p.length; if(Math.abs(q[0]-live.p[n-3])+Math.abs(q[1]-live.p[n-2])<1.2) return; live.p.push(...q); if(live.ghost) return; seg(live,live.p.length/3-1); if(live.e) eraseText(ev.clientX,ev.clientY); }); });
   const up=e=>{ if(e.pointerId!==liveId) return;
-    if(live&&live.ghost){ const gh=live; setTimeout(()=>{ if(BX.lastAt>=gh.ghost||gh.p.length<6) return; delete gh.ghost; strokes.push(gh); redraw(); schedule(); },700); }
-    live=null; liveId=null; scrollY=null; if(textGone){ textGone=false; mark(); } schedule(); };
+    if(live&&live.ghost){ const gh=live; setTimeout(()=>{ if(BX.lastAt>=gh.ghost||gh.p.length<6) return; delete gh.ghost; snap(); strokes.push(gh); redraw(); if(isScribble(gh.p)) scribbleErase(gh); schedule(); },700); }
+    else if(live&&!live.e&&isScribble(live.p)) scribbleErase(live);
+    live=null; liveId=null; scrollY=null; flushWords(); if(textGone){ textGone=false; mark(); } schedule(); };
   on(window,'pointerup',up); on(window,'pointercancel',up); cv.addEventListener('contextmenu',e=>e.preventDefault());
   /* ---- BOOX fast pen (Azli, 22 Oct 2026: writing lagged on the Note Air 5C). On BOOX the Onyx pen SDK draws the stroke on the
      e-ink screen at once, like BOOX Notes, and hands the finished stroke to the page. The e-ink screen does not refresh under
@@ -2062,7 +2143,10 @@ function notepadOpen(k,onDone){ const n=noteGet(k);
   window.__boox=(ev,raw,vw)=>{ if(gone||!raw||!raw.length) return; BX.lastAt=Date.now(); const k=innerWidth/(vw||innerWidth*(devicePixelRatio||1)), r=cv.getBoundingClientRect();
     const er=ev==='erase', st={c:color,w:size,e:er?1:0,pen:1,p:[]};
     raw.forEach(q=>{ const x=q[0]*k, y=q[1]*k; st.p.push(Math.round((x-r.left)*10000/r.width)/10, Math.round((y-r.top)*10000/r.width)/10, Math.round((q[2]||.5)*100)); if(er) eraseText(x,y); });
-    strokes.push(st); const m=st.p.length/3; for(let i=0;i<m;i++) seg(st,i); if(er&&textGone){ textGone=false; mark(); } schedule(); };
+    if(er) flushWords(); snap(); strokes.push(st); const m=st.p.length/3; for(let i=0;i<m;i++) seg(st,i); if(er&&textGone){ textGone=false; mark(); }
+    if(er) bxPause(300);   /* refresh the e-ink screen: the fast pen drew the eraser stroke as ink */
+    else if(isScribble(st.p)&&scribbleErase(st)) bxPause(300);
+    schedule(); };
   const pnl=document.getElementById('notepad');
   on(document,'visibilitychange',()=>{ if(gone||!BX.avail) return; if(document.hidden){ BX.on=false; BX.state=''; } else setTimeout(bxSync,300); });   /* the app turns the fast pen off when it goes to the background */
   pnl.addEventListener('scroll',()=>{ if(BX.on||BX.paused) bxPause(700); });
@@ -2091,7 +2175,12 @@ function notepadOpen(k,onDone){ const n=noteGet(k);
   const setMode=m=>{ mode=m; store.set('npMode',m); col.hidden=true; page.classList.toggle('draw',m==='draw'); ed.contentEditable=m==='type'; if(m==='draw') ed.blur();
     b.querySelectorAll('#npMode button').forEach(x=>x.setAttribute('aria-pressed',x.dataset.m===m)); (m==='type'?typeTools:drawTools)(); setTimeout(bxSync,60); };
   setMode(mode);
-  window.__penBtnSet=v=>{ window.__penBtn=v; if(v&&mode!=='draw'&&document.getElementById('notepad')?.hidden===false) setMode('draw'); };   /* the pen button always means erase: go to Draw */
+  /* The pen's side button (as in My Personal eReader): in Type mode a press brings up the pen (Draw); in Draw a press with the
+     pen off the screen switches pen / eraser; held while the pen touches, it erases. */
+  let pbAct=0;
+  window.__penBtnSet=(v,touch)=>{ window.__penBtn=v; if(!v||gone||document.getElementById('notepad')?.hidden!==false) return; if(Date.now()-pbAct<700) return;
+    if(mode!=='draw'){ pbAct=Date.now(); erase=false; setMode('draw'); if(!store.get('npPenHint',false)){ store.set('npPenHint',true); toast('Pen on. Press the button again (pen off the screen) for the eraser, or scribble over writing to erase it.'); } else toast('Pen'); return; }
+    if(touch===0){ pbAct=Date.now(); erase=!erase; drawTools(); toast(erase?'Eraser — press the button again for the pen':'Pen'); } };
   const min=!!store.get('npMin',false); top.classList.toggle('min',min); $('#npTog').textContent=min?'☰ Tools':'▴';
   $('#npTog').onclick=()=>{ const v=!top.classList.contains('min'); top.classList.toggle('min',v); $('#npTog').textContent=v?'☰ Tools':'▴'; col.hidden=true; store.set('npMin',v); };
   $('#npMode').onclick=e=>{ const x=e.target.closest('[data-m]'); if(x) setMode(x.dataset.m); };
@@ -2113,8 +2202,8 @@ function notepadOpen(k,onDone){ const n=noteGet(k);
     if(x.dataset.sz){ size=+x.dataset.sz; drawTools(); return; }
     const c=x.dataset.c; if(!c) return; if(c!=='color'&&c!=='hilite') col.hidden=true;
     if(c==='erase'){ erase=!erase; drawTools(); }
-    else if(c==='inkUndo'){ if(strokes.length){ strokes.pop(); redraw(); schedule(); } }
-    else if(c==='inkClear'){ if(strokes.length){ bxPause(4000); } if(strokes.length) appConfirm('Clear all pen writing on this page? (The typed text stays.)','Clear',true).then(y=>{ if(y){ strokes.length=0; redraw(); schedule(); } }); }
+    else if(c==='inkUndo'){ const h=hist(); if(h.length){ const p=h.pop(); strokes.length=0; strokes.push(...p); redraw(); schedule(); } else toast('Nothing to undo'); }
+    else if(c==='inkClear'){ if(strokes.length){ bxPause(4000); } if(strokes.length) appConfirm('Clear all pen writing on this page? (The typed text stays.)','Clear',true).then(y=>{ if(y){ snap(); strokes.length=0; redraw(); schedule(); } }); }
     else if(c==='penOnly'){ penOnly=!penOnly; penSeen=true; drawTools(); }
     else if(c==='bxFast'){ store.set('npBoox',!store.get('npBoox',true)); drawTools(); }
     else if(c==='head'){ back(); const v=document.queryCommandValue('formatBlock'); document.execCommand('formatBlock',false,/h3/i.test(v)?'div':'h3'); ed.oninput(); }
@@ -2174,7 +2263,7 @@ function backupApply(o){
 const TAFSIRS=[
   ['indonesian_mokhtasar','Al-Mukhtasar','Bahasa Indonesia','Tafsir Center for Quranic Studies (Markaz Tafsir)','arabic_mokhtasar'],
   ['english_mokhtasar','Al-Mukhtasar','English','Tafsir Center for Quranic Studies (Markaz Tafsir)','arabic_mokhtasar'],
-  ['indonesian_saadi','As-Sa\'di','Bahasa Indonesia','Shaykh Abdurrahman bin Nasir as-Sa\'di','arabic_saadi']];
+  ['indonesian_saadi','As-Sa\'di','Bahasa Indonesia','Shaykh Abdurrahman bin Nasir as-Sa\'di (d. 1376 AH / 1956 CE)','arabic_saadi']];
 const tafMem=new Map();
 async function tafLoad(key,s){ const id=key+'/'+p3(s)+'.json'; if(tafMem.has(id)) return tafMem.get(id);
   const j=await dlGet('tafsir',id,{ok:j=>!!j&&(Array.isArray(j.ayat)||Array.isArray(j.blocks)),revalidate:true}); tafMem.set(id,j); return j; }
@@ -3276,7 +3365,7 @@ function aboutSheet(){
    <li><b>Independent cross-check</b>Compared with the Tanzil Project Uthmani text, all 6,236 ayat: no letter differences. The only differences are how hamza is encoded and word spacing in 15:7, 27:20 and 36:22. This app follows KFGQPC. <a href="https://tanzil.net" target="_blank" rel="noopener">tanzil.net</a></li>
    <li><b>Printed pages</b>KFGQPC V4 (1441H) page fonts and word layout as published by the Quranic Universal Library (QUL, Tarteel), the same set Quran.com uses. Checked against the King Fahd Complex data: all 9,046 lines, every surah header, basmalah and ayah end sit on the same page and line. The page fonts are © King Fahd Complex and are loaded from QUL, not shipped with this app.</li>
    <li><b>Page and ruku' divisions</b>Page boundaries and the 556 ruku' sections were compared across two independent compilations of Tanzil and KFGQPC metadata: all match. Page 296 holds 18:21–27, as in the printed mushaf.</li>
-   <li><b>Terjemahan Melayu</b>Abdullah Muhammad Basmeih, via QuranEnc.com (malay_basumayyah, version 1.0.0). <a href="https://quranenc.com/en/browse/malay_basumayyah" target="_blank" rel="noopener">quranenc.com</a></li>
+   <li><b>Terjemahan Melayu</b>Abdullah Muhammad Basmeih (${esc(wafTxt('basmeih').replace(/^[^,]*, /,''))}), via QuranEnc.com (malay_basumayyah, version 1.0.0). <a href="https://quranenc.com/en/browse/malay_basumayyah" target="_blank" rel="noopener">quranenc.com</a></li>
    <li><b>English translation</b>Saheeh International, via QuranEnc.com (english_saheeh, version 1.1.2). <a href="https://quranenc.com/en/browse/english_saheeh" target="_blank" rel="noopener">quranenc.com</a></li>
    <li><b>Arabic fonts</b>KFGQPC HAFS Uthmanic Script version 1.001 (2021) for the text, and KFGQPC Uthmanic Script HAFS 0.09 for the ayah markers. Both © King Fahd Glorious Qur'an Printing Complex, included unmodified.</li>
    <li><b>Recitation checking</b>Uses the browser's speech recognition (in Chrome, Google's service; your audio is sent to it). Word judging adapted from Tilawi quran-asr (MIT). It checks words only. It does not judge tajwid, makhraj, or where you stop and start.</li>
@@ -3345,6 +3434,7 @@ function applyUiZoom(){ const z=(store.get('uiZoom',100)||100)/100; document.doc
 applyUiZoom();
 function applyHomeBars(){ try{ const v=getComputedStyle(document.documentElement).getPropertyValue('--h-bg').trim(); window.AndroidSpeech?.setBarColor?.(v, !['gading','biru-muda','pastel'].includes(store.get('homeTheme','hijau'))); }catch(e){} }
 const homeIc={
+ lang:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/>',
  read:'<path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H11v16H5.5A1.5 1.5 0 0 1 4 18.5zM20 5.5A1.5 1.5 0 0 0 18.5 4H13v16h5.5a1.5 1.5 0 0 0 1.5-1.5z"/><path d="M15 8h3M15 11h3"/>',
  open:'<path d="M12 3l2.4 4.9 5.4.8-3.9 3.8.9 5.4L12 15.4 7.2 17.9l.9-5.4L4.2 8.7l5.4-.8z"/>',
  hz:'<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/>',
@@ -3441,6 +3531,7 @@ function renderHome(){ const el=document.getElementById('home'); const g=pageSta
     <button class="tile" data-t="qibla">${hic('qibla')}<b>Qibla</b><small>Direction of the Ka'bah</small></button>
     <button class="tile" data-t="set">${hic('set')}<b>Settings</b><small>Reading, sound, colours</small></button>
     <button class="tile" data-t="man">${hic('man')}<b>User manual</b><small>Panduan · English / Bahasa Melayu</small></button>
+    <div class="tile langtile">${hic('lang')}<b>Language · Bahasa</b>${langPick()}</div>
    </div></div>`;
   renderSalahCard();
   el.querySelector('#hmSet').onclick=homeSetSheet;
@@ -3826,7 +3917,7 @@ async function duaPanel(){ const b=openPanel('dua','Doa & zikir',`<p class="note
   const row=c=>`<button class="tile wide" data-c="${c.id}" style="margin-bottom:8px;min-height:0;padding:12px 14px"><span style="flex:1"><b>${esc(c.en[0].toUpperCase()+c.en.slice(1))}</b><br><small>${c.items.length} doa</small></span><span class="ar" style="font-size:20px">${esc(c.ar)}</span></button>`;
   b.innerHTML=`<input class="field" id="duaQ" type="search" placeholder="Search: sleep, travel, rain, masjid…" aria-label="Search doa" style="margin-bottom:4px">
    <div id="duaList"></div>
-   <p class="note" style="font-size:12px">Hisn al-Muslim (Fortress of the Muslim) by Sa'id ibn Wahf al-Qahtani. Text, English translation, transliteration and audio from hisnmuslim.com; each entry's reference (with the grading where the book gives one) from the book's English edition on sunnah.com. The transliteration is approximate (AA = ع). A Malay translation is not yet available from an open source.</p>`;
+   <p class="note" style="font-size:12px">Hisn al-Muslim (Fortress of the Muslim) by Sa'id ibn Wahf al-Qahtani (${esc(wafTxt('qahtani').replace(/^[^,]*, /,''))}). Text, English translation, transliteration and audio from hisnmuslim.com; each entry's reference (with the grading where the book gives one) from the book's English edition on sunnah.com. The transliteration is approximate (AA = ع). A Malay translation is not yet available from an open source.</p>`;
   const q0=b.querySelector('#duaQ'); pinHead(b,[q0]);
   const list=b.querySelector('#duaList'), openCats=new Set(store.get('duaCats',[]));
   const draw=q=>{ q=(q||'').trim().toLowerCase(); const fav=new Set(DUA_FAV()); let cs=H.chapters;
@@ -3947,11 +4038,11 @@ async function kamusFind(word){ const D=await kmLoad(), n=kmNorm(word).split(/\s
 let sirahD=null;
 const SIRAH_ERA={pre:['Before prophethood','Sebelum kenabian'],mak:['Makkah: prophethood','Makkah: kenabian'],mad:['Madinah: after the Hijrah','Madinah: selepas Hijrah']};
 const SIRAH_KIND={none:['No authentic basis','Tiada asas yang sahih','#b3261e'],weak:['Weak','Lemah','#c25e00'],disputed:['Scholars differ','Ulama berbeza pendapat','#8a6d00'],hist:['Historians\' report: no checked chain','Riwayat ahli sejarah: sanad tidak disemak','#5b6b7a']};
-const sL=()=>{ const u=store.get('uiLang','auto'); return u==='ms'||u==='en'? u : (st.lang==='ms'?'ms':'en'); }, sT=o=>o?(o[sL()]||o.en||''):'', sCE=c=>sL()==='ms'?String(c).replace(/^c\. /,'sekitar ')+' M':String(c)+' CE';
+const sL=()=>{ const u=store.get('uiLang','auto'); return u==='ms'||u==='en'? u : APP_LANG; }, sT=o=>o?(o[sL()]||o.en||''):'', sCE=c=>sL()==='ms'?String(c).replace(/^c\. /,'sekitar ')+' M':String(c)+' CE';
 async function sirahLoad(){ if(sirahD) return sirahD; const j=await ktGet('../sirah/sirah.json'); sirahD=j; return j; }
 async function sirahBooks(){ if(ktBooks) return; try{ const bj=await ktGet('books2.json'); ktBooks=bj.books; ktHeV=bj.he||{}; }catch(e){} }
 const sirahBmAll=()=>store.get('sirahBm',{});
-const SIRAH_ULAMA=[["Musa ibn 'Uqbah",141,758,'al-Maghazi'],['Ibn Ishaq',150,767,'as-Sirah (through Ibn Hisham)'],["al-Waqidi",207,823,'al-Maghazi'],['Ibn Hisham',218,833,'as-Sirah an-Nabawiyyah'],["Abu 'Ubayd",224,838,'al-Amwal'],["Ibn Sa'd",230,845,'at-Tabaqat al-Kubra'],['Ahmad ibn Hanbal',241,855,'al-Musnad'],['al-Bukhari',256,870,'al-Jami\' as-Sahih, al-Adab al-Mufrad'],['at-Tabarani',360,971,"al-Mu'jam al-Kabir"],['al-Hakim',405,1014,'al-Mustadrak'],["Abu Nu'aym",430,1038,"Dala'il an-Nubuwwah"],['al-Bayhaqi',458,1066,"Dala'il an-Nubuwwah, as-Sunan al-Kubra"],['as-Suhayli',581,1185,'ar-Rawd al-Unuf'],['Ibn al-Athir',630,1233,'Usd al-Ghabah'],['adh-Dhahabi',748,1348,"Tarikh al-Islam, Talkhis al-Mustadrak"],['Ibn al-Qayyim',751,1350,"Zad al-Ma'ad"],['Ibn Kathir',774,1373,'al-Bidayah wa an-Nihayah, al-Fusul'],["al-'Iraqi",806,1404,"Takhrij Ahadith al-Ihya'"],['al-Haythami',807,1405,"Majma' az-Zawa'id"],["Ibn Hajar al-'Asqalani",852,1449,'Fath al-Bari, al-Isabah, Taqrib at-Tahdhib'],['al-Qastallani',923,1517,'al-Mawahib al-Laduniyyah'],['al-Albani',1420,1999,"Silsilat al-Ahadith ad-Da'ifah, Fiqh as-Sirah"],["Shu'ayb al-Arna'ut",1438,2016,'Takhrij al-Musnad, Takhrij Siyar A\'lam an-Nubala\'']];
+const SIRAH_ULAMA=[['az-Zuhri',124,742,'reports on the Maghazi'],["Musa ibn 'Uqbah",141,758,'al-Maghazi'],['Ibn Ishaq',150,767,'as-Sirah (through Ibn Hisham)'],["al-Waqidi",207,823,'al-Maghazi'],['Ibn Hisham',218,833,'as-Sirah an-Nabawiyyah'],["Abu 'Ubayd",224,838,'al-Amwal'],["Ibn Sa'd",230,845,'at-Tabaqat al-Kubra'],['Ahmad ibn Hanbal',241,855,'al-Musnad'],['al-Bukhari',256,870,'al-Jami\' as-Sahih, al-Adab al-Mufrad'],['Muslim',261,875,'as-Sahih'],['Ibn Majah',273,887,'as-Sunan'],['Abu Dawud',275,889,'as-Sunan'],['at-Tirmidhi',279,892,"al-Jami', ash-Shama'il"],["an-Nasa'i",303,915,'as-Sunan'],['Ibn Khuzaymah',311,924,'as-Sahih'],['at-Tabarani',360,971,"al-Mu'jam al-Kabir"],['ad-Daraqutni',385,995,'as-Sunan'],['al-Hakim',405,1014,'al-Mustadrak'],["Abu Nu'aym",430,1038,"Dala'il an-Nubuwwah"],['Ibn Hazm',456,1064,"Jawami' as-Sirah"],['al-Bayhaqi',458,1066,"Dala'il an-Nubuwwah, as-Sunan al-Kubra"],["Ibn 'Abd al-Barr",463,1071,"al-Isti'ab"],['as-Suhayli',581,1185,'ar-Rawd al-Unuf'],['Ibn al-Jawzi',597,1201,'al-Wafa, Talqih Fuhum Ahl al-Athar'],['Ibn al-Athir',630,1233,'Usd al-Ghabah'],['adh-Dhahabi',748,1348,"Tarikh al-Islam, Talkhis al-Mustadrak"],['Ibn al-Qayyim',751,1350,"Zad al-Ma'ad"],['Ibn Kathir',774,1373,'al-Bidayah wa an-Nihayah, al-Fusul'],["al-'Iraqi",806,1404,"Takhrij Ahadith al-Ihya'"],['al-Haythami',807,1405,"Majma' az-Zawa'id"],["Ibn Hajar al-'Asqalani",852,1449,'Fath al-Bari, al-Isabah, Taqrib at-Tahdhib'],['al-Qastallani',923,1517,'al-Mawahib al-Laduniyyah'],['al-Albani',1420,1999,"Silsilat al-Ahadith ad-Da'ifah, Fiqh as-Sirah"],["Shu'ayb al-Arna'ut",1438,2016,'Takhrij al-Musnad, Takhrij Siyar A\'lam an-Nubala\'']];
 function sirahTitleOf(id){ const e=sirahD?.events.find(x=>x.id===id); if(e) return sT(e.title); const c=store.get('sirahTitles',{})[id]; return c?(c[sL()]||c.en):id; }
 async function sirahOpen(id){ try{ await sirahLoad(); }catch(e){ toast('The Sirah needs the internet the first time'); return; } if(document.getElementById('sirah')?.hidden!==false) await sirahPanel(); sirahEvent(id); }
 async function sirahPanel(){ const b=openPanel('sirah','Sirah',`<p class="note">Loading…</p>`);
@@ -4529,7 +4620,7 @@ if('serviceWorker' in navigator && /github\.io$/.test(location.hostname)){ navig
   if(h){ r=parseRef(h.replace('.',':')) || parseRef(h); }
   // opened from a prayer notification: straight to the prayer times, no book cover
   let fromN=''; try{ fromN=window.AndroidExtra?.takeOpen?.()||''; }catch(e){}
-  if(r){ r.page? goPage(r.page) : goAyah(r.g); } else { renderReader(); applyHomeLook(); showHome(); if(fromN==='prayer') prayerPanel(); else if(ckTakeShared()){} else if(store.get('cover',true)) showCover(); } })();
+  if(r){ r.page? goPage(r.page) : goAyah(r.g); } else { renderReader(); applyHomeLook(); showHome(); if(fromN==='prayer') prayerPanel(); else if(ckTakeShared()){} else if(store.get('cover',true) && !(()=>{ try{ const x=sessionStorage.getItem('mpq.noCover'); sessionStorage.removeItem('mpq.noCover'); return x; }catch(e){ return null; } })()) showCover(); } })();
 window.__openFrom=w=>{ if(w!=='prayer') return; const c=document.getElementById('cover'); if(c) c.hidden=true; if(document.getElementById('home')?.hidden!==false){ applyHomeLook(); showHome(); } prayerPanel(); };
 applyHomeLook();
 document.addEventListener('visibilitychange',()=>{ if(document.hidden) coverOnLeave(); });

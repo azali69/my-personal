@@ -1191,7 +1191,7 @@ public class MainActivity extends Activity {
     static boolean isOnyx() {
         String m = Build.MANUFACTURER == null ? "" : Build.MANUFACTURER.toLowerCase(), b = Build.BRAND == null ? "" : Build.BRAND.toLowerCase();
         return m.contains("onyx") || b.contains("onyx") || b.contains("boox"); }
-    private com.onyx.android.sdk.pen.TouchHelper bxHelper; private boolean bxOpened = false; private float bxDensity = 1f, bxMaxP = 0f;
+    private com.onyx.android.sdk.pen.TouchHelper bxHelper; private boolean bxOpened = false; private float bxDensity = 1f, bxMaxP = 0f; private long bxStrokeStart = 0;
     private void bxSend(String ev, com.onyx.android.sdk.pen.data.TouchPointList list) {
         if (list == null || list.getPoints() == null || list.getPoints().isEmpty()) return;
         if (bxMaxP <= 0f) { try { bxMaxP = com.onyx.android.sdk.api.device.epd.EpdController.getMaxTouchPressure(); } catch (Throwable t) { bxMaxP = 4096f; } if (bxMaxP <= 0f) bxMaxP = 4096f; }
@@ -1200,10 +1200,12 @@ public class MainActivity extends Activity {
         sb.append(']');
         js("window.__boox && window.__boox('" + ev + "'," + sb + "," + web.getWidth() + ")"); }
     private final com.onyx.android.sdk.pen.RawInputCallback bxCb = new com.onyx.android.sdk.pen.RawInputCallback() {
-        @Override public void onBeginRawDrawing(boolean b, com.onyx.android.sdk.data.note.TouchPoint p) { }
+        @Override public void onBeginRawDrawing(boolean b, com.onyx.android.sdk.data.note.TouchPoint p) { bxStrokeStart = System.currentTimeMillis(); }
         @Override public void onEndRawDrawing(boolean b, com.onyx.android.sdk.data.note.TouchPoint p) { }
         @Override public void onRawDrawingTouchPointMoveReceived(com.onyx.android.sdk.data.note.TouchPoint p) { }
-        @Override public void onRawDrawingTouchPointListReceived(com.onyx.android.sdk.pen.data.TouchPointList l) { bxSend("stroke", l); }
+        @Override public void onRawDrawingTouchPointListReceived(com.onyx.android.sdk.pen.data.TouchPointList l) {
+            // drawn with the side button held (as in My Personal eReader): an eraser stroke
+            bxSend(penBtn || (bxStrokeStart > 0 && penBtnAt >= bxStrokeStart - 150) ? "erase" : "stroke", l); }
         @Override public void onBeginRawErasing(boolean b, com.onyx.android.sdk.data.note.TouchPoint p) { }
         @Override public void onEndRawErasing(boolean b, com.onyx.android.sdk.data.note.TouchPoint p) { }
         @Override public void onRawErasingTouchPointMoveReceived(com.onyx.android.sdk.data.note.TouchPoint p) { }
@@ -1260,17 +1262,21 @@ public class MainActivity extends Activity {
        touches, and the page is told the button is held (window.__penBtn) so the Notepad erases. Other phones report the
        button in the button state, or the pen's eraser end as its own tool. */
     private boolean penBtn = false;
-    private void setPenBtn(boolean b) { if (b != penBtn) { penBtn = b; js("window.__penBtn=" + (b ? 1 : 0) + ";window.__penBtnSet&&window.__penBtnSet(" + (b ? 1 : 0) + ")"); } }
+    private long penBtnAt = 0;
+    /** touch: the pen is on the screen (false while it hovers). Pressed while hovering, the Notepad switches pen / eraser. */
+    private void setPenBtn(boolean b, boolean touch) { if (b) penBtnAt = System.currentTimeMillis(); if (b != penBtn) { penBtn = b; js("window.__penBtn=" + (b ? 1 : 0) + ";window.__penBtnSet&&window.__penBtnSet(" + (b ? 1 : 0) + "," + (touch ? 1 : 0) + ")"); } }
     private void penState(android.view.MotionEvent ev) {
         boolean b = (ev.getButtonState() & (android.view.MotionEvent.BUTTON_STYLUS_PRIMARY | android.view.MotionEvent.BUTTON_STYLUS_SECONDARY)) != 0;
         for (int i = 0; i < ev.getPointerCount(); i++) if (ev.getToolType(i) == android.view.MotionEvent.TOOL_TYPE_ERASER) b = true;
-        if (ev.getToolType(0) == android.view.MotionEvent.TOOL_TYPE_STYLUS || ev.getToolType(0) == android.view.MotionEvent.TOOL_TYPE_ERASER) setPenBtn(b); }
+        if (ev.getToolType(0) == android.view.MotionEvent.TOOL_TYPE_STYLUS || ev.getToolType(0) == android.view.MotionEvent.TOOL_TYPE_ERASER) {
+            int a = ev.getActionMasked(); boolean hover = a == android.view.MotionEvent.ACTION_HOVER_MOVE || a == android.view.MotionEvent.ACTION_HOVER_ENTER || a == android.view.MotionEvent.ACTION_HOVER_EXIT;
+            setPenBtn(b, !hover); } }
     @Override public boolean dispatchTouchEvent(android.view.MotionEvent ev) {
         int a = ev.getActionMasked();
         if (a == 211 || a == 212 || a == 213) {
             android.view.MotionEvent c = android.view.MotionEvent.obtain(ev);
             c.setAction(a == 211 ? android.view.MotionEvent.ACTION_DOWN : a == 212 ? android.view.MotionEvent.ACTION_UP : android.view.MotionEvent.ACTION_MOVE);
-            setPenBtn(true); boolean r = super.dispatchTouchEvent(c); c.recycle(); return r; }
+            setPenBtn(true, true); boolean r = super.dispatchTouchEvent(c); c.recycle(); return r; }
         penState(ev); return super.dispatchTouchEvent(ev); }
     @Override public boolean dispatchGenericMotionEvent(android.view.MotionEvent ev) { penState(ev); return super.dispatchGenericMotionEvent(ev); }
 

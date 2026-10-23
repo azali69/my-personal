@@ -33,7 +33,8 @@ rep = {
     'FONT2': b64(S, 'fonts', 'kfgqpc-hafs-2021.woff2'),         # KFGQPC HAFS Uthmanic Script 1.001 (text)
     'FONT3': b64(S, 'fonts', 'qcf-surah-header.woff2'),         # QCF surah header frames
     'FONT4': b64(S, 'fonts', 'great-vibes.woff2'),              # cover name (OFL)
-    'DATA': js(rd(S, 'data.json')),                             # made by src/quran-data/build_data.py
+    'DATA': js(rd(S, 'data.json')),
+    'I18N_MS': js(rd(S, 'i18n_ms.json')),                       # Malay for the app's own words (Settings → Language)                             # made by src/quran-data/build_data.py
 }
 t = re.sub(r'%%ART:([\w.-]+)%%', lambda m: b64(S, 'art', 'cover', m.group(1)), t)
 # one pass, so text inside an inserted file is never treated as a placeholder

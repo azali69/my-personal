@@ -66,6 +66,7 @@ STEPS = [  # (name, JS run in the page, wait ms)
     ('backup', "backupSheet()", 800),
     ('sync', "closeSheet(); syncSheet()", 800),
     ('manual', "closeSheet(); manualPanel()", 1000),
+    ('language tile', "if(!document.querySelector('[data-al=ms]')) throw new Error('no language choice'); if(tr('Settings')!=='Settings') throw new Error('English must stay English')", 300),
     ('cover', "document.querySelectorAll('.panel').forEach(p=>p.hidden=true); showCover()", 800),
 ]
 
