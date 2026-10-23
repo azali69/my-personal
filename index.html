@@ -699,12 +699,13 @@ a.tile{text-decoration:none;color:inherit}
 #qbWrap .qb-kaaba{position:absolute;left:50%;top:-34px;transform:translateX(-50%);width:13%;height:auto;z-index:2;filter:drop-shadow(0 3px 4px rgba(0,0,0,.5))}
 #qbMsg{display:block;width:fit-content;margin:14px auto 4px;padding:8px 20px;border-radius:999px;font-size:19px;text-align:center;min-height:1.5em;background:color-mix(in srgb,var(--h-bg2) 70%,transparent);border:1px solid color-mix(in srgb,var(--gold) 55%,transparent)}
 #qbMsg.on{background:#1f6b45;border-color:#5fd08a;color:#fff}
+.man-q{margin:10px 0;padding:10px 14px;border-inline-start:3px solid var(--gold,#b8913f);border-radius:8px;background:color-mix(in srgb,var(--gold,#b8913f) 10%,transparent)}
 </style>
 
 <header class="top"><div class="top-in">
   <button class="ib" id="btnHome" aria-label="Home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11.5 12 5l8 6.5V20h-5v-5h-6v5H4z"/></svg></button>
   <button class="ib" id="btnNav" aria-label="Surahs and pages"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg></button>
-  <button class="where" id="where"><b id="whereT">My Personal Quran</b><small id="whereS">v1.0.0.86</small></button>
+  <button class="where" id="where"><b id="whereT">My Personal Quran</b><small id="whereS">v1.0.0.87</small></button>
   <button class="ib" id="btnBlk" aria-label="Waqaf and ibtida' colours" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="4" y="5" width="16" height="5" rx="1.5" fill="currentColor" fill-opacity=".25"/><rect x="4" y="14" width="16" height="5" rx="1.5"/></svg></button>
   <button class="ib" id="btnBm" aria-label="Bookmarks"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M7 4h10v16l-5-3.5L7 20z"/></svg></button>
   <button class="ib" id="btnSearch" aria-label="Search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/></svg></button>
@@ -3267,7 +3268,7 @@ function histSheet(){
 async function sha(s){ const b=await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s)); return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join(''); }
 function aboutSheet(){
   openSheet('Sources & verification', `
-  <p class="note" style="margin-top:0"><b>My Personal Quran v1.0.0.86.</b> The Qur'an text is shown exactly as published by its source. The app never edits it.</p>
+  <p class="note" style="margin-top:0"><b>My Personal Quran v1.0.0.87.</b> The Qur'an text is shown exactly as published by its source. The app never edits it.</p>
   <div class="card" style="padding:10px 12px;margin:8px 0"><b>${sL()==='ms'?'Penafian':'Disclaimer'}</b><p class="note" style="margin:4px 0 0">${sL()==='ms'?'Untuk kegunaan peribadi sahaja: percuma, tidak dijual dan tidak boleh digunakan secara komersial. Kandungan milik penerbit masing-masing (disenaraikan di bawah) dan dipaparkan tanpa diubah. Sirah, Sifat Solat dan Solat Jumaat ditulis untuk aplikasi ini daripada sumber yang dinamakan. Ini alat bantu belajar, bukan fatwa: rujuk ulama yang berkelayakan untuk hukum.':'For personal use only: free, not for sale, and not to be used commercially. The contents belong to their publishers (listed below) and are shown unchanged. The Sirah, Sifat Solat and Solat Jumaat are written for this app from the sources named in them. This is a study aid, not a fatwa: ask a qualified scholar for rulings.'}</p></div>
   <p id="integ" class="note">Checking the text in this copy of the app…</p>
   <ul class="src">
@@ -3509,8 +3510,9 @@ function mdRender(md){ const L=md.replace(/\r/g,'').split('\n'); let h='', i=0, 
       h+='<div class="man-tw"><table class="man-t">'+rows.filter(r=>!/^\|[\s:|-]+\|$/.test(r.trim())).map((r,k)=>'<tr>'+cells(r).map(c=>k===0?`<th>${mdInline(c)}</th>`:`<td>${mdInline(c)}</td>`).join('')+'</tr>').join('')+'</table></div>'; continue; }
     if(/^\d+\. /.test(l)){ h+='<ol>'; while(i<L.length && /^\d+\. /.test(L[i])){ h+=`<li>${mdInline(L[i].replace(/^\d+\. /,''))}</li>`; i++; } h+='</ol>'; continue; }
     if(/^[-*] /.test(l)){ h+='<ul>'; while(i<L.length && /^[-*] /.test(L[i])){ h+=`<li>${mdInline(L[i].replace(/^[-*] /,''))}</li>`; i++; } h+='</ul>'; continue; }
+    if(/^> /.test(l)){ const q=[]; while(i<L.length && /^> /.test(L[i])){ q.push(L[i].slice(2)); i++; } h+=`<blockquote class="man-q">${mdInline(q.join(' '))}</blockquote>`; continue; }
     if(!l.trim()){ i++; continue; }
-    const para=[]; while(i<L.length && L[i].trim() && !/^(#{2,3} |\||\d+\. |[-*] )/.test(L[i])){ para.push(L[i]); i++; }
+    const para=[]; while(i<L.length && L[i].trim() && !/^(#{2,3} |\||\d+\. |[-*] |> )/.test(L[i])){ para.push(L[i]); i++; }
     h+=`<p>${mdInline(para.join(' '))}</p>`; }
   return {h,toc}; }
 function manualPanel(){ const lang=store.get('manLang', st.lang==='ms'?'ms':'en');

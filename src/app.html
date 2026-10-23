@@ -699,6 +699,7 @@ a.tile{text-decoration:none;color:inherit}
 #qbWrap .qb-kaaba{position:absolute;left:50%;top:-34px;transform:translateX(-50%);width:13%;height:auto;z-index:2;filter:drop-shadow(0 3px 4px rgba(0,0,0,.5))}
 #qbMsg{display:block;width:fit-content;margin:14px auto 4px;padding:8px 20px;border-radius:999px;font-size:19px;text-align:center;min-height:1.5em;background:color-mix(in srgb,var(--h-bg2) 70%,transparent);border:1px solid color-mix(in srgb,var(--gold) 55%,transparent)}
 #qbMsg.on{background:#1f6b45;border-color:#5fd08a;color:#fff}
+.man-q{margin:10px 0;padding:10px 14px;border-inline-start:3px solid var(--gold,#b8913f);border-radius:8px;background:color-mix(in srgb,var(--gold,#b8913f) 10%,transparent)}
 </style>
 
 <header class="top"><div class="top-in">
@@ -3509,8 +3510,9 @@ function mdRender(md){ const L=md.replace(/\r/g,'').split('\n'); let h='', i=0, 
       h+='<div class="man-tw"><table class="man-t">'+rows.filter(r=>!/^\|[\s:|-]+\|$/.test(r.trim())).map((r,k)=>'<tr>'+cells(r).map(c=>k===0?`<th>${mdInline(c)}</th>`:`<td>${mdInline(c)}</td>`).join('')+'</tr>').join('')+'</table></div>'; continue; }
     if(/^\d+\. /.test(l)){ h+='<ol>'; while(i<L.length && /^\d+\. /.test(L[i])){ h+=`<li>${mdInline(L[i].replace(/^\d+\. /,''))}</li>`; i++; } h+='</ol>'; continue; }
     if(/^[-*] /.test(l)){ h+='<ul>'; while(i<L.length && /^[-*] /.test(L[i])){ h+=`<li>${mdInline(L[i].replace(/^[-*] /,''))}</li>`; i++; } h+='</ul>'; continue; }
+    if(/^> /.test(l)){ const q=[]; while(i<L.length && /^> /.test(L[i])){ q.push(L[i].slice(2)); i++; } h+=`<blockquote class="man-q">${mdInline(q.join(' '))}</blockquote>`; continue; }
     if(!l.trim()){ i++; continue; }
-    const para=[]; while(i<L.length && L[i].trim() && !/^(#{2,3} |\||\d+\. |[-*] )/.test(L[i])){ para.push(L[i]); i++; }
+    const para=[]; while(i<L.length && L[i].trim() && !/^(#{2,3} |\||\d+\. |[-*] |> )/.test(L[i])){ para.push(L[i]); i++; }
     h+=`<p>${mdInline(para.join(' '))}</p>`; }
   return {h,toc}; }
 function manualPanel(){ const lang=store.get('manLang', st.lang==='ms'?'ms':'en');
