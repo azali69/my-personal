@@ -1,6 +1,6 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>My Personal Quran</title>
+<title>My Personal Qur'an</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="data:image/png;base64,%%FAVICON%%">
 <link rel="apple-touch-icon" href="icon-192.png">
@@ -706,7 +706,7 @@ a.tile{text-decoration:none;color:inherit}
 <header class="top"><div class="top-in">
   <button class="ib" id="btnHome" aria-label="Home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11.5 12 5l8 6.5V20h-5v-5h-6v5H4z"/></svg></button>
   <button class="ib" id="btnNav" aria-label="Surahs and pages"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg></button>
-  <button class="where" id="where"><b id="whereT">My Personal Quran</b><small id="whereS">v%%VERSION%%</small></button>
+  <button class="where" id="where"><b id="whereT">My Personal Qur'an</b><small id="whereS">v%%VERSION%%</small></button>
   <button class="ib" id="btnBlk" aria-label="Waqaf and ibtida' colours" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="4" y="5" width="16" height="5" rx="1.5" fill="currentColor" fill-opacity=".25"/><rect x="4" y="14" width="16" height="5" rx="1.5"/></svg></button>
   <button class="ib" id="btnBm" aria-label="Bookmarks"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M7 4h10v16l-5-3.5L7 20z"/></svg></button>
   <button class="ib" id="btnSearch" aria-label="Search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/></svg></button>
@@ -760,6 +760,9 @@ const gOf = (s,v)=> surahStart[s]+v-1;
 const esc = s => s.replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
 /* ============================ STATE ============================ */
+/* The app's name (Azli, 24 Oct 2026: "Qur'an", as in the rest of the app). Backup and sync files from older versions carry the
+   old spelling, so both are accepted. */
+const APP_NAME="My Personal Qur'an", APP_IDS=new Set([APP_NAME,'My Personal Quran']);
 const store = {
   get(k,d){ try{ const v=localStorage.getItem('mpq.'+k); return v===null?d:JSON.parse(v);}catch(e){return d;} },
   set(k,v){ if(SYNC_MAPS.has(k) && !window.__syncApplying) syncTomb(k,v); try{ localStorage.setItem('mpq.'+k, JSON.stringify(v)); }catch(e){} if(SYNC_KEYS.has(k)) syncTouch(k); }
@@ -842,7 +845,7 @@ async function syncNow(manual){ if(!syncOn()||syncBusy) return; syncBusy=true;
   try{ if(manual) toast('Syncing…'); const raw=await syncIO('syncRead'); let R=null;
     if(raw && raw[0]!=='!'){ try{ R=JSON.parse(raw); }catch(e){} }
     if(raw && raw[0]==='!' && raw!=='!none'){ store.set('syncErr',Date.now()); if(manual) toast(raw==='!sign in again'?'Google sign-in has expired: open Sync and sign in again':'Could not read the sync data ('+raw.slice(1,120)+')'); return; }
-    const LT=syncTimes(), RK=(R&&R.app==='My Personal Quran'&&R.kind==='sync'&&R.keys)||{}, out={}, outT={}; let changed=[];
+    const LT=syncTimes(), RK=(R&&APP_IDS.has(R.app)&&R.kind==='sync'&&R.keys)||{}, out={}, outT={}; let changed=[];
     const LD=syncDels(), RD=(R&&R.del)||{}, DEL={}; new Set([...Object.keys(LD),...Object.keys(RD)]).forEach(k=>{ DEL[k]=Object.assign({},RD[k]||{}); Object.entries(LD[k]||{}).forEach(([id,t])=>{ if(!(DEL[k][id]>=t)) DEL[k][id]=t; }); });
     try{ localStorage.setItem('mpq.__syncDel',JSON.stringify(DEL)); }catch(e){}
     SYNC_KEYS.forEach(k=>{ const lt=LT[k]||0, r=RK[k], rt=r?r.t:0, lv=store.get(k,undefined);
@@ -856,7 +859,7 @@ async function syncNow(manual){ if(!syncOn()||syncBusy) return; syncBusy=true;
       syncAfter(changed); }
     if(R && R.at) store.set('syncFrom',{at:R.at,dev:R.dev||''});   // what the other device last wrote, shown in the Sync window
     const dev=(()=>{ try{ return window.AndroidExtra.deviceName?.()||''; }catch(e){ return ''; } })();
-    const ok=!!(await syncIO('syncWrite',JSON.stringify({app:'My Personal Quran',kind:'sync',at:Date.now(),dev,keys:out,del:DEL})));
+    const ok=!!(await syncIO('syncWrite',JSON.stringify({app:APP_NAME,kind:'sync',at:Date.now(),dev,keys:out,del:DEL})));
     if(!ok){ store.set('syncErr',Date.now()); if(manual) toast(window.AndroidExtra.gAccount?.()?'Could not save to Google Drive. Check the internet and try again.':'Could not write the sync file. Open the Drive or OneDrive app once, then try again.'); return; }
     store.set('syncErr',0); store.set('syncAt',Date.now()); if(manual) toast(changed.length?`Synced: ${changed.length} updated from your other device`:'Synced');
   }catch(e){ if(manual) toast('Sync failed'); } finally{ syncBusy=false; } }
@@ -2225,7 +2228,7 @@ function notepadOpen(k,onDone){ const n=noteGet(k);
    Saved as one .json file wherever the person chooses. Not included: voice recordings and chosen adhan sound files
    (files, not settings), and downloaded texts (fetched again when needed). */
 function backupCollect(){ const data={}; for(let i=0;i<localStorage.length;i++){ const k=localStorage.key(i); if(k&&k.startsWith('mpq.')) data[k.slice(4)]=localStorage.getItem(k); }
-  return {app:'My Personal Quran', kind:'backup', v:1, at:new Date().toISOString(), data}; }
+  return {app:APP_NAME, kind:'backup', v:1, at:new Date().toISOString(), data}; }
 function backupSummary(data){ const g=(k,d)=>{ try{ return data[k]==null? d : JSON.parse(data[k]); }catch(e){ return d; } };
   const n=o=>o&&typeof o==='object'? (Array.isArray(o)?o.length:Object.keys(o).length) : 0;
   return [[n(g('bm',{})),"Qur'an bookmarks"],[n(g('ktBm',{})),'hadith bookmarks'],[n(g('sirahBm',{})),'Sirah bookmarks'],[n(g('notes',{})),'notes'],[n(g('myr',[]))+n(g('myb',[])||[]),"My ruku' and My blocks"],[n(g('hist',[])),'Hafazan results'],[n(g('myPlaces',[])),'own places (Masjid & musollah)']]
@@ -2249,7 +2252,7 @@ function backupSheet(){ const now=backupCollect();
       goingAway(); window.AndroidExtra.openBackup(); return; }
     const f=sheetB.querySelector('#bkFile'); f.onchange=()=>{ const file=f.files&&f.files[0]; if(!file) return; file.text().then(backupRestore).catch(()=>toast('Could not read the file')); }; f.click(); }; }
 function backupRestore(text){ let o=null; try{ o=JSON.parse(text); }catch(e){}
-  if(!o || o.app!=='My Personal Quran' || o.kind!=='backup' || !o.data || typeof o.data!=='object'){ toast('This is not a My Personal Quran backup file'); return; }
+  if(!o || !APP_IDS.has(o.app) || o.kind!=='backup' || !o.data || typeof o.data!=='object'){ toast('This is not a My Personal Qur\'an backup file'); return; }
   const when=o.at? new Date(o.at).toLocaleString() : 'unknown date';
   appConfirm(`Restore the backup from ${when}?\n\n${backupSummary(o.data)}\n\nThis replaces the settings, bookmarks and notes in the app now.`,'Restore').then(yes=>{ if(yes) backupApply(o); }); }
 function backupApply(o){
@@ -2837,7 +2840,7 @@ function plMedia(state){ let title='', sub='';
   const key=state+'|'+title; if(key===plMediaKey) return; plMediaKey=key;
   try{ window.AndroidSpeech?.mediaState?.(state, title, sub); }catch(e){}
   try{ if('mediaSession' in navigator){ navigator.mediaSession.playbackState = state==='stopped'?'none':state;
-      if(state!=='stopped') navigator.mediaSession.metadata = new MediaMetadata({title, artist:sub, album:'My Personal Quran'}); } }catch(e){} }
+      if(state!=='stopped') navigator.mediaSession.metadata = new MediaMetadata({title, artist:sub, album:APP_NAME}); } }catch(e){} }
 window.__media=c=>{ if(!pl) return;
   if(c==='play'){ if(pl.paused) document.getElementById('pbPlay').click(); }
   else if(c==='pause'){ if(!pl.paused) document.getElementById('pbPlay').click(); }
@@ -3357,7 +3360,7 @@ function histSheet(){
 async function sha(s){ const b=await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s)); return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join(''); }
 function aboutSheet(){
   openSheet('Sources & verification', `
-  <p class="note" style="margin-top:0"><b>My Personal Quran v%%VERSION%%.</b> The Qur'an text is shown exactly as published by its source. The app never edits it.</p>
+  <p class="note" style="margin-top:0"><b>My Personal Qur'an v%%VERSION%%.</b> The Qur'an text is shown exactly as published by its source. The app never edits it.</p>
   <div class="card" style="padding:10px 12px;margin:8px 0"><b>${sL()==='ms'?'Penafian':'Disclaimer'}</b><p class="note" style="margin:4px 0 0">${sL()==='ms'?'Untuk kegunaan peribadi sahaja: percuma, tidak dijual dan tidak boleh digunakan secara komersial. Kandungan milik penerbit masing-masing (disenaraikan di bawah) dan dipaparkan tanpa diubah. Sirah, Sifat Solat dan Solat Jumaat ditulis untuk aplikasi ini daripada sumber yang dinamakan. Ini alat bantu belajar, bukan fatwa: rujuk ulama yang berkelayakan untuk hukum.':'For personal use only: free, not for sale, and not to be used commercially. The contents belong to their publishers (listed below) and are shown unchanged. The Sirah, Sifat Solat and Solat Jumaat are written for this app from the sources named in them. This is a study aid, not a fatwa: ask a qualified scholar for rulings.'}</p></div>
   <p id="integ" class="note">Checking the text in this copy of the app…</p>
   <ul class="src">
@@ -3415,7 +3418,7 @@ function showCover(){ let el=document.getElementById('cover'); if(!el){ el=docum
     <div class="cv-pm"><img src="${cvSrc(g+'mid')}" alt="">${name||''}</div>
     <div class="cv-med"><img src="${cvSrc(g+'mid')}" alt=""></div><div class="cv-ttl"><div class="cv-tc"><img src="${cvSrc(g+'mid')}" alt=""></div>${name||''}</div>${hint||''}</div>`;
   el.innerHTML=`<div class="cover-leaf"><div class="cover-fr" aria-label="القرآن الكريم">
-    ${book('cv-b','')}${book('cv-g','g','<div class="cv-name">My Personal Quran</div>','<div class="cover-hint">Tap to open</div>')}</div></div>
+    ${book('cv-b','')}${book('cv-g','g','<div class="cv-name">My Personal Qur\'an</div>','<div class="cover-hint">Tap to open</div>')}</div></div>
     <div class="cv-corner l">Tap to OFF</div><div class="cv-corner r">Tap change colour</div>`;
   try{ window.AndroidSpeech?.setBarColor?.(COVER_BG[cc], !COVER_LIGHT.has(cc)); }catch(e){}
   const open=()=>{ if(el.classList.contains('open')) return; el.classList.add('open'); const h=document.getElementById('home'); if(h && !h.hidden) applyHomeBars(); else applyLook(); setTimeout(()=>{ el.hidden=true; },RM.matches?320:980); };
@@ -3903,7 +3906,7 @@ function duaBmAll(){ let m=store.get('duaBm',null); if(!m){ m={}; store.get('dua
 function duaCopy(c){ const L=[c.en[0].toUpperCase()+c.en.slice(1), c.ar, ''];
   c.items.forEach((it,k)=>{ L.push(`${k+1}. ${it.ar}`); if(it.tl) L.push(it.tl); if(it.en) L.push(it.en); if(it.ref) L.push('['+it.ref+']'); L.push(''); });
   const nt=noteGet('d:'+c.id); if(nt) L.push('My note: '+nt.t, '');
-  L.push("— My Personal Quran · Hisn al-Muslim"); putClipboard(L.join('\n')).then(ok=>toast(ok?'Copied':'Could not copy')); }
+  L.push("— My Personal Qur'an · Hisn al-Muslim"); putClipboard(L.join('\n')).then(ok=>toast(ok?'Copied':'Could not copy')); }
 /* Entries that are Qur'an recitations: the source gives an instruction ("Recite Ayat al-Kursi") instead of a transliteration,
    so the app shows the Qur'an.com transliteration of those ayat (the same one as in the translation view). */
 const HISN_QURAN={75:[[2,255,255]],71:[[2,255,255]],100:[[2,255,255]],101:[[2,285,286]],76:[[112,1,4],[113,1,5],[114,1,6]],70:[[112,1,4],[113,1,5],[114,1,6]],99:[[112,1,4],[113,1,5],[114,1,6]]};
@@ -4127,7 +4130,7 @@ function sirahCopy(e){ const ms=sL()==='ms', L=[];
   if((e.ext||[]).length){ L.push('', (ms?'Riwayat dalam kitab lain':'Reports in other books')+(e.extb?' ('+e.extb+')':'')+':'); e.ext.forEach(x=>L.push('• '+sT(x)+(x.src?' ['+x.src+']':''))); }
   if((e.pop||[]).length){ L.push('', ms?'Kisah popular dan statusnya:':'Popular stories and their status:'); e.pop.forEach(x=>{ const K=SIRAH_KIND[x.kind]||SIRAH_KIND.hist; L.push(`• [${K[ms?1:0]}] ${sT(x)}${x.src?' ['+(ms?'Sumber: ':'Source: ')+x.src+']':''}`); }); }
   const nt=noteGet('s:'+e.id); if(nt) L.push('', (ms?'Nota saya: ':'My note: ')+nt.t);
-  L.push('', '— My Personal Quran · Sirah');
+  L.push('', '— '+APP_NAME+' · Sirah');
   putClipboard(L.join('\n')).then(ok=>toast(ok?(ms?'Disalin':'Copied'):(ms?'Tidak dapat menyalin':'Could not copy'))); }
 async function sirahEvent(id){ const D=sirahD; const i=D.events.findIndex(e=>e.id===id); const e=D.events[i]; if(!e) return; const ms=sL()==='ms';
   store.set('sirahLast',id);
@@ -4268,7 +4271,7 @@ function checkPanel(init){ const ms=sL()==='ms', app=!!window.AndroidExtra?.scan
   const lang=store.get('scanLang','ar');
   const b=openPanel('chk', ms?'Imbas & Semak':'Scan & Check', `
    ${app?`<div class="row2" style="gap:8px"><button class="pill primary" id="ckCam" style="flex:1;justify-content:center">${ic('cam')}${ms?'Kamera':'Camera'}</button><button class="pill" id="ckPic" style="flex:1;justify-content:center">${ic('img')}${ms?'Gambar':'Picture'}</button></div>
-   ${window.AndroidExtra?.lens?`<button class="pill" id="ckLens" style="width:100%;justify-content:center;margin-top:8px">${ic('search')}${ms?'Baca dengan Google Lens':'Read with Google Lens'}</button><p class="note" style="margin:4px 0 0;font-size:12px">${ms?'Jika bacaan kamera kurang tepat: Lens membaca gambar terakhir (atau buka kameranya); pilih teks, ketik Kongsi → My Personal Quran.':'If the camera reading is not right: Lens reads the last picture (or opens its camera); select the text, tap Share → My Personal Quran.'}</p>`:''}
+   ${window.AndroidExtra?.lens?`<button class="pill" id="ckLens" style="width:100%;justify-content:center;margin-top:8px">${ic('search')}${ms?'Baca dengan Google Lens':'Read with Google Lens'}</button><p class="note" style="margin:4px 0 0;font-size:12px">${ms?'Jika bacaan kamera kurang tepat: Lens membaca gambar terakhir (atau buka kameranya); pilih teks, ketik Kongsi → My Personal Qur\'an.':'If the camera reading is not right: Lens reads the last picture (or opens its camera); select the text, tap Share → My Personal Qur\'an.'}</p>`:''}
    <div class="label">${ms?'Bahasa tulisan dalam gambar':'Language of the text in the picture'}</div>${segHtml('ckLang',[['ar','Arabic · عربي'],['lat','Melayu / English']],lang)}`
    :`<p class="note" style="margin-top:0">${ms?'Imbas dengan kamera ada dalam aplikasi Android. Di sini, tampal teks.':'Camera scanning is in the Android app. Here, paste the text.'}</p>`}
    <div class="label">${ms?'Teks untuk disemak (boleh dibetulkan)':'Text to check (you can correct it)'}</div>
@@ -4488,7 +4491,7 @@ function solatCopy(e,i,kind='solat'){ const ms=sL()==='ms', K=SLK[kind], D=slDat
   if((e.h||[]).length){ L.push('', ms?'Hadis:':'Hadith:'); e.h.forEach(([bk,n,sn,nt])=>L.push(`• ${KT_SHORT[bk]||bk} ${n}${nt?': '+sT(nt):''}`)); }
   (e.d||[]).forEach(x=>{ L.push('', sT(x.topic)); x.p.forEach(p=>L.push(`• ${sT(D.who[p.w]||{en:p.w,ms:p.w})}: ${ms?(p.ms||p.en):p.en}${p.ref?' ['+p.ref+']':''}`)); if(x.note) L.push(sT(x.note)); });
   const nt=noteGet(K.np+':'+e.id); if(nt) L.push('', (ms?'Nota saya: ':'My note: ')+nt.t);
-  L.push('', '— My Personal Quran · '+K.copy); putClipboard(L.join('\n')).then(ok=>toast(ok?(ms?'Disalin':'Copied'):(ms?'Tidak dapat menyalin':'Could not copy'))); }
+  L.push('', '— '+APP_NAME+' · '+K.copy); putClipboard(L.join('\n')).then(ok=>toast(ok?(ms?'Disalin':'Copied'):(ms?'Tidak dapat menyalin':'Could not copy'))); }
 function solatOpen(id,kind='solat'){ const K=SLK[kind]; document.querySelectorAll('.panel').forEach(p=>{ if(p.id!==K.pid) p.hidden=true; }); if(document.getElementById(K.pid)?.hidden!==false) solatPanel(kind); solatStep(id,kind); }
 async function solatStep(id,kind='solat'){ const K=SLK[kind]; const D=await solatLoad(kind); const i=D.steps.findIndex(e=>e.id===id), e=D.steps[i]; if(!e) return; const ms=sL()==='ms';
   store.set(K.last,id); const prev=D.steps[i-1], next=D.steps[i+1];

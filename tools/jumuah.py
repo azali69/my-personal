@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Solat Jumaat: the sunnah of the Prophet ﷺ from before the khutbah to after the prayer, for My Personal Quran
+"""Solat Jumaat: the sunnah of the Prophet ﷺ from before the khutbah to after the prayer, for My Personal Qur'an
 (Azli, 17 Oct 2026). Same layout as Sifat Solat (tools/sifat_solat.py): every step cites hadith in the books in the app
 (the app shows each one's grading); where scholars differ, the positions are side by side with their references, and
 other scholars' views (with references and links) in a separate box. Hadith numbers are this app's numbering.

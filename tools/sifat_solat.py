@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Sifat Solat Nabi ﷺ: the Prophet's prayer, step by step, for My Personal Quran (Azli, 15 Oct 2026).
+"""Sifat Solat Nabi ﷺ: the Prophet's prayer, step by step, for My Personal Qur'an (Azli, 15 Oct 2026).
 Written for this app. Every step cites hadith in the seven books in the app (the app shows each one's grading);
 where scholars differ, the positions are given side by side with their evidence, without choosing between them.
 Positions of the schools: al-Nawawi, al-Majmu' Sharh al-Muhadhdhab and Minhaj at-Talibin (Shafi'i, with his reports of

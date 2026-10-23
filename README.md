@@ -1,4 +1,4 @@
-# My Personal Quran
+# My Personal Qur'an
 
 Version numbers: v&lt;major&gt;.&lt;minor&gt;.&lt;patch&gt;.&lt;build&gt; (e.g. v1.0.0.65). major.minor.patch is in `VERSION`; build is the APK build number.
 

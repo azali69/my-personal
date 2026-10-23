@@ -1,6 +1,6 @@
-My Personal Quran is a Madinah mushaf for reading, memorising (hafazan), listening and daily worship. This manual explains every screen and button, in the order you meet them.
+My Personal Qur'an is a Madinah mushaf for reading, memorising (hafazan), listening and daily worship. This manual explains every screen and button, in the order you meet them.
 
-> **Disclaimer.** My Personal Quran is for **personal use only**. It is free, not for sale, and must not be used commercially. Its contents belong to their publishers and are shown unchanged with credit: the Qur'an text from the King Fahd Complex (KFGQPC); translations and tafsir from QuranEnc.com; word by word and transliteration from Quran.com; hadith texts from the Hadith API (fawazahmed0) and Sunnah.com, with the gradings of the scholars named on each hadith; explanations from HadeethEnc.com; Hisnul Muslim from hisnmuslim.com; prayer times, khutbah and halal certificates from MUIS; and the Sirah, Sifat Solat and Solat Jumaat written for this app from named classical sources (Settings → Sources & verification lists them all). The app is a study aid, not a fatwa: for rulings, ask a qualified scholar.
+> **Disclaimer.** My Personal Qur'an is for **personal use only**. It is free, not for sale, and must not be used commercially. Its contents belong to their publishers and are shown unchanged with credit: the Qur'an text from the King Fahd Complex (KFGQPC); translations and tafsir from QuranEnc.com; word by word and transliteration from Quran.com; hadith texts from the Hadith API (fawazahmed0) and Sunnah.com, with the gradings of the scholars named on each hadith; explanations from HadeethEnc.com; Hisnul Muslim from hisnmuslim.com; prayer times, khutbah and halal certificates from MUIS; and the Sirah, Sifat Solat and Solat Jumaat written for this app from named classical sources (Settings → Sources & verification lists them all). The app is a study aid, not a fatwa: for rulings, ask a qualified scholar.
 
 ## 1. Getting started
 
@@ -14,7 +14,7 @@ My Personal Quran is a Madinah mushaf for reading, memorising (hafazan), listeni
 
 - The **book cover** appears. Tap anywhere on it to open the book; it swings open to the **Home** screen.
 - The cover comes back when you have been out of the app for more than 3 minutes (a quick trip to Google Translate or a source link does not bring it back). **Tap the top-left corner** of the cover to turn it off (turn it on again in Settings › Home); **tap the top-right corner** to change its colour; by default Home and the top and bottom bars change with it (Home settings → **"Tap change colour" on the book cover changes** → **Book cover only** to change just the cover). To skip it in settings: Home → settings button (top right) → **Book cover when the app opens → Skip**.
-- The cover has a gold frame, corner flowers and the medallion with القرآن الكريم, and "My Personal Quran" below. Its colour: same settings button → **Book cover colour**: **Same as home** (follows the Home background), **Madinah green**, **Black**, **Night blue**, **Light blue**, **Pastel green** or **Ivory**. **Preview the cover** shows it straight away.
+- The cover has a gold frame, corner flowers and the medallion with القرآن الكريم, and "My Personal Qur'an" below. Its colour: same settings button → **Book cover colour**: **Same as home** (follows the Home background), **Madinah green**, **Black**, **Night blue**, **Light blue**, **Pastel green** or **Ivory**. **Preview the cover** shows it straight away.
 - Opening the app from a prayer notification skips the cover and goes straight to **Prayer Times**.
 
 **Permissions** (each asked only when you first use the feature)
@@ -279,9 +279,9 @@ All open from the **ayah menu**; they need the internet once per surah.
 
 1. Someone posts an "ayah" or a "hadith" and you want to check it. Home → **Scan & Check**, then:
    - **Camera** (Android app): choose the language of the text first (**Arabic** or **Melayu / English**), take a photo of the text, and the app reads it on the phone (no internet needed for reading). Arabic is read by a reader made for Arabic script (from EasyOCR), which handles harakat and Qur'an script; the first time you scan Arabic, the app asks to download it once (about 59 MB, Wi-Fi recommended); Malay and English by Google ML Kit.
-   - **Read with Google Lens**: if a reading is not right, Lens (in the Google app) reads the last picture, or opens its own camera. Select the text, tap **Share → My Personal Quran**, and it is checked here. Lens needs the internet.
+   - **Read with Google Lens**: if a reading is not right, Lens (in the Google app) reads the last picture, or opens its own camera. Select the text, tap **Share → My Personal Qur'an**, and it is checked here. Lens needs the internet.
    - **Picture / screenshot**: pick a screenshot or photo you already have.
-   - **Share**: in WhatsApp, Telegram, the browser or the gallery, tap **Share → My Personal Quran** ("Check in My Quran"). Shared text is checked at once; for a shared picture, choose its language.
+   - **Share**: in WhatsApp, Telegram, the browser or the gallery, tap **Share → My Personal Qur'an** ("Check in My Qur'an"). Shared text is checked at once; for a shared picture, choose its language.
    - **Paste**: paste the text into the box. This works in the browser too.
    - The language of this page, the Sirah and Masjid & musollah follows Settings → **Language of the Sirah, Scan & check and Masjid pages** (Same as translation, Bahasa Melayu or English).
 2. Check the text in the box (the camera can misread a letter, especially in Arabic with harakat or decorated fonts), correct it if needed, and tap **Check**.

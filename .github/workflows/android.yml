@@ -56,11 +56,11 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v${{ env.V }}
-          name: My Personal Quran v${{ env.V }}
+          name: My Personal Qur'an v${{ env.V }}
           make_latest: true
           files: out/*.apk
           body: |
-            Android app for My Personal Quran v${{ env.V }}.
+            Android app for My Personal Qur'an v${{ env.V }}.
 
             Install: download the .apk on your phone and open it. Android will ask you to allow installs from this source the first time.
             Updates install over the previous version, keeping your blocks and hafazan history.

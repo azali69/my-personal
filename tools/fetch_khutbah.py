@@ -5,7 +5,7 @@ Run by .github/workflows/khutbah.yml on Thursday evening and Friday morning (Sin
 import json, re, sys, os, html, datetime, urllib.request
 BASE = 'https://www.muis.gov.sg'
 LIST = BASE + '/resources/khutbah-and-religious-advice/khutbah/'
-UA = {'User-Agent': 'Mozilla/5.0 (My Personal Quran; github.com/azali69/my-personal)'}
+UA = {'User-Agent': 'Mozilla/5.0 (My Personal Qur'an; github.com/azali69/my-personal)'}
 def get(u):
     with urllib.request.urlopen(urllib.request.Request(u, headers=UA), timeout=40) as r:
         return r.read().decode('utf-8', 'replace')

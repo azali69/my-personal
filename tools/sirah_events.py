@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Sirah timeline for My Personal Quran (Azli, 15 Oct 2026).
+"""Sirah timeline for My Personal Qur'an (Azli, 15 Oct 2026).
 Each event: a short summary written for the app (EN/MS), Qur'an links that the hadith books or the classical tafsir
 make themselves, hadith from the app's own books (gradings come from the data), reports from books outside the app
 (named, with their status where it is known), and popular stories with their status shown plainly.

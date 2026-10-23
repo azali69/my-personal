@@ -65,7 +65,7 @@ import java.util.Map;
 import java.util.ArrayList;
 
 /**
- * Hosts the My Personal Quran web app from the APK's own assets (works offline)
+ * Hosts the My Personal Qur'an web app from the APK's own assets (works offline)
  * and gives it Android's speech recogniser, because WebView has no Web Speech API.
  */
 public class MainActivity extends Activity {
@@ -534,7 +534,7 @@ public class MainActivity extends Activity {
                 msess.setMetadata(new MediaMetadata.Builder()
                         .putString(MediaMetadata.METADATA_KEY_TITLE, title == null ? "" : title)
                         .putString(MediaMetadata.METADATA_KEY_ARTIST, subtitle == null ? "" : subtitle)
-                        .putString(MediaMetadata.METADATA_KEY_ALBUM, "My Personal Quran").build());
+                        .putString(MediaMetadata.METADATA_KEY_ALBUM, "My Personal Qur'an").build());
                 msess.setPlaybackState(new PlaybackState.Builder().setActions(actions)
                         .setState("playing".equals(state) ? PlaybackState.STATE_PLAYING : PlaybackState.STATE_PAUSED, PlaybackState.PLAYBACK_POSITION_UNKNOWN, 1f).build());
                 msess.setActive(true);
