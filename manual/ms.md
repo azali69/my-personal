@@ -38,25 +38,27 @@ Kembali ke Home dari mana-mana dengan **butang rumah** (atas kiri skrin bacaan) 
 
 | Jubin | Membuka |
 | --- | --- |
-| Last read | Halaman terakhir yang dibaca |
-| Open Qur'an | Senarai surah, juzuk dan halaman |
-| Hafazan | Kotak hafazan (bahagian 5) |
-| Listen & repeat | Qari membaca, anda mengulang dan disemak (bahagian 6) |
-| Bookmarks | Semua penanda dalam tab: Qur'an, Hadith, Sirah, Doa, Sifat Solat, Jumaat. Dibuka di atas Home; al-Quran dibuka hanya apabila anda memilih ayat |
-| Doa & zikir | Hisnul Muslim (bahagian 8) |
-| Hadith | Enam kitab hadis (Kutub as-Sittah) dan al-Muwatta Imam Malik, dengan hukum hadis (bahagian 8) |
-| Syama'il | Asy-Syama'il al-Muhammadiyyah karya at-Tirmizi, dalam jubinnya sendiri (juga kitab kelapan dalam Hadith) (bahagian 8) |
-| Sifat Solat Nabi ﷺ | Solat Nabi langkah demi langkah, dengan hadis dan perbezaan pendapat ulama (bahagian 8) |
-| Solat Jumaat | Sunnah hari Jumaat dari sebelum khutbah hingga selepas solat, isu qabliyah, rukun khutbah, dan khutbah terkini MUIS (bahagian 8) |
-| Kamus Al-Quran | Setiap perkataan al-Quran mengikut akar kata: makna, kekerapan dan tempatnya (bahagian 8) |
-| Scan & check | Semak sama ada ayat atau hadis yang dikongsi orang ada dalam Al-Quran atau kitab hadis (bahagian 8) |
-| Halal food | Cari tempat makan bersijil halal MUIS; pautan rasmi Jepun, Korea dan Thailand (bahagian 8) |
-| Masjid & musollah | Masjid dan musolla, yang paling dekat dahulu, dengan arah jalan; tambah tempat sendiri (bahagian 8) |
-| Notes | Buku nota anda: nota pada ayat, pada hadis, dan nota bebas (bahagian 8) |
-| Prayer times | Waktu solat MUIS, peringatan (bahagian 8) |
-| Qibla | Kompas arah Kaabah (bahagian 8) |
-| Settings | Semua tetapan (bahagian 9) |
-| User manual | Panduan ini, dalam bahasa Inggeris atau Bahasa Melayu |
+| Last Read (Terakhir Dibaca) | Halaman terakhir yang dibaca |
+| Read Qur'an (Baca Al-Quran) | Senarai surah, juzuk dan halaman |
+| Memorisation (Hafazan) | Kotak hafazan (bahagian 5) |
+| Listen & Repeat (Dengar & Ulang) | Qari membaca, anda mengulang dan disemak (bahagian 6) |
+| Bookmarks (Penanda) | Semua penanda dalam tab: Qur'an, Hadith, Sirah, Doa, Sifat Solat, Jumaat. Dibuka di atas Home; al-Quran dibuka hanya apabila anda memilih ayat |
+| Du'a & Dhikr (Doa & Zikir) | Hisnul Muslim (bahagian 8) |
+| Hadith (Hadis) | Enam kitab hadis (Kutub as-Sittah) dan al-Muwatta Imam Malik, dengan hukum hadis (bahagian 8) |
+| Shama'il (Syama'il) | Asy-Syama'il al-Muhammadiyyah karya at-Tirmizi, dalam jubinnya sendiri (juga kitab kelapan dalam Hadith) (bahagian 8) |
+| Seerah (Sirah) | Kehidupan Nabi ﷺ, dengan rujukan Al-Quran dan hadis (bahagian 8) |
+| Prophet's ﷺ Prayer (Sifat Solat Nabi ﷺ) | Solat Nabi langkah demi langkah, dengan hadis dan perbezaan pendapat ulama (bahagian 8) |
+| Friday Prayer (Solat Jumaat) | Sunnah hari Jumaat dari sebelum khutbah hingga selepas solat, isu qabliyah, rukun khutbah, dan khutbah terkini MUIS (bahagian 8) |
+| Qur'an Dictionary (Kamus Al-Quran) | Setiap perkataan al-Quran mengikut akar kata: makna, kekerapan dan tempatnya (bahagian 8) |
+| Scan & Check (Imbas & Semak) | Semak sama ada ayat atau hadis yang dikongsi orang ada dalam Al-Quran atau kitab hadis (bahagian 8) |
+| Halal Food (Makanan Halal) | Cari tempat makan bersijil halal MUIS; pautan rasmi Jepun, Korea dan Thailand (bahagian 8) |
+| Mosques & Prayer Rooms (Masjid & Musolla) | Masjid dan musolla, yang paling dekat dahulu, dengan arah jalan; tambah tempat sendiri (bahagian 8) |
+| Notes (Nota) | Buku nota anda: nota pada ayat, pada hadis, dan nota bebas (bahagian 8) |
+| Prayer Times (Waktu Solat) | Waktu solat MUIS, peringatan (bahagian 8) |
+| Qibla (Kiblat) | Kompas arah Kaabah (bahagian 8) |
+| Settings (Tetapan) | Semua tetapan (bahagian 9) |
+| User Guide (Panduan Pengguna) | Panduan ini, dalam bahasa Inggeris atau Bahasa Melayu |
+| Language · Bahasa | Tanda English atau Bahasa Melayu untuk seluruh aplikasi (bahagian 9) |
 
 ## 3. Membaca al-Quran
 
@@ -198,7 +200,7 @@ Semuanya dibuka dari **menu ayat**; memerlukan internet sekali bagi setiap surah
 
 **Doa & zikir (Hisnul Muslim)**
 
-1. Home → **Doa & zikir**. **Morning zikir** (zikir pagi), **Evening zikir** (zikir petang), sebelum tidur dan bangun tidur berada di atas di bawah **Daily**; bab yang anda simpan di bawah **Saved**; kemudian **All chapters**, dikumpulkan mengikut topik (contohnya **Prayer (solat)** mengandungi semua bahagian solat, **After prayer** zikir selepas solat). Ketik topik untuk membuka atau menutupnya. Carian mencari bab mengikut topik.
+1. Home → **Du'a & Dhikr**. **Morning zikir** (zikir pagi), **Evening zikir** (zikir petang), sebelum tidur dan bangun tidur berada di atas di bawah **Daily**; bab yang anda simpan di bawah **Saved**; kemudian **All chapters**, dikumpulkan mengikut topik (contohnya **Prayer (solat)** mengandungi semua bahagian solat, **After prayer** zikir selepas solat). Ketik topik untuk membuka atau menutupnya. Carian mencari bab mengikut topik.
 2. **Morning zikir** dan **Evening zikir** ialah bab zikir pagi dan petang dalam kitab itu, dijadikan dua set: yang kitab berikan untuk pagi sahaja ada dalam set pagi sahaja, yang untuk petang sahaja dalam set petang sahaja, dan set petang menggunakan lafaz petang (أمسينا، أمسيت…) di mana kitab memberikannya. Doa dengan lafaz petang tiada butang Listen kerana rakamannya dengan lafaz pagi.
 3. Setiap doa memaparkan teks Arab, transliterasi dan terjemahan Inggeris. **Listen** memperdengarkannya; pembilang **0 / 3** mengira ulangan.
 4. **Source** di bawah setiap doa: ketik untuk melihat rujukan yang diberikan dalam kitab (contohnya "Al-Bukhari …; Muslim …") bersama pautan ke doa itu di sunnah.com. Baris pertamanya meringkaskan hukum daripada rujukan itu: dipetik daripada Sahih al-Bukhari / Muslim; dinilai sahih atau hasan oleh ulama yang disebut; sahih sebagai kata-kata Sahabat; atau tiada hukum dalam kitab.
@@ -234,23 +236,23 @@ Semuanya dibuka dari **menu ayat**; memerlukan internet sekali bagi setiap surah
 8. Tiada hasil? Cari 3 hingga 5 perkataan yang jarang tanpa tanda petik; lafaz riwayat berbeza-beza.
 13. **Asy-Syama'il al-Muhammadiyyah** (at-Tirmizi) ada jubinnya sendiri, **Syama'il**, di Home, dan juga kitab kelapan dalam senarai Hadith: rupa, akhlak dan kehidupan harian Nabi ﷺ, 400 hadis dalam 56 bab, dalam bahasa Arab dan Inggeris (Sunnah.com). Setiap hadis menunjukkan penilaian **Zubair 'Ali Za'i** dan, jika hadis itu ada dalam *Mukhtasar asy-Syama'il* al-Albani, penilaian **al-Albani** dengan nombornya. Beliau membuang sanad yang berulang, jadi tiada penilaian beliau tidak bermakna hadis itu lemah. **Also in** menunjukkan hadis yang sama dalam enam kitab, dengan penilaian masing-masing (al-Albani, Syu'aib al-Arna'ut, Zubair 'Ali Za'i). Tiada terjemahan Melayu terbuka untuk kitab ini, jadi BI memaparkan bahasa Inggeris.
 
-**Sifat Solat Nabi ﷺ**
+**Prophet's ﷺ Prayer (Sifat Solat Nabi ﷺ)**
 
-1. Home → **Sifat Solat Nabi ﷺ**: solat dalam 17 langkah, daripada niat hingga salam, kemudian **zikir dan doa selepas solat**, dan qunut Subuh.
+1. Home → **Prophet's ﷺ Prayer**: solat dalam 17 langkah, daripada niat hingga salam, kemudian **zikir dan doa selepas solat**, dan qunut Subuh.
 2. Setiap langkah ada huraian ringkas dan **hadis**nya daripada tujuh kitab dengan darjatnya; ketik untuk membacanya (butang kembali telefon membawa anda semula ke langkah itu).
 3. **Perbezaan pendapat ulama** (ditanda "ada perbezaan" dalam senarai) meletakkan pendapat empat mazhab, **Syafi'i**, **Hanafi**, **Maliki** dan **Hanbali**, bersebelahan; di bawahnya, **Pandangan ulama lain** membuka kotak berasingan dengan **Imam al-Nawawi**, **Ibn Taimiyyah**, **asy-Syatibi**, **al-Albani**, **Ibn Baz**, **Ibn 'Uthaimin** dan **Syu'aib al-Arna'ut** (penilaian beliau terhadap riwayat di luar kitab aplikasi ini, cth. 'di atas dada' riwayat Hulb at-Ta'i) , **Dar al-Ifta' Mesir** (badan fatwa Mesir) dan **Jawatankuasa Fatwa Negeri Perlis** jika mereka membincangkannya, setiap satu bertanda \*, dengan **rujukan**nya (kitab dan jilid/halaman) dan **Buka sumber ›** (laman fatwa ulama itu, ensiklopedia fiqh Dorar.net atau IslamQA). Hanya pendapat yang ada rujukannya dimasukkan. Dalil yang dibincangkan disenaraikan dengan darjatnya, tanpa memilih antara mereka: cth. tempat meletak tangan, basmalah dikuatkan, Al-Fatihah di belakang imam, lutut atau tangan dahulu, duduk istirahat, jari ketika tasyahhud, qunut Subuh, zikir kuat atau perlahan selepas solat, dan doa imam dengan makmum mengaminkan.
 4. Setiap langkah ada **Penanda**, **Nota** dan **Salin**; **Sambung membaca** dan penanda anda ada di atas senarai. Langkah yang ada doa mempunyai **Buka di Doa & zikir ›** (cth. selepas solat → "bacaan selepas selesai solat" Hisn al-Muslim). Imam empat mazhab, para pengulas dan penilai hadis ditunjukkan dengan tahun wafatnya (w.).
 5. Sumber pendapat mazhab: al-Nawawi (*al-Majmu'*, *Minhaj at-Talibin*), Ibn Qudamah (*al-Mughni*), Ibn Rushd (*Bidayat al-Mujtahid*); ulama lain: al-Nawawi (*al-Majmu'*), al-Albani (*Asl Sifat Solat an-Nabi*), Ibn Baz (*Majmu' Fatawa*, *Fatawa Nur 'ala ad-Darb*), Ibn 'Uthaimin (*Majmu' Fatawa wa Rasa'il*, *asy-Syarh al-Mumti'*), Syu'aib al-Arna'ut (*Takhrij al-Musnad*, *Takhrij Zad al-Ma'ad*), Ibn Taimiyyah (*al-Fatawa al-Kubra*), Dar al-Ifta' Mesir (fatwa bernombor), setiap baris dengan jilid/halaman. Ditulis untuk aplikasi ini; untuk amalan anda, ikut guru anda.
 
-**Solat Jumaat**
+**Friday Prayer (Solat Jumaat)**
 
-1. Home → **Solat Jumaat**: 7 langkah, susunan yang sama dengan Sifat Solat: persiapan (mandi, bersugi, wangian), pergi awal dan apa yang dilakukan sementara menunggu, **solat sunat qabliyah Jumaat?**, khutbah (mendengar, tahiyyatul masjid, **rukun khutbah** empat mazhab), **duduk antara dua khutbah**, solat, dan selepasnya.
+1. Home → **Friday Prayer**: 7 langkah, susunan yang sama dengan Sifat Solat: persiapan (mandi, bersugi, wangian), pergi awal dan apa yang dilakukan sementara menunggu, **solat sunat qabliyah Jumaat?**, khutbah (mendengar, tahiyyatul masjid, **rukun khutbah** empat mazhab), **duduk antara dua khutbah**, solat, dan selepasnya.
 2. **Qabliyah**: pada zaman Nabi ﷺ hanya ada satu azan, ketika imam duduk di atas mimbar, lalu khutbah terus menyusul (al-Bukhari 912); tiada riwayat sahih yang menunjukkan Baginda atau para Sahabat solat selepas azan Jumaat. Pendapat empat mazhab (Syafi'i dan Hanafi: ada; Maliki: tiada sunat tetap; Hanbali: dua riwayat) dan ulama lain (Ibn Taimiyyah, Ibn Hajar, Dar al-Ifta' Mesir, Mufti Wilayah Persekutuan) diberi dengan rujukannya; hadis "empat rakaat sebelum Jumaat" (Ibn Majah 1129) sangat lemah.
 3. **Khutbah Jumaat MUIS**: khutbah terkini dari laman MUIS (Melayu atau Inggeris mengikut bahasa anda, dengan PDF), disemak setiap petang Khamis dan pagi Jumaat, serta pautan ke semua khutbah MUIS. Dalam aplikasi Android, **PDF ›** bertanya cara membukanya: **Buka dengan aplikasi pembaca…** menyimpan PDF itu dan membiarkan anda memilih aplikasinya (cth. My Personal Reader atau NeoReader; selepas itu ia boleh dibuka semula tanpa internet), **Muat turun ke folder Download** menyimpan salinan yang boleh dibuka dari aplikasi e-reader anda (Android 10 ke atas), atau **Buka dalam pelayar**.
 
-**Kamus Al-Quran**
+**Qur'an Dictionary (Kamus Al-Quran)**
 
-1. Home → **Kamus Al-Quran**: setiap perkataan al-Quran mengikut akar katanya (1,650 akar kata dan partikel, 4,770 perkataan). Ketik satu huruf, atau cari dalam bahasa Arab (akar kata, perkataan atau bentuknya dalam ayat) atau dengan makna dalam Bahasa Melayu/Indonesia atau Inggeris (cth. "rahmat").
+1. Home → **Qur'an Dictionary**: setiap perkataan al-Quran mengikut akar katanya (1,650 akar kata dan partikel, 4,770 perkataan). Ketik satu huruf, atau cari dalam bahasa Arab (akar kata, perkataan atau bentuknya dalam ayat) atau dengan makna dalam Bahasa Melayu/Indonesia atau Inggeris (cth. "rahmat").
 2. Satu akar kata menunjukkan setiap perkataan daripadanya (lema) dengan jenis kata, berapa kali ia muncul, maknanya (Indonesia, hampir sama dengan Melayu, dan Inggeris) dan bentuk-bentuknya; **Lihat ayat** menyenaraikan tempatnya: ketik untuk membuka ayat itu (butang **‹ Kembali** membawa anda ke Kamus semula).
 3. Sumber: Quranic Arabic Corpus (Universiti Leeds, GNU GPL) dengan pembetulan mustafa0x/quran-morphology; makna daripada kata demi kata Quran.com. *Kamus Al-Qur'an* terbitan PTS dilindungi hak cipta, maka tidak disalin.
 4. **Makna di mana-mana**: tekan lama satu perkataan dan pilih **Makna** dalam menu (atau **Cari makna** yang muncul di halaman Sirah, Hadis dan Doa). Bahasa Arab membuka Kamus; Bahasa Melayu atau Inggeris memberi carian dalam terjemahan al-Quran dan pautan ke Kamus Dewan (PRPM, DBP), Wiktionary, Cambridge dan Google Translate. Kamus Melayu yang terbuka sepenuhnya untuk dimuat ke dalam aplikasi belum ada.
@@ -275,7 +277,7 @@ Semuanya dibuka dari **menu ayat**; memerlukan internet sekali bagi setiap surah
 
 **Imbas & semak (Scan & check)**
 
-1. Seseorang berkongsi "ayat" atau "hadis" dan anda mahu menyemaknya. Home → **Scan & check**, kemudian:
+1. Seseorang berkongsi "ayat" atau "hadis" dan anda mahu menyemaknya. Home → **Scan & Check**, kemudian:
    - **Kamera** (aplikasi Android): pilih dahulu bahasa teks itu (**Arabic** atau **Melayu / English**), ambil gambar teks itu, dan aplikasi membacanya dalam telefon (tidak perlu internet untuk membaca). Bahasa Arab dibaca oleh pembaca khas tulisan Arab (daripada EasyOCR), yang boleh membaca baris dan tulisan mushaf; kali pertama anda mengimbas tulisan Arab, aplikasi meminta untuk memuat turunnya sekali (kira-kira 59 MB, guna Wi-Fi); Melayu dan Inggeris oleh Google ML Kit.
    - **Baca dengan Google Lens**: jika bacaan kurang tepat, Lens (dalam aplikasi Google) membaca gambar terakhir, atau membuka kameranya sendiri. Pilih teks, ketik **Kongsi → My Personal Quran**, dan ia disemak di sini. Lens memerlukan internet.
    - **Gambar / tangkap layar**: pilih tangkapan layar atau gambar yang sudah ada.
@@ -290,13 +292,13 @@ Semuanya dibuka dari **menu ayat**; memerlukan internet sekali bagi setiap surah
 
 **Makanan halal (Halal food)**
 
-1. Home → **Halal food**. Taip nama atau kawasan (sekurang-kurangnya 3 huruf), cth. *Tampines* atau *prata*: aplikasi mencari terus dalam **direktori halal MUIS** dan menyenaraikan setiap tempat dengan jenis, alamat dan nombor sijil, serta **Map ›**. MUIS memaparkan paling banyak 200 hasil; perincikan carian. (Aplikasi Android; perlu internet.)
+1. Home → **Halal Food**. Taip nama atau kawasan (sekurang-kurangnya 3 huruf), cth. *Tampines* atau *prata*: aplikasi mencari terus dalam **direktori halal MUIS** dan menyenaraikan setiap tempat dengan jenis, alamat dan nombor sijil, serta **Map ›**. MUIS memaparkan paling banyak 200 hasil; perincikan carian. (Aplikasi Android; perlu internet.)
 2. Sijil boleh tamat atau ditarik balik: semak sijil MUIS yang dipamerkan di premis.
 3. **Pautan rasmi** Jepun (panduan JNTO untuk pelawat Muslim dan Muslim Welcome Guide JNTO, serta Halal Gourmet Japan, direktori swasta yang dirujuk JNTO), Korea (Korea Tourism Organization) dan Thailand (CICOT, Halal Standard Institute) dibuka dalam pelayar. Senarai Korea ada empat gred dan hanya **Halal Certified** bersijil halal; Jepun tiada badan halal kerajaan.
 
 **Masjid & musolla (Masjid & musollah)**
 
-1. Home → **Masjid & musollah**: 70 masjid dalam Direktori Masjid MUIS (dengan alamat dan telefon), 3 masjid bukan di bawah MUIS, dan beberapa musolla dari OpenStreetMap dan Wikipedia.
+1. Home → **Mosques & Prayer Rooms**: 70 masjid dalam Direktori Masjid MUIS (dengan alamat dan telefon), 3 masjid bukan di bawah MUIS, dan beberapa musolla dari OpenStreetMap dan Wikipedia.
 2. Ketik butang **lokasi** untuk menyusun yang paling dekat dahulu. **Arah** membuka Google Maps; **Telefon** menelefon masjid.
 3. **Cari** ikut nama, jalan atau poskod. **Semua · Masjid · Musolla · Tempat saya** menapis senarai.
 4. **Tambah tempat**: nama, jenis, alamat dan catatan (tingkat, ruang wanita, tempat wuduk), dan lokasinya: **Lokasi saya sekarang** (berdiri di tempat itu) atau tampal pautan Google Maps. Tempat anda disimpan dalam telefon; ketik **Ubah** untuk mengubah atau memadamnya.

@@ -15,7 +15,7 @@ My Personal Quran is a Madinah mushaf for reading, memorising (hafazan), listeni
 - The **book cover** appears. Tap anywhere on it to open the book; it swings open to the **Home** screen.
 - The cover comes back when you have been out of the app for more than 3 minutes (a quick trip to Google Translate or a source link does not bring it back). **Tap the top-left corner** of the cover to turn it off (turn it on again in Settings › Home); **tap the top-right corner** to change its colour; by default Home and the top and bottom bars change with it (Home settings → **"Tap change colour" on the book cover changes** → **Book cover only** to change just the cover). To skip it in settings: Home → settings button (top right) → **Book cover when the app opens → Skip**.
 - The cover has a gold frame, corner flowers and the medallion with القرآن الكريم, and "My Personal Quran" below. Its colour: same settings button → **Book cover colour**: **Same as home** (follows the Home background), **Madinah green**, **Black**, **Night blue**, **Light blue**, **Pastel green** or **Ivory**. **Preview the cover** shows it straight away.
-- Opening the app from a prayer notification skips the cover and goes straight to **Prayer times**.
+- Opening the app from a prayer notification skips the cover and goes straight to **Prayer Times**.
 
 **Permissions** (each asked only when you first use the feature)
 
@@ -38,25 +38,27 @@ Return to Home from anywhere with the **house button** (top left of the reading 
 
 | Tile | Opens |
 | --- | --- |
-| Last read | The page you were reading |
-| Open Qur'an | The surah, juz and page list |
-| Hafazan | The Hafazan box (section 5) |
-| Listen & repeat | The reciter reads, you repeat and get checked (section 6) |
+| Last Read | The page you were reading |
+| Read Qur'an | The surah, juz and page list |
+| Memorisation (Hafazan) | The Hafazan box (section 5) |
+| Listen & Repeat | The reciter reads, you repeat and get checked (section 6) |
 | Bookmarks | All your bookmarks in tabs: Qur'an, Hadith, Sirah, Doa, Sifat Solat, Jumaat. Opens over Home; the Qur'an opens only when you choose an ayah |
-| Doa & zikir | Hisnul Muslim (section 8) |
+| Du'a & Dhikr | Hisnul Muslim (section 8) |
 | Hadith | The six books (Kutub as-Sittah) and the Muwatta of Imam Malik, with gradings (section 8) |
-| Syama'il | Asy-Syama'il al-Muhammadiyyah of at-Tirmidhi, on its own tile (also the eighth book in Hadith) (section 8) |
-| Sifat Solat Nabi ﷺ | The Prophet's prayer step by step, with hadith and where scholars differ (section 8) |
-| Solat Jumaat | The sunnah of Friday from before the khutbah to after the prayer, the qabliyyah question, the pillars of the khutbah, and MUIS's latest khutbah (section 8) |
-| Kamus Al-Quran | Every word of the Qur'an by root: meanings, how often and where it occurs (section 8) |
-| Scan & check | Check whether a posted ayah or hadith is in the Qur'an or the hadith books (section 8) |
-| Halal food | Search MUIS's halal-certified eating places; official links for Japan, Korea and Thailand (section 8) |
-| Masjid & musollah | Mosques and musollahs, nearest first, with directions; add your own (section 8) |
+| Shama'il | Asy-Syama'il al-Muhammadiyyah of at-Tirmidhi, on its own tile (also the eighth book in Hadith) (section 8) |
+| Seerah | Sirah: the life of the Prophet ﷺ, with Qur'an and hadith references (section 8) |
+| Prophet's ﷺ Prayer | The Prophet's prayer step by step, with hadith and where scholars differ (section 8) |
+| Friday Prayer | The sunnah of Friday from before the khutbah to after the prayer, the qabliyyah question, the pillars of the khutbah, and MUIS's latest khutbah (section 8) |
+| Qur'an Dictionary | Every word of the Qur'an by root: meanings, how often and where it occurs (section 8) |
+| Scan & Check | Check whether a posted ayah or hadith is in the Qur'an or the hadith books (section 8) |
+| Halal Food | Search MUIS's halal-certified eating places; official links for Japan, Korea and Thailand (section 8) |
+| Mosques & Prayer Rooms | Mosques and musollahs, nearest first, with directions; add your own (section 8) |
 | Notes | Your notepad: notes on ayat, on hadith, and free notes (section 8) |
-| Prayer times | MUIS times, alerts and reminders (section 8) |
+| Prayer Times | MUIS times, alerts and reminders (section 8) |
 | Qibla | Compass to the Ka'bah (section 8) |
 | Settings | All settings (section 9) |
-| User manual | This manual, in English or Bahasa Melayu |
+| User Guide | This manual, in English or Bahasa Melayu |
+| Language · Bahasa | Tick English or Bahasa Melayu for the whole app (section 9) |
 
 ## 3. Reading the Qur'an
 
@@ -175,7 +177,7 @@ Tap the **headphones** or long-press an ayah → **Listen from this ayah**.
 - The small player bar: play/pause, previous, next, stop. Headset and Bluetooth buttons work too. When the bars are hidden while it plays, the **page number** at the bottom shows ▶ / ❚❚: tap it to pause or play; tap the page anywhere else to bring the bars back.
 - On the phone the recitation keeps playing with the screen off or in another app, and **Carry on to the next surah** goes on by itself; a **Recitation playing** notification (with Pause, Next, Stop) shows while it plays. For whole-surah reciters with missing surahs (Hazza al-Balushi), it goes on to the next surah that is available.
 
-**Listen & repeat**
+**Listen & Repeat**
 
 1. The reciter recites one part; the microphone then opens by itself (or waits, with **Wait for me**).
 2. Recite it, then press the red **Stop**.
@@ -198,7 +200,7 @@ All open from the **ayah menu**; they need the internet once per surah.
 
 **Doa & zikir (Hisnul Muslim)**
 
-1. Home → **Doa & zikir**. **Morning zikir**, **Evening zikir**, before sleeping and on waking are at the top under **Daily**; your saved chapters are under **Saved**; then **All chapters**, grouped by topic (e.g. **Prayer (solat)** holds every part of the prayer, **After prayer** the zikir after it). Tap a topic to open or close it. Search finds a chapter by topic.
+1. Home → **Du'a & Dhikr**. **Morning zikir**, **Evening zikir**, before sleeping and on waking are at the top under **Daily**; your saved chapters are under **Saved**; then **All chapters**, grouped by topic (e.g. **Prayer (solat)** holds every part of the prayer, **After prayer** the zikir after it). Tap a topic to open or close it. Search finds a chapter by topic.
 2. **Morning zikir** and **Evening zikir** are the book's chapter of morning and evening remembrance as two sets: what the book gives for the morning only is only in the morning set, what it gives for the evening only is only in the evening set, and the evening set uses the evening wording (أمسينا، أمسيت…) where the book gives one. Entries with the evening wording have no Listen button, as the recording is of the morning wording.
 3. Each doa shows Arabic, transliteration and English. **Listen** plays it; the **0 / 3** counter counts repetitions.
 4. **Source** under each doa: tap it for the reference given in the book (e.g. "Al-Bukhari …; Muslim …") with a link to that entry on sunnah.com. Its first line sums up the grading from that reference: cited from Sahih al-Bukhari / Muslim; graded sahih or hasan by the scholars named; authentic as the words of a Companion; or no grading given in the book.
@@ -234,23 +236,23 @@ All open from the **ayah menu**; they need the internet once per surah.
 8. No results? Search 3 to 5 less common words without quotation marks; narrations differ in wording.
 13. **Asy-Syama'il al-Muhammadiyyah** (at-Tirmidhi) has its own **Syama'il** tile on Home, and is also the eighth book in the Hadith list: the Prophet's appearance, manners and daily life ﷺ, 400 hadith in 56 chapters, in Arabic and English (Sunnah.com). Each hadith shows the grading of **Zubair 'Ali Za'i** and, where the hadith is in al-Albani's *Mukhtasar asy-Syama'il*, **al-Albani**'s grading with his number. He left out repeated chains, so a missing grading of his does not mean weak. **Also in** shows the same hadith in the six books, with their own gradings (al-Albani, Shu'ayb al-Arna'ut, Zubair 'Ali Za'i). There is no open Malay translation of this book, so BI shows the English.
 
-**Sifat Solat Nabi ﷺ**
+**Prophet's ﷺ Prayer (Sifat Solat Nabi ﷺ)**
 
-1. Home → **Sifat Solat Nabi ﷺ**: the prayer in 17 steps, from the intention to the salam, then **dhikr and du'a after the prayer**, and qunut in Subuh.
+1. Home → **Prophet's ﷺ Prayer**: the prayer in 17 steps, from the intention to the salam, then **dhikr and du'a after the prayer**, and qunut in Subuh.
 2. Each step has a short description and its **hadith** from the seven books with their gradings; tap one to read it (the phone's back button returns to the step).
 3. **Where scholars differ** (marked "scholars differ" in the list) sets the four schools, **Shafi'i**, **Hanafi**, **Maliki** and **Hanbali**, side by side; below them, **Other scholars' views** opens a separate box with **Imam al-Nawawi**, **Ibn Taymiyyah**, **al-Shatibi**, **al-Albani**, **Ibn Baz**, **Ibn 'Uthaymin** and **Shu'ayb al-Arna'ut** (his gradings of reports outside this app's books, e.g. Hulb at-Ta'i's 'on the chest') **Dar al-Ifta al-Misriyyah** (Egypt's fatwa house) and the **Perlis State Fatwa Committee** where they spoke on the point, each marked \*, with its **reference** (book and volume/page) and **Open source ›** (the scholar's fatwa site, Dorar.net's fiqh encyclopedia or IslamQA). Only views with a reference are included. The evidence discussed is listed with its grading, without choosing between them: e.g. where to place the hands, the basmalah aloud, al-Fatihah behind the imam, knees or hands first, the short sitting, the finger in tashahhud, qunut in Subuh, dhikr aloud or quietly after the prayer, and the imam's du'a with the people saying amin.
 4. Each step has **Bookmark**, **Note** and **Copy**; **Continue reading** and your bookmarks are at the top of the list. Steps with a doa have **Open in Doa & zikir ›** (e.g. after the prayer → Hisn al-Muslim's "what to say after completing the prayer"). The four imams, the commentators and the hadith graders show their death year (w. = wafat).
 5. Sources for the schools: al-Nawawi (*al-Majmu'*, *Minhaj at-Talibin*), Ibn Qudamah (*al-Mughni*), Ibn Rushd (*Bidayat al-Mujtahid*); other scholars: al-Nawawi (*al-Majmu'*), al-Albani (*Asl Sifat Salat an-Nabi*), Ibn Baz (*Majmu' Fatawa*, *Fatawa Nur 'ala ad-Darb*), Ibn 'Uthaymin (*Majmu' Fatawa wa Rasa'il*, *al-Sharh al-Mumti'*), Shu'ayb al-Arna'ut (*Takhrij al-Musnad*, *Takhrij Zad al-Ma'ad*), Ibn Taymiyyah (*al-Fatawa al-Kubra*), Dar al-Ifta al-Misriyyah (numbered fatwas), each line with volume/page. Written for this app; for your own practice, follow your teacher.
 
-**Solat Jumaat**
+**Friday Prayer (Solat Jumaat)**
 
-1. Home → **Solat Jumaat**: 7 steps, the same layout as Sifat Solat: preparing (ghusl, siwak, perfume), going early and what to do while waiting, **a qabliyyah sunnah before Jumu'ah?**, the khutbah (listening, tahiyyat al-masjid, the **pillars of the khutbah** in the four schools), **the sitting between the two khutbahs**, the prayer, and after it.
+1. Home → **Friday Prayer**: 7 steps, the same layout as Sifat Solat: preparing (ghusl, siwak, perfume), going early and what to do while waiting, **a qabliyyah sunnah before Jumu'ah?**, the khutbah (listening, tahiyyat al-masjid, the **pillars of the khutbah** in the four schools), **the sitting between the two khutbahs**, the prayer, and after it.
 2. **Qabliyyah**: in the Prophet's time there was one adhan, when the imam sat on the minbar, and the khutbah followed (al-Bukhari 912); no authentic report shows him or the Companions praying after the Friday adhan. The four schools' views (Shafi'i and Hanafi: yes; Maliki: no fixed sunnah; Hanbali: two reports) and other scholars (Ibn Taymiyyah, Ibn Hajar, Dar al-Ifta al-Misriyyah, Mufti Wilayah Persekutuan) are given with references; the hadith "four before Jumu'ah" (Ibn Majah 1129) is very weak.
 3. **MUIS Friday khutbah**: the latest khutbah from MUIS's website (Malay or English to match your language, with the PDF), checked every Thursday evening and Friday morning, and a link to all MUIS khutbahs. In the Android app, **PDF ›** asks how to open it: **Open with a reader app…** saves the PDF and lets you pick the app (e.g. My Personal Reader or NeoReader; it then opens again without the internet), **Download to the Download folder** keeps a copy you can open from your e-reader app (Android 10 and later), or **Open in the browser**.
 
-**Kamus Al-Quran**
+**Qur'an Dictionary (Kamus Al-Quran)**
 
-1. Home → **Kamus Al-Quran**: every word of the Qur'an by its root (1,650 roots and particles, 4,770 words). Tap a letter, or search in Arabic (root, word or a form as it appears) or by meaning in Malay/Indonesian or English (e.g. "rahmat").
+1. Home → **Qur'an Dictionary**: every word of the Qur'an by its root (1,650 roots and particles, 4,770 words). Tap a letter, or search in Arabic (root, word or a form as it appears) or by meaning in Malay/Indonesian or English (e.g. "rahmat").
 2. A root shows each word from it (lemma) with its part of speech, how many times it occurs, its meanings (Indonesian, close to Malay, and English) and its forms; **Show the ayat** lists where it occurs: tap one to open the ayah (the **‹ Back** button returns to the Kamus).
 3. Sources: the Quranic Arabic Corpus (University of Leeds, GNU GPL) with corrections from mustafa0x/quran-morphology; the meanings are Quran.com's word by word. The PTS *Kamus Al-Qur'an* is copyrighted, so it is not copied.
 4. **Makna (meaning) anywhere**: long-press a word and choose **Makna** in the menu (or **Meaning** that appears on Sirah, Hadith and Doa pages). Arabic opens the Kamus; Malay or English offers a search in the Qur'an translations and links to Kamus Dewan (PRPM, DBP), Wiktionary, Cambridge and Google Translate. A fully open Malay dictionary that can be put inside the app does not exist yet.
@@ -273,9 +275,9 @@ All open from the **ayah menu**; they need the internet once per surah.
 8. **Meaning of a word:** long-press a word in the Sirah (also in Hadith and Doa pages) to select it, then tap **Meaning** (or **Makna** in the phone's selection menu, anywhere in the app): an Arabic word opens the **Kamus Al-Quran** (or Almaany if it is not a Qur'an word); a Malay or English word offers a search in the Qur'an translations and Kamus Dewan (DBP), Wiktionary, Cambridge or Google Translate.
 9. The summaries are written for this app from the hadith and the named historians; dates the hadith do not fix (e.g. 12 Rabi' al-Awwal, 27 Rajab) are marked as such.
 
-**Scan & check**
+**Scan & Check**
 
-1. Someone posts an "ayah" or a "hadith" and you want to check it. Home → **Scan & check**, then:
+1. Someone posts an "ayah" or a "hadith" and you want to check it. Home → **Scan & Check**, then:
    - **Camera** (Android app): choose the language of the text first (**Arabic** or **Melayu / English**), take a photo of the text, and the app reads it on the phone (no internet needed for reading). Arabic is read by a reader made for Arabic script (from EasyOCR), which handles harakat and Qur'an script; the first time you scan Arabic, the app asks to download it once (about 59 MB, Wi-Fi recommended); Malay and English by Google ML Kit.
    - **Read with Google Lens**: if a reading is not right, Lens (in the Google app) reads the last picture, or opens its own camera. Select the text, tap **Share → My Personal Quran**, and it is checked here. Lens needs the internet.
    - **Picture / screenshot**: pick a screenshot or photo you already have.
@@ -288,15 +290,15 @@ All open from the **ayah menu**; they need the internet once per surah.
 5. **Hadith**: the eight books in this app are searched (the first time, every kitab is downloaded, so use Wi-Fi). Each match shows the book, number and gradings, and whether the whole text is in that hadith or **only part of it**. A red **Not found** is not proof that a hadith is fabricated: it may be in other books (such as Musnad Ahmad) or in other words. Ask a qualified teacher.
 5. How it matches: Arabic, the same letters and words (harakat, alif and hamza ignored, so the mushaf's Uthmani spelling and plain spelling compare the same, and a few misread words do not stop a match); Malay and English, the same important words. Translators word things differently, so a low percentage does not mean it is absent. Malay hadith text is compared with the Indonesian translation.
 
-**Halal food**
+**Halal Food**
 
-1. Home → **Halal food**. Type a name or area (3 letters or more), e.g. *Tampines* or *prata*: the app searches **MUIS's halal directory** directly and lists each place with its type, address and certificate number, and **Map ›**. MUIS shows at most 200 results; narrow the search. (Android app; needs the internet.)
+1. Home → **Halal Food**. Type a name or area (3 letters or more), e.g. *Tampines* or *prata*: the app searches **MUIS's halal directory** directly and lists each place with its type, address and certificate number, and **Map ›**. MUIS shows at most 200 results; narrow the search. (Android app; needs the internet.)
 2. Certificates can expire or be withdrawn: check the MUIS certificate displayed at the premises.
 3. **Official links** for Japan (JNTO's guide for Muslim travelers and its Muslim Welcome Guide, plus Halal Gourmet Japan, a private directory JNTO points to), Korea (Korea Tourism Organization) and Thailand (CICOT, Halal Standard Institute) open in the browser. Korea's list has four grades and only **Halal Certified** is certified halal; Japan has no government halal body.
 
-**Masjid & musollah**
+**Mosques & Prayer Rooms (Masjid & musolla)**
 
-1. Home → **Masjid & musollah**: the 70 mosques in MUIS's Mosque Directory (with address and phone), 3 mosques not under MUIS, and the few musollahs in OpenStreetMap and Wikipedia.
+1. Home → **Mosques & Prayer Rooms**: the 70 mosques in MUIS's Mosque Directory (with address and phone), 3 mosques not under MUIS, and the few musollahs in OpenStreetMap and Wikipedia.
 2. Tap the **location** button to list the nearest first. **Directions** opens Google Maps; **Call** phones the mosque.
 3. **Search** by name, street or postal code. **All · Masjid · Musollah · My places** filter the list.
 4. **Add a place**: name, type, address and notes (level, women's area, wudhu), and its location: **My location now** (stand at the place) or paste a Google Maps link. Your places are kept on the phone; tap **Edit** on one to change or delete it.
@@ -320,7 +322,7 @@ All open from the **ayah menu**; they need the internet once per surah.
 6. All the tools are on **one strip** at the top; slide it sideways to see the rest. **▴** hides the strip to give the page all the room, and **☰ Tools** brings it back.
 7. Notes save as you type and sync with your other devices. A note with many pages of writing becomes large and may not sync.
 
-**Prayer times**
+**Prayer Times**
 
 - **‹ ›** move by day; the next prayer is in gold.
 - The Hijri date under the date opens the **Hijri calendar**: each month with the Gregorian and Hijri day in every box, Islamic days marked (Awal Muharram, Asyura, Maulidur Rasul, Israk Mikraj, Nisfu Syaaban, 1 Ramadan, Nuzul al-Quran, the last ten nights, Hari Raya Aidilfitri, Arafah, Hari Raya Aidiladha, the days of Tasyrik) and listed under **This month**. The dates are calculated for Singapore with the MABIMS criteria that MUIS uses. If MUIS announces a different date (the moon is sighted or not), use **Adjust the Hijri date** (−2 to +2 days); it changes the Hijri date everywhere in the app.

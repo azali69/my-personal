@@ -1416,7 +1416,7 @@ function setSheet(){
   <div class="label">Waqaf &amp; ibtida' blocks</div>${seg('blocks',MODES,st.blocks)}
   <p class="note" id="blkNote"></p>
   <div class="label">Backup</div><div class="actions"><button id="openBackup">${ic('copy')}Back up or restore settings, bookmarks and notes</button></div>
-  <div class="label">Help</div><div class="actions"><button id="openManual">${ic('info')}User manual / Panduan pengguna</button></div>
+  <div class="label">Help</div><div class="actions"><button id="openManual">${ic('info')}User Guide / Panduan Pengguna</button></div>
   <div class="label">More</div>
   <div class="actions"><button id="openHist">${ic('hist')}Hafazan history</button><button id="openAbout">${ic('info')}Sources &amp; verification</button></div>`);
   const note=()=>{ document.getElementById('blkNote').innerHTML = st.blocks==='ruku'
@@ -3511,26 +3511,26 @@ function renderHome(){ const el=document.getElementById('home'); const g=pageSta
     <button class="ib" id="hmSet" aria-label="Home settings">${hic('set')}</button></div>
    <div id="hmSalah"></div>
    <div class="tiles">
-    <button class="tile wide" data-t="read">${hic('read')}<span><b>Last read</b><br><small>${esc(sname[1])} · page ${st.page}</small></span><span class="ar">${esc(sname[0])}</span></button>
-    <button class="tile" data-t="open">${hic('open')}<b>Open Qur'an</b><small>Surah list, juz and pages</small></button>
-    <button class="tile" data-t="hz">${hic('hz')}<b>Hafazan</b><small>Recite from memory and get checked</small></button>
-    <button class="tile" data-t="tq">${hic('tq')}<b>Listen &amp; repeat</b><small>The reciter reads, you repeat</small></button>
-    <button class="tile" data-t="bm">${hic('bm')}<b>Bookmarks</b><small>Bookmarks, My ruku', My blocks</small></button>
-    <button class="tile" data-t="dua">${hic('dua')}<b>Doa &amp; zikir</b><small>Hisnul Muslim</small></button>
-    <button class="tile" data-t="kutub">${hic('kutub')}<b>Hadith</b><small>Kutub as-Sittah and al-Muwatta, with gradings</small></button>
-    <button class="tile" data-t="shamail">${hic('kutub')}<b>Syama'il</b><small>Asy-Syama'il al-Muhammadiyyah: the Prophet's appearance and manners ﷺ</small></button>
-    <button class="tile" data-t="sirah">${hic('sirah')}<b>Sirah</b><small>Life of the Prophet ﷺ, with Qur'an and hadith</small></button>
-    <button class="tile" data-t="solat">${hic('solat')}<b>Sifat Solat Nabi ﷺ</b><small>The Prophet's prayer step by step, with hadith and where scholars differ</small></button>
-    <button class="tile" data-t="kamus">${hic('kamus')}<b>Kamus Al-Quran</b><small>Every word of the Qur'an by root: meanings, counts and where it occurs</small></button>
-    <button class="tile" data-t="jumuah">${hic('jumuah')}<b>Solat Jumaat</b><small>The sunnah of Friday, the khutbah, qabliyyah, and MUIS's latest khutbah</small></button>
-    <button class="tile" data-t="check">${hic('check')}<b>Scan &amp; check</b><small>Is this ayah or hadith valid? Camera, share or paste</small></button>
-    <button class="tile" data-t="halal">${hic('halal')}<b>${sL()==='ms'?'Makanan halal':'Halal food'}</b><small>${sL()==='ms'?'Carian sijil halal MUIS; Jepun, Korea, Thailand':'MUIS halal-certified search; Japan, Korea, Thailand'}</small></button>
-    <button class="tile" data-t="masjid">${hic('masjid')}<b>Masjid &amp; musollah</b><small>Nearest first, directions, add your own</small></button>
-    <button class="tile" data-t="notes">${hic('notes')}<b>Notes</b><small>Your notepad, on ayat and hadith</small></button>
-    <button class="tile" data-t="pray">${hic('pray')}<b>Prayer times</b><small>MUIS timetable, alerts</small></button>
-    <button class="tile" data-t="qibla">${hic('qibla')}<b>Qibla</b><small>Direction of the Ka'bah</small></button>
-    <button class="tile" data-t="set">${hic('set')}<b>Settings</b><small>Reading, sound, colours</small></button>
-    <button class="tile" data-t="man">${hic('man')}<b>User manual</b><small>Panduan · English / Bahasa Melayu</small></button>
+    <button class="tile wide" data-t="read">${hic('read')}<span><b>Last Read</b><br><small>${esc(sname[1])} · page ${st.page}</small></span><span class="ar">${esc(sname[0])}</span></button>
+    <button class="tile" data-t="open">${hic('open')}<b>Read Qur'an</b><small>Surahs, juz and pages</small></button>
+    <button class="tile" data-t="hz">${hic('hz')}<b>Memorisation</b><small>Hafazan: recite from memory, each word is checked</small></button>
+    <button class="tile" data-t="tq">${hic('tq')}<b>Listen &amp; Repeat</b><small>The reciter reads, then you repeat</small></button>
+    <button class="tile" data-t="bm">${hic('bm')}<b>Bookmarks</b><small>Saved ayat, My Ruku' and My Blocks</small></button>
+    <button class="tile" data-t="dua">${hic('dua')}<b>Du'a &amp; Dhikr</b><small>Doa &amp; zikir from Hisnul Muslim (Fortress of the Muslim)</small></button>
+    <button class="tile" data-t="kutub">${hic('kutub')}<b>Hadith</b><small>The Six Books (Kutub as-Sittah) and al-Muwatta', with gradings</small></button>
+    <button class="tile" data-t="shamail">${hic('kutub')}<b>Shama'il</b><small>The Prophet's ﷺ appearance and character, by at-Tirmidhi</small></button>
+    <button class="tile" data-t="sirah">${hic('sirah')}<b>Seerah</b><small>Sirah: the Prophet's ﷺ life, with Qur'an and hadith references</small></button>
+    <button class="tile" data-t="solat">${hic('solat')}<b>Prophet's ﷺ Prayer</b><small>Sifat Solat: step by step, with hadith and where scholars differ</small></button>
+    <button class="tile" data-t="kamus">${hic('kamus')}<b>Qur'an Dictionary</b><small>Kamus: every word by its root, with meaning, frequency and where it occurs</small></button>
+    <button class="tile" data-t="jumuah">${hic('jumuah')}<b>Friday Prayer</b><small>Solat Jumaat: Friday sunnah, the khutbah, and MUIS's latest sermon</small></button>
+    <button class="tile" data-t="check">${hic('check')}<b>Scan &amp; Check</b><small>Find a text in the Qur'an and hadith books: camera, share or paste</small></button>
+    <button class="tile" data-t="halal">${hic('halal')}<b>Halal Food</b><small>MUIS-certified search; guides for Japan, Korea and Thailand</small></button>
+    <button class="tile" data-t="masjid">${hic('masjid')}<b>Mosques &amp; Prayer Rooms</b><small>Masjid &amp; musolla: nearest first, with directions; add your own</small></button>
+    <button class="tile" data-t="notes">${hic('notes')}<b>Notes</b><small>Notepad for typing and handwriting; notes on ayat and hadith</small></button>
+    <button class="tile" data-t="pray">${hic('pray')}<b>Prayer Times</b><small>MUIS timetable and alerts</small></button>
+    <button class="tile" data-t="qibla">${hic('qibla')}<b>Qibla</b><small>Compass to the Ka'bah</small></button>
+    <button class="tile" data-t="set">${hic('set')}<b>Settings</b><small>Reading, sound, colours, language</small></button>
+    <button class="tile" data-t="man">${hic('man')}<b>User Guide</b><small>English and Bahasa Melayu</small></button>
     <div class="tile langtile">${hic('lang')}<b>Language · Bahasa</b>${langPick()}</div>
    </div></div>`;
   renderSalahCard();
@@ -3607,7 +3607,7 @@ function mdRender(md){ const L=md.replace(/\r/g,'').split('\n'); let h='', i=0, 
     h+=`<p>${mdInline(para.join(' '))}</p>`; }
   return {h,toc}; }
 function manualPanel(){ const lang=store.get('manLang', st.lang==='ms'?'ms':'en');
-  const b=openPanel('manual', lang==='ms'?'Panduan pengguna':'User manual', `${segHtml('manLang',[['en','English'],['ms','Bahasa Melayu']],lang)}<div id="manBody" class="man"></div>`);
+  const b=openPanel('manual', lang==='ms'?'Panduan Pengguna':'User Guide', `${segHtml('manLang',[['en','English'],['ms','Bahasa Melayu']],lang)}<div id="manBody" class="man"></div>`);
   const draw=lg=>{ const {h,toc}=mdRender(MANUAL[lg]||''); const box=b.querySelector('#manBody');
     box.innerHTML=`<nav class="card man-toc"><div class="label" style="margin-top:0">${lg==='ms'?'Kandungan':'Contents'}</div>${toc.map(([id,tx])=>`<a href="#" data-go="${id}">${esc(tx)}</a>`).join('')}</nav>${h}`;
     box.querySelector('.man-toc').onclick=e=>{ const a=e.target.closest('[data-go]'); if(!a) return; e.preventDefault(); box.querySelector('#'+a.dataset.go)?.scrollIntoView({behavior:'smooth',block:'start'}); };
@@ -3703,7 +3703,7 @@ function prRender(){ const d=new Date(); d.setHours(0,0,0,0); d.setDate(d.getDat
   const P=prayerTimesFor(d), T=prayerToday(), cfg=prAlertCfg(), loc=prLoc(), st8=prStatus(), isApp=!!window.AndroidExtra;
   const hij=hijriOf(d);
   const nextI = prDay===0 && !T.next.tomorrow ? T.next.i : -1;
-  const b=openPanel('prayer','Prayer times',`
+  const b=openPanel('prayer','Prayer Times',`
    <div class="card"><div class="row2" style="justify-content:space-between;align-items:center">
      <button class="pill" id="prPrev" aria-label="Previous day">‹</button>
      <div style="text-align:center"><b>${esc(d.toLocaleDateString('en-SG',{weekday:'long',day:'numeric',month:'long'}))}</b><br><button class="linkish" id="prCal"><small>${esc(hij)} · calendar ›</small></button></div>
@@ -3910,7 +3910,7 @@ const HISN_QURAN={75:[[2,255,255]],71:[[2,255,255]],100:[[2,255,255]],101:[[2,28
 function hisnQuranTl(id){ const refs=HISN_QURAN[id]; if(!refs) return null; const d=TL.simple; if(!d){ tlLoad('simple'); return ''; }
   return refs.map(([su,a,b])=>`${S[su-1][1]} ${su}:${a}${b>a?'–'+b:''}: `+d[su-1].slice(a-1,b).map((t,k)=>`${t} (${a+k})`).join(' ')).join('\n\n'); }
 let duaRedraw=null;
-async function duaPanel(){ const b=openPanel('dua','Doa & zikir',`<p class="note">Loading Hisnul Muslim…</p>`);
+async function duaPanel(){ const b=openPanel('dua',"Du'a & Dhikr",`<p class="note">Loading Hisnul Muslim…</p>`);
   let H; try{ H=await hisnLoad(); }catch(e){ b.innerHTML='<p class="note">Hisnul Muslim needs the internet the first time; after that it is kept on the phone.</p>'; return; }
   const pin=[1001,1002,28,1];   // morning zikir, evening zikir, before sleeping, on waking
   const byId=id=>H.chapters.find(c=>c.id===id);
@@ -3982,7 +3982,7 @@ const KM_POS={N:['Noun','Kata nama'],V:['Verb','Kata kerja'],ADJ:['Adjective','K
 async function kmLoad(){ if(kmD) return kmD; kmD=await ktGet('../kamus/kamus.json'); kmD.lem=[]; kmD.roots.forEach((r,ri)=>r.l.forEach(l=>{ kmD.lem[l[6]]={r:ri,l}; l.nf=l[5].map(kmNorm); l.nl=kmNorm(l[0]); })); return kmD; }
 async function kmOccLoad(){ if(kmOcc) return kmOcc; kmOcc=await ktGet('../kamus/occ.json'); return kmOcc; }
 async function kamusPanel(q){ const ms=sL()==='ms';
-  const b=openPanel('kamus','Kamus Al-Quran',`<p class="note">${ms?'Memuatkan…':'Loading…'}</p>`);
+  const b=openPanel('kamus',"Qur'an Dictionary",`<p class="note">${ms?'Memuatkan…':'Loading…'}</p>`);
   let D; try{ D=await kmLoad(); }catch(e){ b.innerHTML=`<p class="note">${ms?'Kamus perlu internet kali pertama; selepas itu ia disimpan dalam telefon.':'The dictionary needs the internet the first time; after that it is kept on the phone.'}</p>`; return; }
   const letters=[...new Set(D.roots.filter(r=>r.r).map(r=>kmNorm(r.r)[0]))];
   b.innerHTML=`<input class="field" id="kmQ" type="search" placeholder="${ms?'Cari: رحم، رحمة، rahmat, mercy…':'Search: رحم، رحمة، mercy, rahmat…'}" aria-label="Search the dictionary" style="margin-bottom:6px" value="${esc(q||'')}">
@@ -4045,7 +4045,7 @@ const sirahBmAll=()=>store.get('sirahBm',{});
 const SIRAH_ULAMA=[['az-Zuhri',124,742,'reports on the Maghazi'],["Musa ibn 'Uqbah",141,758,'al-Maghazi'],['Ibn Ishaq',150,767,'as-Sirah (through Ibn Hisham)'],["al-Waqidi",207,823,'al-Maghazi'],['Ibn Hisham',218,833,'as-Sirah an-Nabawiyyah'],["Abu 'Ubayd",224,838,'al-Amwal'],["Ibn Sa'd",230,845,'at-Tabaqat al-Kubra'],['Ahmad ibn Hanbal',241,855,'al-Musnad'],['al-Bukhari',256,870,'al-Jami\' as-Sahih, al-Adab al-Mufrad'],['Muslim',261,875,'as-Sahih'],['Ibn Majah',273,887,'as-Sunan'],['Abu Dawud',275,889,'as-Sunan'],['at-Tirmidhi',279,892,"al-Jami', ash-Shama'il"],["an-Nasa'i",303,915,'as-Sunan'],['Ibn Khuzaymah',311,924,'as-Sahih'],['at-Tabarani',360,971,"al-Mu'jam al-Kabir"],['ad-Daraqutni',385,995,'as-Sunan'],['al-Hakim',405,1014,'al-Mustadrak'],["Abu Nu'aym",430,1038,"Dala'il an-Nubuwwah"],['Ibn Hazm',456,1064,"Jawami' as-Sirah"],['al-Bayhaqi',458,1066,"Dala'il an-Nubuwwah, as-Sunan al-Kubra"],["Ibn 'Abd al-Barr",463,1071,"al-Isti'ab"],['as-Suhayli',581,1185,'ar-Rawd al-Unuf'],['Ibn al-Jawzi',597,1201,'al-Wafa, Talqih Fuhum Ahl al-Athar'],['Ibn al-Athir',630,1233,'Usd al-Ghabah'],['adh-Dhahabi',748,1348,"Tarikh al-Islam, Talkhis al-Mustadrak"],['Ibn al-Qayyim',751,1350,"Zad al-Ma'ad"],['Ibn Kathir',774,1373,'al-Bidayah wa an-Nihayah, al-Fusul'],["al-'Iraqi",806,1404,"Takhrij Ahadith al-Ihya'"],['al-Haythami',807,1405,"Majma' az-Zawa'id"],["Ibn Hajar al-'Asqalani",852,1449,'Fath al-Bari, al-Isabah, Taqrib at-Tahdhib'],['al-Qastallani',923,1517,'al-Mawahib al-Laduniyyah'],['al-Albani',1420,1999,"Silsilat al-Ahadith ad-Da'ifah, Fiqh as-Sirah"],["Shu'ayb al-Arna'ut",1438,2016,'Takhrij al-Musnad, Takhrij Siyar A\'lam an-Nubala\'']];
 function sirahTitleOf(id){ const e=sirahD?.events.find(x=>x.id===id); if(e) return sT(e.title); const c=store.get('sirahTitles',{})[id]; return c?(c[sL()]||c.en):id; }
 async function sirahOpen(id){ try{ await sirahLoad(); }catch(e){ toast('The Sirah needs the internet the first time'); return; } if(document.getElementById('sirah')?.hidden!==false) await sirahPanel(); sirahEvent(id); }
-async function sirahPanel(){ const b=openPanel('sirah','Sirah',`<p class="note">Loading…</p>`);
+async function sirahPanel(){ const b=openPanel('sirah',sL()==='ms'?'Sirah':'Seerah',`<p class="note">Loading…</p>`);
   let D; try{ D=await sirahLoad(); }catch(e){ b.innerHTML='<p class="note">The Sirah needs the internet the first time; after that it is kept on the phone.</p>'; return; }
   { const t={}; D.events.forEach(e=>t[e.id]=e.title); store.set('sirahTitles',t); }   // for note and bookmark titles when the data is not loaded
   const ms=sL()==='ms', openEra=new Set(store.get('sirahOpen',[]));
@@ -4104,7 +4104,7 @@ const HALAL_LINKS=[
  ['Thailand','Halal Standard Institute of Thailand','https://www.halal.or.th/','Thailand\'s halal standards institute (under CICOT).','Institut piawaian halal Thailand (di bawah CICOT).']];
 let halalSeq=0;
 function halalPanel(){ const ms=sL()==='ms', app=!!window.AndroidExtra?.halalSearch;
-  const b=openPanel('halal', ms?'Makanan halal':'Halal food', `
+  const b=openPanel('halal', ms?'Makanan Halal':'Halal Food', `
    <div class="label" style="margin-top:0">Singapore · MUIS</div>
    ${app?`<input class="field" id="hlQ" type="search" placeholder="${ms?'Nama kedai atau kawasan, cth. Tampines, prata (sekurang-kurangnya 3 huruf)':'Name or area, e.g. Tampines, prata (3 letters or more)'}" style="width:100%">
    <div id="hlR"><p class="note">${ms?'Carian terus dalam direktori halal MUIS. Perlu internet.':'Searches the MUIS halal directory directly. Needs the internet.'}</p></div>`
@@ -4266,7 +4266,7 @@ function ckPct(x){ return Math.round(Math.min(1,x)*100)+'%'; }
 function checkPanel(init){ const ms=sL()==='ms', app=!!window.AndroidExtra?.scanCamera;
   if(init && typeof init.text==='string') ckSt={text:init.text,res:null};
   const lang=store.get('scanLang','ar');
-  const b=openPanel('chk', ms?'Imbas & semak':'Scan & check', `
+  const b=openPanel('chk', ms?'Imbas & Semak':'Scan & Check', `
    ${app?`<div class="row2" style="gap:8px"><button class="pill primary" id="ckCam" style="flex:1;justify-content:center">${ic('cam')}${ms?'Kamera':'Camera'}</button><button class="pill" id="ckPic" style="flex:1;justify-content:center">${ic('img')}${ms?'Gambar':'Picture'}</button></div>
    ${window.AndroidExtra?.lens?`<button class="pill" id="ckLens" style="width:100%;justify-content:center;margin-top:8px">${ic('search')}${ms?'Baca dengan Google Lens':'Read with Google Lens'}</button><p class="note" style="margin:4px 0 0;font-size:12px">${ms?'Jika bacaan kamera kurang tepat: Lens membaca gambar terakhir (atau buka kameranya); pilih teks, ketik Kongsi → My Personal Quran.':'If the camera reading is not right: Lens reads the last picture (or opens its camera); select the text, tap Share → My Personal Quran.'}</p>`:''}
    <div class="label">${ms?'Bahasa tulisan dalam gambar':'Language of the text in the picture'}</div>${segHtml('ckLang',[['ar','Arabic · عربي'],['lat','Melayu / English']],lang)}`
@@ -4392,7 +4392,7 @@ function mqDist(a,b){ const R=6371, r=x=>x*Math.PI/180, dLa=r(b.lat-a.lat), dLo=
 const mqKm=d=>d<1?Math.round(d*1000/10)*10+' m':d.toFixed(d<10?1:0)+' km';
 function mqDir(p){ return p.lat!=null ? `https://www.google.com/maps/dir/?api=1&destination=${p.lat},${p.lng}` : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(p.n+' '+(p.a||'')+' Singapore')}`; }
 async function mqPanel(){ const ms=sL()==='ms';
-  const b=openPanel('mq', ms?'Masjid & musolla':'Masjid & musollah', `<div class="mq-top">
+  const b=openPanel('mq', ms?'Masjid & Musolla':'Mosques & Prayer Rooms', `<div class="mq-top">
      <div class="row2" style="gap:8px"><input class="field" id="mqQ" placeholder="${ms?'Cari nama, jalan atau poskod':'Search name, street or postal code'}" autocomplete="off" enterkeyhint="search" style="flex:1" value="${esc(mqQ)}">
       <button class="pill" id="mqLoc" aria-label="${ms?'Lokasi saya':'My location'}" style="height:44px">${ic('pin')}</button></div>
      ${segHtml('mqF',[['all',ms?'Semua':'All'],['m','Masjid'],['s',ms?'Musolla':'Musollah'],['me',ms?'Tempat saya':'My places']],mqF)}</div>
