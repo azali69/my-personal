@@ -1514,17 +1514,21 @@ function wordSheet(g,w){ wbStop();
     sheetB.querySelector('#wbAy').onclick=()=>playWords(P_(g,0),P_(g,ords(g).n-1));
     let j; try{ j=await wbwLoad(x[0]); }catch(e){ const b=document.getElementById('wbBox'); if(b) b.innerHTML='<p class="note">Could not load the meanings. They need the internet the first time; after that this surah is saved on the phone.</p>'; return; }
     const ws=wbwFor(j,g), box=document.getElementById('wbBox'); if(!box||!sheetB.contains(box)) return;
-    const big = sel!=null && ws[sel] ? `<div style="text-align:center;margin:10px 0 6px"><div class="arl" style="font-size:40px;line-height:1.7">${ws[sel].t}</div>
+    const big = sel!=null && ws[sel] ? `<div style="text-align:center;margin:10px 0 6px"><div class="arl" style="font-size:40px;line-height:1.7">${esc(ws[sel].t)}</div>
         <div style="font-size:18px;font-weight:600">${esc(ws[sel][lang]||'(no meaning given for this word)')}</div>
         <button class="pill primary" id="wbPlay" style="margin-top:10px">${ic('play')}Play word</button></div>` : '';
     const playSel=()=>playWords(P_(g,sel),P_(g,sel), ws[sel]&&ws[sel].au?'https://audio.qurancdn.com/'+ws[sel].au:null);
-    box.innerHTML = big + `<div class="wbw" dir="rtl">${ws.map((o,k)=>`<button class="wbw-w${k===sel?' on':''}" data-k="${k}"><span class="ar">${o.t}</span><small dir="auto">${esc(o[lang]||'–')}</small></button>`).join('')}</div>`;
+    box.innerHTML = big + `<div class="wbw" dir="rtl">${ws.map((o,k)=>`<button class="wbw-w${k===sel?' on':''}" data-k="${k}"><span class="ar">${esc(o.t)}</span><small dir="auto">${esc(o[lang]||'–')}</small></button>`).join('')}</div>`;
     box.onclick=e=>{ if(e.target.closest('#wbPlay')){ playSel(); return; } const b=e.target.closest('.wbw-w'); if(!b) return; sel=+b.dataset.k;
       box.querySelectorAll('.wbw-w').forEach(z=>z.classList.toggle('on',z===b));
       if(store.get('wbwAuto',false)) playSel(); draw(); };
     if(w!=null && sel===w){ w=null; if(store.get('wbwAuto',false)) playSel(); }
   };
   draw(); }
+/* Sahih Muslim is cited by 'Abd al-Baqi's number (8a = the Jibril hadith), not by the source's own running number (93):
+   kutub/muslim/std.json maps one to the other (23 Oct 2026 audit). Bookmarks and notes keep the running number inside. */
+let KT_STD=null; const ktN=(id,n)=> id==='muslim'&&KT_STD&&KT_STD[n] ? KT_STD[n] : String(n);
+setTimeout(async()=>{ try{ const d=await ktGet('muslim/std.json'); KT_STD=(d&&d.n)||null; }catch(e){} },1200);
 /* ---- Hadith linked to an ayah ----
    Only where the hadith books make the link themselves: the chapters of Kitab at-Tafsir in Sahih al-Bukhari (al-Bukhari's own
    chapter headings name the ayah) and the narrations of Kitab at-Tafsir in Sahih Muslim that quote the ayah. Built by
@@ -1645,7 +1649,7 @@ function ktDrawTop(){ const box=document.getElementById('ktTop'); if(!box||!ktBo
   const L=store.get('ktLast',null), lk=L&&ktBooks.find(x=>x.id===L.b), ls=lk&&lk.sections.find(x=>x.n===L.s);
   const bms=Object.entries(ktBmAll()).map(([key,v])=>{ const [b,n]=key.split(':'); return {b,n:+n,...v}; }).sort((x,y)=>y.t-x.t), f=store.get('ktBmF','');
   const list=bms.filter(x=>!f||x.c===f), on=store.get('ktBmOn',false);   // the list is hidden until ticked (Azli, 11 Oct 2026)
-  box.innerHTML = (ls? `<button class="tile wide" id="ktCont" style="width:100%;text-align:left;margin:12px 0 4px;min-height:0;padding:12px 14px"><span style="flex:1"><b>Continue reading</b><br><small>${esc(lk.en)} ${L.n} · ${esc(ktSecName(ls,true))}</small></span><span style="font-size:20px">›</span></button>`:'')
+  box.innerHTML = (ls? `<button class="tile wide" id="ktCont" style="width:100%;text-align:left;margin:12px 0 4px;min-height:0;padding:12px 14px"><span style="flex:1"><b>Continue reading</b><br><small>${esc(lk.en)} ${ktN(lk.id,L.n)} · ${esc(ktSecName(ls,true))}</small></span><span style="font-size:20px">›</span></button>`:'')
    + (bms.length? `<div class="label">Bookmarks · ${bms.length}</div><div class="bmrow" id="ktBmF" style="margin-bottom:8px"><button class="kt-tog" id="ktBmOn" aria-pressed="${on}" aria-label="Show the bookmarks"><span class="kt-box">${on?'✓':''}</span>Show</button><button class="pill" data-c="" aria-pressed="${!f}">All</button>${BMC.filter(([c])=>bms.some(x=>x.c===c)).map(([c,l])=>`<button class="bmc" style="--c:var(--bm${c});width:32px;height:32px" data-c="${c}" aria-label="${l}" aria-pressed="${f===c}"></button>`).join('')}</div>
       ${!on?'':list.slice(0,30).map(x=>{ const kk=ktBooks.find(z=>z.id===x.b); return `<button class="tile wide" data-bmo="${x.b}:${x.n}" style="width:100%;text-align:left;margin-bottom:6px;min-height:0;padding:9px 14px"><span class="dot" style="--c:var(--bm${x.c});margin-inline-end:10px"></span><span style="flex:1"><b>${esc(kk?kk.en:x.b)} ${x.n}</b>${noteGet(`h:${x.b}:${x.n}`)?' <small>· note</small>':''}</span><span>›</span></button>`; }).join('')}${on&&list.length>30?`<p class="note">Showing the newest 30 of ${list.length}.</p>`:''}`:'');
   box.querySelector('#ktCont')?.addEventListener('click',()=>ktOpenHadith(L.b,L.n,L.s));
@@ -1656,7 +1660,7 @@ function ktBook(id){ const k=ktBooks.find(x=>x.id===id); if(!k) return;
   const b=openPanel('ktB',k.en,`<div class="kt-pin">
    <div style="font-family:var(--ar);font-size:26px;text-align:center;color:var(--gold-hi);margin:2px 0 6px">${esc(k.ar)}</div>
    <details class="kt-about"><summary>About this book</summary><p class="note" style="margin:6px 0 0">${esc(KT_NOTE[id]||'')}</p></details>
-   <div class="row2" style="gap:8px"><input class="field" id="ktNo" type="number" inputmode="numeric" min="1" placeholder="Hadith number" style="flex:1;min-width:0"><button class="pill" id="ktGo">Go</button></div>
+   <div class="row2" style="gap:8px"><input class="field" id="ktNo" type="${id==='muslim'?'text':'number'}" inputmode="${id==='muslim'?'text':'numeric'}" min="1" placeholder="${id==='muslim'?'Hadith number, e.g. 8 or 8a':'Hadith number'}" style="flex:1;min-width:0" autocomplete="off"><button class="pill" id="ktGo">Go</button></div>
    <div class="row2" style="gap:8px;margin-top:8px"><input class="field" id="ktQ" type="search" placeholder="Search this book (Arabic, English or Indonesian)" style="flex:1;min-width:0"><button class="pill" id="ktFind">Search</button></div></div>
    <div id="ktBTop"></div>
    <div class="label">Kitab</div>
@@ -1664,10 +1668,13 @@ function ktBook(id){ const k=ktBooks.find(x=>x.id===id); if(!k) return;
   { const pnl=document.getElementById('ktB'), top=pnl.querySelector('.panel-top'), head=document.createElement('div'); head.className='kt-head'; top.before(head); head.append(top,pnl.querySelector('.kt-pin')); }   // title, number and search stay at the top (tap to hide)
   b.querySelector('#ktKs').onclick=e=>{ const t=e.target.closest('[data-s]'); if(t) ktKitab(id,+t.dataset.s); };
   const drawTop=()=>{ const box=b.querySelector('#ktBTop'); if(!box) return; const L=(store.get('ktLastBy',{}))[id], ls=L&&k.sections.find(x=>x.n===L.s);
-    box.innerHTML=ls?`<button class="tile wide" id="ktBCont" style="width:100%;text-align:left;margin:10px 0 0;min-height:0;padding:12px 14px"><span style="flex:1"><b>Continue reading</b><br><small>${esc(k.en)} ${L.n} · ${esc(ktSecName(ls,true))}</small></span><span style="font-size:20px">›</span></button>`:'';
+    box.innerHTML=ls?`<button class="tile wide" id="ktBCont" style="width:100%;text-align:left;margin:10px 0 0;min-height:0;padding:12px 14px"><span style="flex:1"><b>Continue reading</b><br><small>${esc(k.en)} ${ktN(k.id,L.n)} · ${esc(ktSecName(ls,true))}</small></span><span style="font-size:20px">›</span></button>`:'';
     box.querySelector('#ktBCont')?.addEventListener('click',()=>ktOpenHadith(id,L.n,L.s)); };
   drawTop(); document.getElementById('ktB').__redraw=drawTop;
-  const go=()=>{ const n=+document.getElementById('ktNo').value; if(!n) return; const s=ktSecOf(k,n);
+  const go=()=>{ const v=document.getElementById('ktNo').value.trim().toLowerCase().replace(/\s+/g,''); let n=+v;
+    if(id==='muslim'){ if(!v) return; if(!KT_STD){ toast('Loading the Muslim numbers… try again in a moment'); return; }   /* 'Abd al-Baqi's number, as cited */
+      const hit=Object.entries(KT_STD).find(([,x])=>x===v)||Object.entries(KT_STD).find(([,x])=>x===v+'a'); if(!hit){ toast('No Sahih Muslim hadith numbered '+v); return; } n=+hit[0]; }
+    if(!n) return; const s=ktSecOf(k,n);
     if(!s){ toast('No hadith with that number'); return; } ktKitab(id,s.n,n); };
   document.getElementById('ktGo').onclick=go; document.getElementById('ktNo').onkeydown=e=>{ if(e.key==='Enter') go(); };
   const find=()=>{ const q=document.getElementById('ktQ').value.trim(); if(q.length<2){ toast('Type at least 2 letters'); return; } ktSearch(id,q); };
@@ -1676,10 +1683,10 @@ function ktBook(id){ const k=ktBooks.find(x=>x.id===id); if(!k) return;
 const ktBmAll=()=>store.get('ktBm',{});
 const ktBmGet=(b,n)=>ktBmAll()[b+':'+n];
 function ktBmSheet(k,n,sn,after){ const cur=ktBmGet(k.id,n);
-  openSheet(`Bookmark · ${k.en} ${n}`, `<div class="bmrow" id="kBm">${BMC.map(([c,l])=>`<button class="bmc" style="--c:var(--bm${c})" data-c="${c}" aria-label="${l}" aria-pressed="${cur?.c===c}"></button>`).join('')}${cur?'<button class="pill" id="kBmX">Remove</button>':''}</div>
+  openSheet(`Bookmark · ${k.en} ${ktN(k.id,n)}`, `<div class="bmrow" id="kBm">${BMC.map(([c,l])=>`<button class="bmc" style="--c:var(--bm${c})" data-c="${c}" aria-label="${l}" aria-pressed="${cur?.c===c}"></button>`).join('')}${cur?'<button class="pill" id="kBmX">Remove</button>':''}</div>
    <p class="note">Pick a colour for your own grouping, e.g. green to memorise, gold to teach, red to check.</p>`);
   sheetB.querySelector('#kBm').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; const all=ktBmAll();
-    if(b.id==='kBmX'){ delete all[k.id+':'+n]; toast('Bookmark removed'); } else { all[k.id+':'+n]={c:b.dataset.c,t:Date.now(),s:sn}; toast(`Bookmarked ${k.en} ${n}`); }
+    if(b.id==='kBmX'){ delete all[k.id+':'+n]; toast('Bookmark removed'); } else { all[k.id+':'+n]={c:b.dataset.c,t:Date.now(),s:sn}; toast(`Bookmarked ${k.en} ${ktN(k.id,n)}`); }
     store.set('ktBm',all); closeSheet(); after&&after(); }; }
 /* Clicks on a hadith card: bookmark, note, copy. redraw() repaints that card after a change. */
 function ktCardClick(e,k,find,redraw){ const bmB=e.target.closest('[data-bm]'), ntB=e.target.closest('[data-note]'), cpB=e.target.closest('[data-copy]');
@@ -1698,9 +1705,9 @@ const KT_SHORT={bukhari:'al-Bukhari',muslim:'Muslim',abudawud:'Abu Dawud',tirmid
 function ktRelHtml(id,n){ const R=ktRel[id];
   if(!R){ if(!ktRelWait[id]){ ktRelWait[id]=ktGet('rel2/'+id+'.json').then(j=>{ ktRel[id]=j; document.querySelectorAll(`.kt-rel[data-relk="${id}"]`).forEach(el=>el.innerHTML=ktRelHtml(id,+el.dataset.reln)); }).catch(()=>{ ktRelWait[id]=null; }); } return ''; }
   const L=R[n]; if(!L||!L.length||!ktBooks) return '';
-  return `<div class="kt-rel-h">Also in</div>${L.map(([bi,m,p,sn])=>{ const b=ktBooks[bi]; return b?`<button class="kt-relb" data-rel="${b.id}:${m}:${p}:${sn||''}">${esc(KT_SHORT[b.id]||b.en)} ${m}${p<75?' <small>(close wording)</small>':''}</button>`:''; }).join('')}`; }
+  return `<div class="kt-rel-h">Also in</div>${L.map(([bi,m,p,sn])=>{ const b=ktBooks[bi]; return b?`<button class="kt-relb" data-rel="${b.id}:${m}:${p}:${sn||''}">${esc(KT_SHORT[b.id]||b.en)} ${ktN(b.id,m)}${p<75?' <small>(close wording)</small>':''}</button>`:''; }).join('')}`; }
 async function ktRelSheet(id,n,p,fromId,fromN,sn){ const k=(ktBooks||[]).find(x=>x.id===id); if(!k) return; const s=(sn!=null&&k.sections.find(x=>x.n===sn))||ktSecOf(k,n);
-  openSheet(`${k.en} ${n}`,'<p class="note">Loading…</p>');
+  openSheet(`${k.en} ${ktN(k.id,n)}`,'<p class="note">Loading…</p>');
   let h=null; try{ const j=await ktGet(`${id}/${s.n}.json`); h=j.h.find(x=>x[0]===n); }catch(e){}
   if(!h){ sheetB.innerHTML='<p class="note">This hadith needs the internet the first time.</p>'; return; }
   const cut=(h[7]&&typeof h[7]==='object')?h[7]:{}, gr=h[5]||[];
@@ -1791,7 +1798,7 @@ function ktCard(k,h,show,extra,sn,q){ const [n,ref,ar0,en0,idn0,gr]=h, cut=h[7]|
   const grades = gr.length? `<div class="kt-gs">${gr.map(([w,v])=>`<span class="kt-g ${ktGradeCls(v)}"><small>${esc(KT_GR[w]||w)}${grWaf(w)}</small> <b${w==='tir'?' dir="rtl" lang="ar" style="font-family:var(--ar);font-weight:400"':''}>${esc(w==='tir'?v:ktGradeTxt(v))}</b></span>`).join('')}</div>`
     : (k.id==='bukhari'||k.id==='muslim')? '' : '<div class="kt-gs"><span class="kt-g"><small>No grading in the source for this hadith</small></span></div>';
   return `<div class="card kt-card" id="kt-${n}" data-n="${n}">
-   <div class="kt-ref"><span class="kt-name"><b>${esc(k.en)} ${n}</b>${ref&&sn!=null?`<small>kitab ${sn}, no. ${ref}</small>`:''}</span>${(()=>{ const bm=ktBmGet(k.id,n), nt=noteGet(`h:${k.id}:${n}`); return `<button class="ib kt-btn" data-bm="${n}" aria-label="Bookmark"${bm?` style="color:var(--bm${bm.c})"`:''}><svg viewBox="0 0 24 24" fill="${bm?'currentColor':'none'}" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M7 4h10v16l-5-3.5L7 20z"/></svg></button><button class="ib kt-btn${nt?' on':''}" data-note="${n}" aria-label="Note">${ic('note')}</button>`; })()}<button class="ib kt-copy" data-copy="${n}" aria-label="Copy">${ic('copy')}</button></div>
+   <div class="kt-ref"><span class="kt-name"><b>${esc(k.en)} ${ktN(k.id,n)}</b>${k.id==='muslim'&&ktN(k.id,n)!==String(n)?`<small>no. ${n} in this list</small>`:''}${ref&&sn!=null?`<small>kitab ${sn}, no. ${ref}</small>`:''}</span>${(()=>{ const bm=ktBmGet(k.id,n), nt=noteGet(`h:${k.id}:${n}`); return `<button class="ib kt-btn" data-bm="${n}" aria-label="Bookmark"${bm?` style="color:var(--bm${bm.c})"`:''}><svg viewBox="0 0 24 24" fill="${bm?'currentColor':'none'}" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M7 4h10v16l-5-3.5L7 20z"/></svg></button><button class="ib kt-btn${nt?' on':''}" data-note="${n}" aria-label="Note">${ic('note')}</button>`; })()}<button class="ib kt-copy" data-copy="${n}" aria-label="Copy">${ic('copy')}</button></div>
    ${extra||''}${grades}${byLine}
    ${show.has('ar')&&!ar?'<p class="note" style="margin:4px 0">No Arabic text in the source for this hadith.</p>':''}${show.has('ar')&&ar?`<div class="kt-ar" dir="rtl" lang="ar">${ktMarked(ar,q,dA)}</div>${h[6]?'<p class="note" style="margin:2px 0 6px">One letter of this Arabic text is damaged in the source and could not be confirmed from a second copy; it is shown as …</p>':''}`:''}
    ${show.has('en')&&!en?'<p class="note" style="margin:4px 0">No English translation in the source for this hadith.</p>':''}${noId?`<p class="note" style="margin:4px 0">No Indonesian translation in the source for this hadith${show.has('en')?'.':'; English shown.'}</p>`:''}
@@ -1837,7 +1844,7 @@ function shamelaHelp(words,open){ const ms=sL()==='ms';
 function ktCopy(k,h){ const show=ktShow(), cut=h[7]||{}, [n,ref]=h, gr=h[5], ar=ktPart(h[2],cut.a,show), en=ktPart(h[3],cut.e,show), idn=ktPart(h[4],cut.i,show);
   const tr=[show.has('ar')?ar:'', show.has('id')?(idn||(show.has('en')?'':en)):'', show.has('en')?en:''].filter(Boolean).join('\n\n');
   const g = gr.map(([w,v])=>`${KT_GR[w]||w}: ${w==='tir'?v:ktGradeTxt(v)}`).join('; ');
-  putClipboard(`${tr}\n\n(${k.en} ${n}${g?' · '+g:''})`).then(ok=>toast(ok?'Copied':'Could not copy')); }
+  putClipboard(`${tr}\n\n(${k.en} ${ktN(k.id,n)}${g?' · '+g:''})`).then(ok=>toast(ok?'Copied':'Could not copy')); }
 async function ktKitab(id,sn,focus,q){ const k=ktBooks.find(x=>x.id===id), s=k.sections.find(x=>x.n===sn);
   const b=openPanel('ktS',ktSecName(s,true),`<p class="note">Loading…</p>`);
   let d; try{ d=await ktGet(`${id}/${sn}.json`); }catch(e){ b.innerHTML='<p class="note">This kitab needs the internet the first time; after that it is kept on the phone.</p>'; return; }
@@ -1909,7 +1916,7 @@ function noteSet(k,txt){ const all=notesAll(); txt=(txt||'').replace(/\s+$/,'');
   if(!txt){ delete all[k]; } else { const o=all[k]||{c:Date.now()}; o.t=txt; o.u=Date.now(); all[k]=o; } store.set('notes',all); }
 function noteTitle(k){ const [ty,a,b]=k.split(':');
   if(ty==='q'){ const x=A[+a]; return x? `${S[x[0]-1][1]} ${x[0]}:${x[1]}` : 'Ayah'; }
-  if(ty==='h'){ const bk=(ktBooks||[]).find(z=>z.id===a); return `${bk?bk.en:({bukhari:'Sahih al-Bukhari',muslim:'Sahih Muslim',abudawud:'Sunan Abi Dawud',tirmidhi:"Jami' at-Tirmidhi",nasai:"Sunan an-Nasa'i",ibnmajah:'Sunan Ibn Majah',malik:'Muwatta Malik',shamail:"Asy-Syama'il al-Muhammadiyyah"}[a]||a)} ${b}`; }
+  if(ty==='h'){ const bk=(ktBooks||[]).find(z=>z.id===a); return `${bk?bk.en:({bukhari:'Sahih al-Bukhari',muslim:'Sahih Muslim',abudawud:'Sunan Abi Dawud',tirmidhi:"Jami' at-Tirmidhi",nasai:"Sunan an-Nasa'i",ibnmajah:'Sunan Ibn Majah',malik:'Muwatta Malik',shamail:"Asy-Syama'il al-Muhammadiyyah"}[a]||a)} ${ktN(a,b)}`; }
   if(ty==='s') return 'Sirah · '+sirahTitleOf(a);
   if(ty==='d'){ const c=hisn?.chapters.find(x=>x.id===+a); return 'Doa · '+(c?c.en:'Hisn al-Muslim '+a); }
   if(ty==='j'){ const t=store.get('jumTitles',{})[a]; return (sL()==='ms'?'Solat Jumaat · ':'Jumu\'ah · ')+(t?(t[sL()]||t.en):a); }
@@ -1946,7 +1953,7 @@ function notesPanel(){ const draw=()=>{ const all=notesAll(), f=store.get('notes
    <input class="field" id="nQ" type="search" placeholder="Search notes" style="width:100%;margin-top:10px">
    <div style="margin:10px 0">${segHtml('nF',[['all','All'],['q',"Qur'an"],['h','Hadith'],['s','Sirah'],['p','Solat'],['j','Jumaat'],['d','Doa'],['f','Notepad']],store.get('notesF','all'))}</div>
    <div id="nList"></div>
-   <p class="note" style="font-size:12px">Notes are kept on this phone only; clearing the app's data or uninstalling it deletes them. <a href="#" id="nBk">Back up everything</a> (notes, bookmarks and settings) to a file, or use Copy all notes to paste them somewhere.</p>`);
+   <p class="note" style="font-size:12px">Notes are kept on this phone, and on your other devices once you sign in to Sync (Settings → Back up or restore). Without Sync, clearing the app's data or uninstalling it deletes them. <a href="#" id="nBk">Back up everything</a> (notes, bookmarks and settings) to a file, or use Copy all notes to paste them somewhere.</p>`);
   b.querySelector('#nBk').onclick=e=>{ e.preventDefault(); backupSheet(); };
   draw();
   b.querySelector('#nQ').oninput=draw;
@@ -2026,7 +2033,8 @@ function notepadOpen(k,onDone){ const n=noteGet(k);
     const hit=j=>{ if(j<0||j>=s.length||/\s/.test(s[j])) return false; const q=document.createRange(); q.setStart(nd,j); q.setEnd(nd,j+1); const b=q.getBoundingClientRect(); return x>=b.left-3&&x<=b.right+3&&y>=b.top-3&&y<=b.bottom+3; };
     const j=hit(i)?i:hit(i-1)?i-1:-1; if(j<0) return; let a=j,b=j+1; while(a>0&&!/\s/.test(s[a-1])) a--; while(b<s.length&&!/\s/.test(s[b])) b++;
     if(b<s.length&&/[ \u00a0]/.test(s[b])) b++; else if(a>0&&/[ \u00a0]/.test(s[a-1])) a--; nd.deleteData(a,b-a); textGone=true; };
-  window.addEventListener('pointermove',e=>{ if(e.pointerId!==liveId) return;
+  const offs=[]; const on=(t,ev,fn)=>{ t.addEventListener(ev,fn); offs.push(()=>t.removeEventListener(ev,fn)); };   /* removed when the Notepad closes */
+  on(window,'pointermove',e=>{ if(e.pointerId!==liveId) return;
     if(scrollY!=null){ const pn=document.getElementById('notepad'); pn.scrollTop-= (e.clientY-scrollY); scrollY=e.clientY; return; }
     if(!live) return; e.preventDefault();
     if(live.pen&&!live.e&&!live.ghost&&(window.__penBtn||(e.buttons&34))){ const q=pt(e); live={c:color,w:size,e:1,pen:1,p:[...q]}; strokes.push(live); textGone=textGone||false; }   /* the button pressed during a stroke: erase from here */
@@ -2034,7 +2042,7 @@ function notepadOpen(k,onDone){ const n=noteGet(k);
   const up=e=>{ if(e.pointerId!==liveId) return;
     if(live&&live.ghost){ const gh=live; setTimeout(()=>{ if(BX.lastAt>=gh.ghost||gh.p.length<6) return; delete gh.ghost; strokes.push(gh); redraw(); schedule(); },700); }
     live=null; liveId=null; scrollY=null; if(textGone){ textGone=false; mark(); } schedule(); };
-  window.addEventListener('pointerup',up); window.addEventListener('pointercancel',up); cv.addEventListener('contextmenu',e=>e.preventDefault());
+  on(window,'pointerup',up); on(window,'pointercancel',up); cv.addEventListener('contextmenu',e=>e.preventDefault());
   /* ---- BOOX fast pen (Azli, 22 Oct 2026: writing lagged on the Note Air 5C). On BOOX the Onyx pen SDK draws the stroke on the
      e-ink screen at once, like BOOX Notes, and hands the finished stroke to the page. The e-ink screen does not refresh under
      it, so it pauses while the page scrolls or the tools are used. ---- */
@@ -2055,7 +2063,7 @@ function notepadOpen(k,onDone){ const n=noteGet(k);
     raw.forEach(q=>{ const x=q[0]*k, y=q[1]*k; st.p.push(Math.round((x-r.left)*10000/r.width)/10, Math.round((y-r.top)*10000/r.width)/10, Math.round((q[2]||.5)*100)); if(er) eraseText(x,y); });
     strokes.push(st); const m=st.p.length/3; for(let i=0;i<m;i++) seg(st,i); if(er&&textGone){ textGone=false; mark(); } schedule(); };
   const pnl=document.getElementById('notepad');
-  document.addEventListener('visibilitychange',()=>{ if(gone||!BX.avail) return; if(document.hidden){ BX.on=false; BX.state=''; } else setTimeout(bxSync,300); });   /* the app turns the fast pen off when it goes to the background */
+  on(document,'visibilitychange',()=>{ if(gone||!BX.avail) return; if(document.hidden){ BX.on=false; BX.state=''; } else setTimeout(bxSync,300); });   /* the app turns the fast pen off when it goes to the background */
   pnl.addEventListener('scroll',()=>{ if(BX.on||BX.paused) bxPause(700); });
   pnl.addEventListener('touchstart',e=>{ if(mode==='draw'&&(e.touches.length>1||e.target.closest('#npTop,.row2'))) bxPause(1200); },{capture:true,passive:true});
   /* ---- text ---- */
@@ -2118,7 +2126,7 @@ function notepadOpen(k,onDone){ const n=noteGet(k);
     else run(c); };
   $('#npOk').onclick=()=>closePanel('notepad');
   $('#npDel').onclick=()=>appConfirm('Delete this whole note?','Delete',true).then(yes=>{ if(!yes) return; gone=true; clearTimeout(tm); noteSet(k,''); closePanel('notepad'); toast('Note deleted'); });
-  document.getElementById('notepad').addEventListener('closed',()=>{ save(); gone=true; npFlush=null; ro&&ro.disconnect(); document.removeEventListener('selectionchange',npSel); window.__penBtnSet=null; window.__boox=null; if(BX.avail){ try{ window.AndroidExtra.booxStop(); }catch(e){} } onDone&&onDone(); },{once:true});
+  document.getElementById('notepad').addEventListener('closed',()=>{ save(); gone=true; npFlush=null; ro&&ro.disconnect(); document.removeEventListener('selectionchange',npSel); window.__penBtnSet=null; window.__boox=null; offs.forEach(f=>f()); if(BX.avail){ try{ window.AndroidExtra.booxStop(); }catch(e){} } onDone&&onDone(); },{once:true});
   S.textContent= n? 'Saved '+new Date(n.u).toLocaleString() : 'Saved as you type.';
   requestAnimationFrame(fit); }
 /* ============================ BACKUP AND RESTORE ============================
@@ -3232,7 +3240,7 @@ function bmSheetH(filter,tabs){
   const list=filter? all.filter(x=>x.c===filter) : all;
   openSheet('Bookmarks', tabs + (all.length? `
    <div class="seg" id="bmF"><button data-c="" aria-pressed="${!filter}">All · ${all.length}</button>${BMC.map(([c,l])=>{ const n=all.filter(x=>x.c===c).length; return n?`<button data-c="${c}" aria-pressed="${filter===c}"><span class="dot" style="--c:var(--bm${c});display:inline-block;margin-inline-end:6px;vertical-align:-1px"></span>${l} · ${n}</button>`:''; }).join('')}</div>
-   <ul class="list bml">${list.map(x=>`<li><button class="go" data-h="${x.key}"><span class="dot" style="--c:var(--bm${x.c})"></span><span class="t"><b>${esc(KN[x.b]||x.b)} ${x.n}</b><small>${new Date(x.t).toLocaleDateString()}${noteGet(`h:${x.b}:${x.n}`)?' · note':''}</small></span></button><button class="x" data-delh="${x.key}" aria-label="Remove bookmark">✕</button></li>`).join('')}</ul>`
+   <ul class="list bml">${list.map(x=>`<li><button class="go" data-h="${x.key}"><span class="dot" style="--c:var(--bm${x.c})"></span><span class="t"><b>${esc(KN[x.b]||x.b)} ${ktN(x.b,x.n)}</b><small>${new Date(x.t).toLocaleDateString()}${noteGet(`h:${x.b}:${x.n}`)?' · note':''}</small></span></button><button class="x" data-delh="${x.key}" aria-label="Remove bookmark">✕</button></li>`).join('')}</ul>`
    : `<p class="empty">No hadith bookmarks yet. In Hadith, tap the bookmark button on a hadith and pick a colour.</p>`));
   sheetB.onclick=e=>{ const tb=e.target.closest('#bmTab [data-tab]'); if(tb){ sheetB.onclick=null; bmSheet(null,tb.dataset.tab); return; }
     const f=e.target.closest('#bmF button'); if(f){ sheetB.onclick=null; bmSheetH(f.dataset.c||null,tabs); return; }
@@ -4273,7 +4281,7 @@ function checkShow(res, restored){ const ms=sL()==='ms', msg=document.getElement
   hBox.innerHTML=`<div class="label">${ms?'Hadis':'Hadith'}</div>${hv}`+res.h.map((r,i)=>{ const k=(ktBooks||[]).find(x=>x.id===r.k); if(!k) return '';
     const sc=r.sc, how=res.isAr?(ms?`${ckPct(Math.max(sc.qc,sc.hc))} sama (Arab)`:`${ckPct(Math.max(sc.qc,sc.hc))} the same (Arabic)`):(ms?`${ckPct(Math.max(sc.qc,sc.hc))} perkataan sama (${sc.L==='id'?'Indonesia':'Inggeris'})`:`${ckPct(Math.max(sc.qc,sc.hc))} of words the same (${sc.L==='id'?'Indonesian':'English'})`);
     const whole=sc.qc>=0.8, part=`<div class="ck-v ${whole?'ck-ok':'ck-mid'}" style="font-size:13.5px;padding:5px 10px">${whole?(ms?'Teks itu ada dalam hadis ini':'The text is in this hadith'):(ms?'Hanya sebahagian teks itu sepadan dengan hadis ini':'Only part of the text matches this hadith')}</div>`;
-    return `<div data-ck="${i}" class="ck-hd">${part}${ktCard(k,r.h,show,`<div class="row2" style="gap:6px;margin:0 0 6px"><button class="pill" data-open="${i}">${esc(KT_SHORT[k.id]||k.en)} ${r.h[0]} ›</button><small class="note" style="margin:0">${how}</small></div>`,r.sn,null)}</div>`; }).join('');
+    return `<div data-ck="${i}" class="ck-hd">${part}${ktCard(k,r.h,show,`<div class="row2" style="gap:6px;margin:0 0 6px"><button class="pill" data-open="${i}">${esc(KT_SHORT[k.id]||k.en)} ${ktN(k.id,r.h[0])} ›</button><small class="note" style="margin:0">${how}</small></div>`,r.sn,null)}</div>`; }).join('');
   hBox.onclick=e=>{ if(e.target.closest('[data-ckx]')){ putClipboard(ckSt.text||''); goingAway(); return; } const o=e.target.closest('[data-open]'); const w=e.target.closest('[data-ck]'); if(!w) return; const r=res.h[+w.dataset.ck]; if(!r) return;
     if(o){ ktOpenHadith(r.k,r.h[0],r.sn).then(()=>navRetSet('panel',()=>checkPanel(),ms?'Semakan':'Check')); return; }
     const k=ktBooks.find(x=>x.id===r.k); ktCardClick(e,k,n=>n===r.h[0]?{h:r.h,sn:r.sn}:null,()=>{ w.outerHTML=`<div data-ck="${w.dataset.ck}" class="ck-hd">${ktCard(k,r.h,ktShow(),'',r.sn,null)}</div>`; }); };

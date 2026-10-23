@@ -276,3 +276,4 @@ with open(os.path.join(OUT, 'books.json'), 'w', encoding='utf8') as f:
     for fn in sorted(glob.glob(os.path.join(OUT, 'he', '*.json'))):
         hev[os.path.basename(fn)[:-5]] = hashlib.sha1(open(fn, 'rb').read()).hexdigest()[:8]
     json.dump({'source': 'fawazahmed0/hadith-api (public domain)', 'books': index, 'he': hev}, f, ensure_ascii=False, separators=(',', ':'))
+

@@ -30,6 +30,8 @@ STEPS = [  # (name, JS run in the page, wait ms)
     ('hadith search', "ktSearch('bukhari','النية')", 2500),
     ('open hadith', "ktOpenHadith('muslim',1)", 2500),
     ('same hadith elsewhere', "ktRelSheet('bukhari',1)", 1500),
+    ('muslim standard no.', "if(ktN('muslim',93)!=='8a') throw new Error('Muslim 93 should show as 8a, got '+ktN('muslim',93)); ktBook('muslim')", 1500),
+    ('muslim go 8a', "document.getElementById('ktNo').value='8'; document.getElementById('ktGo').click()", 2000),
     ('syamail', "closeSheet(); ktBook('shamail')", 1500),
     ('sirah', "closeSheet(); sirahPanel()", 1500),
     ('sirah event', "sirahEvent(document.querySelector('[data-e]')?.dataset.e||1)", 1500),
