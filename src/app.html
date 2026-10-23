@@ -1349,6 +1349,8 @@ function setSheet(){
   <div id="offWrap"></div>
   <div class="label">Turning pages</div>${seg('pscroll',[[false,'Book (swipe)'],[true,'Scroll (continuous)']],st.scroll)}
   <p class="note">Scroll: the pages follow one another as you scroll down, like a long scroll. Book: one page at a time, turned by swiping.</p>
+  <div class="label">Screen while reading the Qur'an</div>${seg('awake',[[false,'Sleeps as usual'],[true,'Keep screen on']],awakeRead)}
+  <p class="note">Keep screen on: the screen does not turn off while a mushaf page is showing. It sleeps as usual on Home and the other pages. Uses more battery.</p>
   <div class="label">Surah name, juz and page</div>${seg('sname',[['lat','Latin (At-Takwīr · Juz 30)'],['ar','Arabic (سورة التكوير · الجزء ٣٠)']],st.sname)}
   <div class="label">Translation language</div>${seg('lang',[['ms','Bahasa Melayu'],['en','English']],st.lang)}
   <div class="label">Language of the Sirah, Scan &amp; check and Masjid pages</div>${seg('uiLang',[['auto','Same as translation'],['ms','Bahasa Melayu'],['en','English']],store.get('uiLang','auto'))}
@@ -1384,7 +1386,7 @@ function setSheet(){
     const ob=document.getElementById('offBtn'); if(ob) ob.onclick=()=>saveOffline(st.mushaf); const tk=document.getElementById('tjKey'); if(tk) tk.onclick=tajweedKey; };
   mNote();
   segH('mushaf',v=>{ st.mushaf=v; mNote(); sizeLbl(); });
-  segH('lang',v=>st.lang=v); segH('uiLang',v=>store.set('uiLang',v)); segH('tl',v=>{ st.tl=v; if(v!=='off') tlLoad(v); }); segH('wtap',v=>store.set('wordTap',v==='true')); sheetB.querySelector('#openHomeSet').onclick=homeSetSheet; sheetB.querySelector('#openManual').onclick=()=>{ closeSheet(); manualPanel(); }; sheetB.querySelector('#openBackup').onclick=backupSheet; segH('sname',v=>st.sname=v); segH('fn',v=>st.fn=(v==='true')); segH('blocks',v=>{ if(v!=='off') store.set('lastBlocks',v); st.blocks=v; note(); });
+  segH('lang',v=>st.lang=v); segH('uiLang',v=>store.set('uiLang',v)); segH('tl',v=>{ st.tl=v; if(v!=='off') tlLoad(v); }); segH('wtap',v=>store.set('wordTap',v==='true')); segH('awake',v=>{ awakeRead=(v==='true'); store.set('awakeRead',awakeRead); awakeCheck(); }); sheetB.querySelector('#openHomeSet').onclick=homeSetSheet; sheetB.querySelector('#openManual').onclick=()=>{ closeSheet(); manualPanel(); }; sheetB.querySelector('#openBackup').onclick=backupSheet; segH('sname',v=>st.sname=v); segH('fn',v=>st.fn=(v==='true')); segH('blocks',v=>{ if(v!=='off') store.set('lastBlocks',v); st.blocks=v; note(); });
   const sizeLbl=()=>{ document.getElementById('sizeL').textContent = `${st.size} px`;
     document.getElementById('flowWrap').style.display = st.mushaf==='text'?'':'none';
     document.getElementById('sizeN').textContent = 'Used for translation, Hafazan'+(st.mushaf==='text'?' and Larger text.':'.')+' A fitted page always uses the largest size that fits your screen; turn the phone sideways for bigger letters.'; }; sizeLbl();
@@ -4358,24 +4360,19 @@ const SLK={
   title:ms=>ms?'Solat Jumaat':'Friday Prayer (Jumu\'ah)', copy:'Solat Jumaat',
   intro:ms=>ms?'Sunnah Nabi ﷺ pada hari Jumaat, dari persiapan sebelum khutbah hingga selepas solat, dengan hadisnya dan darjatnya. Di mana ulama berbeza (solat sunat qabliyah, rukun khutbah), pendapat empat mazhab diletakkan bersebelahan dengan rujukannya, dan pandangan ulama lain dalam kotak berasingan. Untuk amalan, ikut guru anda.':'The sunnah of the Prophet ﷺ on Friday, from preparing before the khutbah to after the prayer, with the hadith and their gradings. Where scholars differ (a qabliyyah sunnah, the pillars of the khutbah), the four schools are set side by side with their references, and other scholars\' views are in a separate box. For practice, follow your teacher.',
   foot:ms=>ms?'Pendapat mazhab dan ulama: hanya yang ada rujukannya (kitab, jilid/halaman, dan pautan) dimasukkan. Ditulis untuk aplikasi ini; semak dengan guru anda.':'Schools\' and scholars\' views: only those with a reference (book, volume/page, and a link) are included. Written for this app; check with your teacher.'}};
-/* Solat Jumaat: keep the screen on while it is open (Azli, 23 Oct 2026). Off unless he turns it on; it follows the
-   Jumaat pages however they are opened or closed. */
-const AWAKE_PANELS=['jumuah','jumuahE'];
+/* Keep the screen on while reading the Qur'an (Azli, 23 Oct 2026): Settings → Screen while reading. Off unless he
+   turns it on; on only while the mushaf page itself is showing (not Home, a page or the cover). */
 let awakeRead=!!store.get('awakeRead',false);
-function awakeCheck(){ keepOn(awakeRead && AWAKE_PANELS.some(id=>document.getElementById(id)?.hidden===false),'read'); }
-{ const mo=new MutationObserver(awakeCheck); mo.observe(document.body,{childList:true});
-  new MutationObserver(m=>{ if(m.some(r=>r.target.classList&&r.target.classList.contains('panel'))) awakeCheck(); }).observe(document.body,{subtree:true,attributes:true,attributeFilter:['hidden']}); }
-const AWAKE_IC='<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>';
-const awakePill=ms=>`<button class="pill awake${awakeRead?' on':''}" aria-pressed="${awakeRead}">${AWAKE_IC}${ms?'Skrin sentiasa hidup':'Keep screen on'}</button>`;
-function awakeToggle(root){ const ms=sL()==='ms'; awakeRead=!awakeRead; store.set('awakeRead',awakeRead); awakeCheck();
-  document.querySelectorAll('.pill.awake').forEach(x=>{ x.classList.toggle('on',awakeRead); x.setAttribute('aria-pressed',awakeRead); });
-  toast(awakeRead?(ms?'Skrin akan kekal hidup semasa membaca Solat Jumaat':'The screen stays on while you read Solat Jumaat'):(ms?'Skrin akan padam seperti biasa':'The screen sleeps as usual')); }
+function awakeCheck(){ const shown=id=>{ const x=document.getElementById(id); return !!x && !x.hidden; };
+  keepOn(awakeRead && !shown('home') && !shown('cover') && !topPanel(),'read'); }
+new MutationObserver(awakeCheck).observe(document.body,{childList:true});
+new MutationObserver(m=>{ if(m.some(r=>{ const t=r.target; return t.id==='home'||t.id==='cover'||(t.classList&&t.classList.contains('panel')); })) awakeCheck(); }).observe(document.body,{subtree:true,attributes:true,attributeFilter:['hidden']});
 async function solatLoad(kind='solat'){ if(slData[kind]) return slData[kind]; const D=await ktGet(SLK[kind].file); slData[kind]=D; if(kind==='solat') solatD=D; return D; }
 async function solatPanel(kind='solat'){ const ms=sL()==='ms', K=SLK[kind];
   const b=openPanel(K.pid, K.title(ms), `<p class="note">${ms?'Memuatkan…':'Loading…'}</p>`);
   let D; try{ D=await solatLoad(kind); }catch(e){ b.innerHTML=`<p class="note">${ms?'Perlu internet kali pertama.':'This needs the internet the first time.'}</p>`; return; }
   b.innerHTML=`<p class="note" style="margin-top:0">${K.intro(ms)}</p>
-   ${kind==='jumuah'?`<div class="sr-acts">${awakePill(ms)}</div><div id="jmKh"></div>`:''}
+   ${kind==='jumuah'?`<div id="jmKh"></div>`:''}
    <div class="sl-top"></div>
    <ol class="sl-list">${D.steps.map((e,i)=>`<li><button class="sr-row" data-st="${e.id}"><b>${i+1}. ${esc(sT(e.t))}</b>${(e.d||[]).length?`<span class="sl-diff">${ms?'ada perbezaan':'scholars differ'}</span>`:''}</button></li>`).join('')}</ol>
    <p class="note" style="font-size:12px">${K.foot(ms)}</p>`;
@@ -4385,7 +4382,7 @@ async function solatPanel(kind='solat'){ const ms=sL()==='ms', K=SLK[kind];
     b.querySelector('.sl-top').innerHTML=`${le?`<button class="tile wide sr-cont" data-st="${le.id}"><span style="flex:1"><small>${ms?'Sambung membaca':'Continue reading'}</small><br><b>${esc(sT(le.t))}</b></span>›</button>`:''}${bmTopHtml(K.pre,bms,ms)}`; };
   drawTop(); document.getElementById(K.pid).__redraw=drawTop;
   if(kind==='jumuah') khutbahBox(b.querySelector('#jmKh'),ms);
-  b.onclick=e=>{ if(e.target.closest('.pill.awake')){ awakeToggle(); return; } if(bmTopClick(e,drawTop,k=>solatStep(k,kind))) return; const x=e.target.closest('[data-st]'); if(x) solatStep(x.dataset.st,kind); }; }
+  b.onclick=e=>{ if(bmTopClick(e,drawTop,k=>solatStep(k,kind))) return; const x=e.target.closest('[data-st]'); if(x) solatStep(x.dataset.st,kind); }; }
 function solatCopy(e,i,kind='solat'){ const ms=sL()==='ms', K=SLK[kind], D=slData[kind], L=[`${i+1}. ${sT(e.t)}`,'',sT(e.s)];
   if((e.h||[]).length){ L.push('', ms?'Hadis:':'Hadith:'); e.h.forEach(([bk,n,sn,nt])=>L.push(`• ${KT_SHORT[bk]||bk} ${n}${nt?': '+sT(nt):''}`)); }
   (e.d||[]).forEach(x=>{ L.push('', sT(x.topic)); x.p.forEach(p=>L.push(`• ${sT(D.who[p.w]||{en:p.w,ms:p.w})}: ${ms?(p.ms||p.en):p.en}${p.ref?' ['+p.ref+']':''}`)); if(x.note) L.push(sT(x.note)); });
@@ -4404,7 +4401,7 @@ async function solatStep(id,kind='solat'){ const K=SLK[kind]; const D=await sola
      ${(x.h||[]).length?`<div class="label" style="margin-top:8px">${ms?'Dalil yang dibincangkan':'Evidence discussed'}</div><div class="sr-links">${hl(x.h)}</div>`:''}
      ${x.note?`<p class="note" style="margin:8px 0 0">${esc(sT(x.note))}${x.src?`<br><a class="sl-src" href="${esc(x.src)}" target="_blank" rel="noopener">${ms?'Buka sumber':'Open source'} ›</a>`:''}</p>`:''}</div>`).join('');
   const bmc=(store.get(K.bm,{})[id]||{}).c, snt=noteGet(K.np+':'+id);
-  const b=openPanel(K.pidE, `${i+1}. ${sT(e.t)}`, `<div class="sr-acts"><button class="pill" id="slBm" aria-pressed="${!!bmc}">${ic('bmk')}${bmc?(ms?'Ditanda':'Bookmarked'):(ms?'Penanda':'Bookmark')}</button><button class="pill${snt?' on':''}" id="slNote">${ic('note')}${snt?(ms?'Sunting nota':'Edit note'):(ms?'Nota':'Note')}</button><button class="pill" id="slCopy">${ic('copy')}${ms?'Salin':'Copy'}</button>${kind==='jumuah'?awakePill(ms):''}</div>
+  const b=openPanel(K.pidE, `${i+1}. ${sT(e.t)}`, `<div class="sr-acts"><button class="pill" id="slBm" aria-pressed="${!!bmc}">${ic('bmk')}${bmc?(ms?'Ditanda':'Bookmarked'):(ms?'Penanda':'Bookmark')}</button><button class="pill${snt?' on':''}" id="slNote">${ic('note')}${snt?(ms?'Sunting nota':'Edit note'):(ms?'Nota':'Note')}</button><button class="pill" id="slCopy">${ic('copy')}${ms?'Salin':'Copy'}</button></div>
     <p class="sr-sum">${esc(sT(e.s))}</p>
     ${(e.src||[]).length?`<p class="note" style="margin:-4px 0 10px">${e.src.map(([l,u])=>`<small class="sl-ref">${esc(l)}</small> <a class="sl-src" href="${esc(u)}" target="_blank" rel="noopener">${ms?'Buka sumber':'Open source'} ›</a>`).join('<br>')}</p>`:''}
     ${snt?`<div class="kt-note" id="slNt" dir="auto">${esc(snt.t)}</div>`:''}
@@ -4415,7 +4412,6 @@ async function solatStep(id,kind='solat'){ const K=SLK[kind]; const D=await sola
   b.closest('.panel').scrollTop=0;
   const back=()=>{ solatOpen(id,kind); }, label=sT(e.t);
   b.onclick=ev=>{ const h=ev.target.closest('[data-h]'); if(h){ const [bk,n,sn]=h.dataset.h.split(':'); window.__relRet={go:back,label}; sirahBooks().then(()=>ktRelSheet(bk,+n,null,null,null,+sn)); return; }
-    if(ev.target.closest('.pill.awake')){ awakeToggle(); return; }
     const go=ev.target.closest('[data-go]'); if(go){ solatStep(go.dataset.go,kind); return; }
     const du=ev.target.closest('[data-dua]'); if(du){ duaOpen(+du.dataset.dua); return; }
     const re=()=>{ const pn=b.closest('.panel'), y=pn.scrollTop; solatStep(id,kind).then(()=>{ b.closest('.panel').scrollTop=y; }); };
@@ -4433,11 +4429,13 @@ const isPdfUrl=h=>{ try{ return /\.pdf$/i.test(new URL(h,location.href).pathname
 function pdfSheet(url,name){ const ms=sL()==='ms';
   openSheet(ms?'Buka PDF':'Open the PDF',`<p class="note" style="margin-top:0">${esc(name||'')}</p>
    <div class="sr-links"><button class="sr-link" data-pdf="app"><b>${ms?'Buka dengan aplikasi pembaca…':'Open with a reader app…'}</b><small>${ms?'Pilih aplikasi (cth. My Personal Reader, NeoReader). Disimpan, jadi boleh dibuka semula tanpa internet.':'Pick the app (e.g. My Personal Reader, NeoReader). Saved, so it opens again without the internet.'}</small></button>
+   <button class="sr-link" data-pdf="dl"><b>${ms?'Muat turun ke folder Download':'Download to the Download folder'}</b><small>${ms?'Simpan salinan, kemudian buka dari aplikasi e-reader anda.':'Keep a copy, then open it from your e-reader app.'}</small></button>
    <button class="sr-link" data-pdf="web"><b>${ms?'Buka dalam pelayar':'Open in the browser'}</b></button></div>`);
   sheetB.onclick=e=>{ const x=e.target.closest('[data-pdf]'); if(!x) return; closeSheet();
     if(x.dataset.pdf==='app') window.AndroidExtra.openPdf(new URL(url,location.href).href, name||'');
+    else if(x.dataset.pdf==='dl') window.AndroidExtra.savePdf(new URL(url,location.href).href, name||'');
     else { const l=document.createElement('a'); l.href=url; l.target='_blank'; l.rel='noopener'; l.dataset.direct='1'; document.body.appendChild(l); l.click(); l.remove(); } }; }
-window.__pdf=r=>{ const ms=sL()==='ms', m={loading:ms?'Memuat turun PDF…':'Downloading the PDF…',error:ms?'PDF tidak dapat dimuat turun. Semak internet.':'Could not download the PDF. Check the internet.',noapp:ms?'Tiada aplikasi yang boleh membuka PDF.':'No app here can open a PDF.'}[r&&r.state]; if(m) toast(m); };
+window.__pdf=r=>{ const ms=sL()==='ms', m={loading:ms?'Memuat turun PDF…':'Downloading the PDF…',error:ms?'PDF tidak dapat dimuat turun. Semak internet.':'Could not download the PDF. Check the internet.',noapp:ms?'Tiada aplikasi yang boleh membuka PDF.':'No app here can open a PDF.',saved:(ms?'Disimpan dalam Download: ':'Saved in Download: ')+((r&&r.name)||''),old:ms?'Android ini terlalu lama untuk menyimpan ke Download; guna "Buka dengan aplikasi pembaca".':'This Android is too old to save to Download; use "Open with a reader app".'}[r&&r.state]; if(m) toast(m); };
 document.addEventListener('click',e=>{ if(!IS_ANDROID_APP || !(window.AndroidExtra&&window.AndroidExtra.openPdf)) return;
   const a=e.target.closest&&e.target.closest('a[href]'); if(!a||a.dataset.direct||!isPdfUrl(a.getAttribute('href'))) return;
   e.preventDefault(); e.stopPropagation(); pdfSheet(a.getAttribute('href'), a.dataset.name||''); },true);

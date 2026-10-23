@@ -860,29 +860,33 @@ public class MainActivity extends Activity {
         if (l != null && tryStart(l)) return;
         js("window.__scanned && window.__scanned(" + ScanOcr.err("Google Lens is not on this phone. Install the Google app or Google Lens from the Play Store.") + ")");
     }
-    /** Solat Jumaat (Azli, 23 Oct 2026): a PDF (e.g. MUIS's khutbah) is saved to the cache and handed to the reader app
-        he picks, instead of the browser. A saved copy is reused, so it also opens offline. */
+    /** PDFs, e.g. MUIS's khutbah (Azli, 23 Oct 2026): saved to the cache (reused, so it opens again offline), then
+        handed to the reader app he picks, or copied to the Download folder for his e-reader app. */
+    private File pdfFile(String url, String name) throws Exception {
+        String key = Integer.toHexString(url.hashCode()) + "_" + url.length();
+        String nm = (name == null ? "" : name).replaceAll("[\\\\/:*?\"<>|\\p{Cntrl}]", " ").trim();
+        if (nm.isEmpty()) nm = "document";
+        if (nm.length() > 80) nm = nm.substring(0, 80).trim();
+        File dir = new File(getCacheDir(), "pdf/" + key); dir.mkdirs();
+        File f = new File(dir, nm + ".pdf");
+        if (f.exists() && f.length() > 0) return f;
+        js("window.__pdf && window.__pdf({state:'loading'})");
+        HttpURLConnection c = (HttpURLConnection) new URL(url).openConnection();
+        c.setConnectTimeout(20000); c.setReadTimeout(60000); c.setInstanceFollowRedirects(true);
+        File tmp = new File(dir, "dl.tmp");
+        try {
+            if (c.getResponseCode() / 100 != 2) throw new Exception("HTTP " + c.getResponseCode());
+            try (InputStream in = c.getInputStream(); OutputStream out = new FileOutputStream(tmp)) {
+                byte[] buf = new byte[65536]; int n; while ((n = in.read(buf)) > 0) out.write(buf, 0, n);
+            }
+        } finally { c.disconnect(); }
+        if (tmp.length() == 0 || !tmp.renameTo(f)) throw new Exception("save failed");
+        return f;
+    }
     private void openPdf(String url, String name) {
         new Thread(() -> {
             try {
-                String key = Integer.toHexString(url.hashCode()) + "_" + url.length();
-                String nm = (name == null ? "" : name).replaceAll("[\\\\/:*?\"<>|\\p{Cntrl}]", " ").trim();
-                if (nm.isEmpty()) nm = "document";
-                if (nm.length() > 80) nm = nm.substring(0, 80).trim();
-                File dir = new File(getCacheDir(), "pdf/" + key); dir.mkdirs();
-                File f = new File(dir, nm + ".pdf");
-                if (!f.exists() || f.length() == 0) {
-                    js("window.__pdf && window.__pdf({state:'loading'})");
-                    HttpURLConnection c = (HttpURLConnection) new URL(url).openConnection();
-                    c.setConnectTimeout(20000); c.setReadTimeout(60000); c.setInstanceFollowRedirects(true);
-                    if (c.getResponseCode() / 100 != 2) throw new Exception("HTTP " + c.getResponseCode());
-                    File tmp = new File(dir, "dl.tmp");
-                    try (InputStream in = c.getInputStream(); OutputStream out = new FileOutputStream(tmp)) {
-                        byte[] buf = new byte[65536]; int n; while ((n = in.read(buf)) > 0) out.write(buf, 0, n);
-                    } finally { c.disconnect(); }
-                    if (tmp.length() == 0 || !tmp.renameTo(f)) throw new Exception("save failed");
-                }
-                final File pf = f;
+                final File pf = pdfFile(url, name);
                 runOnUiThread(() -> {
                     Uri u = androidx.core.content.FileProvider.getUriForFile(this, getPackageName() + ".files", pf);
                     Intent v = new Intent(Intent.ACTION_VIEW).setDataAndType(u, "application/pdf")
@@ -894,8 +898,30 @@ public class MainActivity extends Activity {
             } catch (Exception e) { js("window.__pdf && window.__pdf({state:'error'})"); }
         }, "pdf-open").start();
     }
+    private void savePdf(String url, String name) {
+        if (Build.VERSION.SDK_INT < 29) { js("window.__pdf && window.__pdf({state:'old'})"); return; }
+        new Thread(() -> {
+            try {
+                File pf = pdfFile(url, name);
+                android.content.ContentValues cv = new android.content.ContentValues();
+                cv.put(android.provider.MediaStore.MediaColumns.DISPLAY_NAME, pf.getName());
+                cv.put(android.provider.MediaStore.MediaColumns.MIME_TYPE, "application/pdf");
+                cv.put(android.provider.MediaStore.MediaColumns.RELATIVE_PATH, android.os.Environment.DIRECTORY_DOWNLOADS);
+                cv.put(android.provider.MediaStore.MediaColumns.IS_PENDING, 1);
+                android.content.ContentResolver cr = getContentResolver();
+                Uri d = cr.insert(android.provider.MediaStore.Downloads.EXTERNAL_CONTENT_URI, cv);
+                if (d == null) throw new Exception("no Download folder");
+                try (InputStream in = new FileInputStream(pf); OutputStream out = cr.openOutputStream(d)) {
+                    byte[] buf = new byte[65536]; int n; while ((n = in.read(buf)) > 0) out.write(buf, 0, n);
+                }
+                cv.clear(); cv.put(android.provider.MediaStore.MediaColumns.IS_PENDING, 0); cr.update(d, cv, null, null);
+                js("window.__pdf && window.__pdf({state:'saved',name:" + JSONObject.quote(pf.getName()) + "})");
+            } catch (Exception e) { js("window.__pdf && window.__pdf({state:'error'})"); }
+        }, "pdf-save").start();
+    }
     private class ExtraBridge {
         @JavascriptInterface public void openPdf(String url, String name) { MainActivity.this.openPdf(url, name); }
+        @JavascriptInterface public void savePdf(String url, String name) { MainActivity.this.savePdf(url, name); }
         @JavascriptInterface public void lens() { runOnUiThread(MainActivity.this::openLens); }
         @JavascriptInterface public String ocrReady() { return ArabicOcr.ready(MainActivity.this) ? "1" : "0"; }
         @JavascriptInterface public void ocrDownload() {

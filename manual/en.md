@@ -86,6 +86,7 @@ Return to Home from anywhere with the **house button** (top left of the reading 
 
 - **Swipe** left or right: turn the page; it curls like paper.
 - Settings → **Turning pages** → **Scroll (continuous)**: the pages follow one another as you scroll down instead (swiping then does nothing; ‹ › still jump a page).
+- Settings → **Screen while reading the Qur'an** → **Keep screen on**: the screen does not turn off while a mushaf page is showing; it sleeps as usual on Home and the other pages. Uses more battery.
 - **Tap** the page: hide or show the bars.
 - **Long-press an ayah** and let go: the **ayah menu**.
 - **Long-press a word, keep holding and drag** to the last word: select words. A bar appears with **My ruku'**, **My blocks**, **Erase**, **Hafazan**, **Listen** and **Copy**.
@@ -243,8 +244,7 @@ All open from the **ayah menu**; they need the internet once per surah.
 
 1. Home → **Solat Jumaat**: 7 steps, the same layout as Sifat Solat: preparing (ghusl, siwak, perfume), going early and what to do while waiting, **a qabliyyah sunnah before Jumu'ah?**, the khutbah (listening, tahiyyat al-masjid, the **pillars of the khutbah** in the four schools), **the sitting between the two khutbahs**, the prayer, and after it.
 2. **Qabliyyah**: in the Prophet's time there was one adhan, when the imam sat on the minbar, and the khutbah followed (al-Bukhari 912); no authentic report shows him or the Companions praying after the Friday adhan. The four schools' views (Shafi'i and Hanafi: yes; Maliki: no fixed sunnah; Hanbali: two reports) and other scholars (Ibn Taymiyyah, Ibn Hajar, Dar al-Ifta al-Misriyyah, Mufti Wilayah Persekutuan) are given with references; the hadith "four before Jumu'ah" (Ibn Majah 1129) is very weak.
-3. **MUIS Friday khutbah**: the latest khutbah from MUIS's website (Malay or English to match your language, with the PDF), checked every Thursday evening and Friday morning, and a link to all MUIS khutbahs. In the Android app, **PDF ›** asks how to open it: **Open with a reader app…** saves the PDF and lets you pick the app (e.g. My Personal Reader or NeoReader; it then opens again without the internet), or **Open in the browser**.
-4. **Keep screen on**: at the top of Solat Jumaat and on each step. When it is on, the screen does not sleep while a Solat Jumaat page is open; it sleeps as usual once you leave. The setting is remembered.
+3. **MUIS Friday khutbah**: the latest khutbah from MUIS's website (Malay or English to match your language, with the PDF), checked every Thursday evening and Friday morning, and a link to all MUIS khutbahs. In the Android app, **PDF ›** asks how to open it: **Open with a reader app…** saves the PDF and lets you pick the app (e.g. My Personal Reader or NeoReader; it then opens again without the internet), **Download to the Download folder** keeps a copy you can open from your e-reader app (Android 10 and later), or **Open in the browser**.
 
 **Kamus Al-Quran**
 
