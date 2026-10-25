@@ -263,6 +263,7 @@ public class MainActivity extends Activity {
         boolean fresh = savedInstanceState == null && (getIntent() == null || (getIntent().getFlags() & Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY) == 0);
         openTarget = fresh && getIntent() != null ? getIntent().getStringExtra("open") : null;
         if (fresh) takeShare(getIntent());
+        if (fresh && getIntent() != null && getIntent().getData() != null && G_SCHEME.equals(getIntent().getData().getScheme())) { final Uri gu = getIntent().getData(); new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(() -> onBrowserReply(gu), 1500); }   // browser sign-in reply after Android closed the app
         if (Build.VERSION.SDK_INT >= 28) {
             WindowManager.LayoutParams lp = getWindow().getAttributes();
             lp.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
@@ -782,7 +783,7 @@ public class MainActivity extends Activity {
 
 
     /* ---------------- Prayer alerts, adhan files, location, compass ---------------- */
-    private static final int REQ_NOTIF = 21, REQ_LOC = 22, REQ_PICK = 23, REQ_SAVE = 24, REQ_OPEN = 25, REQ_SYNC = 28, REQ_GAUTH = 29;   // 26/27 are the camera and image scans
+    private static final int REQ_NOTIF = 21, REQ_LOC = 22, REQ_PICK = 23, REQ_SAVE = 24, REQ_OPEN = 25, REQ_SYNC = 28, REQ_GAUTH = 29, REQ_GLEGACY = 30;   // 26/27 are the camera and image scans
     private String pendingBackup = null, openedBackup = null;   // backup file text: to be written / just read
     private String pickSlot = null;
     private SensorManager sm; private SensorEventListener compassL; private float decl = 0f; private long lastCompass = 0;
@@ -795,6 +796,7 @@ public class MainActivity extends Activity {
     private volatile String openTarget = null;
     @Override protected void onNewIntent(Intent i) {
         super.onNewIntent(i); setIntent(i);
+        if (i != null && i.getData() != null && G_SCHEME.equals(i.getData().getScheme())) { onBrowserReply(i.getData()); return; }
         String o = i == null ? null : i.getStringExtra("open");
         if (o != null && web != null) { final String w = o.replaceAll("[^a-z]", ""); js("window.__openFrom && window.__openFrom('" + w + "')"); }
         if (takeShare(i) && web != null) js("window.__sharedIn && window.__sharedIn()");
@@ -1012,8 +1014,8 @@ public class MainActivity extends Activity {
                   .addOnSuccessListener(r -> { if (r.hasResolution() && r.getPendingIntent() != null) {
                         try { startIntentSenderForResult(r.getPendingIntent().getIntentSender(), REQ_GAUTH, null, 0, 0, 0); } catch (Exception e) { js("window.__gSigned && window.__gSigned('')"); } }
                       else gAfterAuth(r.getAccessToken()); })
-                  .addOnFailureListener(e -> js("window.__gSigned && window.__gSigned('!'+" + JSONObject.quote(String.valueOf(e.getMessage())) + ")"));
-            } catch (Exception e) { js("window.__gSigned && window.__gSigned('!'+" + JSONObject.quote(String.valueOf(e.getMessage())) + ")"); } }); }
+                  .addOnFailureListener(e -> legacySignIn());   // BOOX and other devices without the newer API (as in My Personal eReader)
+            } catch (Throwable e) { legacySignIn(); } }); }
         /* Sync reads and writes go over the network (Drive) or through the cloud app, which can take seconds: run them on a
            background thread and answer through window.__syncDone(id, result), so the page never waits (Azli, 21 Oct 2026: touch lagged). */
         @JavascriptInterface public void syncReadAsync(final String id) {
@@ -1056,7 +1058,7 @@ public class MainActivity extends Activity {
         @JavascriptInterface public void syncOff() {
             String u = PrayerAlarms.prefs(MainActivity.this).getString("syncUri", "");
             try { if (!u.isEmpty()) getContentResolver().releasePersistableUriPermission(Uri.parse(u), Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION); } catch (Exception ignored) { }
-            PrayerAlarms.prefs(MainActivity.this).edit().remove("syncUri").remove("syncName").remove("gsync").remove("gfile").apply(); }
+            PrayerAlarms.prefs(MainActivity.this).edit().remove("syncUri").remove("syncName").remove("gsync").remove("gfile").remove("glegacy").remove("gbrowser").remove("grefresh").remove("gaccess").remove("gexp").apply(); }
         /** The sync file's text, "" if empty, or "!error" when it cannot be read. */
         @JavascriptInterface public String syncRead() {
             if (!gAccount().isEmpty()) return gRead();
@@ -1224,7 +1226,80 @@ public class MainActivity extends Activity {
             PrayerAlarms.prefs(this).edit().putString("gsync", mail).remove("gfile").apply();
             js("window.__gSigned && window.__gSigned(" + JSONObject.quote(mail) + ")"); }).start(); }
     /** A fresh access token without showing anything; null when the person must sign in again. Called off the main thread. */
+    /* Google sign-in when the newer Authorization API is missing (BOOX: "API is not available on this device", SERVICE_INVALID).
+       As in My Personal eReader: first the older Google Sign-In of Play services, then Google's sign-in page in the browser
+       (PKCE; needs "custom URI scheme" allowed on the Android OAuth client in Google Cloud). (Azli, 25 Oct 2026) */
+    static final String G_CLIENT = "787421539161-pskuco9b997q2tri0g6ndcujfudm990l.apps.googleusercontent.com";
+    static final String G_SCHEME = "net.azli.mypersonalquran", G_REDIRECT = G_SCHEME + ":/oauth2redirect";
+    private void gFail(String m) { js("window.__gSigned && window.__gSigned(" + (m.isEmpty() ? "''" : "'!'+" + JSONObject.quote(m)) + ")"); }
+    private void legacySignIn() {
+        runOnUiThread(() -> { try {
+            com.google.android.gms.auth.api.signin.GoogleSignInOptions o = new com.google.android.gms.auth.api.signin.GoogleSignInOptions.Builder(
+                com.google.android.gms.auth.api.signin.GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().requestScopes(new com.google.android.gms.common.api.Scope(G_SCOPE)).build();
+            startActivityForResult(com.google.android.gms.auth.api.signin.GoogleSignIn.getClient(this, o).getSignInIntent(), REQ_GLEGACY);
+        } catch (Throwable t) { browserSignIn(); } }); }
+    private void onLegacyResult(Intent data) {
+        try {
+            final com.google.android.gms.auth.api.signin.GoogleSignInAccount acc = com.google.android.gms.auth.api.signin.GoogleSignIn
+                .getSignedInAccountFromIntent(data).getResult(com.google.android.gms.common.api.ApiException.class);
+            if (acc == null || acc.getAccount() == null) { gFail(""); return; }
+            new Thread(() -> { try {
+                String tok = com.google.android.gms.auth.GoogleAuthUtil.getToken(this, acc.getAccount(), "oauth2:" + G_SCOPE);
+                PrayerAlarms.prefs(this).edit().putBoolean("glegacy", true).remove("gbrowser").apply(); gAfterAuth(tok);
+            } catch (Exception e) { browserSignIn(); } }).start();
+        } catch (com.google.android.gms.common.api.ApiException e) { if (e.getStatusCode() == 12501) gFail(""); else browserSignIn(); }
+        catch (Exception e) { browserSignIn(); } }
+    private static String b64(byte[] b) { return android.util.Base64.encodeToString(b, android.util.Base64.URL_SAFE | android.util.Base64.NO_PADDING | android.util.Base64.NO_WRAP); }
+    private static String enc(String v) { try { return java.net.URLEncoder.encode(v, "UTF-8"); } catch (Exception e) { return v; } }
+    private void browserSignIn() {
+        try {
+            java.security.SecureRandom rnd = new java.security.SecureRandom(); byte[] b = new byte[48], st = new byte[16]; rnd.nextBytes(b); rnd.nextBytes(st);
+            String ver = b64(b), state = b64(st);
+            String ch = b64(java.security.MessageDigest.getInstance("SHA-256").digest(ver.getBytes(java.nio.charset.StandardCharsets.US_ASCII)));
+            PrayerAlarms.prefs(this).edit().putString("pkceV", ver).putString("pkceS", state).apply();
+            String url = "https://accounts.google.com/o/oauth2/v2/auth?client_id=" + enc(G_CLIENT) + "&redirect_uri=" + enc(G_REDIRECT)
+                + "&response_type=code&scope=" + enc(G_SCOPE + " email") + "&code_challenge=" + ch + "&code_challenge_method=S256&state=" + state
+                + "&access_type=offline&prompt=consent";
+            goingAwayNative(); startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+        } catch (Throwable t) { gFail("browser sign-in: " + t.getMessage()); } }
+    private void goingAwayNative() { js("window.__away=Date.now()"); }
+    private void onBrowserReply(Uri u) {
+        final String code = u.getQueryParameter("code"), st = u.getQueryParameter("state"), err = u.getQueryParameter("error");
+        android.content.SharedPreferences p = PrayerAlarms.prefs(this);
+        if (err != null) { gFail("access_denied".equals(err) ? "" : err); return; }
+        if (code == null || !p.getString("pkceS", "").equals(st)) { gFail("the sign-in reply did not match; try again"); return; }
+        final String ver = p.getString("pkceV", "");
+        new Thread(() -> { try {
+            JSONObject o = new JSONObject(postForm("https://oauth2.googleapis.com/token", "code=" + enc(code) + "&client_id=" + enc(G_CLIENT)
+                + "&redirect_uri=" + enc(G_REDIRECT) + "&grant_type=authorization_code&code_verifier=" + enc(ver)));
+            String at = o.getString("access_token");
+            PrayerAlarms.prefs(this).edit().putBoolean("gbrowser", true).remove("glegacy").putString("grefresh", o.optString("refresh_token", ""))
+                .putString("gaccess", at).putLong("gexp", System.currentTimeMillis() + o.optLong("expires_in", 3600) * 1000 - 120000).remove("pkceV").remove("pkceS").apply();
+            gAfterAuth(at);
+        } catch (Exception e) { gFail(String.valueOf(e.getMessage())); } }).start(); }
+    private static String postForm(String url, String body) throws Exception {
+        java.net.HttpURLConnection c = (java.net.HttpURLConnection) new java.net.URL(url).openConnection();
+        c.setRequestMethod("POST"); c.setDoOutput(true); c.setConnectTimeout(15000); c.setReadTimeout(30000);
+        c.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+        try (OutputStream o = c.getOutputStream()) { o.write(body.getBytes(java.nio.charset.StandardCharsets.UTF_8)); }
+        int code = c.getResponseCode();
+        if (code >= 300) { String e = ""; try { e = readAll(c.getErrorStream()); } catch (Exception ignored) { } throw new Exception("HTTP " + code + " " + e); }
+        return readAll(c.getInputStream()); }
+    private String browserToken() {
+        android.content.SharedPreferences p = PrayerAlarms.prefs(this);
+        if (System.currentTimeMillis() < p.getLong("gexp", 0) && !p.getString("gaccess", "").isEmpty()) return p.getString("gaccess", "");
+        String rt = p.getString("grefresh", ""); if (rt.isEmpty()) return null;
+        try { JSONObject o = new JSONObject(postForm("https://oauth2.googleapis.com/token", "client_id=" + enc(G_CLIENT) + "&grant_type=refresh_token&refresh_token=" + enc(rt)));
+              String at = o.getString("access_token");
+              p.edit().putString("gaccess", at).putLong("gexp", System.currentTimeMillis() + o.optLong("expires_in", 3600) * 1000 - 120000).apply(); return at;
+        } catch (Exception e) { return null; } }
     private String gToken() {
+        android.content.SharedPreferences p = PrayerAlarms.prefs(this);
+        if (p.getBoolean("gbrowser", false)) return browserToken();
+        if (p.getBoolean("glegacy", false)) {
+            try { com.google.android.gms.auth.api.signin.GoogleSignInAccount acc = com.google.android.gms.auth.api.signin.GoogleSignIn.getLastSignedInAccount(this);
+                  if (acc == null || acc.getAccount() == null) return null;
+                  return com.google.android.gms.auth.GoogleAuthUtil.getToken(this, acc.getAccount(), "oauth2:" + G_SCOPE); } catch (Exception e) { return null; } }
         try { com.google.android.gms.auth.api.identity.AuthorizationResult r = com.google.android.gms.tasks.Tasks.await(
                   com.google.android.gms.auth.api.identity.Identity.getAuthorizationClient(this).authorize(gReq()), 30, java.util.concurrent.TimeUnit.SECONDS);
               return r.hasResolution() ? null : r.getAccessToken(); } catch (Exception e) { return null; } }
@@ -1285,6 +1360,7 @@ public class MainActivity extends Activity {
         super.onActivityResult(req, res, data);
         if (req == REQ_CAM) { runScan(res == RESULT_OK ? camUri : null, scanLang); return; }
         if (req == REQ_IMG) { runScan(res == RESULT_OK && data != null ? data.getData() : null, scanLang); return; }
+        if (req == REQ_GLEGACY) { onLegacyResult(data); return; }
         if (req == REQ_GAUTH) {
             if (res != RESULT_OK || data == null) { js("window.__gSigned && window.__gSigned('')"); return; }
             try { gAfterAuth(com.google.android.gms.auth.api.identity.Identity.getAuthorizationClient(this).getAuthorizationResultFromIntent(data).getAccessToken()); }
