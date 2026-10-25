@@ -1,6 +1,6 @@
 My Personal Qur'an ialah mushaf Madinah untuk membaca, menghafaz, mendengar bacaan dan ibadah harian. Panduan ini menerangkan setiap skrin dan butang mengikut urutan anda menemuinya. Nama butang ditulis dalam bahasa Inggeris, seperti antara muka asal aplikasi. Jika anda memilih Bahasa Melayu (Laman Utama → **Language · Bahasa**), butang dipaparkan dalam Bahasa Melayu dengan maksud yang sama.
 
-> **Penafian.** My Personal Qur'an untuk **kegunaan peribadi sahaja**. Ia percuma, tidak dijual dan tidak boleh digunakan untuk tujuan komersial. Kandungannya milik penerbit masing-masing dan dipaparkan tanpa diubah serta dinyatakan sumbernya: teks Al-Quran daripada Kompleks Raja Fahd (KFGQPC); terjemahan dan tafsir daripada QuranEnc.com; makna kata demi kata dan transliterasi daripada Quran.com; teks hadis daripada Hadith API (fawazahmed0) dan Sunnah.com, dengan penilaian ulama yang dinamakan pada setiap hadis; syarah daripada HadeethEnc.com; Hisnul Muslim daripada hisnmuslim.com; waktu solat, khutbah dan sijil halal daripada MUIS; manakala Sirah, Sifat Solat dan Solat Jumaat ditulis untuk aplikasi ini daripada sumber klasik yang dinamakan (senarai penuh di Settings → Sources & verification). Aplikasi ini alat bantu belajar, bukan fatwa: untuk hukum, rujuk ulama yang berkelayakan.
+> **Penafian.** My Personal Qur'an untuk **kegunaan peribadi sahaja**. Ia percuma, tidak dijual dan tidak boleh digunakan untuk tujuan komersial. Kandungannya milik penerbit masing-masing dan dipaparkan tanpa diubah serta dinyatakan sumbernya: teks Al-Qur'an daripada Kompleks Raja Fahd (KFGQPC); terjemahan dan tafsir daripada QuranEnc.com; makna kata demi kata dan transliterasi daripada Quran.com; teks hadis daripada Hadith API (fawazahmed0) dan Sunnah.com, dengan penilaian ulama yang dinamakan pada setiap hadis; syarah daripada HadeethEnc.com; Hisnul Muslim daripada hisnmuslim.com; waktu solat, khutbah dan sijil halal daripada MUIS; manakala Sirah, Sifat Solat dan Solat Jumaat ditulis untuk aplikasi ini daripada sumber klasik yang dinamakan (senarai penuh di Settings → Sources & verification). Aplikasi ini alat bantu belajar, bukan fatwa: untuk hukum, rujuk ulama yang berkelayakan.
 
 ## 1. Bermula
 
@@ -26,7 +26,7 @@ My Personal Qur'an ialah mushaf Madinah untuk membaca, menghafaz, mendengar baca
 | Penggera & peringatan | Peringatan solat | Supaya peringatan tepat pada minitnya |
 | Lokasi | Waktu solat "My location", atau Kiblat | Untuk mengira waktu solat dan arah kiblat |
 
-Teks al-Quran, terjemahan dan hafazan boleh digunakan tanpa internet. Audio, tafsir, hadis, makna kata demi kata dan Hisnul Muslim memerlukan internet kali pertama; kebanyakannya kemudian disimpan di telefon.
+Teks al-Qur'an, terjemahan dan hafazan boleh digunakan tanpa internet. Audio, tafsir, hadis, makna kata demi kata dan Hisnul Muslim memerlukan internet kali pertama; kebanyakannya kemudian disimpan di telefon.
 
 ## 2. Laman Utama (Home)
 
@@ -39,18 +39,18 @@ Kembali ke Home dari mana-mana dengan **butang rumah** (atas kiri skrin bacaan) 
 | Jubin | Membuka |
 | --- | --- |
 | Last Read (Terakhir Dibaca) | Halaman terakhir yang dibaca |
-| Read Qur'an (Baca Al-Quran) | Senarai surah, juzuk dan halaman |
+| Read Qur'an (Baca Al-Qur'an) | Senarai surah, juzuk dan halaman |
 | Memorisation (Hafazan) | Kotak hafazan (bahagian 5) |
 | Listen & Repeat (Dengar & Ulang) | Qari membaca, anda mengulang dan disemak (bahagian 6) |
-| Bookmarks (Penanda) | Semua penanda dalam tab: Qur'an, Hadith, Sirah, Doa, Sifat Solat, Jumaat. Dibuka di atas Home; al-Quran dibuka hanya apabila anda memilih ayat |
+| Bookmarks (Penanda) | Semua penanda dalam tab: Qur'an, Hadith, Sirah, Doa, Sifat Solat, Jumaat. Dibuka di atas Home; al-Qur'an dibuka hanya apabila anda memilih ayat |
 | Du'a & Dhikr (Doa & Zikir) | Hisnul Muslim (bahagian 8) |
 | Hadith (Hadis) | Enam kitab hadis (Kutub as-Sittah) dan al-Muwatta Imam Malik, dengan hukum hadis (bahagian 8) |
 | Shama'il (Syama'il) | Asy-Syama'il al-Muhammadiyyah karya at-Tirmizi, dalam jubinnya sendiri (juga kitab kelapan dalam Hadith) (bahagian 8) |
-| Seerah (Sirah) | Kehidupan Nabi ﷺ, dengan rujukan Al-Quran dan hadis (bahagian 8) |
+| Seerah (Sirah) | Kehidupan Nabi ﷺ, dengan rujukan Al-Qur'an dan hadis (bahagian 8) |
 | Prophet's ﷺ Prayer (Sifat Solat Nabi ﷺ) | Solat Nabi langkah demi langkah, dengan hadis dan perbezaan pendapat ulama (bahagian 8) |
 | Friday Prayer (Solat Jumaat) | Sunnah hari Jumaat dari sebelum khutbah hingga selepas solat, isu qabliyah, rukun khutbah, dan khutbah terkini MUIS (bahagian 8) |
-| Qur'an Dictionary (Kamus Al-Quran) | Setiap perkataan al-Quran mengikut akar kata: makna, kekerapan dan tempatnya (bahagian 8) |
-| Scan & Check (Imbas & Semak) | Semak sama ada ayat atau hadis yang dikongsi orang ada dalam Al-Quran atau kitab hadis (bahagian 8) |
+| Qur'an Dictionary (Kamus Al-Qur'an) | Setiap perkataan al-Qur'an mengikut akar kata: makna, kekerapan dan tempatnya (bahagian 8) |
+| Scan & Check (Imbas & Semak) | Semak sama ada ayat atau hadis yang dikongsi orang ada dalam Al-Qur'an atau kitab hadis (bahagian 8) |
 | Halal Food (Makanan Halal) | Cari tempat makan bersijil halal MUIS; pautan rasmi Jepun, Korea dan Thailand (bahagian 8) |
 | Mosques & Prayer Rooms (Masjid & Musolla) | Masjid dan musolla, yang paling dekat dahulu, dengan arah jalan; tambah tempat sendiri (bahagian 8) |
 | Notes (Nota) | Buku nota anda: nota pada ayat, pada hadis, dan nota bebas (bahagian 8) |
@@ -60,7 +60,7 @@ Kembali ke Home dari mana-mana dengan **butang rumah** (atas kiri skrin bacaan) 
 | User Guide (Panduan Pengguna) | Panduan ini, dalam bahasa Inggeris atau Bahasa Melayu |
 | Language · Bahasa | Tanda English atau Bahasa Melayu untuk seluruh aplikasi (bahagian 9) |
 
-## 3. Membaca al-Quran
+## 3. Membaca al-Qur'an
 
 **Bar atas** (dari kiri ke kanan)
 
@@ -118,7 +118,7 @@ Blok mewarnakan halaman mengikut bahagian supaya anda boleh menghafaz dan mengul
 | Mod | Warna |
 | --- | --- |
 | Off | Tiada (tanda waqaf sentiasa dipaparkan) |
-| Ruku' (original) | Ruku' asal (ع), satu ruku' berlatar emas cerah, ruku' berikutnya tanpa latar, bergilir-gilir sepanjang Al-Quran |
+| Ruku' (original) | Ruku' asal (ع), satu ruku' berlatar emas cerah, ruku' berikutnya tanpa latar, bergilir-gilir sepanjang Al-Qur'an |
 | My ruku' | Biru, ruku' anda sendiri |
 | My blocks | Blok anda sendiri, sebarang panjang |
 
@@ -220,7 +220,7 @@ Semuanya dibuka dari **menu ayat**; memerlukan internet sekali bagi setiap surah
    - **Nombor Sahih Muslim** ialah nombor piawai yang digunakan dalam rujukan dan di sunnah.com (penomboran Muhammad Fu'ad 'Abd al-Baqi, dengan a, b, c untuk sanad tambahan): hadis Jibril ialah **Muslim 8a**. Sumber yang digunakan aplikasi mengira Muslim mengikut susunannya sendiri, jadi setiap hadis Muslim juga menunjukkan "no. … in this list". Taip nombor piawai (contohnya 8 atau 8a) dalam **Hadith number**. Kitab-kitab lain sudah menggunakan nombor piawai masing-masing.
 9. Hadis yang dihuraikan oleh HadeethEnc.com mempunyai butang **Syarah · HadeethEnc** di bawah teksnya. Ia membuka huraian, pengajaran hadis dan makna perkataan dalam **BM** (Bahasa Melayu, kira-kira 100 hadis setakat ini), **BI**, **ENG** atau **AR**, tanpa sebarang perubahan daripada HadeethEnc. Ia dipadankan dengan hadis melalui teksnya, jadi ia mungkin memetik riwayat lain bagi hadis yang sama.
 10. **Also in** di bawah hadis menyenaraikan hadis yang sama dalam kitab lain (contohnya "Muslim 16c", "Abu Dawud 3692"). "(close wording)" bermaksud kebanyakan lafaznya sama tetapi tidak semua, atau hanya sebahagian daripada hadis yang lebih panjang. Ketik untuk membacanya bersama hukum daripada kitab itu sendiri, kemudian **Open in …** untuk pergi ke sana. Ia dicari dengan membandingkan teks Arab, jadi ia membantu mencari riwayat lain; ia tidak bermaksud sanad atau hukumnya sama.
-11. Setiap hadis ada butang **penanda buku** (lima warna, seperti al-Quran) dan butang **nota**. **Continue reading** (tempat anda berhenti) berada di bahagian atas halaman Hadith. Senarai penanda buku dipaparkan di bawahnya apabila **Show** (di sebelah **All**) ditanda; ia tidak ditanda pada mulanya.
+11. Setiap hadis ada butang **penanda buku** (lima warna, seperti al-Qur'an) dan butang **nota**. **Continue reading** (tempat anda berhenti) berada di bahagian atas halaman Hadith. Senarai penanda buku dipaparkan di bawahnya apabila **Show** (di sebelah **All**) ditanda; ia tidak ditanda pada mulanya.
 
 12. Setiap kitab ada **Continue reading** sendiri di atas halamannya (termasuk Syama'il). Pengenalan kitab dilipat dalam **About this book**; ketik untuk membacanya. Di bawah setiap hadis: **Maktabah Syamilah ›** (awal matan disalin dan panduan langkah demi langkah dibuka; lihat *Mencari dalam Maktabah Syamilah* di bawah) dan **Scholars' gradings & syarah · Dorar.net ›** (Dorar menunjukkan penilaian para muhaddith, cth. al-Albani, Ibn Hajar, az-Zahabi, al-Haithami, dengan sebab hadis itu lemah, dan pautan ke syarahnya). Penilai darjat hadis ditunjukkan dengan tahun wafatnya.
 
@@ -250,18 +250,18 @@ Semuanya dibuka dari **menu ayat**; memerlukan internet sekali bagi setiap surah
 2. **Qabliyah**: pada zaman Nabi ﷺ hanya ada satu azan, ketika imam duduk di atas mimbar, lalu khutbah terus menyusul (al-Bukhari 912); tiada riwayat sahih yang menunjukkan Baginda atau para Sahabat solat selepas azan Jumaat. Pendapat empat mazhab (Syafi'i dan Hanafi: ada; Maliki: tiada sunat tetap; Hanbali: dua riwayat) dan ulama lain (Ibn Taimiyyah, Ibn Hajar, Dar al-Ifta' Mesir, Mufti Wilayah Persekutuan) diberi dengan rujukannya; hadis "empat rakaat sebelum Jumaat" (Ibn Majah 1129) sangat lemah.
 3. **Khutbah Jumaat MUIS**: khutbah terkini dari laman MUIS (Melayu atau Inggeris mengikut bahasa anda, dengan PDF), disemak setiap petang Khamis dan pagi Jumaat, serta pautan ke semua khutbah MUIS. Dalam aplikasi Android, **PDF ›** bertanya cara membukanya: **Buka dengan aplikasi pembaca…** menyimpan PDF itu dan membiarkan anda memilih aplikasinya (cth. My Personal Reader atau NeoReader; selepas itu ia boleh dibuka semula tanpa internet), **Muat turun ke folder Download** menyimpan salinan yang boleh dibuka dari aplikasi e-reader anda (Android 10 ke atas), atau **Buka dalam pelayar**.
 
-**Qur'an Dictionary (Kamus Al-Quran)**
+**Qur'an Dictionary (Kamus Al-Qur'an)**
 
-1. Home → **Qur'an Dictionary**: setiap perkataan al-Quran mengikut akar katanya (1,650 akar kata dan partikel, 4,770 perkataan). Ketik satu huruf, atau cari dalam bahasa Arab (akar kata, perkataan atau bentuknya dalam ayat) atau dengan makna dalam Bahasa Melayu/Indonesia atau Inggeris (cth. "rahmat").
+1. Home → **Qur'an Dictionary**: setiap perkataan al-Qur'an mengikut akar katanya (1,650 akar kata dan partikel, 4,770 perkataan). Ketik satu huruf, atau cari dalam bahasa Arab (akar kata, perkataan atau bentuknya dalam ayat) atau dengan makna dalam Bahasa Melayu/Indonesia atau Inggeris (cth. "rahmat").
 2. Satu akar kata menunjukkan setiap perkataan daripadanya (lema) dengan jenis kata, berapa kali ia muncul, maknanya (Indonesia, hampir sama dengan Melayu, dan Inggeris) dan bentuk-bentuknya; **Lihat ayat** menyenaraikan tempatnya: ketik untuk membuka ayat itu (butang **‹ Kembali** membawa anda ke Kamus semula).
 3. Sumber: Quranic Arabic Corpus (Universiti Leeds, GNU GPL) dengan pembetulan mustafa0x/quran-morphology; makna daripada kata demi kata Quran.com. *Kamus Al-Qur'an* terbitan PTS dilindungi hak cipta, maka tidak disalin.
-4. **Makna di mana-mana**: tekan lama satu perkataan dan pilih **Makna** dalam menu (atau **Cari makna** yang muncul di halaman Sirah, Hadis dan Doa). Bahasa Arab membuka Kamus; Bahasa Melayu atau Inggeris memberi carian dalam terjemahan al-Quran dan pautan ke Kamus Dewan (PRPM, DBP), Wiktionary, Cambridge dan Google Translate. Kamus Melayu yang terbuka sepenuhnya untuk dimuat ke dalam aplikasi belum ada.
+4. **Makna di mana-mana**: tekan lama satu perkataan dan pilih **Makna** dalam menu (atau **Cari makna** yang muncul di halaman Sirah, Hadis dan Doa). Bahasa Arab membuka Kamus; Bahasa Melayu atau Inggeris memberi carian dalam terjemahan al-Qur'an dan pautan ke Kamus Dewan (PRPM, DBP), Wiktionary, Cambridge dan Google Translate. Kamus Melayu yang terbuka sepenuhnya untuk dimuat ke dalam aplikasi belum ada.
 
 **Sirah**
 
 1. Home → **Sirah**: sirah Nabi ﷺ sebagai garis masa dalam tiga bahagian: **Sebelum kenabian**, **Makkah** dan **Madinah**. Bahasanya mengikut Settings → Translation language.
 2. Ketik satu peristiwa untuk ringkasan pendek, kemudian:
-   - **Al-Quran**: ayat yang dikaitkan dengan peristiwa itu oleh kitab hadis atau tafsir. Ketik untuk membukanya dalam mushaf.
+   - **Al-Qur'an**: ayat yang dikaitkan dengan peristiwa itu oleh kitab hadis atau tafsir. Ketik untuk membukanya dalam mushaf.
    - **Hadis**: riwayat dalam kitab aplikasi ini, berserta hukumnya (Bukhari dan Muslim ditanda Sahih). Ketik untuk membaca hadis itu; **Open in …** membawa anda kepadanya dalam kitab.
    - **Riwayat dalam kitab lain**: riwayat daripada kitab yang tiada dalam aplikasi ini; tajuknya menamakan kitab itu (cth. Musnad Ahmad), dan setiap satu ada **Sumber** (jilid/halaman atau nombor, darjat) dan **Buka sumber ›**.
    - **Nasab Nabi ﷺ**: di bawah Kelahiran Nabi, nasab hingga 'Adnan seperti yang diberi al-Bukhari, dengan teks Arab dan sumbernya.
@@ -272,7 +272,7 @@ Semuanya dibuka dari **menu ayat**; memerlukan internet sekali bagi setiap surah
 5. Tiga bahagian itu terbuka dan tertutup apabila diketik. **Carian** (kekal di atas) mencari peristiwa dalam bahasa Melayu atau Inggeris, contohnya "Badar", "Hijrah", "Ramadan". **Sambung bacaan** di atas membuka peristiwa terakhir yang anda baca.
 6. Pada sesuatu peristiwa: **Penanda** (disenaraikan di bawah Penanda dalam Sirah dan dalam tab **Sirah** pada butang Bookmarks), **Nota** (juga dalam Notes, di bawah **Sirah**) dan **Salin** (ringkasan, rujukan dan status kisah).
 7. Mengetik ayat atau **Open in …** pada hadis membawa anda ke sana; butang **kembali** telefon (atau butang **‹ Kembali** di atas mushaf) membawa anda semula ke peristiwa yang sama.
-8. **Makna perkataan:** tekan lama sesuatu perkataan dalam Sirah (juga dalam halaman Hadis dan Doa) untuk memilihnya, kemudian ketik **Cari makna** (atau **Makna** dalam menu pilihan teks telefon, di mana-mana dalam aplikasi): perkataan Arab membuka **Kamus Al-Quran** (atau Almaany jika bukan perkataan al-Quran); perkataan Melayu atau Inggeris memberi carian dalam terjemahan al-Quran dan Kamus Dewan (DBP), Wiktionary, Cambridge atau Google Translate.
+8. **Makna perkataan:** tekan lama sesuatu perkataan dalam Sirah (juga dalam halaman Hadis dan Doa) untuk memilihnya, kemudian ketik **Cari makna** (atau **Makna** dalam menu pilihan teks telefon, di mana-mana dalam aplikasi): perkataan Arab membuka **Kamus Al-Qur'an** (atau Almaany jika bukan perkataan al-Qur'an); perkataan Melayu atau Inggeris memberi carian dalam terjemahan al-Qur'an dan Kamus Dewan (DBP), Wiktionary, Cambridge atau Google Translate.
 9. Ringkasan ditulis untuk aplikasi ini berdasarkan hadis dan ahli sejarah yang dinamakan; tarikh yang tidak ditetapkan oleh hadis (contohnya 12 Rabiulawal, 27 Rejab) ditanda sedemikian.
 
 **Imbas & semak (Scan & check)**
@@ -285,7 +285,7 @@ Semuanya dibuka dari **menu ayat**; memerlukan internet sekali bagi setiap surah
    - **Tampal**: tampal teks dalam kotak. Ini juga boleh dalam pelayar.
    - Bahasa halaman ini, Sirah dan Masjid & musollah mengikut Settings → **Language of the Sirah, Scan & check and Masjid pages** (Same as translation, Bahasa Melayu atau English).
 2. Semak teks dalam kotak (kamera boleh tersilap membaca huruf, terutama Arab berbaris atau tulisan berhias), betulkan jika perlu, dan ketik **Semak**.
-3. **Al-Quran**: hijau **Dijumpai dalam Al-Quran**, **Dijumpai: sebahagian daripada ayat**, kuning **Hampir dengan ayat Al-Quran: ada perbezaan**, atau merah **Tiada ayat Al-Quran yang sepadan**. Setiap padanan menunjukkan ayat, terjemahannya dan berapa banyak yang sepadan; ketik untuk membuka ayat itu (butang **kembali** telefon membawa anda semula ke semakan).
+3. **Al-Qur'an**: hijau **Dijumpai dalam Al-Qur'an**, **Dijumpai: sebahagian daripada ayat**, kuning **Hampir dengan ayat Al-Qur'an: ada perbezaan**, atau merah **Tiada ayat Al-Qur'an yang sepadan**. Setiap padanan menunjukkan ayat, terjemahannya dan berapa banyak yang sepadan; ketik untuk membuka ayat itu (butang **kembali** telefon membawa anda semula ke semakan).
 4. **Semak di luar aplikasi** (dipaparkan selepas setiap semakan): **Semak Hadis**, **Dorar.net** dan **Sunnah.com**; teks anda disalin dahulu (tampal di kotak carian Semak Hadis).
 5. **Hadis**: lapan kitab dalam aplikasi ini disemak (kali pertama, setiap kitab dimuat turun, jadi guna Wi-Fi). Setiap padanan menunjukkan kitab, nombor dan darjatnya, dan sama ada seluruh teks itu ada dalam hadis tersebut atau **hanya sebahagian**. Merah **Tidak dijumpai** bukan bukti hadis itu palsu: ia mungkin ada dalam kitab lain (seperti Musnad Ahmad) atau dengan lafaz lain. Tanya guru yang berkelayakan.
 5. Cara padanan: Arab, huruf dan perkataan yang sama (baris, alif dan hamzah diabaikan, jadi ejaan Uthmani mushaf dan ejaan biasa dikira sama, dan beberapa perkataan yang tersilap baca tidak menghalang padanan); Melayu dan Inggeris, perkataan penting yang sama. Penterjemah memilih perkataan berbeza, jadi peratus rendah tidak bermakna tiada. Teks hadis Bahasa Melayu dibandingkan dengan terjemahan Indonesia.
@@ -325,7 +325,7 @@ Semuanya dibuka dari **menu ayat**; memerlukan internet sekali bagi setiap surah
 **Waktu solat**
 
 - **‹ ›** untuk hari sebelum atau selepas; solat seterusnya berwarna emas.
-- Tarikh Hijrah di bawah tarikh membuka **Hijri calendar** (takwim Hijrah): setiap bulan dengan hari Masihi dan Hijrah dalam setiap kotak, hari-hari kebesaran Islam ditanda (Awal Muharram, Asyura, Maulidur Rasul, Israk Mikraj, Nisfu Syaaban, 1 Ramadan, Nuzul al-Quran, sepuluh malam terakhir, Hari Raya Aidilfitri, Arafah, Hari Raya Aidiladha, hari Tasyrik) dan disenaraikan di bawah **This month**. Tarikh dikira untuk Singapura dengan kriteria MABIMS yang digunakan MUIS. Jika MUIS mengumumkan tarikh lain (anak bulan kelihatan atau tidak), gunakan **Adjust the Hijri date** (−2 hingga +2 hari); ia mengubah tarikh Hijrah di seluruh aplikasi.
+- Tarikh Hijrah di bawah tarikh membuka **Hijri calendar** (takwim Hijrah): setiap bulan dengan hari Masihi dan Hijrah dalam setiap kotak, hari-hari kebesaran Islam ditanda (Awal Muharram, Asyura, Maulidur Rasul, Israk Mikraj, Nisfu Syaaban, 1 Ramadan, Nuzul al-Qur'an, sepuluh malam terakhir, Hari Raya Aidilfitri, Arafah, Hari Raya Aidiladha, hari Tasyrik) dan disenaraikan di bawah **This month**. Tarikh dikira untuk Singapura dengan kriteria MABIMS yang digunakan MUIS. Jika MUIS mengumumkan tarikh lain (anak bulan kelihatan atau tidak), gunakan **Adjust the Hijri date** (−2 hingga +2 hari); ia mengubah tarikh Hijrah di seluruh aplikasi.
 - **Location**: jadual rasmi **Singapore (MUIS)**, atau **My location / Choose a city**. Bandar dikumpulkan mengikut negara (Asia Tenggara dan Asia Timur termasuk Jepun, Korea, China, Hong Kong dan Taiwan; Asia Selatan; Timur Tengah; Eropah; Amerika Utara; Australia dan New Zealand). Setiap bandar menggunakan kaedah negaranya sendiri (contohnya JAKIM untuk Malaysia, Kemenag untuk Indonesia, Umm al-Qura untuk Arab Saudi, Diyanet untuk Turki; yang lain Muslim World League), dinyatakan di bawah waktu, dan waktunya mengikut jam bandar itu.
 - **Adjust (minutes)**: tambah atau tolak minit bagi setiap waktu.
 
@@ -346,7 +346,7 @@ Semuanya dibuka dari **menu ayat**; memerlukan internet sekali bagi setiap surah
 
 ## 9. Tetapan (Settings)
 
-**Bahasa antara muka.** Laman Utama → **Language · Bahasa** (atau di bahagian atas Tetapan): tanda **English** (lalai) atau **Bahasa Melayu**. Aplikasi dibuka semula dengan butang, tajuk, tetapan dan mesejnya dalam bahasa itu. Al-Quran, terjemahannya, hadis, tafsir, doa dan nota anda kekal seperti asal; halaman Sirah, Sifat Solat, Jumaat, Imbas & semak dan Masjid mengikutinya melainkan anda memilih bahasanya dalam Tetapan; panduan ini mempunyai pilihan bahasanya sendiri. Beberapa mesej yang jarang muncul mungkin masih dalam bahasa Inggeris.
+**Bahasa antara muka.** Laman Utama → **Language · Bahasa** (atau di bahagian atas Tetapan): tanda **English** (lalai) atau **Bahasa Melayu**. Aplikasi dibuka semula dengan butang, tajuk, tetapan dan mesejnya dalam bahasa itu. Al-Qur'an, terjemahannya, hadis, tafsir, doa dan nota anda kekal seperti asal; halaman Sirah, Sifat Solat, Jumaat, Imbas & semak dan Masjid mengikutinya melainkan anda memilih bahasanya dalam Tetapan; panduan ini mempunyai pilihan bahasanya sendiri. Beberapa mesej yang jarang muncul mungkin masih dalam bahasa Inggeris.
 
 | Tetapan | Fungsi |
 | --- | --- |
@@ -367,12 +367,12 @@ Semuanya dibuka dari **menu ayat**; memerlukan internet sekali bagi setiap surah
 | Back up or restore | Fail sandaran tetapan, penanda buku dan nota (di bawah) |
 | User manual | Panduan ini |
 | Hafazan history | Sesi lalu dan rakaman |
-| Sources & verification | Sumber setiap kandungan; semakan teks al-Quran |
+| Sources & verification | Sumber setiap kandungan; semakan teks al-Qur'an |
 
 **Sandaran dan pemulihan (Backup)**
 
 1. Settings → **Back up or restore settings, bookmarks and notes** (juga ada pautan dalam Notes).
-2. **Save a backup file** menyimpan satu fail .json berisi semua tetapan, penanda buku al-Quran dan hadis, My ruku' dan My blocks, nota, keputusan Hafazan dan tempat terakhir dibaca. Pilih tempat simpanan, contohnya Google Drive, atau hantar kepada diri sendiri.
+2. **Save a backup file** menyimpan satu fail .json berisi semua tetapan, penanda buku al-Qur'an dan hadis, My ruku' dan My blocks, nota, keputusan Hafazan dan tempat terakhir dibaca. Pilih tempat simpanan, contohnya Google Drive, atau hantar kepada diri sendiri.
 3. **Restore from a backup file** di telefon ini atau telefon baharu menggantikan isi aplikasi dengan sandaran itu, kemudian membuka semula aplikasi.
 4. Tidak termasuk: rakaman suara Hafazan dan fail azan yang anda pilih (pilih semula), serta teks yang dimuat turun (akan dimuat turun semula).
 
@@ -380,7 +380,7 @@ Semuanya dibuka dari **menu ayat**; memerlukan internet sekali bagi setiap surah
 
 1. Settings → Back up or restore → **Sync with your other devices (Google)…**.
 2. Ketik **Sign in with Google** di **setiap peranti**, dengan **akaun Google yang sama**. Data disimpan dalam folder tersembunyi aplikasi ini di Google Drive anda sendiri (aplikasi tidak dapat melihat fail Drive anda yang lain). Kali pertama, Google memberi amaran bahawa aplikasi belum disahkan (ia milik anda sendiri, dalam ujian): ketik **Continue**. Google mungkin meminta log masuk semula kira-kira seminggu sekali. (Peranti tanpa perkhidmatan Google masih boleh guna cara lama di bawah *Other way*: satu fail dalam Drive atau OneDrive, dicipta di peranti pertama dan dipilih di peranti lain.)
-3. Selepas itu, penanda (al-Quran, hadis, Sirah, Sifat Solat, Jumaat, Doa), nota, tempat terakhir dibaca, My ruku' dan My blocks, keputusan Hafazan dan tempat anda sendiri diselaraskan dengan sendirinya: apabila aplikasi dibuka, apabila anda kembali kepadanya, dan beberapa saat selepas sesuatu diubah. Yang dipadam di satu peranti dipadam juga di peranti lain. **Sync now** menyelaraskan serta-merta.
+3. Selepas itu, penanda (al-Qur'an, hadis, Sirah, Sifat Solat, Jumaat, Doa), nota, tempat terakhir dibaca, My ruku' dan My blocks, keputusan Hafazan dan tempat anda sendiri diselaraskan dengan sendirinya: apabila aplikasi dibuka, apabila anda kembali kepadanya, dan beberapa saat selepas sesuatu diubah. Yang dipadam di satu peranti dipadam juga di peranti lain. **Sync now** menyelaraskan serta-merta.
 4. Ia dua hala: peranti mana pun yang anda ubah, peranti lain menerimanya pada penyelarasan seterusnya. Tetingkap Sync menunjukkan **peranti mana yang terakhir menulis, dan bila**. Baris merah bermaksud cubaan terakhir gagal (biasanya tiada internet). Tetapan, peringatan waktu solat dan rakaman suara tidak diselaraskan.
 
 ## 10. Penyelesaian masalah

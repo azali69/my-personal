@@ -765,7 +765,7 @@ const esc = s => s.replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"'
 const APP_NAME="My Personal Qur'an", APP_IDS=new Set([APP_NAME,'My Personal Quran']);
 const store = {
   get(k,d){ try{ const v=localStorage.getItem('mpq.'+k); return v===null?d:JSON.parse(v);}catch(e){return d;} },
-  set(k,v){ if(SYNC_MAPS.has(k) && !window.__syncApplying) syncTomb(k,v); try{ localStorage.setItem('mpq.'+k, JSON.stringify(v)); }catch(e){} if(SYNC_KEYS.has(k)) syncTouch(k); }
+  set(k,v){ if((SYNC_MAPS.has(k)||SYNC_ARR.has(k)) && !window.__syncApplying) syncTomb(k,v); try{ localStorage.setItem('mpq.'+k, JSON.stringify(v)); }catch(e){} if(SYNC_KEYS.has(k)) syncTouch(k); }
 };
 
 /* ============================ INTERFACE LANGUAGE (Azli, 23 Oct 2026) ============================
@@ -777,7 +777,7 @@ const store = {
 const APP_LANG=store.get('appLang','en'), I18N_MS=%%I18N_MS%%;
 const I18N_DAYS={Monday:'Isnin',Tuesday:'Selasa',Wednesday:'Rabu',Thursday:'Khamis',Friday:'Jumaat',Saturday:'Sabtu',Sunday:'Ahad'};
 const I18N_MON={January:'Januari',February:'Februari',March:'Mac',April:'April',May:'Mei',June:'Jun',July:'Julai',August:'Ogos',September:'September',October:'Oktober',November:'November',December:'Disember'};
-const I18N_TABS={"Qur'an":'Al-Quran',Hadith:'Hadis',Sirah:'Sirah','Sifat Solat':'Sifat Solat',Jumaat:'Jumaat',Doa:'Doa'};
+const I18N_TABS={"Qur'an":'Al-Qur\'an',Hadith:'Hadis',Sirah:'Sirah','Sifat Solat':'Sifat Solat',Jumaat:'Jumaat',Doa:'Doa'};
 const I18N_RX=[
  [/^([\d,]+) hadith · (\d+) kitab$/,'$1 hadis · $2 kitab'],[/^Juz (\d+) · Page (\d+)$/,'Juzuk $1 · Halaman $2'],[/^(.+) · page (\d+)$/,'$1 · halaman $2'],
  [/^(\d+) words · Page (\d+)$/,'$1 perkataan · Halaman $2'],[/^in (.+) · MUIS timetable$/,'dalam $1 · jadual MUIS'],[/^Next: (.+)$/,'Seterusnya: $1'],
@@ -789,7 +789,7 @@ const I18N_RX=[
  [/^No hadith with that number$/,'Tiada hadis dengan nombor itu'],[/^Google sign-in failed: (.*)$/,'Log masuk Google gagal: $1'],[/^Signed in: (.*)$/,'Log masuk: $1'],
  [/^Sync file: (.*)$/,'Fail selaras: $1'],[/^No Sahih Muslim hadith numbered (.*)$/,'Tiada hadis Sahih Muslim bernombor $1'],[/^no\. (\d+) in this list$/,'no. $1 dalam senarai ini'],
  [/^kitab (\d+), no\. (\d+)$/,'kitab $1, no. $2'],[/^Narrated by (.+)$/,'Diriwayatkan oleh $1'],[/^Page (\d+) added$/,'Halaman $1 ditambah'],
- [/^One file with everything you set and saved in the app: (.+) saved settings in all\.$/,m=>m.replace('One file with everything you set and saved in the app:','Satu fail dengan semua yang anda tetapkan dan simpan dalam aplikasi:').replace("Qur'an bookmarks",'penanda Al-Quran').replace('hadith bookmarks','penanda hadis').replace('Sirah bookmarks','penanda Sirah').replace(' notes',' nota').replace("My ruku' and My blocks","Ruku' saya dan Blok saya").replace('Hafazan results','keputusan Hafazan').replace('own places (Masjid & musollah)','tempat sendiri (Masjid & musolla)').replace('saved settings in all.','tetapan disimpan kesemuanya.')],[/^Erased (.+)$/,m=>m.replace('Erased','Dipadam').replace(' strokes',' garisan').replace(' stroke',' garisan').replace(' and typed words',' dan perkataan ditaip').replace('typed words','perkataan ditaip').replace('(Undo brings strokes back)','(Buat asal mengembalikan garisan)')],
+ [/^One file with everything you set and saved in the app: (.+) saved settings in all\.$/,m=>m.replace('One file with everything you set and saved in the app:','Satu fail dengan semua yang anda tetapkan dan simpan dalam aplikasi:').replace("Qur'an bookmarks",'penanda Al-Qur\'an').replace('hadith bookmarks','penanda hadis').replace('Sirah bookmarks','penanda Sirah').replace(' notes',' nota').replace("My ruku' and My blocks","Ruku' saya dan Blok saya").replace('Hafazan results','keputusan Hafazan').replace('own places (Masjid & musollah)','tempat sendiri (Masjid & musolla)').replace('saved settings in all.','tetapan disimpan kesemuanya.')],[/^Erased (.+)$/,m=>m.replace('Erased','Dipadam').replace(' strokes',' garisan').replace(' stroke',' garisan').replace(' and typed words',' dan perkataan ditaip').replace('typed words','perkataan ditaip').replace('(Undo brings strokes back)','(Buat asal mengembalikan garisan)')],
  [/^(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday), (\d{1,2}) (January|February|March|April|May|June|July|August|September|October|November|December)( \d{4})?$/,(m,d,n,mo,y)=>`${I18N_DAYS[d]}, ${n} ${I18N_MON[mo]}${y||''}`],
  [/^(\d{1,2}) (January|February|March|April|May|June|July|August|September|October|November|December) (\d{4})$/,(m,n,mo,y)=>`${n} ${I18N_MON[mo]} ${y}`],
 ];
@@ -827,7 +827,10 @@ const syncOn=()=>!!(window.AndroidExtra?.syncRead && window.AndroidExtra.syncNam
 const syncEntT=e=>{ if(!e||typeof e!=='object') return 0; for(const f of ['u','t','c']) if(typeof e[f]==='number') return e[f]; return 0; };
 /* A removed bookmark or note leaves a dated "tombstone", so the other device removes it too instead of bringing it back. */
 function syncDels(){ try{ return JSON.parse(localStorage.getItem('mpq.__syncDel')||'{}'); }catch(e){ return {}; } }
-function syncTomb(k,v){ let old=null; try{ old=JSON.parse(localStorage.getItem('mpq.'+k)||'null'); }catch(e){} if(!old||typeof old!=='object') return;
+/* My ruku' and My blocks are lists of {s,e,t}: merged item by item (key = start:end) like the maps, so a block added on one device
+   is not lost when the other device also changed its list (Azli, 25 Oct 2026: My ruku' did not reach the other devices). */
+const SYNC_ARR=new Set(['myr','myb']), arrKey=b=>b.s+':'+b.e, arrMap=a=>{ const m={}; (Array.isArray(a)?a:[]).forEach(b=>{ if(b&&b.s!=null) m[arrKey(b)]=b; }); return m; };
+function syncTomb(k,v){ let old=null; try{ old=JSON.parse(localStorage.getItem('mpq.'+k)||'null'); }catch(e){} if(SYNC_ARR.has(k)){ old=arrMap(old); v=arrMap(v); } if(!old||typeof old!=='object') return;
   const gone=Object.keys(old).filter(id=>!v||!(id in v)); if(!gone.length) return; const D=syncDels(); D[k]=D[k]||{}; const now=Date.now(); gone.forEach(id=>D[k][id]=now);
   try{ localStorage.setItem('mpq.__syncDel',JSON.stringify(D)); }catch(e){} }
 function syncMergeMap(L,R,del){ const out={}; L=L||{}; R=R||{}; del=del||{};
@@ -851,6 +854,7 @@ async function syncNow(manual){ if(!syncOn()||syncBusy) return; syncBusy=true;
     SYNC_KEYS.forEach(k=>{ const lt=LT[k]||0, r=RK[k], rt=r?r.t:0, lv=store.get(k,undefined);
       let v, t;
       if(SYNC_MAPS.has(k) && (lv||r)){ v=syncMergeMap(lv,r&&r.v,DEL[k]); t=Math.max(lt,rt); }
+      else if(SYNC_ARR.has(k) && (lv||r)){ v=Object.values(syncMergeMap(arrMap(lv),arrMap(r&&r.v),DEL[k])).sort((a,b)=>a.s-b.s); t=Math.max(lt,rt); }
       else if(r && rt>lt){ v=r.v; t=rt; } else { v=lv; t=lt; }
       if(v===undefined) return; out[k]={t,v}; outT[k]=t;
       if(JSON.stringify(v)!==JSON.stringify(lv)) changed.push(k); });
@@ -865,6 +869,7 @@ async function syncNow(manual){ if(!syncOn()||syncBusy) return; syncBusy=true;
   }catch(e){ if(manual) toast('Sync failed'); } finally{ syncBusy=false; } }
 function syncAfter(ks){ try{
   if(ks.includes('bm')){ st.bm=store.get('bm',{}); }
+  if(ks.includes('myr')) st.myr=store.get('myr',[]); if(ks.includes('myb')) st.myb=store.get('myb',[]);
   if(ks.includes('page')){ const p=store.get('page',st.page); if(p!==st.page && document.getElementById('home')?.hidden===false){ st.page=p; } }
   if(ks.some(k=>k==='bm'||k==='page'||k==='myb'||k==='myr') && document.getElementById('home')?.hidden!==false) renderReader();
   const t=topPanel(); t&&t.__redraw&&t.__redraw(); if(document.getElementById('kt')?.hidden===false) ktDrawTop(); }catch(e){} }
@@ -934,7 +939,7 @@ if(!st.myb){ // convert block starts from the earlier version
   st.myb=[]; const bySurah={}; for(const g of st.mine){ (bySurah[A[g][0]]??=[]).push(g); }
   for(const sNo in bySurah){ const s0=surahStart[sNo], s1=s0+S[sNo-1][5]-1; const starts=[s0,...bySurah[sNo].sort((a,b)=>a-b)];
     starts.forEach((g,i)=>{ const e=i+1<starts.length?starts[i+1]-1:s1; if(e>=g) st.myb.push({s:P_(g,0),e:P_(e,wcount(e)-1),t:Date.now()}); }); }
-  store.set('myb',st.myb); }
+  window.__syncApplying=true; try{ store.set('myb',st.myb); } finally{ window.__syncApplying=false; } }   /* not stamped as an edit, so blocks from the other device are not overwritten */
 st.myr=store.get('myr',[]);
 if(!store.get('blk2',false)){ if(st.blocks==='ruku') st.blocks='off'; store.set('blk2',true); store.set('blocks',st.blocks); }  // original ruku' starts switched off
 const SETK={mine:'myb',myruku:'myr'};
@@ -3478,7 +3483,7 @@ function hijriParts(d0){ const adj=store.get('hijriAdj',0)||0, d=new Date(d0.get
 /* Islamic days in the year (Hijri month, day). Maulid and Israk Mikraj are the days commonly marked in Singapore and Malaysia;
    their historical dates are not certain. */
 const HIJRI_EV=[[1,1,'Awal Muharram (Hijri New Year)'],[1,10,'Asyura'],[3,12,'Maulidur Rasul'],[7,27,'Israk Mikraj'],[8,15,'Nisfu Syaaban'],
-  [9,1,'1 Ramadan, fasting begins'],[9,17,'Nuzul al-Quran'],[9,21,'The last ten nights of Ramadan begin (from the night of the 21st)'],[10,1,'Hari Raya Aidilfitri'],
+  [9,1,'1 Ramadan, fasting begins'],[9,17,'Nuzul al-Qur\'an'],[9,21,'The last ten nights of Ramadan begin (from the night of the 21st)'],[10,1,'Hari Raya Aidilfitri'],
   [12,9,'Hari Arafah'],[12,10,'Hari Raya Aidiladha'],[12,11,'Hari Tasyrik'],[12,12,'Hari Tasyrik'],[12,13,'Hari Tasyrik']];
 const hijriEv=h=>HIJRI_EV.filter(e=>e[0]===h.m&&e[1]===h.d).map(e=>e[2]);
 function hijriCalendar(d0){ let cur=new Date(d0.getFullYear(),d0.getMonth(),1);
@@ -4004,7 +4009,7 @@ async function kamusPanel(q){ const ms=sL()==='ms';
   b.closest('.panel').querySelector('#kmL').onclick=e=>{ const x=e.target.closest('[data-k]'); if(!x) return; q0.value=''; store.set('kmLet',x.dataset.k); draw(); };
   box.onclick=e=>{ const x=e.target.closest('[data-r]'); if(x) kamusRoot(+x.dataset.r); }; }
 async function kamusRoot(ri,focusLem){ const ms=sL()==='ms', D=await kmLoad(), r=D.roots[ri]; if(!r) return;
-  const b=openPanel('kamusR', r.r?(ms?'Akar ':'Root ')+[...r.r].join(' '):r.l[0][0], `<div class="km-head"><div class="ar km-big">${esc(r.r?[...r.r].join(' '):r.l[0][0])}</div><p class="note" style="margin:0">${r.n} ${ms?'kali dalam Al-Quran':'times in the Qur\'an'} · ${r.l.length} ${ms?'perkataan (lema)':'words (lemmas)'}</p></div>
+  const b=openPanel('kamusR', r.r?(ms?'Akar ':'Root ')+[...r.r].join(' '):r.l[0][0], `<div class="km-head"><div class="ar km-big">${esc(r.r?[...r.r].join(' '):r.l[0][0])}</div><p class="note" style="margin:0">${r.n} ${ms?'kali dalam Al-Qur\'an':'times in the Qur\'an'} · ${r.l.length} ${ms?'perkataan (lema)':'words (lemmas)'}</p></div>
    ${r.l.map(l=>{ const P=KM_POS[l[2]]; return `<div class="card km-l" id="km-${l[6]}"><div class="row2" style="gap:8px;align-items:baseline"><span class="ar km-lem">${esc(l[0])}</span><small class="note">${P?P[ms?1:0]:l[2]} · ${l[1]} ${ms?'kali':'times'}</small></div>
      ${l[4].length?`<p style="margin:4px 0 0"><small class="note">Indonesia:</small> ${esc(l[4].join('; '))}</p>`:''}${l[3].length?`<p style="margin:2px 0 0"><small class="note">English:</small> ${esc(l[3].join('; '))}</p>`:''}
      <p class="ar km-forms" dir="rtl">${l[5].map(esc).join(' · ')}</p><button class="pill" data-occ="${l[6]}">${ms?'Lihat ayat':'Show the ayat'} (${l[1]})</button><div class="km-occ" data-o="${l[6]}"></div></div>`; }).join('')}
@@ -4022,12 +4027,12 @@ async function kamusRoot(ri,focusLem){ const ms=sL()==='ms', D=await kmLoad(), r
 window.__meaning=t=>{ t=(t||'').trim().replace(/\s+/g,' ').slice(0,80); if(!t) return; const ms=sL()==='ms';
   const w=encodeURIComponent(t.toLowerCase().replace(/[“”"'.,;:!?()]/g,''));
   if(/[\u0600-\u06FF]/.test(t)){ kamusFind(t).then(ok=>{ if(ok) return; const u=encodeURIComponent(kmNorm(t).split(' ')[0]);
-      openSheet((ms?'Makna: ':'Meaning: ')+t, `<p class="note" style="margin-top:0">${ms?'Perkataan ini tiada dalam Kamus Al-Quran (ia bukan lafaz Al-Quran, atau bentuknya lain). Kamus Arab dalam talian:':'This word is not in the Kamus Al-Quran (it is not a word of the Qur\'an, or it is in another form). Arabic dictionaries online:'}</p>
-       <div class="sr-links"><button class="sr-link" data-km><b>Kamus Al-Quran ›</b><small>${ms?'Cari akar katanya sendiri':'Search for its root yourself'}</small></button><a class="sr-link" data-mx href="https://www.almaany.com/ms/dict/ar-ms/${u}/" target="_blank" rel="noopener"><b>Almaany (Arab–Melayu) ›</b></a><a class="sr-link" data-mx href="https://www.almaany.com/en/dict/ar-en/${u}/" target="_blank" rel="noopener"><b>Almaany (Arabic–English) ›</b></a><a class="sr-link" data-mx href="https://www.almaany.com/ar/dict/ar-ar/${u}/" target="_blank" rel="noopener"><b>Almaany (العربية) ›</b></a></div>`);
+      openSheet((ms?'Makna: ':'Meaning: ')+t, `<p class="note" style="margin-top:0">${ms?'Perkataan ini tiada dalam Kamus Al-Qur\'an (ia bukan lafaz Al-Qur\'an, atau bentuknya lain). Kamus Arab dalam talian:':'This word is not in the Kamus Al-Qur\'an (it is not a word of the Qur\'an, or it is in another form). Arabic dictionaries online:'}</p>
+       <div class="sr-links"><button class="sr-link" data-km><b>Kamus Al-Qur'an ›</b><small>${ms?'Cari akar katanya sendiri':'Search for its root yourself'}</small></button><a class="sr-link" data-mx href="https://www.almaany.com/ms/dict/ar-ms/${u}/" target="_blank" rel="noopener"><b>Almaany (Arab–Melayu) ›</b></a><a class="sr-link" data-mx href="https://www.almaany.com/en/dict/ar-en/${u}/" target="_blank" rel="noopener"><b>Almaany (Arabic–English) ›</b></a><a class="sr-link" data-mx href="https://www.almaany.com/ar/dict/ar-ar/${u}/" target="_blank" rel="noopener"><b>Almaany (العربية) ›</b></a></div>`);
       sheetB.onclick=e=>{ if(e.target.closest('[data-mx]')){ try{ goingAway(); }catch(_){} return; } if(e.target.closest('[data-km]')){ closeSheet(); kamusPanel(kmNorm(t)); } }; })
       .catch(()=>toast(ms?'Kamus perlu internet kali pertama':'The dictionary needs the internet the first time')); return; }
   openSheet((ms?'Makna: ':'Meaning: ')+t, `<p class="note" style="margin-top:0">${ms?'Kamus Melayu dan Inggeris yang terbuka sepenuhnya untuk dimuat ke dalam aplikasi belum ada; pautan ini percuma di internet.':'There is no fully open Malay and English dictionary to put inside the app yet; these links are free online.'}</p>
-   <div class="sr-links"><button class="sr-link" data-mq><b>${ms?'Cari dalam terjemahan Al-Quran':'Search the Qur\'an translations'} ›</b><small>${ms?'Di mana perkataan ini digunakan dalam terjemahan Melayu dan Inggeris di sini':'Where this word is used in the Malay and English translations here'}</small></button>
+   <div class="sr-links"><button class="sr-link" data-mq><b>${ms?'Cari dalam terjemahan Al-Qur\'an':'Search the Qur\'an translations'} ›</b><small>${ms?'Di mana perkataan ini digunakan dalam terjemahan Melayu dan Inggeris di sini':'Where this word is used in the Malay and English translations here'}</small></button>
    <a class="sr-link" data-mx href="https://prpm.dbp.gov.my/Cari1?keyword=${w}" target="_blank" rel="noopener"><b>Kamus Dewan (PRPM, DBP) ›</b><small>${ms?'Bahasa Melayu, percuma dalam talian':'Malay, free online'}</small></a>
    <a class="sr-link" data-mx href="https://${ms?'ms':'en'}.wiktionary.org/wiki/${w}" target="_blank" rel="noopener"><b>Wiktionary ›</b><small>${ms?'Kamus terbuka (CC BY-SA)':'Open dictionary (CC BY-SA)'}</small></a>
    <a class="sr-link" data-mx href="https://dictionary.cambridge.org/dictionary/english/${w}" target="_blank" rel="noopener"><b>Cambridge Dictionary ›</b><small>English</small></a>
@@ -4125,7 +4130,7 @@ function halalPanel(){ const ms=sL()==='ms', app=!!window.AndroidExtra?.halalSea
   q.oninput=()=>{ clearTimeout(tm); tm=setTimeout(go,700); }; q.onkeydown=e=>{ if(e.key==='Enter'){ clearTimeout(tm); go(); } }; }
 function sirahCopy(e){ const ms=sL()==='ms', L=[];
   L.push(sT(e.title), `${sT(e.when)} · ${sCE(e.ce)}`, '', sT(e.sum));
-  if((e.q||[]).length){ L.push('', ms?'Al-Quran:':"Qur'an:"); (e.q||[]).forEach(([su,a,bb,ne,nm])=>L.push(`• ${S[su-1][1]} ${su}:${a}${bb>a?'–'+bb:''}: ${ms?(nm||ne):ne}`)); }
+  if((e.q||[]).length){ L.push('', ms?'Al-Qur\'an:':"Qur'an:"); (e.q||[]).forEach(([su,a,bb,ne,nm])=>L.push(`• ${S[su-1][1]} ${su}:${a}${bb>a?'–'+bb:''}: ${ms?(nm||ne):ne}`)); }
   if((e.h||[]).length){ L.push('', ms?'Hadis:':'Hadith:'); (e.h||[]).forEach(([bk,n,sn,ne,nm])=>L.push(`• ${KT_SHORT[bk]||bk} ${n}${(ms?(nm||ne):ne)?': '+(ms?(nm||ne):ne):''}`)); }
   if((e.ext||[]).length){ L.push('', (ms?'Riwayat dalam kitab lain':'Reports in other books')+(e.extb?' ('+e.extb+')':'')+':'); e.ext.forEach(x=>L.push('• '+sT(x)+(x.src?' ['+x.src+']':''))); }
   if((e.pop||[]).length){ L.push('', ms?'Kisah popular dan statusnya:':'Popular stories and their status:'); e.pop.forEach(x=>{ const K=SIRAH_KIND[x.kind]||SIRAH_KIND.hist; L.push(`• [${K[ms?1:0]}] ${sT(x)}${x.src?' ['+(ms?'Sumber: ':'Source: ')+x.src+']':''}`); }); }
@@ -4145,7 +4150,7 @@ async function sirahEvent(id){ const D=sirahD; const i=D.events.findIndex(e=>e.i
     <p class="sr-sum">${esc(sT(e.sum))}</p>
     ${nt?`<div class="kt-note" id="srNt" dir="auto">${esc(nt.t)}</div>`:''}
     ${e.nasab?`<div class="label">${ms?'Nasab Nabi ﷺ':'Lineage of the Prophet ﷺ'}</div><div class="card sr-nasab"><ol>${e.nasab.chain.map(n=>`<li>${esc(n)}</li>`).join('')}</ol><div dir="rtl" lang="ar" class="sr-nar">${esc(e.nasab.ar)}</div><p class="note" style="margin:8px 0 0">${esc(sT(e.nasab))}${e.nasab.url?`<br><a class="sl-src" href="${esc(e.nasab.url)}" target="_blank" rel="noopener">${ms?'Buka sumber':'Open source'} ›</a>`:''}</p></div>`:''}
-    ${qh?`<div class="label">${ms?'Al-Quran':'Qur\'an'}</div><div class="sr-links">${qh}</div>`:''}
+    ${qh?`<div class="label">${ms?'Al-Qur\'an':'Qur\'an'}</div><div class="sr-links">${qh}</div>`:''}
     ${hh?`<div class="label">${ms?'Hadis':'Hadith'}</div><div class="sr-links">${hh}</div>`:''}
     ${xh?`<div class="label">${ms?'Riwayat dalam kitab lain':'Reports in other books'}${e.extb?': '+esc(e.extb):''}</div><ul class="sr-ext">${xh}</ul>`:''}
     ${ph?`<div class="label">${ms?'Kisah popular: semak statusnya':'Popular stories: check their status'}</div>${ph}`:''}
@@ -4280,7 +4285,7 @@ function checkPanel(init){ const ms=sL()==='ms', app=!!window.AndroidExtra?.scan
    <p class="note" id="ckMsg"></p><div id="ckQ"></div><div id="ckH"></div>
    <details class="card ck-how"><summary>${ms?'Bagaimana semakan ini dibuat':'How this check works'}</summary>
     <p class="note">${ms?
-    'Teks dibandingkan dengan isi aplikasi ini sahaja: Al-Quran (Arab, terjemahan Melayu Basmeih dan Inggeris Saheeh International) dan lapan kitab hadis (Kutub as-Sittah, al-Muwatta\' dan asy-Syama\'il: Arab, Inggeris, Indonesia). Peratus ialah kadar perkataan yang sama, bukan hukum. Arab: perkataan yang sama mengikut susunan (baris diabaikan). Melayu/Inggeris: perkataan penting yang sama; penterjemah berbeza memilih perkataan berbeza, jadi peratus rendah tidak semestinya bermakna tiada. Hadis dalam Bahasa Melayu dibandingkan dengan terjemahan Indonesia. "Tidak dijumpai" hanya bermaksud tidak ada dalam kitab-kitab ini dengan lafaz ini; hadis itu mungkin ada dalam kitab lain (seperti Musnad Ahmad) atau diriwayatkan dengan lafaz lain. Ia bukan bukti hadis itu palsu. Untuk hukum, rujuk ulama yang berkelayakan. Imbasan kamera boleh tersilap huruf; betulkan teks sebelum menyemak.'
+    'Teks dibandingkan dengan isi aplikasi ini sahaja: Al-Qur\'an (Arab, terjemahan Melayu Basmeih dan Inggeris Saheeh International) dan lapan kitab hadis (Kutub as-Sittah, al-Muwatta\' dan asy-Syama\'il: Arab, Inggeris, Indonesia). Peratus ialah kadar perkataan yang sama, bukan hukum. Arab: perkataan yang sama mengikut susunan (baris diabaikan). Melayu/Inggeris: perkataan penting yang sama; penterjemah berbeza memilih perkataan berbeza, jadi peratus rendah tidak semestinya bermakna tiada. Hadis dalam Bahasa Melayu dibandingkan dengan terjemahan Indonesia. "Tidak dijumpai" hanya bermaksud tidak ada dalam kitab-kitab ini dengan lafaz ini; hadis itu mungkin ada dalam kitab lain (seperti Musnad Ahmad) atau diriwayatkan dengan lafaz lain. Ia bukan bukti hadis itu palsu. Untuk hukum, rujuk ulama yang berkelayakan. Imbasan kamera boleh tersilap huruf; betulkan teks sebelum menyemak.'
     :'The text is compared with what is inside this app only: the Qur\'an (Arabic, the Malay translation of Basmeih and the English of Saheeh International) and the eight hadith books (the six books, al-Muwatta\' and the Syama\'il: Arabic, English, Indonesian). The percentage is how many words are the same, not a ruling. Arabic: the same words in the same order (harakat ignored). Malay/English: the same important words; different translators choose different words, so a low percentage does not mean it is absent. Malay hadith text is compared with the Indonesian translation. "Not found" only means it is not in these books in this wording; it may be in other books (such as Musnad Ahmad) or narrated in other words. It is not proof that a hadith is fabricated. For a ruling, ask a qualified scholar. Camera scanning can misread letters; correct the text before checking.'}</p></details>`);
   const ta=b.querySelector('#ckT');
   b.querySelector('#ckLang')?.addEventListener('click',e=>{ const x=e.target.closest('button'); if(!x) return; b.querySelectorAll('#ckLang button').forEach(y=>y.setAttribute('aria-pressed',y===x)); store.set('scanLang',x.dataset.v); });
@@ -4329,7 +4334,7 @@ async function checkRun(text){ const run=++ckRunId, ms=sL()==='ms'; text=(text||
   const msg=document.getElementById('ckMsg'), qBox=document.getElementById('ckQ'), hBox=document.getElementById('ckH'); if(!msg) return;
   qBox.innerHTML=''; hBox.innerHTML=''; ckSt.res=null;
   if(text.length<8){ msg.textContent=ms?'Teks terlalu pendek untuk disemak.':'The text is too short to check.'; return; }
-  const isAr=ckIsAr(text); msg.textContent=ms?'Menyemak Al-Quran…':'Checking the Qur\'an…';
+  const isAr=ckIsAr(text); msg.textContent=ms?'Menyemak Al-Qur\'an…':'Checking the Qur\'an…';
   await new Promise(r=>setTimeout(r,30));
   const qw=isAr?ckArWords(text):null;
   const qr= isAr? (()=>{ const a=ckQuranTri(text), b=ckQuranWords(text), all=a.concat(b).sort((x,y)=>(y.cov+2*y.qc)-(x.cov+2*x.qc)) /* the ayah holding most of the text first */, out=[];
@@ -4351,9 +4356,9 @@ async function checkRun(text){ const run=++ckRunId, ms=sL()==='ms'; text=(text||
 function checkShow(res, restored){ const ms=sL()==='ms', msg=document.getElementById('ckMsg'), qBox=document.getElementById('ckQ'), hBox=document.getElementById('ckH'); if(!msg) return;
   const ref=(g,e)=>`${S[A[g][0]-1][1]} ${A[g][0]}:${A[g][1]}${e>g?'–'+A[e][1]:''}`;
   const top=res.q[0], full=w=>w.p>=0.85, part=w=>w.p<0.5;
-  const qv= !res.q.length ? `<div class="ck-v ck-no">${ms?'Tiada ayat Al-Quran yang sepadan.':'No ayah of the Qur\'an matched.'}</div><p class="note">${ms?'Jika teks ini dikatakan ayat Al-Quran, semak dengan teliti: ia mungkin terjemahan dengan lafaz lain, hadis, doa, atau bukan dari Al-Quran.':'If this text is presented as an ayah, check it carefully: it may be a translation worded differently, a hadith, a doa, or not from the Qur\'an.'}</p>`
-    : `<div class="ck-v ${full(top)||(part(top)&&top.qc>=0.9)?'ck-ok':'ck-mid'}">${full(top)?(ms?'Dijumpai dalam Al-Quran':'Found in the Qur\'an'):part(top)&&top.qc>=0.9?(ms?'Dijumpai: sebahagian daripada ayat':'Found: part of an ayah'):(ms?'Hampir dengan ayat Al-Quran: ada perbezaan':'Close to an ayah of the Qur\'an: there are differences')}</div>`;
-  qBox.innerHTML=`<div class="label">${ms?'Al-Quran':'Qur\'an'}</div>${qv}`+res.q.map(w=>{ const a=A[w.g]; let ar='', tr='';
+  const qv= !res.q.length ? `<div class="ck-v ck-no">${ms?'Tiada ayat Al-Qur\'an yang sepadan.':'No ayah of the Qur\'an matched.'}</div><p class="note">${ms?'Jika teks ini dikatakan ayat Al-Qur\'an, semak dengan teliti: ia mungkin terjemahan dengan lafaz lain, hadis, doa, atau bukan dari Al-Qur\'an.':'If this text is presented as an ayah, check it carefully: it may be a translation worded differently, a hadith, a doa, or not from the Qur\'an.'}</p>`
+    : `<div class="ck-v ${full(top)||(part(top)&&top.qc>=0.9)?'ck-ok':'ck-mid'}">${full(top)?(ms?'Dijumpai dalam Al-Qur\'an':'Found in the Qur\'an'):part(top)&&top.qc>=0.9?(ms?'Dijumpai: sebahagian daripada ayat':'Found: part of an ayah'):(ms?'Hampir dengan ayat Al-Qur\'an: ada perbezaan':'Close to an ayah of the Qur\'an: there are differences')}</div>`;
+  qBox.innerHTML=`<div class="label">${ms?'Al-Qur\'an':'Qur\'an'}</div>${qv}`+res.q.map(w=>{ const a=A[w.g]; let ar='', tr='';
     for(let g=w.g;g<=w.e;g++){ ar+=(ar?' ':'')+A[g][2]; tr+=(tr?' ':'')+(st.lang==='ms'?A[g][6]:A[g][7]); }
     return `<button class="ck-r" data-ckq="${w.g}"><span class="ck-h"><b>${esc(ref(w.g,w.e))}</b><small>${res.isAr&&part(w)?(ms?`Sebahagian ayat ini (${ckPct(w.qc)} teks itu ada dalam ayat ini)`:`Part of this ayah (${ckPct(w.qc)} of the text is in this ayah)`):ckPct(w.p)+' '+(res.isAr?(ms?'daripada ayat ini sepadan dengan teks':'of this ayah matches the text'):(ms?'perkataan penting sama dengan terjemahan':'of the important words match the translation'))}</small></span>
       <span dir="rtl" lang="ar" class="ck-ar">${esc(ar.length>420?ar.slice(0,420)+'…':ar)}</span><span class="note">${esc(tr.length>300?tr.slice(0,300)+'…':tr)}</span><span class="ck-go">${ms?'Buka ayat ›':'Open the ayah ›'}</span></button>`; }).join('');
