@@ -476,6 +476,8 @@ body.immersive .dock.hz #mic{visibility:visible;pointer-events:auto}
   border:1px solid color-mix(in srgb,var(--gold) 55%,transparent);background:color-mix(in srgb,var(--h-bg2) 70%,transparent);color:var(--h-ink);font:inherit}
 .tile::after{content:"";position:absolute;inset:4px;border-radius:12px;border:1px solid color-mix(in srgb,var(--gold) 18%,transparent);pointer-events:none}
 .tile svg{width:28px;height:28px;color:var(--gold)}
+.hb{display:grid;place-items:center;flex:none;width:46px;height:46px;border-radius:14px;background:linear-gradient(145deg,var(--c1),var(--c2));box-shadow:0 2px 6px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.28)}
+.tile .hb svg{width:28px;height:28px;color:#fff}
 .tile b{font-size:15.5px;font-weight:600}
 .tile small{color:var(--h-mute);font-size:12.5px;line-height:1.35}
 .tile.wide{grid-column:1/-1;flex-direction:row;align-items:center;min-height:0}
@@ -701,6 +703,7 @@ a.tile{text-decoration:none;color:inherit}
 #qbMsg.on{background:#1f6b45;border-color:#5fd08a;color:#fff}
 .man-q{margin:10px 0;padding:10px 14px;border-inline-start:3px solid var(--gold,#b8913f);border-radius:8px;background:color-mix(in srgb,var(--gold,#b8913f) 10%,transparent)}
 .langtile{cursor:default}.langpick{display:flex;flex-direction:column;gap:6px;margin-top:8px;width:100%}.langpick button{display:flex;align-items:center;gap:8px;min-height:40px;border-radius:10px;border:1px solid color-mix(in srgb,var(--gold) 55%,transparent);background:transparent;color:inherit;font-weight:600;padding:0 10px;text-align:left}.langpick button[aria-pressed="true"]{background:color-mix(in srgb,var(--gold) 22%,transparent)}.langpick .cb{display:inline-grid;place-items:center;width:20px;height:20px;border-radius:5px;border:2px solid currentColor;font-size:14px;line-height:1}
+.pclist{margin-top:10px}.pc-co{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);margin:12px 4px 4px}.pc-c{display:flex;justify-content:space-between;align-items:center;width:100%;min-height:46px;padding:0 14px;border:0;border-bottom:1px solid var(--line);background:transparent;color:inherit;font:inherit;font-size:16px;text-align:left}.pc-c.on{background:color-mix(in srgb,var(--accent) 12%,transparent);font-weight:600}.pc-c b{color:var(--accent)}
 </style>
 
 <header class="top"><div class="top-in">
@@ -3441,28 +3444,30 @@ function showCover(){ let el=document.getElementById('cover'); if(!el){ el=docum
 function applyUiZoom(){ const z=(store.get('uiZoom',100)||100)/100; document.documentElement.style.setProperty('--uiz', z); document.documentElement.classList.toggle('uiz', z!==1); }
 applyUiZoom();
 function applyHomeBars(){ try{ const v=getComputedStyle(document.documentElement).getPropertyValue('--h-bg').trim(); window.AndroidSpeech?.setBarColor?.(v, !['gading','biru-muda','pastel'].includes(store.get('homeTheme','hijau'))); }catch(e){} }
+/* Home icons (Azli, 31 Oct 2026: proper icons with colour): a white picture on a coloured tile, one colour per section. */
 const homeIc={
- lang:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/>',
- read:'<path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H11v16H5.5A1.5 1.5 0 0 1 4 18.5zM20 5.5A1.5 1.5 0 0 0 18.5 4H13v16h5.5a1.5 1.5 0 0 0 1.5-1.5z"/><path d="M15 8h3M15 11h3"/>',
- open:'<path d="M12 3l2.4 4.9 5.4.8-3.9 3.8.9 5.4L12 15.4 7.2 17.9l.9-5.4L4.2 8.7l5.4-.8z"/>',
- hz:'<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/>',
- tq:'<path d="M4 14v-2a8 8 0 0 1 16 0v2"/><rect x="3" y="14" width="4" height="6" rx="1.5"/><path d="M17 14h1.5a1.5 1.5 0 0 1 1.5 1.5V17M14 20h3"/>',
- bm:'<path d="M7 4h10v16l-5-3.5L7 20z"/>',
- sirah:'<path d="M12 3v18M12 6h6l-1.5 2 1.5 2h-6M12 13H6l1.5 2L6 17h6"/><circle cx="12" cy="21" r=".6"/>',
- solat:'<path d="M7 21h10M9 21v-4h6v4M12 3a2 2 0 1 1 0 4 2 2 0 0 1 0-4zM8 13l4-4 4 4M12 9v8"/>',
- kamus:'<path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/><path d="M5 17a3 3 0 0 1 3-3h11"/><path d="M10 8h5M10 11h3"/>',
- jumuah:'<path d="M4 21V11l8-6 8 6v10"/><path d="M9 21v-5a3 3 0 0 1 6 0v5"/><path d="M12 2v3M3 21h18"/>',
- check:'<path d="M4 8V5a1 1 0 0 1 1-1h3M16 4h3a1 1 0 0 1 1 1v3M20 16v3a1 1 0 0 1-1 1h-3M8 20H5a1 1 0 0 1-1-1v-3"/><path d="m8 12 3 3 5-6"/>',
- halal:'<path d="M4 11h16a8 8 0 0 1-16 0zM8 7c0-2 1.5-3 1.5-4M12 7c0-2 1.5-3 1.5-4M16 7c0-2 1.5-3 1.5-4M3 21h18"/>',
-masjid:'<path d="M12 3c-3 2-5 4-5 7h10c0-3-2-5-5-7zM12 1.8v1.4M5 21V10.5M19 21V10.5M3.8 10.5h2.4M17.8 10.5h2.4M7 21v-7h10v7M3 21h18M10.5 21v-3a1.5 1.5 0 0 1 3 0v3"/>',
- dua:'<path d="M8 13c-2-1-3-3-3-5 1 0 3 1 4 3M16 13c2-1 3-3 3-5-1 0-3 1-4 3M9 21v-5a3 3 0 0 1 6 0v5"/><circle cx="12" cy="6" r="2.5"/>',
- pray:'<path d="M12 3a6 6 0 0 0 6 6 7 7 0 1 1-6-6z"/><path d="M17 3v3M15.5 4.5h3"/>',
- qibla:'<circle cx="12" cy="12" r="8.5"/><path d="M12 4.5l2.5 7.5L12 19.5 9.5 12z"/><rect x="10.6" y="10.6" width="2.8" height="2.8" fill="currentColor"/>',
- set:'<path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="17" r="2"/>',
- kutub:'<path d="M4 6.5C6.5 5 9.5 5 12 6.5 14.5 5 17.5 5 20 6.5V19c-2.5-1.5-5.5-1.5-8 0-2.5-1.5-5.5-1.5-8 0z"/><path d="M12 6.5V19"/><path d="M6.5 9.5h3M6.5 12h3M14.5 9.5h3M14.5 12h3"/>',
- notes:'<path d="M6 3h9l4 4v14H6z"/><path d="M15 3v4h4M9 11h7M9 14.5h7M9 18h4"/>',
- man:'<path d="M5 4.5A1.5 1.5 0 0 1 6.5 3H19v15H6.5A1.5 1.5 0 0 0 5 19.5zM5 19.5A1.5 1.5 0 0 0 6.5 21H19v-3"/><path d="M12 7.5h.01M12 10v4"/>'};
-const hic=n=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${homeIc[n]}</svg>`;
+ read:["#14b8a6","#0f766e","<path d=\"M3.5 5.5c2.8-.9 5.6-.6 8.5 1v13c-2.9-1.6-5.7-1.9-8.5-1z\" fill=\"#fff\" fill-opacity=\".9\"/><path d=\"M20.5 5.5c-2.8-.9-5.6-.6-8.5 1v13c2.9-1.6 5.7-1.9 8.5-1z\" fill=\"#fff\" fill-opacity=\".65\"/><path d=\"M15.5 6v6l1.6-1.2 1.6 1.2V5.6\" fill=\"#fde68a\" stroke=\"#fde68a\" stroke-width=\"1\"/>"],
+ open:["#22c55e","#15803d","<path d=\"M3 7.5l9 3.2 9-3.2v7l-9 3.3-9-3.3z\" fill=\"#fff\" fill-opacity=\".92\"/><path d=\"M12 10.7v7.1\" stroke=\"#15803d\" stroke-width=\"1.2\"/><path d=\"M7 21.5l10-4.6M17 21.5L7 16.9\" stroke=\"#fff\" stroke-width=\"1.8\" stroke-linecap=\"round\"/><path d=\"M12 3.2l.8 1.7 1.8.2-1.4 1.2.4 1.8-1.6-.9-1.6.9.4-1.8-1.4-1.2 1.8-.2z\" fill=\"#fde68a\"/>"],
+ hz:["#a855f7","#6d28d9","<rect x=\"8.5\" y=\"2.8\" width=\"7\" height=\"11.5\" rx=\"3.5\" fill=\"#fff\"/><path d=\"M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5v3.2M8.8 20.8h6.4\" stroke=\"#fff\" stroke-width=\"1.8\" stroke-linecap=\"round\" fill=\"none\"/><circle cx=\"18.2\" cy=\"5.6\" r=\"3.3\" fill=\"#22c55e\" stroke=\"#fff\" stroke-width=\"1\"/><path d=\"M16.7 5.6l1 1 1.9-2\" stroke=\"#fff\" stroke-width=\"1.2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>"],
+ tq:["#38bdf8","#0369a1","<path d=\"M4 14v-2.5a8 8 0 0 1 16 0V14\" stroke=\"#fff\" stroke-width=\"1.9\" fill=\"none\" stroke-linecap=\"round\"/><rect x=\"3\" y=\"13\" width=\"4.2\" height=\"6.5\" rx=\"1.6\" fill=\"#fff\"/><rect x=\"16.8\" y=\"13\" width=\"4.2\" height=\"6.5\" rx=\"1.6\" fill=\"#fff\"/><path d=\"M10 14.2a2.6 2.6 0 1 1 1 2.1\" stroke=\"#fde68a\" stroke-width=\"1.6\" fill=\"none\" stroke-linecap=\"round\"/><path d=\"M9.2 12.8l.8 1.6 1.6-.7\" stroke=\"#fde68a\" stroke-width=\"1.4\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>"],
+ bm:["#fb7185","#be123c","<path d=\"M6.5 3.5h11a1 1 0 0 1 1 1v16l-6.5-4.2-6.5 4.2v-16a1 1 0 0 1 1-1z\" fill=\"#fff\"/><path d=\"M12 7.2l1 2 2.2.3-1.6 1.5.4 2.2-2-1.1-2 1.1.4-2.2-1.6-1.5 2.2-.3z\" fill=\"#be123c\"/>"],
+ dua:["#10b981","#047857","<circle cx=\"12\" cy=\"9.5\" r=\"5.6\" fill=\"none\" stroke=\"#fff\" stroke-width=\"1\" stroke-opacity=\".55\"/><circle cx=\"12.00\" cy=\"3.90\" r=\"1.35\" fill=\"#fff\"/><circle cx=\"14.80\" cy=\"4.65\" r=\"1.35\" fill=\"#fff\"/><circle cx=\"16.85\" cy=\"6.70\" r=\"1.35\" fill=\"#fff\"/><circle cx=\"17.60\" cy=\"9.50\" r=\"1.35\" fill=\"#fff\"/><circle cx=\"16.85\" cy=\"12.30\" r=\"1.35\" fill=\"#fff\"/><circle cx=\"14.80\" cy=\"14.35\" r=\"1.35\" fill=\"#fff\"/><circle cx=\"9.20\" cy=\"14.35\" r=\"1.35\" fill=\"#fff\"/><circle cx=\"7.15\" cy=\"12.30\" r=\"1.35\" fill=\"#fff\"/><circle cx=\"6.40\" cy=\"9.50\" r=\"1.35\" fill=\"#fff\"/><circle cx=\"7.15\" cy=\"6.70\" r=\"1.35\" fill=\"#fff\"/><circle cx=\"9.20\" cy=\"4.65\" r=\"1.35\" fill=\"#fff\"/><path d=\"M12 15.1v2.4\" stroke=\"#fde68a\" stroke-width=\"1.6\"/><path d=\"M10.6 17.5h2.8l.8 4h-4.4z\" fill=\"#fde68a\"/>"],
+ kutub:["#d97706","#92400e","<path d=\"M6 4.5h10.5a2 2 0 0 1 2 2V18\" fill=\"none\" stroke=\"#fff\" stroke-width=\"1.6\"/><path d=\"M4 6.5a2 2 0 0 1 2-2 2 2 0 0 1 2 2v12.8a1.7 1.7 0 0 0 1.7 1.7h9.6a2 2 0 0 0 2-2V18H9.7\" fill=\"#fff\" fill-opacity=\".92\" stroke=\"#fff\" stroke-width=\"1.4\" stroke-linejoin=\"round\"/><path d=\"M10.5 9h5.5M10.5 12h5.5M10.5 15h3.5\" stroke=\"#92400e\" stroke-width=\"1.3\" stroke-linecap=\"round\"/>"],
+ shamail:["#f472b6","#be185d","<path d=\"M12 21v-7\" stroke=\"#bbf7d0\" stroke-width=\"1.7\" stroke-linecap=\"round\"/><path d=\"M12 17c-2.6-.1-4.3-1.4-4.6-3.6 2.4-.1 4.1 1.1 4.6 3.6zM12 18.5c2.6-.1 4.3-1.4 4.6-3.6-2.4-.1-4.1 1.1-4.6 3.6z\" fill=\"#bbf7d0\"/><path d=\"M12 3.5c1.6 1.2 2.6 2 3.6 1.7.6 2.3-.1 4.6-1.6 6.1-.9.9-1.8 1.4-2 2.7-.2-1.3-1.1-1.8-2-2.7-1.5-1.5-2.2-3.8-1.6-6.1 1 .3 2-.5 3.6-1.7z\" fill=\"#fff\"/><path d=\"M12 5.8c.9.8 1.4 2 1.2 3.4-.4 1.3-1 1.7-1.2 2.6-.2-.9-.8-1.3-1.2-2.6-.2-1.4.3-2.6 1.2-3.4z\" fill=\"#f9a8d4\"/>"],
+ sirah:["#eab308","#a16207","<path d=\"M5 20.5c3.5 0 4-3.2 7-3.2s3.5-3.4 7-3.4\" fill=\"none\" stroke=\"#fff\" stroke-width=\"1.8\" stroke-dasharray=\"2.2 2.2\" stroke-linecap=\"round\"/><circle cx=\"5\" cy=\"20.5\" r=\"1.7\" fill=\"#fff\"/><path d=\"M17.5 13.9V3.5\" stroke=\"#fff\" stroke-width=\"1.8\" stroke-linecap=\"round\"/><path d=\"M17.5 4h-6l1.6 2.3-1.6 2.3h6z\" fill=\"#fff\"/><path d=\"M5.5 11.5a3.2 3.2 0 1 1 2.6-5.1 2.6 2.6 0 1 0 0 3.8 3.2 3.2 0 0 1-2.6 1.3z\" fill=\"#fef3c7\"/>"],
+ solat:["#2dd4bf","#0f766e","<path d=\"M5.5 21.5V9.5a6.5 6.5 0 0 1 13 0v12z\" fill=\"#fff\" fill-opacity=\".92\"/><path d=\"M8.5 21.5v-10a3.5 3.5 0 0 1 7 0v10\" fill=\"none\" stroke=\"#0f766e\" stroke-width=\"1.4\"/><path d=\"M12 4.6v-2\" stroke=\"#fff\" stroke-width=\"1.6\" stroke-linecap=\"round\"/><path d=\"M4 21.5h16\" stroke=\"#fde68a\" stroke-width=\"1.6\" stroke-linecap=\"round\"/><path d=\"M12 13.5l.6 1.2 1.3.2-1 .9.3 1.3-1.2-.7-1.2.7.3-1.3-1-.9 1.3-.2z\" fill=\"#0f766e\"/>"],
+ kamus:["#818cf8","#4338ca","<path d=\"M5 4.5a1.5 1.5 0 0 1 1.5-1.5H19v15.5H6.5A1.5 1.5 0 0 0 5 20z\" fill=\"#fff\"/><path d=\"M5 20a1.5 1.5 0 0 0 1.5 1.5H19v-3\" fill=\"none\" stroke=\"#fff\" stroke-width=\"1.5\"/><text x=\"12.2\" y=\"13.8\" text-anchor=\"middle\" font-size=\"9.5\" font-weight=\"700\" fill=\"#4338ca\" font-family=\"serif\">ع</text><text x=\"12.2\" y=\"17\" text-anchor=\"middle\" font-size=\"3.4\" font-weight=\"700\" fill=\"#4338ca\" font-family=\"sans-serif\">A–Z</text>"],
+ jumuah:["#4ade80","#166534","<path d=\"M7 20.5V13a5 5 0 0 1 10 0v7.5z\" fill=\"#fff\"/><path d=\"M12 8v-2.5\" stroke=\"#fff\" stroke-width=\"1.5\" stroke-linecap=\"round\"/><path d=\"M11.3 4.5a1.2 1.2 0 1 0 1.4-1 1.5 1.5 0 0 1-1.4 1z\" fill=\"#fde68a\"/><path d=\"M3.5 20.5V10l1-1.5 1 1.5v10.5M18.5 20.5V10l1-1.5 1 1.5v10.5\" fill=\"#fff\"/><path d=\"M2.5 20.8h19\" stroke=\"#fff\" stroke-width=\"1.5\" stroke-linecap=\"round\"/><path d=\"M10.6 20.5v-3.2a1.4 1.4 0 0 1 2.8 0v3.2\" fill=\"#166534\"/>"],
+ check:["#60a5fa","#1d4ed8","<path d=\"M6 3h8.5l3.5 3.5V12\" fill=\"none\" stroke=\"#fff\" stroke-width=\"1.5\"/><path d=\"M6 3a1 1 0 0 0-1 1v15a1 1 0 0 0 1 1h5\" fill=\"none\" stroke=\"#fff\" stroke-width=\"1.5\"/><path d=\"M8 7.5h5M8 10.5h7M8 13.5h3\" stroke=\"#fff\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-opacity=\".8\"/><circle cx=\"15.5\" cy=\"16\" r=\"4\" fill=\"#fff\"/><path d=\"M18.4 19l2.8 2.8\" stroke=\"#fff\" stroke-width=\"2.2\" stroke-linecap=\"round\"/><path d=\"M13.7 16l1.2 1.2 2.2-2.4\" stroke=\"#1d4ed8\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>"],
+ halal:["#fb923c","#c2410c","<ellipse cx=\"12\" cy=\"17.2\" rx=\"8.5\" ry=\"2.3\" fill=\"#fff\" fill-opacity=\".55\"/><path d=\"M5 16.4a7 7 0 0 1 14 0z\" fill=\"#fff\"/><path d=\"M12 9.4V8M10.5 8h3\" stroke=\"#fff\" stroke-width=\"1.6\" stroke-linecap=\"round\"/><circle cx=\"18.3\" cy=\"6.3\" r=\"3.6\" fill=\"#16a34a\" stroke=\"#fff\" stroke-width=\"1\"/><path d=\"M16.7 6.4l1.1 1.1 2-2.2\" stroke=\"#fff\" stroke-width=\"1.3\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>"],
+ masjid:["#22d3ee","#0e7490","<path d=\"M12 22s-7-6.2-7-12a7 7 0 0 1 14 0c0 5.8-7 12-7 12z\" fill=\"#fff\"/><path d=\"M8.8 13.5V11a3.2 3.2 0 0 1 6.4 0v2.5z\" fill=\"#0e7490\"/><path d=\"M12 7.8V6.6\" stroke=\"#0e7490\" stroke-width=\"1.2\" stroke-linecap=\"round\"/><path d=\"M8 13.6h8\" stroke=\"#0e7490\" stroke-width=\"1.4\" stroke-linecap=\"round\"/>"],
+ notes:["#facc15","#a16207","<rect x=\"4.5\" y=\"3.5\" width=\"12.5\" height=\"17\" rx=\"1.8\" fill=\"#fff\"/><path d=\"M7.5 8h6.5M7.5 11h6.5M7.5 14h4\" stroke=\"#a16207\" stroke-width=\"1.3\" stroke-linecap=\"round\"/><path d=\"M19.8 9.2l1.3 1.3-7 7-2.1.8.8-2.1z\" fill=\"#1e293b\" stroke=\"#fff\" stroke-width=\".9\" stroke-linejoin=\"round\"/>"],
+ pray:["#818cf8","#3730a3","<circle cx=\"11\" cy=\"13\" r=\"7.5\" fill=\"#fff\"/><path d=\"M11 8.6V13l3 1.9\" stroke=\"#3730a3\" stroke-width=\"1.7\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M18.6 2.6a3.4 3.4 0 1 0 2.8 5.2 2.8 2.8 0 1 1-2.8-5.2z\" fill=\"#fde68a\"/>"],
+ qibla:["#d4a73a","#8a6417","<circle cx=\"12\" cy=\"12\" r=\"9\" fill=\"none\" stroke=\"#fff\" stroke-width=\"1.6\"/><path d=\"M12 3.8l1.6 5.6L12 8.6l-1.6.8z\" fill=\"#fff\"/><rect x=\"9.2\" y=\"10.2\" width=\"5.6\" height=\"5.6\" rx=\".6\" fill=\"#111\"/><rect x=\"9.2\" y=\"11.4\" width=\"5.6\" height=\"1.1\" fill=\"#fde68a\"/><path d=\"M12 18v2.2M3.8 12H6M18 12h2.2\" stroke=\"#fff\" stroke-width=\"1.4\" stroke-linecap=\"round\" stroke-opacity=\".8\"/>"],
+ set:["#94a3b8","#475569","<path d=\"M12 2.8l1.7.3.5 2.2 1.5.8 2.1-.8 1.2 1.2-.8 2.1.8 1.5 2.2.5.3 1.7-.3 1.7-2.2.5-.8 1.5.8 2.1-1.2 1.2-2.1-.8-1.5.8-.5 2.2-1.7.3-1.7-.3-.5-2.2-1.5-.8-2.1.8-1.2-1.2.8-2.1-.8-1.5-2.2-.5-.3-1.7.3-1.7 2.2-.5.8-1.5-.8-2.1 1.2-1.2 2.1.8 1.5-.8.5-2.2z\" fill=\"#fff\"/><circle cx=\"12\" cy=\"12\" r=\"3.2\" fill=\"#475569\"/>"],
+ man:["#c084fc","#7e22ce","<path d=\"M5 4.5A1.5 1.5 0 0 1 6.5 3H19v15.5H6.5A1.5 1.5 0 0 0 5 20z\" fill=\"#fff\"/><path d=\"M5 20a1.5 1.5 0 0 0 1.5 1.5H19v-3\" fill=\"none\" stroke=\"#fff\" stroke-width=\"1.5\"/><circle cx=\"12\" cy=\"7.4\" r=\"1.25\" fill=\"#7e22ce\"/><path d=\"M12 10.4v5\" stroke=\"#7e22ce\" stroke-width=\"2\" stroke-linecap=\"round\"/>"],
+ lang:["#38bdf8","#075985","<circle cx=\"12\" cy=\"12\" r=\"9\" fill=\"#fff\" fill-opacity=\".18\" stroke=\"#fff\" stroke-width=\"1.6\"/><path d=\"M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z\" fill=\"none\" stroke=\"#fff\" stroke-width=\"1.4\"/>"]};
+const hic=n=>{ const d=homeIc[n]||homeIc.read; return `<span class="hb" style="--c1:${d[0]};--c2:${d[1]}"><svg viewBox="0 0 24 24" aria-hidden="true">${d[2]}</svg></span>`; };
 /* Hijri date: the phone's Umm al-Qura calendar where it has one; Android's WebView often does not (it then shows Gregorian
    month names), so the tabular Islamic calendar is used instead, which can differ by a day from the announced date. */
 const HIJRI_M=['Muharram','Safar','Rabiʿ I','Rabiʿ II','Jumada I','Jumada II','Rajab','Shaʿban','Ramadan','Shawwal','Dhu al-Qaʿdah','Dhu al-Hijjah'];
@@ -3516,7 +3521,7 @@ function renderHome(){ const el=document.getElementById('home'); const g=pageSta
   const d=new Date(), greg=d.toLocaleDateString('en-SG',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
   el.innerHTML=`<div class="home-in">
    <div class="home-head"><div class="home-date"><b>${esc(hijriToday())}</b><small>${esc(greg)}</small></div>
-    <button class="ib" id="hmSet" aria-label="Home settings">${hic('set')}</button></div>
+    <button class="ib" id="hmSet" aria-label="Home settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg></button></div>
    <div id="hmSalah"></div>
    <div class="tiles">
     <button class="tile wide" data-t="read">${hic('read')}<span><b>Last Read</b><br><small>${esc(sname[1])} · page ${st.page}</small></span><span class="ar">${esc(sname[0])}</span></button>
@@ -3526,7 +3531,7 @@ function renderHome(){ const el=document.getElementById('home'); const g=pageSta
     <button class="tile" data-t="bm">${hic('bm')}<b>Bookmarks</b><small>Saved ayat, My Ruku' and My Blocks</small></button>
     <button class="tile" data-t="dua">${hic('dua')}<b>Du'a &amp; Dhikr</b><small>Doa &amp; zikir from Hisnul Muslim (Fortress of the Muslim)</small></button>
     <button class="tile" data-t="kutub">${hic('kutub')}<b>Hadith</b><small>The Six Books (Kutub as-Sittah) and al-Muwatta', with gradings</small></button>
-    <button class="tile" data-t="shamail">${hic('kutub')}<b>Shama'il</b><small>The Prophet's ﷺ appearance and character, by at-Tirmidhi</small></button>
+    <button class="tile" data-t="shamail">${hic('shamail')}<b>Shama'il</b><small>The Prophet's ﷺ appearance and character, by at-Tirmidhi</small></button>
     <button class="tile" data-t="sirah">${hic('sirah')}<b>Seerah</b><small>Sirah: the Prophet's ﷺ life, with Qur'an and hadith references</small></button>
     <button class="tile" data-t="solat">${hic('solat')}<b>Prophet's ﷺ Prayer</b><small>Sifat Solat: step by step, with hadith and where scholars differ</small></button>
     <button class="tile" data-t="kamus">${hic('kamus')}<b>Qur'an Dictionary</b><small>Kamus: every word by its root, with meaning, frequency and where it occurs</small></button>
@@ -3637,6 +3642,18 @@ const PR_METHODS={muis:{f:20,i:18,n:'MUIS'},jakim:{f:20,i:18,n:'JAKIM'},kemenag:
   mwl:{f:18,i:17,n:'Muslim World League'},isna:{f:15,i:15,n:'ISNA'},egypt:{f:19.5,i:17.5,n:'Egyptian General Authority of Survey'},
   karachi:{f:18,i:18,a:2,n:'Karachi (Hanafi Asr)'},uq:{f:18.5,im:90,n:'Umm al-Qura'},dubai:{f:18.2,i:18.2,n:'Dubai'},qatar:{f:18,im:90,n:'Qatar'},
   kuwait:{f:18,i:17.5,n:'Kuwait'},turkey:{f:18,i:17,a:2,n:'Diyanet (Hanafi Asr)'},morocco:{f:19,i:17,n:'Morocco'}};
+/* Choosing a city (Azli, 31 Oct 2026: the phone's own list was not aligned and could not be searched): a search box and the
+   cities grouped by country; the search matches the city or the country. */
+function prCitySheet(cur,pick){
+  openSheet('Choose a city',`<input class="field" id="pcQ" type="search" placeholder="Search a city or country" autocomplete="off" style="width:100%"><div id="pcL" class="pclist"></div>`);
+  const L=sheetB.querySelector('#pcL'), Q=sheetB.querySelector('#pcQ');
+  const draw=()=>{ const q=Q.value.trim().toLowerCase(); const by=new Map();
+    PR_CITIES.forEach((c,i)=>{ if(q && !(c[0]+' '+c[5]).toLowerCase().includes(q)) return; if(!by.has(c[5])) by.set(c[5],[]); by.get(c[5]).push([c,i]); });
+    L.innerHTML= by.size? [...by].map(([co,cs])=>`<div class="pc-co">${esc(co)}</div>`+cs.map(([c,i])=>`<button class="pc-c${c[0]===cur?' on':''}" data-i="${i}"><span>${esc(c[0])}</span>${c[0]===cur?'<b>✓</b>':''}</button>`).join('')).join('')
+      : `<p class="note">No city matches. Use My location instead, or try another spelling.</p>`; };
+  Q.oninput=draw; draw();
+  L.onclick=e=>{ const x=e.target.closest('[data-i]'); if(!x) return; const c=PR_CITIES[+x.dataset.i]; closeSheet(); pick(c); };
+  const on=L.querySelector('.on'); if(on) setTimeout(()=>on.scrollIntoView({block:'center'}),50); }
 const PR_CITIES=[
  ['Singapore',1.3521,103.8198,'Asia/Singapore','muis','Singapore'],
  ['Kuala Lumpur',3.139,101.6869,'Asia/Kuala_Lumpur','jakim','Malaysia'],['Johor Bahru',1.4927,103.7414,'Asia/Kuala_Lumpur','jakim','Malaysia'],['Melaka',2.1896,102.2501,'Asia/Kuala_Lumpur','jakim','Malaysia'],['George Town (Penang)',5.4141,100.3288,'Asia/Kuala_Lumpur','jakim','Malaysia'],['Kota Bharu',6.1254,102.2381,'Asia/Kuala_Lumpur','jakim','Malaysia'],['Kuching',1.5533,110.3592,'Asia/Kuching','jakim','Malaysia'],['Kota Kinabalu',5.9804,116.0735,'Asia/Kuching','jakim','Malaysia'],
@@ -3721,7 +3738,7 @@ function prRender(){ const d=new Date(); d.setHours(0,0,0,0); d.setDate(d.getDat
     <p class="note" style="margin:8px 0 0">${P.label==='MUIS'?'Official MUIS timetable for Singapore.':esc(P.label)+(P.method?`, with the ${esc(P.method.n)} method (Fajr ${P.method.f}°, Isha ${P.method.im?P.method.im+' minutes after Maghrib':P.method.i+'°'}${P.method.a===2?', Hanafi Asr':''}).`:', with the method MUIS uses (Fajr 20°, Isha 18°).')+' The local masjid’s timetable comes first where it differs.'}${tzDiffers(P.tz)?` Times are in ${esc(prLoc().name||'that place')}’s own clock; alerts still ring at the right moment.`:''}</p>
    <div class="label">Location</div>
    ${segHtml('prMode',[['sg','Singapore (MUIS)'],['gps','My location'],['city','Choose a city']],loc.mode)}
-   ${loc.mode==='city'?`<select class="field" id="prCity" style="margin-top:8px">${[...new Set(PR_CITIES.map(c=>c[5]))].map(co=>`<optgroup label="${esc(co)}">${PR_CITIES.map((c,i)=>c[5]!==co?'':`<option value="${i}"${loc.name===c[0]?' selected':''}>${esc(c[0])}</option>`).join('')}</optgroup>`).join('')}</select>`:''}
+   ${loc.mode==='city'?`<button class="pill" id="prCity" style="width:100%;justify-content:space-between;margin-top:8px"><span>📍 ${esc(loc.name||'Choose a city')}${(()=>{ const c=PR_CITIES.find(x=>x[0]===loc.name); return c?' · '+esc(c[5]):''; })()}</span><span>▾</span></button>`:''}
    ${loc.mode==='gps'?`<p class="note">${loc.lat!=null?`${esc(loc.name||'')} ${loc.lat.toFixed(3)}, ${loc.lng.toFixed(3)}`:'Location not found yet.'} <button class="pill" id="prGps" style="height:34px">Update location</button></p>`:''}
    <div class="label">Adjust (minutes)</div>
    <div class="row2" style="flex-wrap:wrap;gap:6px">${PR_NAMES.map((n,i)=>`<label class="note" style="display:flex;flex-direction:column;align-items:center;gap:2px;min-width:52px">${n}<input class="field" type="number" inputmode="numeric" data-off="${i}" value="${store.get('prOff',[0,0,0,0,0,0])[i]}" min="-30" max="30" style="width:56px;text-align:center"></label>`).join('')}</div>
@@ -3736,7 +3753,7 @@ function prRender(){ const d=new Date(); d.setHours(0,0,0,0); d.setDate(d.getDat
   $('prPrev').onclick=()=>{ prDay--; prRender(); }; $('prNext').onclick=()=>{ prDay++; prRender(); };
   const seg=(id,fn)=>{ const el=$(id); if(el) el.onclick=e=>{ const x=e.target.closest('button'); if(!x) return; fn(x.dataset.v); }; };
   seg('prMode',v=>{ if(v==='sg') store.set('prLoc',{mode:'sg'}); else if(v==='city'){ const c=PR_CITIES[1]; store.set('prLoc',{mode:'city',name:c[0],lat:c[1],lng:c[2]}); } else { store.set('prLoc',Object.assign({mode:'gps'},store.get('prGps',{}))); prLocate(); } prSchedule(); prRender(); });
-  if($('prCity')) $('prCity').onchange=e=>{ const c=PR_CITIES[+e.target.value]; store.set('prLoc',{mode:'city',name:c[0],lat:c[1],lng:c[2]}); prSchedule(); prRender(); };
+  if($('prCity')) $('prCity').onclick=()=>prCitySheet(loc.name,c=>{ store.set('prLoc',{mode:'city',name:c[0],lat:c[1],lng:c[2]}); prSchedule(); prRender(); });
   if($('prGps')) $('prGps').onclick=prLocate;
   b.querySelectorAll('[data-off]').forEach(inp=>inp.onchange=()=>{ const o=store.get('prOff',[0,0,0,0,0,0]); o[+inp.dataset.off]=Math.max(-30,Math.min(30,Math.round(+inp.value||0))); store.set('prOff',o); prSchedule(); prRender(); });
   b.querySelectorAll('[data-bell]').forEach(x=>x.onclick=()=>{ const c=prAlertCfg(); c.on[+x.dataset.bell]=!c.on[+x.dataset.bell]; store.set('prAlert',c); prSchedule(); prPermCheck(true); prRender(); });
