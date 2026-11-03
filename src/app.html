@@ -251,7 +251,7 @@ textarea.field{height:110px;padding:10px 14px;direction:rtl;font-family:var(--ar
 input[type=range]{width:100%;accent-color:var(--accent)}
 .res{padding:12px 4px;border-bottom:1px solid var(--line);cursor:pointer}
 .res .ref{font-size:12.5px;font-weight:700;color:var(--accent);letter-spacing:.03em}
-.res .arl{direction:rtl;font-family:var(--ar);font-size:22px;line-height:1.9}
+.res .arl{direction:rtl;font-family:var(--ar);font-size:calc(var(--arsize) * 0.786);line-height:1.9}
 .res .tr{font-family:var(--read);font-size:14.5px;color:var(--muted)}
 mark{background:color-mix(in srgb,var(--accent) 28%,transparent);color:inherit;border-radius:3px;padding:0 2px}
 .actions{display:flex;flex-direction:column;gap:8px}
@@ -312,16 +312,16 @@ body.immersive .pbar .pbar-t,body.immersive #pbPrev,body.immersive #pbNext,body.
 .tq-heard{direction:rtl;font-family:var(--ar);font-size:18px;color:var(--muted);text-align:center;min-height:1.6em}
 .wbw{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
 .wbw-w{display:flex;flex-direction:column;align-items:center;gap:2px;border:1px solid var(--line);background:var(--bg);border-radius:12px;padding:6px 10px;min-width:64px;color:var(--fg)}
-.wbw-w .ar{font-family:var(--ar);font-size:24px;line-height:1.6}
+.wbw-w .ar{font-family:var(--ar);font-size:calc(var(--arsize) * 0.857);line-height:1.6}
 .wbw-w small{font-size:12.5px;color:var(--muted);max-width:9em;text-align:center;line-height:1.3}
 .wbw-w.on{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,var(--bg))}
 .hd-item{border-top:1px solid var(--line);padding:10px 0}
 .hd-ref{display:flex;flex-wrap:wrap;gap:6px;align-items:baseline}
 .hd-g{font-size:12px;font-weight:700;color:var(--ok);border:1px solid var(--ok);border-radius:999px;padding:0 8px}
-.hd-ar{font-family:var(--ar);font-size:19px;line-height:1.9;margin:6px 0}
+.hd-ar{font-family:var(--ar);font-size:calc(var(--arsize) * 0.679);line-height:1.9;margin:6px 0}
 .hd-tr{font-size:15px;line-height:1.65;margin:6px 0;white-space:pre-wrap}
 .hd-bab{margin-top:14px;padding:8px 10px;border-radius:10px;background:color-mix(in srgb,var(--accent) 7%,transparent)}
-.hd-bab-ar{font-family:var(--ar);font-size:18px;line-height:1.8}
+.hd-bab-ar{font-family:var(--ar);font-size:calc(var(--arsize) * 0.643);line-height:1.8}
 .hz-sname{font-family:var(--ar);text-align:center;color:var(--accent);font-size:calc(var(--arsize)*.9);margin:14px 0 2px}
 .hz-bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:4px 0 12px}
 /* Hafazan bottom bar: Close, Show text, Type and the microphone at the right end */
@@ -360,7 +360,7 @@ body.immersive .dock.hz #mic{visibility:visible;pointer-events:auto}
 .mist{list-style:none;padding:0;margin:10px 0 0;display:flex;flex-direction:column;gap:8px}
 .mist li{border:1px solid var(--line);border-radius:12px;padding:8px 12px;background:var(--bg);display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
 .mist .k{font-size:12px;font-weight:700;letter-spacing:.04em;min-width:64px}
-.mist .ar{font-family:var(--ar);font-size:21px;direction:rtl}
+.mist .ar{font-family:var(--ar);font-size:calc(var(--arsize) * 0.75);direction:rtl}
 .k.u{color:var(--unsure)}.k.e{color:var(--bad)}.k.m{color:var(--warn)}.k.x{color:var(--bad)}
 .dock.hz .read-only{display:none}
 .dock:not(.hz) .hz-only{display:none}
@@ -550,8 +550,8 @@ mark.kt-q{background:color-mix(in srgb,#e0352b 22%,transparent);color:#ff6b5e;bo
 .sr-acts{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 10px}
 .km-let{display:flex;flex-wrap:nowrap;overflow-x:auto;gap:6px;margin:0 0 4px;padding-bottom:4px;direction:rtl}.km-let .pill{flex:0 0 auto}.km-let .pill{min-width:40px;padding:4px 10px;font-family:var(--ar);font-size:18px}.km-let .pill[aria-pressed="true"]{background:var(--gold);color:#1b1608}
 .km-r{width:100%;text-align:left;margin-bottom:6px;min-height:0;padding:9px 14px;gap:12px}.km-ra{font-size:24px;min-width:70px;text-align:center;color:var(--gold-hi)}
-.km-ra,.km-big,.km-lem,.km-forms{font-family:var(--ar)}.km-big{font-size:44px;text-align:center;color:var(--gold-hi);margin:4px 0}.km-lem{font-size:28px;color:var(--gold-hi)}.km-forms{font-size:20px;margin:6px 0;opacity:.85}.km-l{margin-bottom:10px}
-.sr-nasab ol{margin:0;padding-inline-start:26px;columns:2;column-gap:18px;line-height:1.7}.sr-nasab ol li::marker{color:var(--gold-hi);font-size:12px}.sr-nar{font-family:var(--ar);font-size:20px;line-height:1.9;margin-top:10px;color:var(--gold-hi)}
+.km-ra,.km-big,.km-lem,.km-forms{font-family:var(--ar)}.km-big{font-size:44px;text-align:center;color:var(--gold-hi);margin:4px 0}.km-lem{font-size:var(--arsize);color:var(--gold-hi)}.km-forms{font-size:calc(var(--arsize) * .714);margin:6px 0;opacity:.85}.km-l{margin-bottom:10px}
+.sr-nasab ol{margin:0;padding-inline-start:26px;columns:2;column-gap:18px;line-height:1.7}.sr-nasab ol li::marker{color:var(--gold-hi);font-size:12px}.sr-nar{font-family:var(--ar);font-size:calc(var(--arsize) * 0.714);line-height:1.9;margin-top:10px;color:var(--gold-hi)}
 .sr-acts .pill[aria-pressed="true"],.sr-acts .pill.on{background:var(--gold);color:#1b1608;border-color:var(--gold)}
 .sr-bm{display:inline-flex;color:var(--gold-hi)}.sr-bm svg{width:16px;height:16px}
 .sr-cont{width:100%;box-sizing:border-box;margin:4px 0 6px;min-height:0;padding:10px 14px;align-items:center}
@@ -574,7 +574,7 @@ body.immersive .navret{display:none}
 .sl-com{margin:8px 0 0;border:1px dashed color-mix(in srgb,var(--gold) 50%,transparent);border-radius:10px;padding:6px 10px}
 .sl-com summary{cursor:pointer;font-weight:600;color:var(--gold-hi)}.sl-com summary small{font-weight:400;color:var(--h-mute,#888)}
 .wf{font-style:normal;font-weight:400;opacity:.72;font-size:.86em;margin-inline-start:4px}.sl-p .wf{display:block;margin:0}
-.sr-fam{margin:6px 0;padding:10px 12px}.sr-fam p{margin:4px 0;line-height:1.55}.sr-fam-h{display:flex;justify-content:space-between;gap:8px;align-items:baseline}.sr-fam-ar{font-family:var(--ar);font-size:19px;color:var(--gold-hi)}.sr-kids{margin:2px 0;padding-inline-start:18px;line-height:1.55}.sr-kids span{font-family:var(--ar)}
+.sr-fam{margin:6px 0;padding:10px 12px}.sr-fam p{margin:4px 0;line-height:1.55}.sr-fam-h{display:flex;justify-content:space-between;gap:8px;align-items:baseline}.sr-fam-ar{font-family:var(--ar);font-size:calc(var(--arsize) * 0.679);color:var(--gold-hi)}.sr-kids{margin:2px 0;padding-inline-start:18px;line-height:1.55}.sr-kids span{font-family:var(--ar)}
 .tj-key li{display:flex;gap:10px;align-items:center;padding:8px 0}.tj-sw{flex:none;width:22px;height:22px;border-radius:6px}.tj-key .t{display:flex;flex-direction:column}
 a.tile{text-decoration:none;color:inherit}
 .hl-list li{display:flex;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid color-mix(in srgb,var(--gold) 20%,transparent)}.hl-list .t{flex:1;display:flex;flex-direction:column;gap:2px}.hl-list small{opacity:.85}
@@ -610,7 +610,7 @@ a.tile{text-decoration:none;color:inherit}
 .kt-he svg{width:18px;height:18px}
 .he-t{font-family:var(--read);font-weight:600;color:var(--gold-hi);font-size:19px;line-height:1.35;margin:12px 0 8px}
 .he-q{margin:10px 0;padding:10px 12px;border-inline-start:3px solid var(--gold);background:color-mix(in srgb,#000 18%,transparent);border-radius:8px;line-height:1.7}
-.he-ar{font-family:var(--ar);font-size:20px;line-height:1.95;text-align:right}
+.he-ar{font-family:var(--ar);font-size:calc(var(--arsize) * 0.714);line-height:1.95;text-align:right}
 .he-ul{padding-inline-start:20px;line-height:1.65}.he-ul li{margin:4px 0}
 .he-wm dt{font-weight:700;color:var(--gold-hi);margin-top:6px}.he-wm dd{margin:2px 0 6px;line-height:1.6}
 .he-hr{border:0;border-top:1px solid color-mix(in srgb,var(--gold) 40%,transparent);margin:22px 0}
@@ -1401,8 +1401,13 @@ function setSheet(){
   <div class="label">Background</div>
   <div class="swatches" id="bgs">${BGS.map(([v,l])=>{ const c=BGV[v]; const sty=c?`background:${c[0]};color:${c[1]}`:'background:linear-gradient(90deg,#f4efe2 50%,#141a17 50%);color:#888';
     return `<button class="sw" data-v="${v}" aria-pressed="${st.bg===v}"><div class="chip" style="${sty}">بِسۡمِ</div><span>${l}</span></button>`; }).join('')}</div>
-  <div class="label">App size (all pages)</div>${seg('uiZoom',[[100,'100%'],[125,'125%'],[150,'150%'],[175,'175%'],[200,'200%'],[250,'250%']],store.get('uiZoom',100))}
-  <p class="note">Makes the whole app bigger: writing, buttons and icons on Home, menus, translation, hadith, Sirah. For large or e-ink screens (Boox). The fitted mushaf page always fills the screen by itself.</p>
+  <div class="label">Text size on this device</div>
+  <p class="note" style="margin:0 0 4px">Kept on this device only (not synced), so your phone and tablet can each have their own sizes.</p>
+  <div class="label" style="font-size:13px;margin-top:6px">All text and buttons</div><div class="row2"><input type="range" id="uiZoomR" min="100" max="250" step="5" value="${store.get('uiZoom',100)}" aria-label="App size" style="flex:1"><span id="uiZoomL" class="note" style="min-width:4em;text-align:right">${store.get('uiZoom',100)}%</span></div>
+  <p class="note">Makes the whole app bigger: writing, buttons and icons on Home, menus, translation, hadith, du'a, Sirah. 110% to 125% suits most phones; more for large or e-ink screens (Boox). The fitted mushaf page always fills the screen by itself.</p>
+  <div class="label" style="font-size:13px;margin-top:6px">Arabic text</div><div class="row2"><input type="range" id="size" min="0" max="20" step="1" value="${Math.round((st.size-22)/2)}" aria-label="Arabic text size" style="flex:1"><span id="sizeL" class="note" style="min-width:4em;text-align:right"></span></div>
+  <p class="note" id="sizeN"></p>
+  <div class="card" id="tsPrev" style="margin:6px 0 4px;padding:10px 12px"><div dir="rtl" lang="ar" style="font-family:var(--ar);font-size:calc(var(--arsize) * .9);line-height:2.05">يَا حَيُّ يَا قَيُّومُ بِرَحْمَتِكَ أَسْتَغيثُ</div><p style="margin:6px 0 0;line-height:1.6">O Ever Living, O Self-Subsisting and Supporter of all, by Your mercy I seek assistance</p><p class="note" style="margin:4px 0 0">Preview · Hisn al-Muslim 88</p></div>
   <div class="label">Mushaf</div>${seg('mushaf',[['v4','Madinah 1441H'],['v4t','Madinah tajweed'],['text','Uthmani text']],st.mushaf)}
   <p class="note" id="mNote"></p>
   <div id="offWrap"></div>
@@ -1421,8 +1426,6 @@ function setSheet(){
   <div class="label">English footnotes</div>${seg('fn',[[false,'Hide'],[true,'Show']],st.fn)}
   <div id="flowWrap"><div class="label">Uthmani text page</div>${seg('flow',[[false,'Fit page (15 lines)'],[true,'Larger text']],st.flow)}
   <p class="note">Fit page keeps the printed 15 lines on one screen. Larger text lets the lines run on, so you scroll to read the rest of the page.</p></div>
-  <div class="label">Arabic size</div><div class="row2"><input type="range" id="size" min="0" max="20" step="1" value="${Math.round((st.size-22)/2)}" aria-label="Arabic text size" style="flex:1"><span id="sizeL" class="note" style="min-width:4em;text-align:right"></span></div>
-  <p class="note" id="sizeN"></p>
   ${micSettingsHtml()}
   <div class="label">Waqaf &amp; ibtida' blocks</div>${seg('blocks',MODES,st.blocks)}
   <p class="note" id="blkNote"></p>
@@ -1448,10 +1451,10 @@ function setSheet(){
   segH('lang',v=>st.lang=v); segH('uiLang',v=>store.set('uiLang',v)); segH('tl',v=>{ st.tl=v; if(v!=='off') tlLoad(v); }); segH('wtap',v=>store.set('wordTap',v==='true')); segH('awake',v=>{ awakeRead=(v==='true'); store.set('awakeRead',awakeRead); awakeCheck(); }); sheetB.querySelector('#openHomeSet').onclick=homeSetSheet; sheetB.querySelector('#openManual').onclick=()=>{ closeSheet(); manualPanel(); }; sheetB.querySelector('#openBackup').onclick=backupSheet; segH('sname',v=>st.sname=v); segH('fn',v=>st.fn=(v==='true')); segH('blocks',v=>{ if(v!=='off') store.set('lastBlocks',v); st.blocks=v; note(); });
   const sizeLbl=()=>{ document.getElementById('sizeL').textContent = `${st.size} px`;
     document.getElementById('flowWrap').style.display = st.mushaf==='text'?'':'none';
-    document.getElementById('sizeN').textContent = 'Used for translation, Hafazan'+(st.mushaf==='text'?' and Larger text.':'.')+' A fitted page always uses the largest size that fits your screen; turn the phone sideways for bigger letters.'; }; sizeLbl();
+    document.getElementById('sizeN').textContent = 'Arabic in the translation view, Hafazan'+(st.mushaf==='text'?', Larger text':'')+', hadith, du\'a, Sirah and the dictionary. A fitted page always uses the largest size that fits your screen; turn the phone sideways for bigger letters.'; }; sizeLbl();
   segH('flow',v=>{ st.flow=(v==='true'); });
   segH('pscroll',v=>{ st.scroll=(v==='true'); });
-  if(sheetB.querySelector('#uiZoom')) segH('uiZoom',v=>{ store.set('uiZoom',+v); applyUiZoom(); });
+  { const zr=sheetB.querySelector('#uiZoomR'); if(zr){ zr.oninput=()=>{ document.getElementById('uiZoomL').textContent=zr.value+'%'; }; zr.onchange=()=>{ store.set('uiZoom',+zr.value); applyUiZoom(); rerender(); }; } }
   sheetB.querySelector('#size').oninput=e=>{ st.size=22+(+e.target.value)*2; applyLook(); save(); sizeLbl(); rerender(); };
   bindMicSettings();
   sheetB.querySelector('#openHist').onclick=histSheet; sheetB.querySelector('#openAbout').onclick=aboutSheet;
@@ -2289,7 +2292,7 @@ function tafsirSheet(g){
      <div class="arl" dir="rtl" style="margin:14px 0 6px;font-size:24px;line-height:1.9">${a[2]}<span class="num">${arNum(a[1])}</span></div>
      ${st.tl!=='off'&&TL[st.tl]?`<div class="note" style="font-style:italic;color:var(--accent);margin:-2px 0 10px">${esc(tlText(g))}</div>`:''}
      <div id="tfT" class="note" dir="auto" style="font-family:var(--ui),var(--ar);font-size:16px;line-height:1.7;color:var(--ink);white-space:pre-wrap">Loading…</div>
-     <div id="tfA" dir="rtl" lang="ar" style="display:${showAr?'block':'none'};white-space:pre-wrap;font-family:var(--ar),serif;font-size:19px;line-height:1.9;margin-top:10px;padding-top:10px;border-top:1px solid var(--line)"></div>
+     <div id="tfA" dir="rtl" lang="ar" style="display:${showAr?'block':'none'};white-space:pre-wrap;font-family:var(--ar),serif;font-size:calc(var(--arsize) * 0.679);line-height:1.9;margin-top:10px;padding-top:10px;border-top:1px solid var(--line)"></div>
      <div class="row2" style="margin-top:14px;flex-wrap:wrap;gap:8px">
       <button class="pill" id="tfP" ${g<=0?'disabled':''}>‹ Previous ayah</button>
       <button class="pill" id="tfN" ${g>=A.length-1?'disabled':''}>Next ayah ›</button>

@@ -360,8 +360,8 @@ Semuanya dibuka dari **menu ayat**; memerlukan internet sekali bagi setiap surah
 | Transliteration | Di bawah teks Arab dalam paparan terjemahan |
 | English footnotes | Nota kaki Saheeh International |
 | Uthmani text page | Fit page atau Larger text |
-| Arabic size | Saiz teks Arab untuk paparan terjemahan, hafazan dan Larger text (hingga 62 px) |
-| App size (all pages) | Membesarkan seluruh aplikasi (tulisan, butang, ikon), 100% hingga 250%. Untuk skrin besar atau e-ink seperti Boox; halaman mushaf yang dimuatkan memenuhi skrin dengan sendirinya |
+| Saiz teks pada peranti ini → Semua teks dan butang | Membesarkan seluruh aplikasi (tulisan, butang, ikon), 100% hingga 250% dengan langkah 5%. 110% hingga 125% sesuai untuk kebanyakan telefon; lebih besar untuk skrin besar atau e-ink seperti Boox. Disimpan pada peranti ini sahaja, jadi telefon dan tablet boleh berbeza. Pratonton menunjukkan hasilnya. Halaman mushaf yang dimuatkan memenuhi skrin dengan sendirinya |
+| Saiz teks pada peranti ini → Teks Arab | Saiz teks Arab di luar halaman mushaf yang dimuatkan: paparan terjemahan, hafazan, Teks lebih besar, hadis, doa, Sirah, kamus (22 hingga 62 px). Disimpan pada peranti ini sahaja |
 | Microphone (3 tetapan) | Suara perlahan, persekitaran, fon kepala Bluetooth |
 | Waqaf & ibtida' blocks | Warna blok (bahagian 4) |
 | Back up or restore | Fail sandaran tetapan, penanda buku dan nota (di bawah) |

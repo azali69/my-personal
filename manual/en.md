@@ -360,8 +360,8 @@ All open from the **ayah menu**; they need the internet once per surah.
 | Transliteration | Under the Arabic in the translation view |
 | English footnotes | Saheeh International's notes |
 | Uthmani text page | Fit page or Larger text |
-| Arabic size | Size for translation view, Hafazan and Larger text (up to 62 px) |
-| App size (all pages) | Makes the whole app bigger (writing, buttons, icons), 100% to 250%. For large or e-ink screens such as Boox; the fitted mushaf page fills the screen by itself |
+| Text size on this device → All text and buttons | Makes the whole app bigger (writing, buttons, icons), 100% to 250% in 5% steps. 110% to 125% suits most phones; more for large or e-ink screens such as Boox. Kept on this device only, so phone and tablet can differ. A preview shows the result. The fitted mushaf page fills the screen by itself |
+| Text size on this device → Arabic text | Size of Arabic outside the fitted mushaf page: translation view, Hafazan, Larger text, hadith, du'a, Sirah, dictionary (22 to 62 px). Kept on this device only |
 | Microphone (3 settings) | Quiet voice, surroundings, Bluetooth headset |
 | Waqaf & ibtida' blocks | Block shading (section 4) |
 | Back up or restore | Backup file of settings, bookmarks and notes (below) |

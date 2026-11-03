@@ -324,7 +324,6 @@
 "Prayer times": "Waktu solat",
 "Prayer times in the notification bar": "Waktu solat dalam bar notifikasi",
 "Press the microphone at the bottom right. Words appear as you recite them correctly. Tap the page to hide the bars.": "Tekan mikrofon di kanan bawah. Perkataan muncul apabila anda membacanya dengan betul. Ketik halaman untuk menyembunyikan bar.",
-"Preview": "Pratonton",
 "Preview the cover": "Pratonton kulit buku",
 "Previous": "Sebelumnya",
 "Previous ayah": "Ayat sebelumnya",
@@ -526,5 +525,12 @@
 "⌨ Type": "⌨ Taip",
 "✎ Draw": "✎ Lukis",
 "✓ Facing the qibla": "✓ Menghadap kiblat",
-"✓ Integrity check passed": "✓ Semakan integriti lulus"
+"✓ Integrity check passed": "✓ Semakan integriti lulus",
+"Arabic in the translation view, Hafazan, Larger text, hadith, du'a, Sirah and the dictionary. A fitted page always uses the largest size that fits your screen; turn the phone sideways for bigger letters.": "Teks Arab dalam paparan terjemahan, Hafazan, Teks lebih besar, hadis, doa, Sirah dan kamus. Halaman yang dimuatkan sentiasa menggunakan saiz terbesar yang muat di skrin; pusingkan telefon ke sisi untuk huruf lebih besar.",
+"Arabic in the translation view, Hafazan, hadith, du'a, Sirah and the dictionary. A fitted page always uses the largest size that fits your screen; turn the phone sideways for bigger letters.": "Teks Arab dalam paparan terjemahan, Hafazan, hadis, doa, Sirah dan kamus. Halaman yang dimuatkan sentiasa menggunakan saiz terbesar yang muat di skrin; pusingkan telefon ke sisi untuk huruf lebih besar.",
+"Text size on this device": "Saiz teks pada peranti ini",
+"Kept on this device only (not synced), so your phone and tablet can each have their own sizes.": "Disimpan pada peranti ini sahaja (tidak disegerakkan), jadi telefon dan tablet anda boleh ada saiz masing-masing.",
+"All text and buttons": "Semua teks dan butang",
+"Makes the whole app bigger: writing, buttons and icons on Home, menus, translation, hadith, du'a, Sirah. 110% to 125% suits most phones; more for large or e-ink screens (Boox). The fitted mushaf page always fills the screen by itself.": "Membesarkan seluruh aplikasi: tulisan, butang dan ikon di Laman Utama, menu, terjemahan, hadis, doa, Sirah. 110% hingga 125% sesuai untuk kebanyakan telefon; lebih besar untuk skrin besar atau e-ink (Boox). Halaman mushaf yang dimuatkan sentiasa memenuhi skrin dengan sendirinya.",
+"Preview · Hisn al-Muslim 88": "Pratonton · Hisn al-Muslim 88"
 }
