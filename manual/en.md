@@ -90,7 +90,7 @@ Return to Home from anywhere with the **house button** (top left of the reading 
 - Settings → **Turning pages** → **Scroll (continuous)**: the pages follow one another as you scroll down instead (swiping then does nothing; ‹ › still jump a page).
 - Settings → **Screen while reading the Qur'an** → **Keep screen on**: the screen does not turn off while a mushaf page is showing; it sleeps as usual on Home and the other pages. Uses more battery.
 - **Tap** the page: hide or show the bars.
-- In Hadith, Shama'il, Du'a & Dhikr, Sirah, Prophet's ﷺ Prayer, Friday Prayer and this guide, the **book icon** at the top chooses how pages turn: **Scroll**, **Pages: swipe sideways** (swipe, or tap the left or right edge) or **Pages: swipe up/down**. In page mode each swipe moves one screen; the last lines of the screen show again at the top so nothing is missed, and *Page n / N* shows briefly at the bottom.
+- In Hadith, Shama'il, Du'a & Dhikr, Sirah, Prophet's ﷺ Prayer, Friday Prayer and this guide, the **book icon** at the top chooses **Scroll** or **Book**. In Book, swipe left or right (or tap the left or right edge) to go one screen forward or back, and scroll up and down as usual for long text. The last lines of the screen show again at the top so nothing is missed, and *Page n / N* shows briefly at the bottom.
 - **Long-press an ayah** and let go: the **ayah menu**.
 - **Long-press a word, keep holding and drag** to the last word: select words. A bar appears with **My ruku'**, **My blocks**, **Erase**, **Hafazan**, **Listen** and **Copy**.
 - **Tap once** anywhere on the page: show or hide the bars. With Settings → **Tap a word twice: meaning and sound → On**, **tap a word twice** quickly to see its meaning and hear it (section 7); tap twice again, or tap outside, to close it.
@@ -363,7 +363,7 @@ All open from the **ayah menu**; they need the internet once per surah.
 | Uthmani text page | Fit page or Larger text |
 | Text size on this device → All text and buttons | Makes the whole app bigger (writing, buttons, icons), 100% to 250% in 5% steps. 110% to 125% suits most phones; more for large or e-ink screens such as Boox. Kept on this device only, so phone and tablet can differ. A preview shows the result. The fitted mushaf page fills the screen by itself |
 | Text size on this device → Arabic text | Size of Arabic outside the fitted mushaf page: translation view, Hafazan, Larger text, hadith, du'a, Sirah, dictionary (22 to 62 px). Kept on this device only |
-| Turning pages in the other books | Hadith, Shama'il, Du'a & Dhikr, Sirah, Prophet's ﷺ Prayer, Friday Prayer and the User Guide: **Scroll (continuous)**, **Pages: swipe sideways ⇆** (or tap the left or right edge) or **Pages: swipe up/down ⇅**. Also from the book icon at the top of those pages. Kept on this device only |
+| Turning pages in the other books | Hadith, Shama'il, Du'a & Dhikr, Sirah, Prophet's ﷺ Prayer, Friday Prayer and the User Guide: **Scroll (continuous)** or **Book**: swipe sideways (or tap the left or right edge) to turn a screen, scroll up and down to read long text. Also from the book icon at the top of those pages. Kept on this device only |
 | Microphone (3 settings) | Quiet voice, surroundings, Bluetooth headset |
 | Waqaf & ibtida' blocks | Block shading (section 4) |
 | Back up or restore | Backup file of settings, bookmarks and notes (below) |

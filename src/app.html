@@ -512,7 +512,7 @@ mark.kt-q{background:color-mix(in srgb,#e0352b 22%,transparent);color:#ff6b5e;bo
 .kt-head{position:sticky;top:-14px;z-index:6;margin:0 -16px 6px;padding:2px 16px 8px;background:var(--h-bg,var(--bg));box-shadow:0 calc(-1px - var(--sat,0px)) 0 var(--h-bg,var(--bg));border-bottom:1px solid color-mix(in srgb,var(--gold) 35%,transparent)}
 .kt-head .panel-top{margin-bottom:8px}
 .kt-head{transition:transform .22s ease,opacity .22s ease}
-.panel.bk-h,.panel.bk-v{touch-action:none;scrollbar-width:none}.panel.bk-h::-webkit-scrollbar,.panel.bk-v::-webkit-scrollbar{display:none}
+.panel.bk-h{touch-action:pan-y pinch-zoom}   /* up and down still scroll; sideways swipes turn the page */
 .bk-ind{position:fixed;left:50%;bottom:calc(14px + var(--sab,0px));transform:translateX(-50%);z-index:60;padding:4px 12px;border-radius:999px;font-size:13px;background:color-mix(in srgb,var(--h-bg2,#123) 88%,transparent);color:var(--h-ink,#fff);border:1px solid color-mix(in srgb,var(--gold) 50%,transparent);opacity:0;transition:opacity .25s;pointer-events:none}
 .bk-ind.on{opacity:1}
 .panel.hd-hide .kt-head{transform:translateY(calc(-100% - 20px));opacity:0;pointer-events:none}
@@ -1416,7 +1416,7 @@ function setSheet(){
   <div id="offWrap"></div>
   <div class="label">Turning pages</div>${seg('pscroll',[[false,'Book (swipe)'],[true,'Scroll (continuous)']],st.scroll)}
   <p class="note">Scroll: the pages follow one another as you scroll down, like a long scroll. Book: one page at a time, turned by swiping.</p>
-  <div class="label">Turning pages in the other books</div><div class="actions"><button id="openBk">${BK_IC}Hadith, Du'a, Sirah, Prayer, User Guide: scroll or pages</button></div>
+  <div class="label">Turning pages in the other books</div><div class="actions"><button id="openBk">${BK_IC}Hadith, Du'a, Sirah, Prayer, User Guide: scroll or book</button></div>
   <div class="label">Screen while reading the Qur'an</div>${seg('awake',[[false,'Sleeps as usual'],[true,'Keep screen on']],awakeRead)}
   <p class="note">Keep screen on: the screen does not turn off while a mushaf page is showing. It sleeps as usual on Home and the other pages. Uses more battery.</p>
   <div class="label">Surah name, juz and page</div>${seg('sname',[['lat','Latin (At-Takwīr · Juz 30)'],['ar','Arabic (سورة التكوير · الجزء ٣٠)']],st.sname)}
@@ -4603,14 +4603,14 @@ document.addEventListener('selectionchange',()=>{ const sel=document.getSelectio
 function lookupSheet(w){ return window.__meaning(w); }
 
 /* Turning pages in the books (Azli, 6 Nov 2026): Hadith, Shama'il, Du'a, Sirah, Prophet's Prayer, Friday Prayer and the user
-   guide can scroll as before, or turn a screen at a time like a book: swipe sideways (or tap the left or right edge), or swipe
-   up and down. The page still scrolls underneath, so loading more hadith and remembering the last read work as before.
+   guide can scroll as before, or work like a book: swipe sideways (or tap the left or right edge) to turn a screen, while
+   long text still scrolls up and down (one book mode since v1.0.0.96, Azli 6 Nov 2026). The page still scrolls underneath, so loading more hadith and remembering the last read work as before.
    Kept on this device only (store key bookTurn): a Boox may turn pages while the phone scrolls. No slide on a Boox (e-ink). */
 const BK_PANELS=new Set(['ktS','ktE','ktR','duaC','sirahE','solatE','jumuahE','manual']);
 const BK_IC='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.5C10 5 7 4.6 3.5 5v13c3.5-.4 6.5 0 8.5 1.5 2-1.5 5-1.9 8.5-1.5V5C17 4.6 14 5 12 6.5z"/><path d="M12 6.5v13"/></svg>';
 let BK_FX=true; try{ BK_FX=!window.AndroidExtra?.booxAvailable?.(); }catch(e){}
-const bkMode=()=>{ const m=store.get('bookTurn','scroll'); return m==='h'||m==='v'?m:'scroll'; };
-function bkApply(p){ const m=bkMode(); p.classList.toggle('bk-h',m==='h'); p.classList.toggle('bk-v',m==='v'); }
+const bkMode=()=>{ const m=store.get('bookTurn','scroll'); return m==='h'||m==='v'?'h':'scroll'; };   // one book mode since v1.0.0.96 (Azli): an old 'v' choice becomes it
+function bkApply(p){ p.classList.toggle('bk-h',bkMode()==='h'); }
 function bkStep(p){ const r=p.getBoundingClientRect(); let top=r.top; const head=p.classList.contains('hd-hide')?null:p.querySelector('.kt-head');
   if(head){ const hb=head.getBoundingClientRect().bottom; if(hb>top&&hb<r.bottom-120) top=hb; }
   return Math.max(120, Math.round(r.bottom-top-30)); }   // 30 px of the last lines show again at the top of the next page
@@ -4623,7 +4623,6 @@ function bkTurn(p,dir){ const max=Math.max(0,p.scrollHeight-p.clientHeight), cur
   else { let v; while(stack.length&&(v=stack.pop())>=cur-2){} to=(v!=null&&v<cur-2)?v:Math.max(0,cur-bkStep(p)); }
   bkInd(p,to); const m=bkMode(), inn=p.querySelector('.panel-in');
   if(!BK_FX||!inn){ p.scrollTop=to; return; }
-  if(m==='v'){ p.scrollTo({top:to,behavior:'smooth'}); return; }
   const w=dir>0?-1:1; inn.style.transition='transform .14s ease-in,opacity .14s ease-in'; inn.style.transform=`translateX(${w*28}%)`; inn.style.opacity='0';
   setTimeout(()=>{ p.scrollTop=to; inn.style.transition='none'; inn.style.transform=`translateX(${-w*28}%)`;
     requestAnimationFrame(()=>requestAnimationFrame(()=>{ inn.style.transition='transform .16s ease-out,opacity .16s ease-out'; inn.style.transform=''; inn.style.opacity='';
@@ -4635,12 +4634,11 @@ function bkBind(p){ if(p.__bk) return; p.__bk=1; let sx=0,sy=0,ok=false;
   p.addEventListener('touchmove',e=>{ if(e.touches.length!==1) ok=false; },{passive:true});
   p.addEventListener('touchend',e=>{ if(!ok) return; ok=false; if(String(document.getSelection()||'').trim()) return;
     const t=e.changedTouches[0], dx=t.clientX-sx, dy=t.clientY-sy, m=bkMode();
-    if(m==='h'&&Math.abs(dx)>45&&Math.abs(dx)>1.3*Math.abs(dy)){ p.__bkSw=Date.now(); bkTurn(p,dx<0?1:-1); }
-    else if(m==='v'&&Math.abs(dy)>45&&Math.abs(dy)>1.3*Math.abs(dx)){ p.__bkSw=Date.now(); bkTurn(p,dy<0?1:-1); } },{passive:true});
-  let wl=0; p.addEventListener('wheel',e=>{ if(bkMode()==='scroll'||e.ctrlKey) return; e.preventDefault(); const t=Date.now(); if(t-wl<350) return; wl=t; bkTurn(p,(e.deltaY||e.deltaX)>0?1:-1); },{passive:false}); }
+    if(m==='h'&&Math.abs(dx)>45&&Math.abs(dx)>1.3*Math.abs(dy)){ p.__bkSw=Date.now(); bkTurn(p,dx<0?1:-1); } },{passive:true});
+  p.addEventListener('touchcancel',()=>{ ok=false; },{passive:true}); }
 function bkSheet(){ const ms=sL()==='ms', cur=bkMode();
-  openSheet(ms?'Membalik halaman':'Turning pages', `<div class="seg" id="bkSeg" style="flex-wrap:wrap">${[['scroll',ms?'Tatal (berterusan)':'Scroll (continuous)'],['h',ms?'Halaman: leret ke sisi ⇆':'Pages: swipe sideways ⇆'],['v',ms?'Halaman: leret atas/bawah ⇅':'Pages: swipe up/down ⇅']].map(([v,l])=>`<button data-v="${v}" aria-pressed="${cur===v}">${l}</button>`).join('')}</div>
-   <p class="note">${ms?'Untuk Hadis, Syamail, Doa & zikir, Sirah, Sifat Solat, Solat Jumaat dan Panduan Pengguna. Halaman: satu skrin setiap kali, seperti buku. Leret ke sisi juga boleh dengan mengetik tepi kiri atau kanan skrin. Disimpan pada peranti ini sahaja. Mushaf Al-Qur\'an mempunyai pilihannya sendiri dalam Tetapan.':'For Hadith, Shama\'il, Du\'a & Dhikr, Sirah, the Prophet\'s ﷺ Prayer, Friday Prayer and the User Guide. Pages: one screen at a time, like a book. With sideways, tapping the left or right edge of the screen also turns the page. Kept on this device only. The Qur\'an mushaf has its own setting in Settings.'}</p>`);
+  openSheet(ms?'Membalik halaman':'Turning pages', `<div class="seg" id="bkSeg" style="flex-wrap:wrap">${[['scroll',ms?'Tatal (berterusan)':'Scroll (continuous)'],['h',ms?'Buku: leret ke sisi untuk selak, tatal atas/bawah untuk baca':'Book: swipe sideways to turn, scroll up/down to read']].map(([v,l])=>`<button data-v="${v}" aria-pressed="${cur===v}">${l}</button>`).join('')}</div>
+   <p class="note">${ms?'Untuk Hadis, Syamail, Doa & zikir, Sirah, Sifat Solat, Solat Jumaat dan Panduan Pengguna. Buku: leret ke kiri atau kanan (atau ketik tepi kiri atau kanan skrin) untuk satu skrin ke hadapan atau ke belakang; teks yang panjang masih boleh ditatal ke atas dan ke bawah. Disimpan pada peranti ini sahaja. Mushaf Al-Qur\'an mempunyai pilihannya sendiri dalam Tetapan.':'For Hadith, Shama\'il, Du\'a & Dhikr, Sirah, the Prophet\'s ﷺ Prayer, Friday Prayer and the User Guide. Book: swipe left or right (or tap the left or right edge of the screen) to go one screen forward or back; long text still scrolls up and down. Kept on this device only. The Qur\'an mushaf has its own setting in Settings.'}</p>`);
   sheetB.querySelector('#bkSeg').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; store.set('bookTurn',b.dataset.v);
     sheetB.querySelectorAll('#bkSeg button').forEach(x=>x.setAttribute('aria-pressed',x===b)); document.querySelectorAll('.panel').forEach(x=>{ if(x.__bk){ bkApply(x); x.__bkStack=[]; } }); }; }
 /* Edge taps turn the page in sideways mode; buttons, links and text being selected are left alone. */
@@ -4650,7 +4648,7 @@ document.addEventListener('click',e=>{ const pnl=e.target.closest('.panel'); if(
   if(String(document.getSelection()||'').trim()) return; const w=innerWidth, x=e.clientX;
   if(x<w*.22||x>w*.78){ e.stopImmediatePropagation(); bkTurn(pnl, x>w*.5?1:-1); } },true);
 document.addEventListener('keydown',e=>{ const p=topPanel(); if(!p||!p.__bk||bkMode()==='scroll'||document.querySelector('.sheet.open')) return; if(e.target.closest?.('input,textarea,select,[contenteditable="true"]')) return;
-  const nx=['PageDown',' ','ArrowRight','ArrowDown'], pv=['PageUp','ArrowLeft','ArrowUp']; if(nx.includes(e.key)){ e.preventDefault(); bkTurn(p,e.shiftKey&&e.key===' '?-1:1); } else if(pv.includes(e.key)){ e.preventDefault(); bkTurn(p,-1); } });
+  const nx=['ArrowRight'], pv=['ArrowLeft']; if(nx.includes(e.key)){ e.preventDefault(); bkTurn(p,1); } else if(pv.includes(e.key)){ e.preventDefault(); bkTurn(p,-1); } });
 /* Tap once on a page to hide or show its fixed top part (Doa & zikir, Hadith, Sirah: Azli, 15 Oct 2026). Taps on buttons,
    links, fields and while selecting text do not count. */
 document.addEventListener('click',e=>{ const pnl=e.target.closest('.panel'); if(!pnl||pnl.hidden) return; const head=pnl.querySelector('.kt-head'); if(!head) return;
