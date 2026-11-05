@@ -90,6 +90,7 @@ Kembali ke Home dari mana-mana dengan **butang rumah** (atas kiri skrin bacaan) 
 - Settings → **Turning pages** → **Scroll (continuous)**: halaman bersambung apabila anda menatal ke bawah (leretan tidak lagi menyelak; ‹ › masih melompat satu halaman).
 - Settings → **Screen while reading the Qur'an** → **Keep screen on**: skrin tidak padam selagi halaman mushaf dipaparkan; ia padam seperti biasa di Home dan halaman lain. Menggunakan lebih banyak bateri.
 - **Ketik** halaman: sembunyi atau papar bar.
+- Dalam Hadis, Syamail, Doa & zikir, Sirah, Sifat Solat, Solat Jumaat dan panduan ini, **ikon buku** di bahagian atas memilih cara halaman dibalik: **Tatal**, **Halaman: leret ke sisi** (leret, atau ketik tepi kiri atau kanan) atau **Halaman: leret atas/bawah**. Dalam mod halaman setiap leretan bergerak satu skrin; baris terakhir skrin ditunjukkan semula di atas supaya tiada yang tertinggal, dan *Halaman n / N* dipaparkan sebentar di bawah.
 - **Tekan lama pada ayat** lalu lepaskan: **menu ayat**.
 - **Tekan lama pada perkataan, tahan dan seret** ke perkataan terakhir: pilih perkataan. Bar muncul dengan **My ruku'**, **My blocks**, **Erase**, **Hafazan**, **Listen** dan **Copy**.
 - **Ketik sekali** di mana-mana pada halaman: papar atau sembunyi bar. Dengan Settings → **Tap a word twice: meaning and sound → On**, **ketik dua kali** pada perkataan dengan cepat untuk melihat maknanya dan mendengarnya (bahagian 7); ketik dua kali lagi, atau ketik di luar, untuk menutupnya.
@@ -362,6 +363,7 @@ Semuanya dibuka dari **menu ayat**; memerlukan internet sekali bagi setiap surah
 | Uthmani text page | Fit page atau Larger text |
 | Saiz teks pada peranti ini → Semua teks dan butang | Membesarkan seluruh aplikasi (tulisan, butang, ikon), 100% hingga 250% dengan langkah 5%. 110% hingga 125% sesuai untuk kebanyakan telefon; lebih besar untuk skrin besar atau e-ink seperti Boox. Disimpan pada peranti ini sahaja, jadi telefon dan tablet boleh berbeza. Pratonton menunjukkan hasilnya. Halaman mushaf yang dimuatkan memenuhi skrin dengan sendirinya |
 | Saiz teks pada peranti ini → Teks Arab | Saiz teks Arab di luar halaman mushaf yang dimuatkan: paparan terjemahan, hafazan, Teks lebih besar, hadis, doa, Sirah, kamus (22 hingga 62 px). Disimpan pada peranti ini sahaja |
+| Membalik halaman dalam kitab lain | Hadis, Syamail, Doa & zikir, Sirah, Sifat Solat, Solat Jumaat dan Panduan Pengguna: **Tatal (berterusan)**, **Halaman: leret ke sisi ⇆** (atau ketik tepi kiri atau kanan) atau **Halaman: leret atas/bawah ⇅**. Juga dari ikon buku di bahagian atas halaman tersebut. Disimpan pada peranti ini sahaja |
 | Microphone (3 tetapan) | Suara perlahan, persekitaran, fon kepala Bluetooth |
 | Waqaf & ibtida' blocks | Warna blok (bahagian 4) |
 | Back up or restore | Fail sandaran tetapan, penanda buku dan nota (di bawah) |
