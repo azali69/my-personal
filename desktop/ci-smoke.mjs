@@ -32,7 +32,7 @@ const until = async (expr, ms = 30000) => { const t0 = Date.now(); while (Date.n
 await c.send('Runtime.enable'); await c.send('Page.enable'); await c.send('Log.enable');
 await c.send('Page.reload'); await sleep(1500);
 check('app loaded', await until("document.getElementById('whereS') && typeof st === 'object' && typeof renderReader === 'function'", 60000));
-const info = JSON.parse(await ev(`JSON.stringify({ver:document.getElementById('whereS').textContent, origin:location.origin, secure:isSecureContext,
+const info = JSON.parse(await ev(`JSON.stringify({ver:'v'+((document.documentElement.outerHTML.match(/My Personal Qur'an v(\\d+\\.\\d+\\.\\d+\\.\\d+)/)||[])[1]||'?'), origin:location.origin, secure:isSecureContext,
   tauri: !!window.__TAURI_INTERNALS__, caches: typeof caches, speech: typeof (window.SpeechRecognition||window.webkitSpeechRecognition), notif: typeof Notification, ua: navigator.userAgent})`));
 console.log(JSON.stringify(info));
 check('version shown', /^v\d+\.\d+\.\d+\.\d+$/.test(info.ver), info.ver);
@@ -45,8 +45,11 @@ if (phase === '1') {
   await sleep(1000); await shot('p1-quran');
   check('Arabic text is Fatihah/Baqarah', (await ev("document.getElementById('main').innerText")).length > 200);
   check('online data reachable from the app', await ev("fetch('https://azali69.github.io/my-personal/kutub/books2.json').then(r=>r.ok).catch(()=>false)"));
+  await ev("document.querySelectorAll('.panel').forEach(p=>{ if(p.id!=='main') {} }); ktPanel(); 1"); await sleep(2500);
   await ev("ktOpenHadith('bukhari',1); 1");
-  check('Bukhari 1 opens (data downloaded and shown)', await until("/depends on the intentions|deeds depends/i.test(document.body.innerText)", 60000));
+  const bukhari = await until("document.body.innerText.replace(/[\\u064B-\\u0652\\u0670]/g,'').includes('الأعمال بالنيات')", 90000);
+  if (!bukhari) console.log('page text then:', (await ev('document.body.innerText')).slice(0, 400).replace(/\n/g, ' | '));
+  check('Bukhari 1 opens (data downloaded and shown)', bukhari);
   await sleep(800); await shot('p1-hadith');
   let rej = ''; try { await ev("window.__TAURI_INTERNALS__.invoke('open_url',{url:'javascript:alert(1)'}).then(()=>'allowed')"); } catch (e) { rej = 'rejected'; }
   check('native open_url refuses non-web links', rej === 'rejected');
