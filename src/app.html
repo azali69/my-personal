@@ -1424,6 +1424,8 @@ function setSheet(){
   <div class="label">Language of the Sirah, Scan &amp; check and Masjid pages</div>${seg('uiLang',[['auto','Same as the app language'],['ms','Bahasa Melayu'],['en','English']],store.get('uiLang','auto'))}
   <div class="label">Home and colours</div><div class="actions"><button id="openHomeSet">${ic('blk')}Home background, bottom bar colour, book cover</button></div>
   <div class="label">Tap a word twice: meaning and sound</div>${seg('wtap',[[false,'Off'],[true,'On']],store.get('wordTap',false))}
+  <div class="label">Tap the sides of the page</div>${seg('sidetap',[[false,'Off'],[true,'On']],store.get('sideTap',true))}
+  <p class="note">On: a tap in the middle shows or hides the bars; a tap on the left or right edge turns the page (the left edge goes forward, as in a mushaf), or scrolls up and down in the continuous view. Double-tap the 📖 mark or a bookmark on an ayah number to open it. Off: every tap shows or hides the bars.</p>
   <p class="note">Tapping once always shows or hides the bars. When this is On, tapping a word twice quickly shows its meaning word by word, with a button to hear it (in the text and translation views, tapping an ayah twice lists its words); tap twice again to close it.</p>
   <div class="label">Transliteration (in the translation view)</div>${seg('tl',[['off','Off'],['simple','Show']],st.tl)}
   <p class="note">Transliteration converts the writing system (letters) while keeping the original pronunciation. From Quran.com; needs the internet once.</p>
@@ -1452,7 +1454,7 @@ function setSheet(){
     const ob=document.getElementById('offBtn'); if(ob) ob.onclick=()=>saveOffline(st.mushaf); const tk=document.getElementById('tjKey'); if(tk) tk.onclick=tajweedKey; };
   mNote();
   segH('mushaf',v=>{ st.mushaf=v; mNote(); sizeLbl(); });
-  segH('lang',v=>st.lang=v); segH('uiLang',v=>store.set('uiLang',v)); segH('tl',v=>{ st.tl=v; if(v!=='off') tlLoad(v); }); segH('wtap',v=>store.set('wordTap',v==='true')); segH('awake',v=>{ awakeRead=(v==='true'); store.set('awakeRead',awakeRead); awakeCheck(); }); sheetB.querySelector('#openHomeSet').onclick=homeSetSheet; sheetB.querySelector('#openManual').onclick=()=>{ closeSheet(); manualPanel(); }; sheetB.querySelector('#openBackup').onclick=backupSheet; segH('sname',v=>st.sname=v); segH('fn',v=>st.fn=(v==='true')); segH('blocks',v=>{ if(v!=='off') store.set('lastBlocks',v); st.blocks=v; note(); });
+  segH('lang',v=>st.lang=v); segH('uiLang',v=>store.set('uiLang',v)); segH('tl',v=>{ st.tl=v; if(v!=='off') tlLoad(v); }); segH('wtap',v=>store.set('wordTap',v==='true')); segH('sidetap',v=>store.set('sideTap',v==='true')); segH('awake',v=>{ awakeRead=(v==='true'); store.set('awakeRead',awakeRead); awakeCheck(); }); sheetB.querySelector('#openHomeSet').onclick=homeSetSheet; sheetB.querySelector('#openManual').onclick=()=>{ closeSheet(); manualPanel(); }; sheetB.querySelector('#openBackup').onclick=backupSheet; segH('sname',v=>st.sname=v); segH('fn',v=>st.fn=(v==='true')); segH('blocks',v=>{ if(v!=='off') store.set('lastBlocks',v); st.blocks=v; note(); });
   const sizeLbl=()=>{ document.getElementById('sizeL').textContent = `${st.size} px`;
     document.getElementById('flowWrap').style.display = st.mushaf==='text'?'':'none';
     document.getElementById('sizeN').textContent = 'Arabic in the translation view, Hafazan'+(st.mushaf==='text'?', Larger text':'')+', hadith, du\'a, Sirah and the dictionary. A fitted page always uses the largest size that fits your screen; turn the phone sideways for bigger letters.'; }; sizeLbl();
@@ -2557,15 +2559,41 @@ main.addEventListener('click',e=>{
   if(Math.abs(e.clientX-lpX)>10||Math.abs(e.clientY-lpY)>10) return;
   if(e.target.closest('.pageno') && pl && document.body.classList.contains('immersive')){ pbPlay.click(); return; }   // page number = play / pause while reading full screen
   if(e.target.closest('.surah-h,.pagehead')) return;
+  // Azli, 6 Nov 2026: one tap in the middle = show/hide the bars; a tap on a side = turn the page (scroll in continuous
+  // mode); two quick taps on the 📖 mark or a bookmark = open it; long-press = the ayah menu.
+  const hit=iconAt(e.clientX,e.clientY);
+  if(hit){ const key='i'+hit.kind+hit.g, now=Date.now();
+    if(tapWait && tapWait.key===key && now-tapWait.t<380){ clearTimeout(tapWait.tm); tapWait=null;
+      if(sheet.classList.contains('open')) closeSheet(); else if(hit.kind==='hl') hadithSheet(hit.g); else ayahSheet(hit.g); return; }
+    if(tapWait) clearTimeout(tapWait.tm);
+    const cx=e.clientX; tapWait={key,t:now,tm:setTimeout(()=>{ tapWait=null; tapAction(cx); },340)}; return; }
   // one tap: show or hide the bars; two quick taps on a word (when switched on): meaning and sound (Azli, 11 Oct 2026)
   if(store.get('wordTap',false)){ const w=e.target.closest('.mline [data-g][data-w]'), a=!w&&e.target.closest('.ay[data-g], .row[data-g]');
     if(w||a){ const key=w?`${w.dataset.g}:${w.dataset.w}`:`a${a.dataset.g}`, now=Date.now();
       if(tapWait && tapWait.key===key && now-tapWait.t<350){ clearTimeout(tapWait.tm); tapWait=null;
         if(sheet.classList.contains('open')) closeSheet(); else (w? wordSheet(+w.dataset.g, +w.dataset.w) : wordSheet(+a.dataset.g, null)); return; }
       if(tapWait) clearTimeout(tapWait.tm);
-      tapWait={key,t:now,tm:setTimeout(()=>{ tapWait=null; setImmersive(!document.body.classList.contains('immersive')); },300)}; return; } }
+      const cx=e.clientX; tapWait={key,t:now,tm:setTimeout(()=>{ tapWait=null; tapAction(cx); },300)}; return; } }
+  tapAction(e.clientX); });
+/* The 📖 mark (hadith on this ayah) sits above the ayah number and ignores touches, so find it by position:
+   returns {g,kind:'hl'|'bm'} when the tap is on, or just above, a marked ayah number. */
+function iconAt(x,y){ let best=null,bd=1e9;
+  main.querySelectorAll('.num.hl,.num.bm').forEach(n=>{ const r=n.getBoundingClientRect(); if(!r.width) return;
+    const hl=n.classList.contains('hl'), bm=n.classList.contains('bm'), fs=r.height||20, pad=10;
+    const L=r.left-pad-(hl?fs*.2:0), R=r.right+pad+(hl?fs*.6:0), T=r.top-pad-(hl?fs*1.0:0), B=r.bottom+pad;
+    if(x<L||x>R||y<T||y>B) return;
+    const d=Math.hypot(x-(r.left+r.right)/2,y-(r.top+r.bottom)/2); if(d>=bd) return;
+    const holder=n.closest('[data-g]'); if(!holder) return; bd=d;
+    best={g:+holder.dataset.g, kind: hl&&(!bm||y<r.top)?'hl':'bm'}; });
+  return best; }
+function tapAction(x){
+  const W=innerWidth, zone=Math.min(W*.2,140);
+  if(store.get('sideTap',true) && !hz && (x<zone||x>W-zone)){
+    const next=x<zone;   // the mushaf reads right to left: the left edge is forward, like swiping right
+    if(st.scroll){ window.scrollBy({top:(next?1:-1)*Math.round(innerHeight*.85),behavior:'smooth'}); return; }
+    turnPage(next?1:-1); return; }
   setImmersive(!document.body.classList.contains('immersive'));
-  if(!store.get('tipImm',false)){ store.set('tipImm',true); toast('Tap to show or hide the bars. Long-press a word for options.'); } });
+  if(!store.get('tipImm2',false)){ store.set('tipImm2',true); toast('Tap the middle to show or hide the bars, the sides to turn the page. Double-tap 📖 or a bookmark to open it. Long-press a word for options.'); } }
 
 document.addEventListener('click',e=>{ if(hz||e.target!==document.body&&e.target!==document.documentElement) return; if(lpFired){ lpFired=false; return; } if(selBar){ hideSelBar(); return; } setImmersive(!document.body.classList.contains('immersive')); });
 /* Swipe (RTL book: swipe right = next page) */
