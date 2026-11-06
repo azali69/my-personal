@@ -577,7 +577,7 @@ body.immersive .navret{display:none}
 .sl-com{margin:8px 0 0;border:1px dashed color-mix(in srgb,var(--gold) 50%,transparent);border-radius:10px;padding:6px 10px}
 .sl-com summary{cursor:pointer;font-weight:600;color:var(--gold-hi)}.sl-com summary small{font-weight:400;color:var(--h-mute,#888)}
 .wf{font-style:normal;font-weight:400;opacity:.72;font-size:.86em;margin-inline-start:4px}.sl-p .wf{display:block;margin:0}
-.sr-fam{margin:6px 0;padding:10px 12px}.sr-fam p{margin:4px 0;line-height:1.55}.sr-fam-h{display:flex;justify-content:space-between;gap:8px;align-items:baseline}.sr-fam-ar{font-family:var(--ar);font-size:calc(var(--arsize) * 0.679);color:var(--gold-hi)}.sr-kids{margin:2px 0;padding-inline-start:18px;line-height:1.55}.sr-kids span{font-family:var(--ar)}
+.sr-fam{margin:6px 0;padding:10px 12px}.sr-fam a{color:var(--gold-hi)}.sr-fam p{margin:4px 0;line-height:1.55}.sr-fam-h{display:flex;justify-content:space-between;gap:8px;align-items:baseline}.sr-fam-ar{font-family:var(--ar);font-size:calc(var(--arsize) * 0.679);color:var(--gold-hi)}.sr-kids{margin:2px 0;padding-inline-start:18px;line-height:1.55}.sr-kids span{font-family:var(--ar)}
 .tj-key li{display:flex;gap:10px;align-items:center;padding:8px 0}.tj-sw{flex:none;width:22px;height:22px;border-radius:6px}.tj-key .t{display:flex;flex-direction:column}
 a.tile{text-decoration:none;color:inherit}
 .hl-list li{display:flex;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid color-mix(in srgb,var(--gold) 20%,transparent)}.hl-list .t{flex:1;display:flex;flex-direction:column;gap:2px}.hl-list small{opacity:.85}
@@ -3635,7 +3635,7 @@ function homeSetSheet(){ openSheet('Home and colours', `
 /* A full-screen page above the reader (prayer times, Qibla, doa), with a back arrow to Home. */
 function openPanel(id,title,html){ let el=document.getElementById(id); if(!el){ el=document.createElement('section'); el.id=id; el.className='panel'; }
   document.body.appendChild(el);   // (re)opened panels go on top of the others
-  el.hidden=false; document.body.style.overflow='hidden';
+  el.hidden=false; el.classList.remove('hd-hide'); document.body.style.overflow='hidden';
   el.innerHTML=`<div class="panel-in"><div class="panel-top"><button class="ib" data-back aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m15 6-6 6 6 6"/></svg></button><h2>${esc(title)}</h2>${BK_PANELS.has(id)?`<button class="ib" data-bkm aria-label="Turning pages">${BK_IC}</button>`:''}</div><div class="panel-b">${html}</div></div>`;
   el.querySelector('[data-back]').onclick=()=>closePanel(id);
   if(BK_PANELS.has(id)){ el.querySelector('[data-bkm]').onclick=bkSheet; bkBind(el); bkApply(el); el.__bkNav=null; el.__bkRe=null; }
@@ -4171,13 +4171,24 @@ async function sirahPanel(){ const b=openPanel('sirah',sL()==='ms'?'Sirah':'Seer
   draw(); q0.oninput=draw;
   body.addEventListener('toggle',ev=>{ const d=ev.target.closest?.('.sr-era'); if(!d) return; d.open?openEra.add(d.dataset.era):openEra.delete(d.dataset.era); store.set('sirahOpen',[...openEra]); },true);
   window.sirahRedraw=draw; document.getElementById('sirah').__redraw=()=>{ if(!q0.value.trim()) draw(); };
-  b.onclick=e=>{ if(bmTopClick(e,draw,k=>sirahEvent(k))) return; const r=e.target.closest('[data-e]'); if(r) sirahEvent(r.dataset.e); }; }
+  b.onclick=e=>{ if(bmTopClick(e,draw,k=>sirahEvent(k))) return; const fm=e.target.closest('[data-fam]'); if(fm){ sirahFamily(+fm.dataset.fam); return; } const r=e.target.closest('[data-e]'); if(r) sirahEvent(r.dataset.e); }; }
 /* The Prophet's family ﷺ (Azli, 20 Oct 2026): from Zad al-Ma'ad and al-Bidayah wa an-Nihayah (sources on each entry; texts kept in tools/sources/). */
-function sirahFamilyHtml(D,ms){ const L=ms?'ms':'en', grp={w:ms?'Isteri (Ummahatul Mukminin)':'Wives (Mothers of the Believers)',s:ms?'Hamba milik (umm walad)':'Concubines',c:ms?'Anak dan cucu':'Children and grandchildren'};
-  const one=f=>`<div class="card sr-fam"><div class="sr-fam-h"><b>${esc(f.name)}</b><span dir="rtl" lang="ar" class="sr-fam-ar">${esc(f.ar)}</span></div><p>${esc(f[L])}</p>
+const SR_GRP=ms=>({w:ms?'Isteri (Ummahatul Mukminin)':'Wives (Mothers of the Believers)',s:ms?'Hamba milik (umm walad)':'Concubines',c:ms?'Anak dan cucu':'Children and grandchildren'});
+const SR_GRP1=ms=>({w:ms?'Isteri':'Wife',s:ms?'Hamba milik':'Concubine',c:ms?'Anak':'Child'});
+/* Numbered in each group, in Ibn al-Qayyim's order: wives 1 to 11, then the concubines, then the children (Azli, 6 Nov 2026). */
+function sirahFamNo(D,f){ const g=D.family.filter(x=>x.grp===f.grp); return [g.indexOf(f)+1, g.length]; }
+function sirahFamCard(D,f,ms){ const L=ms?'ms':'en', [n]=sirahFamNo(D,f);
+  return `<div class="card sr-fam"><div class="sr-fam-h"><b>${n}. ${esc(f.name)}</b><span dir="rtl" lang="ar" class="sr-fam-ar">${esc(f.ar)}</span></div><p>${esc(f[L])}</p>
     ${f.kids?`<div class="label" style="margin:6px 0 2px">${ms?'Anak-anak (cucu Rasulullah ﷺ)':'Children (the Prophet\'s grandchildren)'}</div><ul class="sr-kids">${f.kids.map(k=>`<li>${esc(k[L])} <span dir="rtl" lang="ar">${esc(k.ar)}</span></li>`).join('')}</ul>`:''}
-    <p class="note" style="font-size:12px;margin:6px 0 0">${ms?'Sumber':'Source'}: ${f.src.map(x=>x.u?`<a href="${esc(x.u)}" target="_blank" rel="noopener">${esc(x.t)}</a>`:esc(x.t)).join(' · ')}</p></div>`;
-  return `<p class="note" style="margin:6px 0">${esc((D.familyNote||{})[L]||'')}</p>`+['w','s','c'].map(g=>`<div class="label">${grp[g]}</div>`+D.family.filter(f=>f.grp===g).map(one).join('')).join(''); }
+    <p class="note" style="font-size:12px;margin:6px 0 0">${ms?'Sumber':'Source'}: ${f.src.map(x=>x.u?`<a href="${esc(x.u)}" target="_blank" rel="noopener">${esc(x.t)}</a>`:esc(x.t)).join(' · ')}</p></div>`; }
+function sirahFamilyHtml(D,ms){ const L=ms?'ms':'en', grp=SR_GRP(ms), bk=bkOn();
+  const row=f=>{ const [n]=sirahFamNo(D,f); return `<button class="tile wide" data-fam="${D.family.indexOf(f)}" style="width:100%;margin-bottom:6px;min-height:0;padding:10px 14px;text-align:left"><span style="flex:1"><b>${n}. ${esc(f.name)}</b></span><span dir="rtl" lang="ar" class="sr-fam-ar">${esc(f.ar)}</span></button>`; };
+  return `<p class="note" style="margin:6px 0">${esc((D.familyNote||{})[L]||'')}</p>`+['w','s','c'].map(g=>`<div class="label">${grp[g]}</div>`+D.family.filter(f=>f.grp===g).map(f=>bk?row(f):sirahFamCard(D,f,ms)).join('')).join(''); }
+/* Book mode: one person per page, from the first wife to the last child; swipe or ‹ › for the next. */
+function sirahFamily(i){ const D=sirahD, f=D&&D.family[i]; if(!f) return; const ms=sL()==='ms', [n,N]=sirahFamNo(D,f);
+  const b=openPanel('sirahE', ms?'Keluarga Rasulullah ﷺ':'The Prophet\'s family ﷺ', `<div class="sr-meta">${esc(SR_GRP(ms)[f.grp])} · ${n} / ${N}</div>${sirahFamCard(D,f,ms)}${bkBar(`${SR_GRP1(ms)[f.grp]} ${n} / ${N}`, i>0, i<D.family.length-1)}`);
+  const P=b.closest('.panel'); P.scrollTop=0;
+  P.__bkNav=async dir=>{ const j=i+dir; if(j<0||j>=D.family.length) return false; sirahFamily(j); return true; }; }
 /* Madinah tajweed colour key (Azli, 20 Oct 2026). The printed tajweed pages are the KFGQPC V4 tajweed fonts published by QUL
    (Tarteel); the key is Tarteel's own guide to those colours, https://support.tarteel.ai/en/articles/14936922 (checked 20 Oct 2026). */
 const TAJWEED_KEY=[['#9b1c1c',"Madd Lazim (necessary prolongation): 6 counts","Mad Lazim (wajib dipanjangkan): 6 harakat",'الضَّآلِّينَ'],
@@ -4725,7 +4736,10 @@ document.addEventListener('keydown',e=>{ const p=topPanel(); if(!p||!p.__bk||!bk
 document.addEventListener('click',e=>{ const pnl=e.target.closest('.panel'); if(!pnl||pnl.hidden) return; const head=pnl.querySelector('.kt-head'); if(!head) return;
   if(e.target.closest('button,a,input,select,textarea,summary,label,details>summary,.kt-head,[data-q],[data-h],[data-e],[data-c],[role=button]')) return;
   if(String(document.getSelection()||'').trim()) return;
-  pnl.classList.toggle('hd-hide'); });
+  pnl.classList.toggle('hd-hide'); hdGap(pnl); });
+/* A hidden top part gives back its room, so the text starts at the top instead of under an empty band (Azli, 6 Nov 2026). */
+function hdGap(pnl){ const head=pnl.querySelector('.kt-head'); if(!head) return; const hid=pnl.classList.contains('hd-hide'), H=head.offsetHeight, was=parseFloat(head.style.marginBottom)||0, want=hid?-H:0;
+  if(was===want) return; head.style.marginBottom=hid?want+'px':''; if(pnl.scrollTop>0) pnl.scrollTop+=(want-was); }
 /* ============================ WIRING ============================ */
 document.getElementById('btnNav').onclick=navSheet;
 document.getElementById('btnHome').onclick=()=>{ closeSheet(); showHome(); };
