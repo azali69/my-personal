@@ -47,15 +47,23 @@ fn main() {
             }
         }))
         .setup(|app| {
-            WebviewWindowBuilder::new(app, "main", WebviewUrl::App("index.html".into()))
+            let b = WebviewWindowBuilder::new(app, "main", WebviewUrl::App("index.html".into()))
                 .title("My Personal Qur'an")
                 .inner_size(1100.0, 860.0)
                 .min_inner_size(380.0, 500.0)
                 .center()
                 .resizable(true)
                 .disable_drag_drop_handler()
-                .initialization_script(include_str!("shim.js"))
-                .build()?;
+                .initialization_script(include_str!("shim.js"));
+            // Only for the automatic check in CI (tests the installed app): when the environment variable MPQ_DEBUG_PORT
+            // is set to a number, WebView2 listens for the test driver on that local port. Normal use never sets it.
+            #[cfg(windows)]
+            let b = match std::env::var("MPQ_DEBUG_PORT") {
+                Ok(p) if !p.is_empty() && p.len() <= 5 && p.chars().all(|c| c.is_ascii_digit()) => b.additional_browser_args(&format!(
+                    "--disable-features=msWebOOUI,msPdfOOUI,msSmartScreenProtection --remote-debugging-port={} --remote-allow-origins=*", p)),
+                _ => b,
+            };
+            b.build()?;
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![save_file, open_url])

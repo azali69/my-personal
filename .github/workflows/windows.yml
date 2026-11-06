@@ -64,7 +64,7 @@ jobs:
         timeout-minutes: 12
         run: |
           export MSYS2_ARG_CONV_EXCL="*"   # Git Bash must not turn the installer flag /S into a path
-          export WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS="--remote-debugging-port=9222 --remote-allow-origins=*"
+          export MPQ_DEBUG_PORT=9222   # lets the test driver look into the window (see main.rs)
           SETUP="./My-Personal-Quran-v${V}-Windows-setup.exe"
           echo "--- WebView2 runtime on this machine"
                               echo "--- install"
