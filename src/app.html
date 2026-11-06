@@ -493,7 +493,7 @@ body.immersive .dock.hz #mic{visibility:visible;pointer-events:auto}
 .panel .label{color:var(--gold)}
 .kt-ref{display:flex;align-items:center;gap:6px;color:var(--gold-hi)}
 .kt-name{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.3}
-.kt-name b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kt-name b{overflow-wrap:anywhere}   /* the full name and number, never cut (Azli, 6 Nov 2026) */
 .kt-name small{font-weight:400;opacity:.8;font-size:12.5px}
 .kt-ref .ib{width:36px!important;height:36px!important;flex:none;border:1.5px solid color-mix(in srgb,var(--gold) 75%,transparent);border-radius:50%;color:var(--gold-hi);display:grid;place-items:center}
 .kt-ref .ib svg{width:18px;height:18px}
@@ -513,8 +513,7 @@ mark.kt-q{background:color-mix(in srgb,#e0352b 22%,transparent);color:#ff6b5e;bo
 .kt-head .panel-top{margin-bottom:8px}
 .kt-head{transition:transform .22s ease,opacity .22s ease}
 .panel.bk-h{touch-action:pan-y pinch-zoom}   /* up and down still scroll; sideways swipes turn the page */
-.bk-ind{position:fixed;left:50%;bottom:calc(14px + var(--sab,0px));transform:translateX(-50%);z-index:60;padding:4px 12px;border-radius:999px;font-size:13px;background:color-mix(in srgb,var(--h-bg2,#123) 88%,transparent);color:var(--h-ink,#fff);border:1px solid color-mix(in srgb,var(--gold) 50%,transparent);opacity:0;transition:opacity .25s;pointer-events:none}
-.bk-ind.on{opacity:1}
+.bk-bar{display:flex;align-items:center;gap:10px;margin:18px 0 8px}.bk-bar span{flex:1;text-align:center;font-size:13.5px;color:var(--h-mute)}.bk-bar .pill{min-width:56px;justify-content:center;font-size:20px}.bk-bar .pill:disabled{opacity:.35}
 .panel.hd-hide .kt-head{transform:translateY(calc(-100% - 20px));opacity:0;pointer-events:none}
 .kt-head .kt-show{position:static;margin:0;padding:0;border:0;box-shadow:none;background:none}
 .kt-head > .field{margin:0 0 2px}
@@ -529,6 +528,7 @@ mark.kt-q{background:color-mix(in srgb,#e0352b 22%,transparent);color:#ff6b5e;bo
 .du-cat > summary small{color:var(--h-mute)}
 #duaList .tile{width:100%;box-sizing:border-box}
 .du-cat[open]{padding-bottom:2px}
+.du-pg{font-size:13px;font-weight:600;color:var(--gold-hi);margin:-2px 0 6px}.du-pg small{font-weight:400;color:var(--h-mute)}
 .du-ref{margin:10px 0 0;font-size:13px;border-top:1px dashed color-mix(in srgb,var(--gold) 35%,transparent);padding-top:8px}
 .du-ref summary{cursor:pointer;color:var(--h-mute);line-height:1.45}
 .du-ref summary b{color:var(--gold-hi)}
@@ -1693,7 +1693,7 @@ function ktBindShow(root,onChange){ const g=root.querySelector('.kt-show'); if(!
 async function ktPanel(){ const b=openPanel('kt','Hadith',`<p class="note">Loading…</p>`);
   try{ const bj=await ktGet('books2.json'); ktBooks=bj.books; ktHeV=bj.he||{}; }catch(e){ b.innerHTML='<p class="note">The hadith books need the internet the first time; after that each kitab you open is kept on the phone.</p>'; return; }
   b.innerHTML=`<div class="kt-ttl" style="font-family:var(--ar);font-size:26px;text-align:center;color:var(--gold-hi);margin:2px 0 8px">الكتب الستة والموطأ والشمائل</div>
-   <form id="ktAllF" class="row2" style="gap:8px;margin:0 0 8px"><input class="field" id="ktAllQ" type="search" placeholder="Search all eight books" aria-label="Search all the hadith books (Arabic, English, Indonesian)" style="flex:1 1 auto;min-width:0"><button class="pill primary" type="submit" style="flex:0 0 auto">Search</button></form>
+   <form id="ktAllF" class="row2" style="gap:8px;margin:0 0 8px"><input class="field" id="ktAllQ" type="search" placeholder="Search words, or e.g. Bukhari 10" aria-label="Search all the hadith books (Arabic, English, Indonesian)" style="flex:1 1 auto;min-width:0"><button class="pill primary" type="submit" style="flex:0 0 auto">Search</button></form>
    ${ktShowHtml()}
    <div id="ktTop"></div>
    <div style="margin-top:12px">${ktBooks.map(k=>`<button class="tile wide" data-b="${k.id}" style="width:100%;text-align:left;margin-bottom:8px;min-height:0;padding:12px 14px"><span style="flex:1"><b>${esc(k.en)}</b><br><small>${k.count.toLocaleString()} hadith · ${k.sections.length} kitab</small>${ULAMA_D[k.id]?`<br><small class="wf">${esc(wafTxt(k.id))}</small>`:''}<small></span><span class="ar" style="font-size:22px">${esc(k.ar)}</span></button>`).join('')}</div>
@@ -1871,7 +1871,7 @@ function ktCard(k,h,show,extra,sn,q){ const [n,ref,ar0,en0,idn0,gr]=h, cut=h[7]|
   const grades = gr.length? `<div class="kt-gs">${gr.map(([w,v])=>`<span class="kt-g ${ktGradeCls(v)}"><small>${esc(KT_GR[w]||w)}${grWaf(w)}</small> <b${w==='tir'?' dir="rtl" lang="ar" style="font-family:var(--ar);font-weight:400"':''}>${esc(w==='tir'?v:ktGradeTxt(v))}</b></span>`).join('')}</div>`
     : (k.id==='bukhari'||k.id==='muslim')? '' : '<div class="kt-gs"><span class="kt-g"><small>No grading in the source for this hadith</small></span></div>';
   return `<div class="card kt-card" id="kt-${n}" data-n="${n}">
-   <div class="kt-ref"><span class="kt-name"><b>${esc(k.en)} ${ktN(k.id,n)}</b>${k.id==='muslim'&&ktN(k.id,n)!==String(n)?`<small>no. ${n} in this list</small>`:''}${ref&&sn!=null?`<small>kitab ${sn}, no. ${ref}</small>`:''}</span>${(()=>{ const bm=ktBmGet(k.id,n), nt=noteGet(`h:${k.id}:${n}`); return `<button class="ib kt-btn" data-bm="${n}" aria-label="Bookmark"${bm?` style="color:var(--bm${bm.c})"`:''}><svg viewBox="0 0 24 24" fill="${bm?'currentColor':'none'}" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M7 4h10v16l-5-3.5L7 20z"/></svg></button><button class="ib kt-btn${nt?' on':''}" data-note="${n}" aria-label="Note">${ic('note')}</button>`; })()}<button class="ib kt-copy" data-copy="${n}" aria-label="Copy">${ic('copy')}</button></div>
+   <div class="kt-ref"><span class="kt-name"><b>${esc(k.en)} ${ktN(k.id,n)}</b>${k.id==='muslim'&&ktN(k.id,n)!==String(n)?`<small>no. ${n} in this list</small>`:''}${ref&&sn!=null?`<small>Kitab ${sn} · in-book no. ${ref}</small>`:''}</span>${(()=>{ const bm=ktBmGet(k.id,n), nt=noteGet(`h:${k.id}:${n}`); return `<button class="ib kt-btn" data-bm="${n}" aria-label="Bookmark"${bm?` style="color:var(--bm${bm.c})"`:''}><svg viewBox="0 0 24 24" fill="${bm?'currentColor':'none'}" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M7 4h10v16l-5-3.5L7 20z"/></svg></button><button class="ib kt-btn${nt?' on':''}" data-note="${n}" aria-label="Note">${ic('note')}</button>`; })()}<button class="ib kt-copy" data-copy="${n}" aria-label="Copy">${ic('copy')}</button></div>
    ${extra||''}${grades}${byLine}
    ${show.has('ar')&&!ar?'<p class="note" style="margin:4px 0">No Arabic text in the source for this hadith.</p>':''}${show.has('ar')&&ar?`<div class="kt-ar" dir="rtl" lang="ar">${ktMarked(ar,q,dA)}</div>${h[6]?'<p class="note" style="margin:2px 0 6px">One letter of this Arabic text is damaged in the source and could not be confirmed from a second copy; it is shown as …</p>':''}`:''}
    ${show.has('en')&&!en?'<p class="note" style="margin:4px 0">No English translation in the source for this hadith.</p>':''}${noId?`<p class="note" style="margin:4px 0">No Indonesian translation in the source for this hadith${show.has('en')?'.':'; English shown.'}</p>`:''}
@@ -1923,6 +1923,7 @@ async function ktKitab(id,sn,focus,q){ const k=ktBooks.find(x=>x.id===id), s=k.s
   let d; try{ d=await ktGet(`${id}/${sn}.json`); }catch(e){ b.innerHTML='<p class="note">This kitab needs the internet the first time; after that it is kept on the phone.</p>'; return; }
   if(document.getElementById('ktS')?.hidden!==false) return;
   const hs=d.h; let shown=0, show=ktShow();
+  if(bkOn()) return ktKitabBook(k,s,hs,b,focus,q);
   b.innerHTML=`${ktShowHtml()}<p class="note" style="margin-top:6px">${esc(k.en)} · ${hs.length} hadith (${s.first===s.last?s.first:s.first+'–'+s.last}) · tap the title to change kitab</p><div id="ktList"></div><div id="ktMore" style="height:40px"></div>`;
   const pnlS=document.getElementById('ktS'); ktPinHead(pnlS);
   const h2=pnlS.querySelector('.panel-top h2'); h2.innerHTML=esc(ktSecName(s,true))+' <span style="font-size:.7em;opacity:.8">▾</span>'; h2.style.cursor='pointer'; h2.onclick=()=>ktKitabSheet(k,sn);
@@ -1943,10 +1944,44 @@ async function ktKitab(id,sn,focus,q){ const k=ktBooks.find(x=>x.id===id), s=k.s
     if(c){ const v={b:id,s:sn,n:+c.dataset.n,t:Date.now()}; store.set('ktLast',v); const by=store.get('ktLastBy',{}); by[id]=v; store.set('ktLastBy',by); } };
   const near=()=>{ if(shown<hs.length && pnl.scrollTop+pnl.clientHeight > pnl.scrollHeight-900) add(20); clearTimeout(lrT); lrT=setTimeout(lastRead,500); };
   pnl.onscroll=near; near(); setTimeout(lastRead,300);
+  pnl.__bkRe=()=>{ const L=store.get('ktLast',{}); ktKitab(id,sn,L.b===id&&L.s===sn?L.n:null); };
   const find=n=>{ const h=hs.find(x=>x[0]===n); return h&&{h,sn}; };
   const redraw=r=>{ const el=list.querySelector(`[data-n="${r.h[0]}"]`); if(el) el.outerHTML=ktCard(k,r.h,show,'',sn,r.h[0]===focus?q:null); };
   list.onclick=e=>{ ktCardClick(e,k,find,redraw); }; }
-async function ktSearchAll(q){ let lang=ktShow();
+/* Book mode for a kitab (Azli, 6 Nov 2026): one hadith per page, like a printed page; ‹ › and swipes go through the kitab
+   and on into the next kitab (focus -1 opens a kitab at its last hadith). */
+function ktKitabBook(k,s,hs,b,focus,q){ const id=k.id, sn=s.n, pnl=document.getElementById('ktS'); let show=ktShow(); pnl.onscroll=null;
+  let i= focus===-1? hs.length-1 : focus? hs.findIndex(h=>h[0]>=focus) : 0; if(i<0) i=focus?hs.length-1:0;
+  if(focus>0 && hs[i] && hs[i][0]!==focus) toast('No hadith '+focus+' in the source; showing the nearest');
+  const si=k.sections.indexOf(s), prevS=k.sections[si-1], nextS=k.sections[si+1];
+  b.innerHTML=`${ktShowHtml()}<div id="ktList"></div><div id="ktBar"></div>`;
+  ktPinHead(pnl);
+  const h2=pnl.querySelector('.panel-top h2'); h2.innerHTML=esc(ktSecName(s,true))+' <span style="font-size:.7em;opacity:.8">▾</span>'; h2.style.cursor='pointer'; h2.onclick=()=>ktKitabSheet(k,sn);
+  const list=b.querySelector('#ktList'), bar=b.querySelector('#ktBar');
+  const draw=()=>{ const h=hs[i]; list.innerHTML=ktCard(k,h,show,'',sn,h[0]===focus?q:null);
+    bar.innerHTML=bkBar(`${i+1} / ${hs.length} · ${ktSecName(s)}`, i>0||!!prevS, i<hs.length-1||!!nextS);
+    const v={b:id,s:sn,n:h[0],t:Date.now()}; store.set('ktLast',v); const by=store.get('ktLastBy',{}); by[id]=v; store.set('ktLastBy',by); };
+  draw();
+  ktBindShow(pnl,()=>{ show=ktShow(); draw(); });
+  pnl.__bkNav=async dir=>{ const j=i+dir; if(j>=0&&j<hs.length){ i=j; draw(); return true; }
+    const t=dir>0?nextS:prevS; if(!t) return false; await ktKitab(id,t.n,dir>0?null:-1); return true; };
+  pnl.__bkRe=()=>ktKitab(id,sn,hs[i][0]);
+  const find=n=>{ const h=hs.find(x=>x[0]===n); return h&&{h,sn}; };
+  list.onclick=e=>{ ktCardClick(e,k,find,()=>draw()); }; }
+/* "bukhari 10", "muslim 8a", "Sahih al-Bukhari 10", "abu daud 5", "tirmizi 3": opens that hadith by the book's own standard
+   number (Muslim: 'Abd al-Baqi's numbers, as cited) instead of searching the words (Azli, 6 Nov 2026). */
+const KT_ALIAS=[['bukhari',/^(sahih )?(al[- ]?|imam )?bukh[ao]ri$/],['muslim',/^(sahih )?(imam )?muslim$/],['abudawud',/^(sunan )?(abi|abu|abou) ?da[wu]u?d$|^abudawud$/],
+  ['tirmidhi',/^((jami'?|jamiu?|sunan) )?(al[- ]?|at[- ]?)?t[ie]rmi(dh|z|d)i$/],['nasai',/^(sunan )?(al[- ]?|an[- ]?)?nasa'?i$|^nasaie$/],['ibnmajah',/^(sunan )?ibnu? ?majah?$/],
+  ['malik',/^(al[- ]?)?muwatt?a'?( (imam )?malik)?$|^malik$/],['shamail',/^(al[- ]?|asy[- ]?|ash[- ]?)?(sh|sy)ama'?il( (at[- ]?)?tirmidhi)?$|^shamail$/]];
+function ktRefParse(q){ const m=String(q).trim().toLowerCase().replace(/[’`]/g,"'").replace(/\s+/g,' ').match(/^(.+?)[\s:#.,-]*(?:no\.?\s*|hadith\s*|hadis\s*)?(\d+)\s*([a-z])?$/); if(!m) return null;
+  const w=m[1].trim().replace(/[\s:#.,-]+$/,''), hit=KT_ALIAS.find(([,rx])=>rx.test(w)); if(!hit) return null; return {id:hit[0], v:m[2]+(m[3]||'')}; }
+async function ktGoRef(r){ await ktPanel(); const k=(ktBooks||[]).find(x=>x.id===r.id); if(!k){ toast('That book is not in the app'); return; }
+  let n=parseInt(r.v,10);
+  if(r.id==='muslim'){ if(!KT_STD){ try{ const d=await ktGet('muslim/std.json'); KT_STD=(d&&d.n)||null; }catch(e){} }
+    if(KT_STD){ const hit=Object.entries(KT_STD).find(([,x])=>x===r.v)||Object.entries(KT_STD).find(([,x])=>x===r.v+'a'); if(!hit){ toast('No Sahih Muslim hadith numbered '+r.v); return; } n=+hit[0]; } }
+  const s=ktSecOf(k,n); if(!s||n>k.sections[k.sections.length-1].last){ toast(`No ${k.en} hadith numbered ${r.v}`); return; }
+  ktOpenHadith(r.id,n,s.n); }
+async function ktSearchAll(q){ { const r=ktRefParse(q); if(r) return ktGoRef(r); } let lang=ktShow();
   const b=openPanel('ktR',`Search · all books`,`${ktShowHtml()}<p class="note" id="ktProg">Searching…</p><div id="ktRes"></div>`);
   const ql=q.toLowerCase(), qa=normAr(q).replace(/ /g,''), isAr=/[؀-ۿ]/.test(q), res=[]; let fail=0, done=0; const total=ktBooks.reduce((a,k)=>a+k.sections.length,0);
   const prog=b.querySelector('#ktProg'), out=b.querySelector('#ktRes');
@@ -1964,7 +1999,7 @@ async function ktSearchAll(q){ let lang=ktShow();
   out.onclick=e=>{ const o=e.target.closest('[data-open]'); if(o){ const [bk,sn,n]=o.dataset.open.split('|'); ktBook(bk); ktKitab(bk,+sn,+n,q); return; }
     const w=e.target.closest('[data-bk]'); if(!w) return; const k=ktBooks.find(x=>x.id===w.dataset.bk);
     ktCardClick(e,k,n=>{ const r=res.find(([kk,,h])=>kk.id===k.id&&h[0]===n); return r&&{h:r[2],sn:r[1].n}; }, r=>{ const sec=k.sections.find(x=>x.n===r.sn); w.outerHTML=card([k,sec,r.h]); }); }; }
-async function ktSearch(id,q){ const k=ktBooks.find(x=>x.id===id); let lang=ktShow();
+async function ktSearch(id,q){ { const r=ktRefParse(q)||(/^\d+[a-z]?$/i.test(String(q).trim())?{id,v:String(q).trim().toLowerCase()}:null); if(r) return ktGoRef(r); } const k=ktBooks.find(x=>x.id===id); let lang=ktShow();
   const b=openPanel('ktR',`Search · ${k.en}`,`${ktShowHtml()}<p class="note" id="ktProg">Searching…</p><div id="ktRes"></div>`);
   const ql=q.toLowerCase(), qa=normAr(q).replace(/ /g,''), isAr=/[؀-ۿ]/.test(q), res=[]; let done=0, fail=0;
   const prog=b.querySelector('#ktProg'), out=b.querySelector('#ktRes');
@@ -3536,7 +3571,7 @@ function renderHome(){ const el=document.getElementById('home'); const g=pageSta
     <button class="tile" data-t="hz">${hic('hz')}<b>Memorisation</b><small>Hafazan: recite from memory, each word is checked</small></button>
     <button class="tile" data-t="tq">${hic('tq')}<b>Listen &amp; Repeat</b><small>The reciter reads, then you repeat</small></button>
     <button class="tile" data-t="bm">${hic('bm')}<b>Bookmarks</b><small>Saved ayat, My Ruku' and My Blocks</small></button>
-    <button class="tile" data-t="dua">${hic('dua')}<b>Du'a &amp; Dhikr</b><small>Doa &amp; zikir from Hisnul Muslim (Fortress of the Muslim)</small></button>
+    <button class="tile" data-t="dua">${hic('dua')}<b>Du'a &amp; Zikir</b><small>Doa &amp; zikir from Hisnul Muslim (Fortress of the Muslim)</small></button>
     <button class="tile" data-t="kutub">${hic('kutub')}<b>Hadith</b><small>The Six Books (Kutub as-Sittah) and al-Muwatta', with gradings</small></button>
     <button class="tile" data-t="shamail">${hic('shamail')}<b>Shama'il</b><small>The Prophet's ﷺ appearance and character, by at-Tirmidhi</small></button>
     <button class="tile" data-t="sirah">${hic('sirah')}<b>Seerah</b><small>Sirah: the Prophet's ﷺ life, with Qur'an and hadith references</small></button>
@@ -3603,7 +3638,7 @@ function openPanel(id,title,html){ let el=document.getElementById(id); if(!el){ 
   el.hidden=false; document.body.style.overflow='hidden';
   el.innerHTML=`<div class="panel-in"><div class="panel-top"><button class="ib" data-back aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m15 6-6 6 6 6"/></svg></button><h2>${esc(title)}</h2>${BK_PANELS.has(id)?`<button class="ib" data-bkm aria-label="Turning pages">${BK_IC}</button>`:''}</div><div class="panel-b">${html}</div></div>`;
   el.querySelector('[data-back]').onclick=()=>closePanel(id);
-  if(BK_PANELS.has(id)){ el.querySelector('[data-bkm]').onclick=bkSheet; bkBind(el); bkApply(el); el.__bkStack=[]; }
+  if(BK_PANELS.has(id)){ el.querySelector('[data-bkm]').onclick=bkSheet; bkBind(el); bkApply(el); el.__bkNav=null; el.__bkRe=null; }
   return el.querySelector('.panel-b'); }
 function closePanel(id){ const el=document.getElementById(id); if(el){ el.hidden=true; el.dispatchEvent(new Event('closed')); }
   if(document.getElementById('kt')?.hidden===false && typeof ktDrawTop==='function') ktDrawTop();
@@ -3630,12 +3665,19 @@ function mdRender(md){ const L=md.replace(/\r/g,'').split('\n'); let h='', i=0, 
   return {h,toc}; }
 function manualPanel(){ const lang=store.get('manLang', st.lang==='ms'?'ms':'en');
   const b=openPanel('manual', lang==='ms'?'Panduan Pengguna':'User Guide', `${segHtml('manLang',[['en','English'],['ms','Bahasa Melayu']],lang)}<div id="manBody" class="man"></div>`);
-  const draw=lg=>{ const {h,toc}=mdRender(MANUAL[lg]||''); const box=b.querySelector('#manBody');
+  const pnl=document.getElementById('manual');
+  const draw=(lg,pgI)=>{ const {h,toc}=mdRender(MANUAL[lg]||''); const box=b.querySelector('#manBody');
+    if(bkOn()){ const pages=h.split(/(?=<h3 id="man-)/); let cur=Math.max(0,Math.min(pages.length-1,pgI||0)); const ms=lg==='ms';
+      const show=()=>{ box.innerHTML=(cur===0?`<nav class="card man-toc"><div class="label" style="margin-top:0">${ms?'Kandungan':'Contents'}</div>${toc.map(([id,tx])=>`<a href="#" data-go="${id}">${esc(tx)}</a>`).join('')}</nav>`:'')+pages[cur]+bkBar(`${ms?'Halaman':'Page'} ${cur+1} / ${pages.length}`,cur>0,cur<pages.length-1);
+        const t=box.querySelector('.man-toc'); if(t) t.onclick=e=>{ const a=e.target.closest('[data-go]'); if(!a) return; e.preventDefault(); const k=pages.findIndex(x=>x.startsWith(`<h3 id="${a.dataset.go}"`)); if(k>=0){ cur=k; show(); pnl.scrollTop=0; } }; };
+      show(); pnl.__bkNav=async dir=>{ const j=cur+dir; if(j<0||j>=pages.length) return false; cur=j; show(); return true; };
+      pnl.querySelector('h2').textContent=ms?'Panduan pengguna':'User manual'; pnl.scrollTop=0; return; }
+    pnl.__bkNav=null;
     box.innerHTML=`<nav class="card man-toc"><div class="label" style="margin-top:0">${lg==='ms'?'Kandungan':'Contents'}</div>${toc.map(([id,tx])=>`<a href="#" data-go="${id}">${esc(tx)}</a>`).join('')}</nav>${h}`;
     box.querySelector('.man-toc').onclick=e=>{ const a=e.target.closest('[data-go]'); if(!a) return; e.preventDefault(); box.querySelector('#'+a.dataset.go)?.scrollIntoView({behavior:'smooth',block:'start'}); };
     const p=document.getElementById('manual'); p.querySelector('h2').textContent=lg==='ms'?'Panduan pengguna':'User manual'; p.scrollTop=0; };
   b.querySelector('#manLang').onclick=e=>{ const x=e.target.closest('button'); if(!x) return; b.querySelectorAll('#manLang button').forEach(y=>y.setAttribute('aria-pressed',y===x)); store.set('manLang',x.dataset.v); draw(x.dataset.v); };
-  draw(lang); }
+  draw(lang); pnl.__bkRe=()=>draw(store.get('manLang',lang)); }
 function topPanel(){ return [...document.querySelectorAll('.panel')].reverse().find(p=>!p.hidden); }
 
 /* ============================ PRAYER TIMES ============================
@@ -3944,18 +3986,20 @@ const HISN_QURAN={75:[[2,255,255]],71:[[2,255,255]],100:[[2,255,255]],101:[[2,28
 function hisnQuranTl(id){ const refs=HISN_QURAN[id]; if(!refs) return null; const d=TL.simple; if(!d){ tlLoad('simple'); return ''; }
   return refs.map(([su,a,b])=>`${S[su-1][1]} ${su}:${a}${b>a?'–'+b:''}: `+d[su-1].slice(a-1,b).map((t,k)=>`${t} (${a+k})`).join(' ')).join('\n\n'); }
 let duaRedraw=null;
-async function duaPanel(){ const b=openPanel('dua',"Du'a & Dhikr",`<p class="note">Loading Hisnul Muslim…</p>`);
+async function duaPanel(){ const b=openPanel('dua',"Du'a & Zikir",`<p class="note">Loading Hisnul Muslim…</p>`);
   let H; try{ H=await hisnLoad(); }catch(e){ b.innerHTML='<p class="note">Hisnul Muslim needs the internet the first time; after that it is kept on the phone.</p>'; return; }
   const pin=[1001,1002,28,1];   // morning zikir, evening zikir, before sleeping, on waking
   const byId=id=>H.chapters.find(c=>c.id===id);
   const row=c=>`<button class="tile wide" data-c="${c.id}" style="margin-bottom:8px;min-height:0;padding:12px 14px"><span style="flex:1"><b>${esc(c.en[0].toUpperCase()+c.en.slice(1))}</b><br><small>${c.items.length} doa</small></span><span class="ar" style="font-size:20px">${esc(c.ar)}</span></button>`;
-  b.innerHTML=`<input class="field" id="duaQ" type="search" placeholder="Search: sleep, travel, rain, masjid…" aria-label="Search doa" style="margin-bottom:4px">
+  b.innerHTML=`<input class="field" id="duaQ" type="search" placeholder="Search: sleep, rain… or Morning 10, Hisn 88" aria-label="Search doa" style="margin-bottom:4px">
    <div id="duaList"></div>
    <p class="note" style="font-size:12px">Hisn al-Muslim (Fortress of the Muslim) by Sa'id ibn Wahf al-Qahtani (${esc(wafTxt('qahtani').replace(/^[^,]*, /,''))}). Text, English translation, transliteration and audio from hisnmuslim.com; each entry's reference (with the grading where the book gives one) from the book's English edition on sunnah.com. The transliteration is approximate (AA = ع). A Malay translation is not yet available from an open source.</p>`;
   const q0=b.querySelector('#duaQ'); pinHead(b,[q0]);
   const list=b.querySelector('#duaList'), openCats=new Set(store.get('duaCats',[]));
   const draw=q=>{ q=(q||'').trim().toLowerCase(); const fav=new Set(DUA_FAV()); let cs=H.chapters;
-    if(q){ cs=cs.filter(c=>(c.en+' '+c.ar).toLowerCase().includes(q) || c.items.some(i=>(i.en||'').toLowerCase().includes(q))); list.innerHTML=cs.map(row).join('')||'<p class="note">Nothing found.</p>'; return; }
+    if(q){ const pr=duaPageRef(q); if(pr){ list.innerHTML=`<button class="tile wide" data-pg="${pr.c.id}:${pr.k}" style="margin-bottom:8px;min-height:0;padding:12px 14px"><span style="flex:1"><b>${esc(duaPgLbl(pr.c,pr.k))}</b><small> · Hisn al-Muslim ${esc(String(pr.c.items[pr.k].id))}</small><br><small>${esc(pr.c.en[0].toUpperCase()+pr.c.en.slice(1))}</small></span>›</button>`; }
+      else list.innerHTML='';
+      cs=cs.filter(c=>(c.en+' '+c.ar).toLowerCase().includes(q) || c.items.some(i=>(i.en||'').toLowerCase().includes(q))); list.innerHTML+=cs.map(row).join('')||(pr?'':'<p class="note">Nothing found.</p>'); return; }
     const top=pin.map(byId).filter(Boolean), bm=duaBmAll(), last=byId(store.get('duaLast',0));
     const bms=Object.entries(bm).map(([id,v])=>{ const c=byId(+id); return c&&{key:id,c:v.c,t:v.t,label:c.en[0].toUpperCase()+c.en.slice(1),note:!!noteGet('d:'+id)}; }).filter(Boolean).sort((x,y)=>y.t-x.t);
     list.innerHTML=`${last?`<button class="tile wide sr-cont" data-c="${last.id}"><span style="flex:1"><small>Continue reading</small><br><b>${esc(last.en[0].toUpperCase()+last.en.slice(1))}</b></span>›</button>`:''}${bmTopHtml('du',bms,false)}<div class="label">Daily</div>${top.map(row).join('')}<div class="label">All chapters</div>`+
@@ -3965,9 +4009,28 @@ async function duaPanel(){ const b=openPanel('dua',"Du'a & Dhikr",`<p class="not
   duaRedraw=()=>{ if(document.getElementById('dua')?.isConnected) draw(q0.value); };
   list.addEventListener('toggle',e=>{ const d=e.target.closest?.('.du-cat'); if(!d) return; d.open?openCats.add(+d.dataset.k):openCats.delete(+d.dataset.k); store.set('duaCats',[...openCats]); },true);
   document.getElementById('dua').__redraw=()=>{ if(!q0.value.trim()) draw(''); };
-  list.onclick=e=>{ if(bmTopClick(e,()=>draw(q0.value),k=>duaChapter(+k))) return; const t=e.target.closest('[data-c]'); if(t) duaChapter(+t.dataset.c); }; }
+  list.onclick=e=>{ if(bmTopClick(e,()=>draw(q0.value),k=>duaChapter(+k))) return; const pg=e.target.closest('[data-pg]'); if(pg){ const [ci,k]=pg.dataset.pg.split(':').map(Number); const P=document.getElementById('duaC'); if(P) P.__duaPg=null; duaChapter(ci,k); return; } const t=e.target.closest('[data-c]'); if(t) duaChapter(+t.dataset.c); };
+  q0.onkeydown=e=>{ if(e.key!=='Enter') return; const pr=duaPageRef(q0.value.trim().toLowerCase()); if(pr){ const P=document.getElementById('duaC'); if(P) P.__duaPg=null; duaChapter(pr.c.id,pr.k); } }; }
 async function duaOpen(id){ try{ await hisnLoad(); }catch(e){ toast('Hisnul Muslim needs the internet the first time'); return; } duaChapter(id); }
-function duaChapter(id){ const c=hisn.chapters.find(x=>x.id===id); if(!c) return;
+/* Page numbers (Azli, 6 Nov 2026): every du'a has a page number in its chapter (Morning 10, Evening 6, Chapter 28 · 3) and
+   keeps its own Hisn al-Muslim number. In Book mode one du'a is one page; after the last page comes the next chapter. */
+function duaPgName(c){ const ms=sL()==='ms'; return c.id===1001?(ms?'Pagi':'Morning'):c.id===1002?(ms?'Petang':'Evening'):(ms?'Bab ':'Chapter ')+c.id+' ·'; }
+function duaNextCh(c,dir){ if(c.virt) return null; const L=hisn.chapters.filter(x=>!x.virt), i=L.indexOf(c); return L[i+dir]||null; }
+/* "morning 10", "pagi 10", "evening 6" / "afternoon 6" / "petang 6", "hisn 88", "28 3" (chapter 28, page 3), "sleep 2". */
+function duaPageRef(q){ const m=q.match(/^(.*?)[\s:#.-]*(\d+)$/); if(!m) return null; let w=m[1].trim().replace(/\s+/g,' '), n=+m[2];
+  const L=hisn.chapters, byId=x=>L.find(c=>c.id===x);
+  if(/^(hisn|hisnul|hisn al-muslim|hisnul muslim|no|number|nombor)$/.test(w)){ for(const c of L){ if(c.virt) continue; const k=c.items.findIndex(i=>+i.id===n); if(k>=0) return {c,k}; } return null; }
+  let c=null; const sub=w.match(/^(\d+)$/);
+  if(/^(morning|pagi|zikir pagi|dhikr morning|morning zikir|subuh)$/.test(w)) c=byId(1001);
+  else if(/^(evening|afternoon|petang|zikir petang|evening zikir|asar|asr)$/.test(w)) c=byId(1002);
+  else if(sub) c=byId(+sub[1]);
+  else if(!w) return null;
+  else c=L.filter(x=>!x.virt&&x.en.toLowerCase().includes(w)).sort((a,b)=>a.en.length-b.en.length)[0]||null;
+  if(!c||n<1||n>c.items.length) return null; return {c,k:n-1}; }
+function duaPgLbl(c,k){ return `${duaPgName(c)} ${k+1}`; }
+function duaChapter(id,pg){ const c=hisn.chapters.find(x=>x.id===id); if(!c) return;
+  const pnl0=document.getElementById('duaC'), bk=bkOn(); if(pg==null) pg=(pnl0&&pnl0.__duaId===id&&pnl0.__duaPg!=null)?pnl0.__duaPg:(bk?0:null);
+  if(pg!=null){ pg=Math.max(0,Math.min(c.items.length-1, pg===-1?c.items.length-1:pg)); }
   if(c.items.some(it=>HISN_QURAN[+it.id]) && !TL.simple){ tlLoad('simple').then(()=>{ if(document.getElementById('duaC')?.hidden===false && TL.simple) duaChapter(id); }); }
   const showTl=store.get('duaTl',true), showTr=store.get('duaTr',true), bmc=(duaBmAll()[id]||{}).c, nt=noteGet('d:'+id); if(!c.virt||true) store.set('duaLast',id);
   const b=openPanel('duaC',c.en[0].toUpperCase()+c.en.slice(1),`
@@ -3976,7 +4039,7 @@ function duaChapter(id){ const c=hisn.chapters.find(x=>x.id===id); if(!c) return
    <div style="font-family:var(--ar);font-size:24px;text-align:center;color:var(--gold-hi);margin:4px 0 0">${esc(c.ar)}</div></div>
    ${nt?`<div class="kt-note" id="duNt" dir="auto">${esc(nt.t)}</div>`:''}
    ${c.virt?`<p class="note" style="font-size:12px">From Hisn al-Muslim chapter 27 (morning and evening). ${id===1001?'Entries the book gives for the evening only are left out.':'Entries the book gives for the morning only are left out, and the evening wording is used where the book gives one.'}</p>`:''}
-   ${c.items.map((it,k)=>`<div class="card" data-i="${k}">
+   ${c.items.map((it,k)=>bk&&k!==pg?'':`<div class="card" data-i="${k}"><div class="du-pg">${esc(duaPgLbl(c,k))} <small>· Hisn al-Muslim ${esc(String(it.id))}</small></div>
      <div dir="rtl" lang="ar" style="font-family:var(--ar);font-size:calc(var(--arsize) * .9);line-height:2.05;white-space:pre-wrap">${esc(it.ar)}</div>
      ${showTl?(()=>{ const q=hisnQuranTl(+it.id); if(q!=null) return `${it.tl?`<p class="note" style="margin:8px 0 0">${esc(it.tl)}</p>`:''}<p style="font-style:italic;color:var(--gold-hi);margin:6px 0 0;line-height:1.6;white-space:pre-wrap">${q?esc(q):'Loading transliteration…'}</p><p class="note" style="font-size:12px;margin:4px 0 0">Transliteration of these ayat from Quran.com (approximate).</p>`;
         return it.tl?`<p style="font-style:italic;color:var(--gold-hi);margin:8px 0 0;line-height:1.6">${esc(it.tl)}</p>`:`<p class="note" style="font-size:12px;margin:8px 0 0">No transliteration in the source for this entry: it tells what to do or narrates a hadith, rather than giving words to say.</p>`; })():''}
@@ -3985,8 +4048,12 @@ function duaChapter(id){ const c=hisn.chapters.find(x=>x.id===id); if(!c) return
      <div class="row2" style="gap:8px;margin-top:10px;align-items:center">
       ${it.audio?`<button class="pill" data-play="${k}">${ic('play')}Listen</button>`:''}
       ${it.rep>1?`<button class="pill primary" data-count="${k}" data-n="0" style="flex:0 1 auto">0 / ${it.rep}</button>`:''}
-      <span class="note" style="margin-left:auto">${it.rep>1?`Read ${it.rep} times`:''}</span></div></div>`).join('')}`);
+      <span class="note" style="margin-left:auto">${it.rep>1?`Read ${it.rep} times`:''}</span></div></div>`).join('')}${bk?bkBar(`${duaPgLbl(c,pg)} / ${c.items.length}`, pg>0||!!duaNextCh(c,-1), pg<c.items.length-1||!!duaNextCh(c,1)):''}`);
   pinHead(b,[b.querySelector('.du-ctl')]);
+  { const P=b.closest('.panel'); P.__duaId=id; P.__duaPg=bk?pg:null;
+    P.__bkNav=async dir=>{ const j=pg+dir; if(j>=0&&j<c.items.length){ P.__duaPg=j; duaChapter(id,j); return true; } const t=duaNextCh(c,dir); if(!t) return false; P.__duaPg=null; duaChapter(t.id,dir>0?0:-1); return true; };
+    P.__bkRe=()=>{ P.__duaPg=null; duaChapter(id,0); };
+    if(!bk&&pg!=null) requestAnimationFrame(()=>{ const el=b.querySelector(`.card[data-i="${pg}"]`), hb=P.querySelector('.kt-head')?.getBoundingClientRect().bottom||0; if(el){ P.scrollTop+=el.getBoundingClientRect().top-hb-8; el.classList.add('kt-hit'); } }); }
   const seg=(sid,key)=>{ b.closest('.panel').querySelector('#'+sid).onclick=e=>{ const x=e.target.closest('button'); if(!x) return; store.set(key,x.dataset.v==='true'); const pn=b.closest('.panel'), y=pn.scrollTop; duaChapter(id); pn.scrollTop=y; }; };
   seg('duTl','duaTl'); seg('duTr','duaTr');
   const fb=b.closest('.panel').querySelector('#duFav');
@@ -4182,6 +4249,7 @@ async function sirahEvent(id){ const D=sirahD; const i=D.events.findIndex(e=>e.i
     ${ph?`<div class="label">${ms?'Kisah popular: semak statusnya':'Popular stories: check their status'}</div>${ph}`:''}
     <div class="row2" style="gap:8px;margin-top:16px">${prev?`<button class="pill" data-go="${prev.id}">‹ ${esc(sT(prev.title))}</button>`:''}<span style="flex:1"></span>${next?`<button class="pill" data-go="${next.id}">${esc(sT(next.title))} ›</button>`:''}</div>`);
   b.closest('.panel').scrollTop=0;
+  b.closest('.panel').__bkNav=async dir=>{ const t=D.events[i+dir]; if(!t) return false; await sirahEvent(t.id); return true; };
   const back=()=>{ sirahOpen(id); }, label=sT(e.title);
   b.onclick=ev=>{ const q=ev.target.closest('[data-q]'); if(q){ const [su,a]=q.dataset.q.split(':').map(Number); const g=A.findIndex(x=>x[0]===su&&x[1]===a); document.querySelectorAll('.panel').forEach(p=>p.hidden=true); hideHome(); goAyah(g); navRetSet('reader',back,label); return; }
     const h=ev.target.closest('[data-h]'); if(h){ const [bk,n,sn]=h.dataset.h.split(':'); window.__relRet={go:back,label}; sirahBooks().then(()=>ktRelSheet(bk,+n,null,null,null,+sn)); return; }
@@ -4545,6 +4613,7 @@ async function solatStep(id,kind='solat'){ const K=SLK[kind]; const D=await sola
     ${dd?`<div class="label">${ms?'Perbezaan pendapat ulama':'Where scholars differ'}</div>${dd}`:''}
     <div class="row2" style="gap:8px;margin-top:16px">${prev?`<button class="pill" data-go="${prev.id}">‹ ${esc(sT(prev.t))}</button>`:''}<span style="flex:1"></span>${next?`<button class="pill" data-go="${next.id}">${esc(sT(next.t))} ›</button>`:''}</div>`);
   b.closest('.panel').scrollTop=0;
+  b.closest('.panel').__bkNav=async dir=>{ const t=D.steps[i+dir]; if(!t) return false; await solatStep(t.id,kind); return true; };
   const back=()=>{ solatOpen(id,kind); }, label=sT(e.t);
   b.onclick=ev=>{ const h=ev.target.closest('[data-h]'); if(h){ const [bk,n,sn]=h.dataset.h.split(':'); window.__relRet={go:back,label}; sirahBooks().then(()=>ktRelSheet(bk,+n,null,null,null,+sn)); return; }
     const go=ev.target.closest('[data-go]'); if(go){ solatStep(go.dataset.go,kind); return; }
@@ -4602,53 +4671,55 @@ document.addEventListener('selectionchange',()=>{ const sel=document.getSelectio
   lkBtn.dataset.w=t; lkBtn.textContent=(sL()==='ms'?'Cari makna: ':'Meaning: ')+(t.length>18?t.slice(0,18)+'…':t); });
 function lookupSheet(w){ return window.__meaning(w); }
 
-/* Turning pages in the books (Azli, 6 Nov 2026): Hadith, Shama'il, Du'a, Sirah, Prophet's Prayer, Friday Prayer and the user
-   guide can scroll as before, or work like a book: swipe sideways (or tap the left or right edge) to turn a screen, while
-   long text still scrolls up and down (one book mode since v1.0.0.96, Azli 6 Nov 2026). The page still scrolls underneath, so loading more hadith and remembering the last read work as before.
-   Kept on this device only (store key bookTurn): a Boox may turn pages while the phone scrolls. No slide on a Boox (e-ink). */
-const BK_PANELS=new Set(['ktS','ktE','ktR','duaC','sirahE','solatE','jumuahE','manual']);
+/* Turning pages in the books (Azli, 6 Nov 2026). Two ways to read Hadith, Shama'il, Du'a & Zikir, Sirah, Prophet's Prayer,
+   Friday Prayer and the User Guide: Scroll (the whole kitab or chapter as one continuous list, as before) or Book: one hadith,
+   du'a, event, step or guide section per page; swipe sideways (or tap the left or right edge, or ‹ ›) for the next or previous
+   page; a long page scrolls up and down. At the end of a kitab or chapter the next page is the first of the next one.
+   Each page sets its panel's __bkNav(dir) (true when it moved). Kept on this device only (store key bookTurn); no slide on a Boox. */
+const BK_PANELS=new Set(['ktS','duaC','sirahE','solatE','jumuahE','manual']);
 const BK_IC='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.5C10 5 7 4.6 3.5 5v13c3.5-.4 6.5 0 8.5 1.5 2-1.5 5-1.9 8.5-1.5V5C17 4.6 14 5 12 6.5z"/><path d="M12 6.5v13"/></svg>';
 let BK_FX=true; try{ BK_FX=!window.AndroidExtra?.booxAvailable?.(); }catch(e){}
-const bkMode=()=>{ const m=store.get('bookTurn','scroll'); return m==='h'||m==='v'?'h':'scroll'; };   // one book mode since v1.0.0.96 (Azli): an old 'v' choice becomes it
-function bkApply(p){ p.classList.toggle('bk-h',bkMode()==='h'); }
-function bkStep(p){ const r=p.getBoundingClientRect(); let top=r.top; const head=p.classList.contains('hd-hide')?null:p.querySelector('.kt-head');
-  if(head){ const hb=head.getBoundingClientRect().bottom; if(hb>top&&hb<r.bottom-120) top=hb; }
-  return Math.max(120, Math.round(r.bottom-top-30)); }   // 30 px of the last lines show again at the top of the next page
-function bkInd(p,to){ const step=bkStep(p), max=Math.max(0,p.scrollHeight-p.clientHeight), N=Math.ceil(max/step)+1, n=to>=max-2?N:Math.min(N,Math.round(to/step)+1);
-  let el=p.querySelector('.bk-ind'); if(!el){ el=document.createElement('div'); el.className='bk-ind'; p.appendChild(el); }
-  el.textContent=(sL()==='ms'?'Halaman ':'Page ')+n+' / '+N; el.classList.add('on'); clearTimeout(el.__t); el.__t=setTimeout(()=>el.classList.remove('on'),1400); }
-function bkTurn(p,dir){ const max=Math.max(0,p.scrollHeight-p.clientHeight), cur=p.scrollTop, stack=p.__bkStack||(p.__bkStack=[]);
-  if(dir>0&&cur>=max-2){ bkInd(p,cur); return; } if(dir<0&&cur<=1) return;
-  let to; if(dir>0){ stack.push(cur); to=Math.min(max,cur+bkStep(p)); }
-  else { let v; while(stack.length&&(v=stack.pop())>=cur-2){} to=(v!=null&&v<cur-2)?v:Math.max(0,cur-bkStep(p)); }
-  bkInd(p,to); const m=bkMode(), inn=p.querySelector('.panel-in');
-  if(!BK_FX||!inn){ p.scrollTop=to; return; }
-  const w=dir>0?-1:1; inn.style.transition='transform .14s ease-in,opacity .14s ease-in'; inn.style.transform=`translateX(${w*28}%)`; inn.style.opacity='0';
-  setTimeout(()=>{ p.scrollTop=to; inn.style.transition='none'; inn.style.transform=`translateX(${-w*28}%)`;
-    requestAnimationFrame(()=>requestAnimationFrame(()=>{ inn.style.transition='transform .16s ease-out,opacity .16s ease-out'; inn.style.transform=''; inn.style.opacity='';
-      setTimeout(()=>{ inn.style.transition=''; },200); })); },140); }
+const bkMode=()=>{ const m=store.get('bookTurn','scroll'); return m==='h'||m==='v'?'h':'scroll'; };   // an old 'v' choice (v1.0.0.95) becomes Book
+const bkOn=()=>bkMode()==='h';
+function bkApply(p){ p.classList.toggle('bk-h',bkOn()); }
+/* The ‹ label › strip at the foot of a page in Book mode. */
+function bkBar(label,hasPrev,hasNext){ return `<div class="bk-bar"><button class="pill" data-bkp${hasPrev?'':' disabled'} aria-label="Previous page">‹</button><span>${esc(label)}</span><button class="pill" data-bkn${hasNext?'':' disabled'} aria-label="Next page">›</button></div>`; }
+let bkBusy=false;
+async function bkGo(p,dir){ if(bkBusy||!p||!p.__bkNav) return; bkBusy=true;
+  try{ const inn=p.querySelector('.panel-in'), w=dir>0?-1:1, fx=BK_FX&&inn;
+    if(fx){ inn.style.transition='transform .13s ease-in,opacity .13s ease-in'; inn.style.transform=`translateX(${w*26}%)`; inn.style.opacity='0'; await new Promise(r=>setTimeout(r,130)); }
+    const moved=await p.__bkNav(dir); const n=p.querySelector('.panel-in');
+    if(!moved){ if(n){ n.style.transition='transform .15s ease-out,opacity .15s'; n.style.transform=''; n.style.opacity=''; } toast(sL()==='ms'?(dir>0?'Halaman terakhir':'Halaman pertama'):(dir>0?'Last page':'First page')); return; }
+    p.scrollTop=0;
+    if(fx&&n){ n.style.transition='none'; n.style.transform=`translateX(${-w*26}%)`; n.style.opacity='0';
+      await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r))); n.style.transition='transform .16s ease-out,opacity .16s ease-out'; n.style.transform=''; n.style.opacity='';
+      setTimeout(()=>{ n.style.transition=''; },200); }
+  } finally { bkBusy=false; } }
 function bkHScroll(el,p){ for(;el&&el!==p;el=el.parentElement){ if(el.scrollWidth>el.clientWidth+2){ const o=getComputedStyle(el).overflowX; if(o==='auto'||o==='scroll') return true; } } return false; }
 function bkBind(p){ if(p.__bk) return; p.__bk=1; let sx=0,sy=0,ok=false;
-  p.addEventListener('touchstart',e=>{ ok=false; const m=bkMode(); if(m==='scroll'||e.touches.length!==1) return; if(e.target.closest('input,textarea,select,[contenteditable="true"]')) return;
-    if(m==='h'&&bkHScroll(e.target,p)) return; sx=e.touches[0].clientX; sy=e.touches[0].clientY; ok=true; },{passive:true});
+  p.addEventListener('touchstart',e=>{ ok=false; if(!bkOn()||e.touches.length!==1) return; if(e.target.closest('input,textarea,select,[contenteditable="true"]')||bkHScroll(e.target,p)) return;
+    sx=e.touches[0].clientX; sy=e.touches[0].clientY; ok=true; },{passive:true});
   p.addEventListener('touchmove',e=>{ if(e.touches.length!==1) ok=false; },{passive:true});
   p.addEventListener('touchend',e=>{ if(!ok) return; ok=false; if(String(document.getSelection()||'').trim()) return;
-    const t=e.changedTouches[0], dx=t.clientX-sx, dy=t.clientY-sy, m=bkMode();
-    if(m==='h'&&Math.abs(dx)>45&&Math.abs(dx)>1.3*Math.abs(dy)){ p.__bkSw=Date.now(); bkTurn(p,dx<0?1:-1); } },{passive:true});
-  p.addEventListener('touchcancel',()=>{ ok=false; },{passive:true}); }
+    const t=e.changedTouches[0], dx=t.clientX-sx, dy=t.clientY-sy;
+    if(Math.abs(dx)>45&&Math.abs(dx)>1.3*Math.abs(dy)){ p.__bkSw=Date.now(); bkGo(p,dx<0?1:-1); } },{passive:true});
+  p.addEventListener('touchcancel',()=>{ ok=false; },{passive:true});
+  p.addEventListener('click',e=>{ const x=e.target.closest('[data-bkp],[data-bkn]'); if(!x) return; e.stopPropagation(); bkGo(p,x.hasAttribute('data-bkn')?1:-1); }); }
 function bkSheet(){ const ms=sL()==='ms', cur=bkMode();
-  openSheet(ms?'Membalik halaman':'Turning pages', `<div class="seg" id="bkSeg" style="flex-wrap:wrap">${[['scroll',ms?'Tatal (berterusan)':'Scroll (continuous)'],['h',ms?'Buku: leret ke sisi untuk selak, tatal atas/bawah untuk baca':'Book: swipe sideways to turn, scroll up/down to read']].map(([v,l])=>`<button data-v="${v}" aria-pressed="${cur===v}">${l}</button>`).join('')}</div>
-   <p class="note">${ms?'Untuk Hadis, Syamail, Doa & zikir, Sirah, Sifat Solat, Solat Jumaat dan Panduan Pengguna. Buku: leret ke kiri atau kanan (atau ketik tepi kiri atau kanan skrin) untuk satu skrin ke hadapan atau ke belakang; teks yang panjang masih boleh ditatal ke atas dan ke bawah. Disimpan pada peranti ini sahaja. Mushaf Al-Qur\'an mempunyai pilihannya sendiri dalam Tetapan.':'For Hadith, Shama\'il, Du\'a & Dhikr, Sirah, the Prophet\'s ﷺ Prayer, Friday Prayer and the User Guide. Book: swipe left or right (or tap the left or right edge of the screen) to go one screen forward or back; long text still scrolls up and down. Kept on this device only. The Qur\'an mushaf has its own setting in Settings.'}</p>`);
-  sheetB.querySelector('#bkSeg').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; store.set('bookTurn',b.dataset.v);
-    sheetB.querySelectorAll('#bkSeg button').forEach(x=>x.setAttribute('aria-pressed',x===b)); document.querySelectorAll('.panel').forEach(x=>{ if(x.__bk){ bkApply(x); x.__bkStack=[]; } }); }; }
-/* Edge taps turn the page in sideways mode; buttons, links and text being selected are left alone. */
-document.addEventListener('click',e=>{ const pnl=e.target.closest('.panel'); if(!pnl||pnl.hidden||!pnl.__bk||bkMode()!=='h') return;
+  openSheet(ms?'Membalik halaman':'Turning pages', `<div class="seg" id="bkSeg" style="flex-wrap:wrap">${[['scroll',ms?'Tatal (berterusan)':'Scroll (continuous)'],['h',ms?'Buku (halaman demi halaman)':'Book (page by page)']].map(([v,l])=>`<button data-v="${v}" aria-pressed="${cur===v}">${l}</button>`).join('')}</div>
+   <p class="note"><b>${ms?'Tatal':'Scroll'}</b>: ${ms?'seluruh kitab atau bab dalam satu senarai panjang.':'the whole kitab or chapter in one long list.'}<br><b>${ms?'Buku':'Book'}</b>: ${ms?'satu hadis, doa, peristiwa Sirah, langkah solat atau bahagian panduan bagi setiap halaman. Leret ke kiri atau kanan (atau ketik tepi kiri atau kanan skrin, atau ‹ › di bawah) untuk halaman seterusnya atau sebelumnya; halaman yang panjang ditatal ke atas dan ke bawah. Selepas hadis terakhir sesuatu kitab, halaman seterusnya ialah hadis pertama kitab berikutnya.':'one hadith, du\'a, Sirah event, prayer step or guide section per page. Swipe left or right (or tap the left or right edge of the screen, or ‹ › at the bottom) for the next or previous page; a long page scrolls up and down. After the last hadith of a kitab, the next page is the first hadith of the next kitab.'}</p>
+   <p class="note">${ms?'Untuk Hadis, Syamail, Doa & zikir, Sirah, Sifat Solat, Solat Jumaat dan Panduan Pengguna. Disimpan pada peranti ini sahaja. Mushaf Al-Qur\'an mempunyai pilihannya sendiri dalam Tetapan.':'For Hadith, Shama\'il, Du\'a & Zikir, Sirah, the Prophet\'s ﷺ Prayer, Friday Prayer and the User Guide. Kept on this device only. The Qur\'an mushaf has its own setting in Settings.'}</p>`);
+  sheetB.querySelector('#bkSeg').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; const was=bkMode(); store.set('bookTurn',b.dataset.v);
+    sheetB.querySelectorAll('#bkSeg button').forEach(x=>x.setAttribute('aria-pressed',x===b));
+    document.querySelectorAll('.panel').forEach(x=>{ if(x.__bk){ bkApply(x); if(was!==bkMode()&&!x.hidden&&x.__bkRe) try{ x.__bkRe(); }catch(err){} } }); }; }
+/* Edge taps turn the page in Book mode; buttons, links and text being selected are left alone. */
+document.addEventListener('click',e=>{ const pnl=e.target.closest('.panel'); if(!pnl||pnl.hidden||!pnl.__bk||!bkOn()||!pnl.__bkNav) return;
   if(Date.now()-(pnl.__bkSw||0)<500){ e.stopImmediatePropagation(); return; }
   if(e.target.closest('button,a,input,select,textarea,summary,label,.kt-head,[data-q],[data-h],[data-e],[data-c],[role=button],[contenteditable="true"]')) return;
   if(String(document.getSelection()||'').trim()) return; const w=innerWidth, x=e.clientX;
-  if(x<w*.22||x>w*.78){ e.stopImmediatePropagation(); bkTurn(pnl, x>w*.5?1:-1); } },true);
-document.addEventListener('keydown',e=>{ const p=topPanel(); if(!p||!p.__bk||bkMode()==='scroll'||document.querySelector('.sheet.open')) return; if(e.target.closest?.('input,textarea,select,[contenteditable="true"]')) return;
-  const nx=['ArrowRight'], pv=['ArrowLeft']; if(nx.includes(e.key)){ e.preventDefault(); bkTurn(p,1); } else if(pv.includes(e.key)){ e.preventDefault(); bkTurn(p,-1); } });
+  if(x<w*.18||x>w*.82){ e.stopImmediatePropagation(); bkGo(pnl, x>w*.5?1:-1); } },true);
+document.addEventListener('keydown',e=>{ const p=topPanel(); if(!p||!p.__bk||!bkOn()||!p.__bkNav||document.querySelector('.sheet.open')) return; if(e.target.closest?.('input,textarea,select,[contenteditable="true"]')) return;
+  if(e.key==='ArrowRight'){ e.preventDefault(); bkGo(p,1); } else if(e.key==='ArrowLeft'){ e.preventDefault(); bkGo(p,-1); } });
 /* Tap once on a page to hide or show its fixed top part (Doa & zikir, Hadith, Sirah: Azli, 15 Oct 2026). Taps on buttons,
    links, fields and while selecting text do not count. */
 document.addEventListener('click',e=>{ const pnl=e.target.closest('.panel'); if(!pnl||pnl.hidden) return; const head=pnl.querySelector('.kt-head'); if(!head) return;

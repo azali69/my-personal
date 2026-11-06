@@ -43,7 +43,7 @@ Return to Home from anywhere with the **house button** (top left of the reading 
 | Memorisation (Hafazan) | The Hafazan box (section 5) |
 | Listen & Repeat | The reciter reads, you repeat and get checked (section 6) |
 | Bookmarks | All your bookmarks in tabs: Qur'an, Hadith, Sirah, Doa, Sifat Solat, Jumaat. Opens over Home; the Qur'an opens only when you choose an ayah |
-| Du'a & Dhikr | Hisnul Muslim (section 8) |
+| Du'a & Zikir | Hisnul Muslim (section 8) |
 | Hadith | The six books (Kutub as-Sittah) and the Muwatta of Imam Malik, with gradings (section 8) |
 | Shama'il | Asy-Syama'il al-Muhammadiyyah of at-Tirmidhi, on its own tile (also the eighth book in Hadith) (section 8) |
 | Seerah | Sirah: the life of the Prophet ﷺ, with Qur'an and hadith references (section 8) |
@@ -90,7 +90,7 @@ Return to Home from anywhere with the **house button** (top left of the reading 
 - Settings → **Turning pages** → **Scroll (continuous)**: the pages follow one another as you scroll down instead (swiping then does nothing; ‹ › still jump a page).
 - Settings → **Screen while reading the Qur'an** → **Keep screen on**: the screen does not turn off while a mushaf page is showing; it sleeps as usual on Home and the other pages. Uses more battery.
 - **Tap** the page: hide or show the bars.
-- In Hadith, Shama'il, Du'a & Dhikr, Sirah, Prophet's ﷺ Prayer, Friday Prayer and this guide, the **book icon** at the top chooses **Scroll** or **Book**. In Book, swipe left or right (or tap the left or right edge) to go one screen forward or back, and scroll up and down as usual for long text. The last lines of the screen show again at the top so nothing is missed, and *Page n / N* shows briefly at the bottom.
+- In Hadith, Shama'il, Du'a & Zikir, Sirah, Prophet's ﷺ Prayer, Friday Prayer and this guide, the **book icon** at the top chooses **Scroll (continuous)** or **Book (page by page)**. In Book, each page is one hadith, one du'a, one Sirah event, one prayer step or one section of this guide: swipe left or right (or tap the left or right edge, or ‹ › at the bottom) for the next or previous page, and scroll up and down when a page is long. After the last hadith of a kitab comes the first hadith of the next kitab.
 - **Long-press an ayah** and let go: the **ayah menu**.
 - **Long-press a word, keep holding and drag** to the last word: select words. A bar appears with **My ruku'**, **My blocks**, **Erase**, **Hafazan**, **Listen** and **Copy**.
 - **Tap once** anywhere on the page: show or hide the bars. With Settings → **Tap a word twice: meaning and sound → On**, **tap a word twice** quickly to see its meaning and hear it (section 7); tap twice again, or tap outside, to close it.
@@ -201,9 +201,10 @@ All open from the **ayah menu**; they need the internet once per surah.
 
 **Doa & zikir (Hisnul Muslim)**
 
-1. Home → **Du'a & Dhikr**. **Morning zikir**, **Evening zikir**, before sleeping and on waking are at the top under **Daily**; your saved chapters are under **Saved**; then **All chapters**, grouped by topic (e.g. **Prayer (solat)** holds every part of the prayer, **After prayer** the zikir after it). Tap a topic to open or close it. Search finds a chapter by topic.
+1. Home → **Du'a & Zikir**. **Morning zikir**, **Evening zikir**, before sleeping and on waking are at the top under **Daily**; your saved chapters are under **Saved**; then **All chapters**, grouped by topic (e.g. **Prayer (solat)** holds every part of the prayer, **After prayer** the zikir after it). Tap a topic to open or close it. Search finds a chapter by topic.
 2. **Morning zikir** and **Evening zikir** are the book's chapter of morning and evening remembrance as two sets: what the book gives for the morning only is only in the morning set, what it gives for the evening only is only in the evening set, and the evening set uses the evening wording (أمسينا، أمسيت…) where the book gives one. Entries with the evening wording have no Listen button, as the recording is of the morning wording.
 3. Each doa shows Arabic, transliteration and English. **Listen** plays it; the **0 / 3** counter counts repetitions.
+   - Each du'a has a **page number** in its chapter and its **Hisn al-Muslim number**, e.g. *Morning 10 · Hisn al-Muslim 88*. In the search box type **morning 10** (or pagi 10), **evening 6** (or afternoon 6, petang 6), **hisn 88**, a chapter number and page (**28 3**) or a chapter word and page (**sleep 2**) to open that page.
 4. **Source** under each doa: tap it for the reference given in the book (e.g. "Al-Bukhari …; Muslim …") with a link to that entry on sunnah.com. Its first line sums up the grading from that reference: cited from Sahih al-Bukhari / Muslim; graded sahih or hasan by the scholars named; authentic as the words of a Companion; or no grading given in the book.
 5. The title and the on/off buttons stay at the top while you scroll. Each chapter has **Bookmark** (five colours, as in Hadith), **Note** and **Copy**. **Continue reading** and your **Bookmarks** (tick **Show**; filter by colour) are at the top of Doa & zikir, the same layout as Hadith. Chapters saved in the older version became gold bookmarks.
 
@@ -212,6 +213,7 @@ All open from the **ayah menu**; they need the internet once per surah.
 1. Home → **Hadith**. Tick what to show, **Arabic**, **Bahasa Indonesia** and/or **English** (at least one; the same boxes are at the top of each kitab), then a book: Sahih al-Bukhari, Sahih Muslim, Sunan Abi Dawud, Jami' at-Tirmidhi, Sunan an-Nasa'i, Sunan Ibn Majah or Muwatta Malik.
 2. Open a kitab to read its hadith: Arabic with harakat, then the translation. More hadith load as you scroll.
 3. **Search all eight books** (at the top of the Hadith page) looks through every book at once, in Arabic, English or Indonesian; the first time it downloads each book (about 80 MB in all, Wi-Fi recommended). **Hadith number** + **Go** jumps to a hadith. **Search** looks through the whole book in Arabic, English or Indonesian (the first search downloads the book).
+   - To open a hadith by its number, type the book and number in either search box: **bukhari 10**, **muslim 8a**, **abu dawud 5**, **tirmidhi 3**, **nasai 12**, **ibn majah 4**, **muwatta 7**, **shamail 2** (full names such as *Sahih al-Bukhari 10* work too). Each book keeps its own standard numbering, the one used by sunnah.com and in citations; on each hadith the large number is that standard number, and *in-book no.* is only its place in the kitab.
 4. Gradings appear above each hadith of the four Sunan: al-Albani, Shu'ayb al-Arna'ut, Zubair 'Ali Za'i, and for at-Tirmidhi his own verdict in Arabic. Green is sahih, blue hasan, orange da'if, red very weak or fabricated. Bukhari and Muslim are sahih by the agreement of the scholars, so they have no per-hadith grade. The Muwatta has one grading, Salim al-Hilali's; Mawquf means the words of a Companion and Maqtu' the words of a Successor, not of the Prophet ﷺ. The Muwatta is always shown in full (with its chain).
 5. The copy button copies the Arabic, the translation, the reference and the gradings.
 6. Each kitab needs the internet the first time; after that it is kept on the phone.
@@ -363,7 +365,7 @@ All open from the **ayah menu**; they need the internet once per surah.
 | Uthmani text page | Fit page or Larger text |
 | Text size on this device → All text and buttons | Makes the whole app bigger (writing, buttons, icons), 100% to 250% in 5% steps. 110% to 125% suits most phones; more for large or e-ink screens such as Boox. Kept on this device only, so phone and tablet can differ. A preview shows the result. The fitted mushaf page fills the screen by itself |
 | Text size on this device → Arabic text | Size of Arabic outside the fitted mushaf page: translation view, Hafazan, Larger text, hadith, du'a, Sirah, dictionary (22 to 62 px). Kept on this device only |
-| Turning pages in the other books | Hadith, Shama'il, Du'a & Dhikr, Sirah, Prophet's ﷺ Prayer, Friday Prayer and the User Guide: **Scroll (continuous)** or **Book**: swipe sideways (or tap the left or right edge) to turn a screen, scroll up and down to read long text. Also from the book icon at the top of those pages. Kept on this device only |
+| Turning pages in the other books | **Scroll (continuous)** or **Book (page by page)** for Hadith, Shama'il, Du'a & Zikir, Sirah, Prophet's ﷺ Prayer, Friday Prayer and the User Guide (see section 3). Also from the book icon at the top of those pages. Kept on this device only |
 | Microphone (3 settings) | Quiet voice, surroundings, Bluetooth headset |
 | Waqaf & ibtida' blocks | Block shading (section 4) |
 | Back up or restore | Backup file of settings, bookmarks and notes (below) |
