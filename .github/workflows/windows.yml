@@ -67,9 +67,7 @@ jobs:
           export WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS="--remote-debugging-port=9222 --remote-allow-origins=*"
           SETUP="./My-Personal-Quran-v${V}-Windows-setup.exe"
           echo "--- WebView2 runtime on this machine"
-          reg query "HKLM\\SOFTWARE\\WOW6432Node\\Microsoft\\EdgeUpdate\\Clients\\{F3017226-FE2A-4295-8BDF-00C3A9A7E4C5}" //v pv 2>&1 | tail -2 || true
-          reg query "HKCU\\Software\\Microsoft\\EdgeUpdate\\Clients\\{F3017226-FE2A-4295-8BDF-00C3A9A7E4C5}" //v pv 2>&1 | tail -2 || true
-          echo "--- install"
+                              echo "--- install"
           cp "$SETUP" qsetup.exe
           ("./qsetup.exe" /S > setup.log 2>&1 &) ; INST_OK=0
           for i in $(seq 1 40); do sleep 3; if ! tasklist | grep -qi "qsetup"; then INST_OK=1; echo "installer finished after ~$((i*3))s"; break; fi; done
@@ -87,6 +85,9 @@ jobs:
           EXE=$(find "$LOCALAPPDATA" -maxdepth 3 -name 'my-personal-quran.exe' | head -1); echo "installed: $EXE"; test -n "$EXE"
           MARK="ci-$(date +%s)"
           echo "--- first launch"; ("$EXE" > app1.log 2>&1 &) ; sleep 6; tasklist | grep -i my-personal-quran || echo "(app is not running)"
+          echo "--- webview processes and ports"; sleep 4
+          powershell -NoProfile -Command "Get-CimInstance Win32_Process | Where-Object { \$_.Name -match 'my-personal|msedgewebview2' } | Select-Object ProcessId,Name,@{n='Cmd';e={\$_.CommandLine.Substring(0,[Math]::Min(\$_.CommandLine.Length,420))}} | Format-List | Out-String -Width 500" | head -60
+          netstat -ano | grep -E "LISTENING" | grep -E "9222|127.0.0.1" | head; cat app1.log | head -20
           timeout 240 node desktop/ci-smoke.mjs 1 shots "$MARK"; R1=$?
           echo "--- install the same version again while the app is open (an update)"
           ("./qsetup.exe" /S > setup2.log 2>&1 &) ; for i in $(seq 1 40); do sleep 3; if ! tasklist | grep -qi "qsetup"; then echo "installer finished after ~$((i*3))s"; break; fi; done
