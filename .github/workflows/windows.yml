@@ -1,0 +1,89 @@
+name: Build Windows app
+# My Personal Qur'an for Windows: index.html in a WebView2 window (Tauri), as a per-user installer (no admin rights needed).
+# Same version as the APK: after "Build Android APK" succeeds, the installer is added to that same release (v<major>.<minor>.<patch>.<build>).
+# Changes under desktop/ build and test it without making a release.
+on:
+  workflow_run:
+    workflows: ['Build Android APK']
+    types: [completed]
+  push:
+    branches: [main]
+    paths: ['desktop/**', '.github/workflows/windows.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  windows:
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: bash
+    env:
+      RUN_NO: ${{ github.event.workflow_run.run_number || github.run_number }}
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: desktop/src-tauri
+      - name: Version
+        run: |
+          BASE=$(tr -d '[:space:]' < VERSION)
+          echo "BASE=$BASE" >> $GITHUB_ENV
+          echo "V=$BASE.$RUN_NO" >> $GITHUB_ENV
+      - name: Put the web app in the window
+        run: |
+          mkdir -p desktop/www
+          cp index.html icon-192.png icon-512.png manifest.webmanifest desktop/www/
+          grep -o 'id="whereS">v[0-9.]*' index.html
+      - name: Install the build tool
+        working-directory: desktop
+        run: npm install --no-audit --no-fund
+      - name: Build the Windows installer
+        working-directory: desktop/src-tauri
+        run: node ../node_modules/@tauri-apps/cli/tauri.js build --config "{\"version\":\"${BASE}\"}" 2>&1 | tee ../../tauri.log; exit ${PIPESTATUS[0]}
+      - name: Keep the build log on the ci-diag-win branch if the build fails
+        if: failure()
+        run: |
+          mkdir wdiag && tail -300 tauri.log > wdiag/tauri-tail.txt; grep -nE "error|warning: unused" tauri.log | tail -200 > wdiag/errors.txt || true
+          cd wdiag && git init -q -b ci-diag-win && git config user.name ci && git config user.email ci@example.com
+          git add -A && git commit -q -m "run ${{ github.run_number }}" && git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" ci-diag-win
+      - name: Name the installer
+        run: |
+          ls -la desktop/src-tauri/target/release/bundle/nsis/
+          cp desktop/src-tauri/target/release/bundle/nsis/*-setup.exe "My-Personal-Quran-v${V}-Windows-setup.exe"
+          ls -la My-Personal-Quran-v${V}-Windows-setup.exe
+      - name: Install it silently, open it and check the app
+        run: |
+          export WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS="--remote-debugging-port=9222 --remote-allow-origins=*"
+          "./My-Personal-Quran-v${V}-Windows-setup.exe" /S; sleep 12
+          EXE=$(find "$LOCALAPPDATA" -maxdepth 3 -name 'my-personal-quran.exe' | head -1); echo "installed: $EXE"; test -n "$EXE"
+          MARK="ci-$(date +%s)"
+          "$EXE" & sleep 5
+          node desktop/ci-smoke.mjs 1 shots "$MARK"
+          echo "--- install the same version again while the app is open (an update) ---"
+          "./My-Personal-Quran-v${V}-Windows-setup.exe" /S; sleep 12
+          tasklist | grep -i my-personal-quran || echo "(app was closed by the installer)"
+          "$EXE" & sleep 5
+          node desktop/ci-smoke.mjs 2 shots "$MARK"
+          taskkill //F //IM my-personal-quran.exe || true
+          UN=$(find "$LOCALAPPDATA" -maxdepth 3 -name 'uninstall.exe' | head -1); echo "uninstaller: $UN"; test -n "$UN"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: windows-checks
+          path: shots/
+      - uses: actions/upload-artifact@v4
+        with:
+          name: windows-installer
+          path: My-Personal-Quran-v${{ env.V }}-Windows-setup.exe
+      - name: Add the installer to the release
+        if: github.event_name == 'workflow_run'
+        run: gh release upload "v${V}" "My-Personal-Quran-v${V}-Windows-setup.exe" --clobber --repo "${{ github.repository }}"
