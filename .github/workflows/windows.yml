@@ -63,6 +63,7 @@ jobs:
       - name: Install it silently, open it and check the app
         timeout-minutes: 12
         run: |
+          export MSYS2_ARG_CONV_EXCL="*"   # Git Bash must not turn the installer flag /S into a path
           export WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS="--remote-debugging-port=9222 --remote-allow-origins=*"
           SETUP="./My-Personal-Quran-v${V}-Windows-setup.exe"
           echo "--- WebView2 runtime on this machine"
