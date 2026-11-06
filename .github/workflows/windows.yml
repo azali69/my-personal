@@ -69,9 +69,18 @@ jobs:
           reg query "HKLM\\SOFTWARE\\WOW6432Node\\Microsoft\\EdgeUpdate\\Clients\\{F3017226-FE2A-4295-8BDF-00C3A9A7E4C5}" //v pv 2>&1 | tail -2 || true
           reg query "HKCU\\Software\\Microsoft\\EdgeUpdate\\Clients\\{F3017226-FE2A-4295-8BDF-00C3A9A7E4C5}" //v pv 2>&1 | tail -2 || true
           echo "--- install"
-          ("$SETUP" /S > setup.log 2>&1 &) ; INST_OK=0
-          for i in $(seq 1 40); do sleep 3; if ! tasklist | grep -qi "Windows-setup"; then INST_OK=1; echo "installer finished after ~$((i*3))s"; break; fi; done
-          if [ "$INST_OK" = 0 ]; then echo "installer still running after 120s; processes:"; tasklist | grep -iE "setup|webview|msedge|nsis|tasklist|cmd|find|my-personal" ; ls -la "$LOCALAPPDATA" | head -30; ls -la "$LOCALAPPDATA/My Personal Qur’an" 2>&1 | head; taskkill //F //IM "My-Personal-Quran-v${V}-Windows-setup.exe" > /dev/null 2>&1; fi
+          cp "$SETUP" qsetup.exe
+          ("./qsetup.exe" /S > setup.log 2>&1 &) ; INST_OK=0
+          for i in $(seq 1 40); do sleep 3; if ! tasklist | grep -qi "qsetup"; then INST_OK=1; echo "installer finished after ~$((i*3))s"; break; fi; done
+          if [ "$INST_OK" = 0 ]; then
+            echo "installer still running after 120s; processes:"
+            powershell -NoProfile -Command "Get-CimInstance Win32_Process | Where-Object { \$_.Name -match 'qsetup|setup|webview|nsis|cmd|find|tasklist|taskkill|my-personal|msedge|conhost' } | Select-Object ProcessId,ParentProcessId,Name,CommandLine | Format-List | Out-String -Width 300"
+            mkdir -p shots
+            powershell -NoProfile -Command "Add-Type -AssemblyName System.Windows.Forms,System.Drawing; \$b=[System.Windows.Forms.SystemInformation]::VirtualScreen; \$bmp=New-Object System.Drawing.Bitmap \$b.Width,\$b.Height; \$g=[System.Drawing.Graphics]::FromImage(\$bmp); \$g.CopyFromScreen(\$b.Location,[System.Drawing.Point]::Empty,\$b.Size); \$bmp.Save('shots/desktop-while-installing.png')"
+            ls -la "$LOCALAPPDATA" | grep -i qur; cat setup.log | head -20
+            taskkill //F //IM qsetup.exe > /dev/null 2>&1
+            exit 1
+          fi
           sleep 3
           find "$LOCALAPPDATA" -maxdepth 3 \( -name '*.exe' \) | head
           EXE=$(find "$LOCALAPPDATA" -maxdepth 3 -name 'my-personal-quran.exe' | head -1); echo "installed: $EXE"; test -n "$EXE"
@@ -79,7 +88,7 @@ jobs:
           echo "--- first launch"; ("$EXE" > app1.log 2>&1 &) ; sleep 6; tasklist | grep -i my-personal-quran || echo "(app is not running)"
           timeout 240 node desktop/ci-smoke.mjs 1 shots "$MARK"; R1=$?
           echo "--- install the same version again while the app is open (an update)"
-          ("$SETUP" /S > setup2.log 2>&1 &) ; for i in $(seq 1 40); do sleep 3; if ! tasklist | grep -qi "Windows-setup"; then echo "installer finished after ~$((i*3))s"; break; fi; done
+          ("./qsetup.exe" /S > setup2.log 2>&1 &) ; for i in $(seq 1 40); do sleep 3; if ! tasklist | grep -qi "qsetup"; then echo "installer finished after ~$((i*3))s"; break; fi; done
           tasklist | grep -i my-personal-quran || echo "(app was closed by the installer)"
           taskkill //F //IM my-personal-quran.exe > /dev/null 2>&1 || true; sleep 2
           echo "--- launch again after the update"; ("$EXE" > app2.log 2>&1 &) ; sleep 6
