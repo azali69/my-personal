@@ -9,14 +9,15 @@ const check = (name, ok, extra = '') => { console.log(`${ok ? 'ok  ' : 'FAIL'} $
 
 async function findPage() {
   for (let i = 0; i < 90; i++) {
-    try { const t = (await (await fetch('http://127.0.0.1:9222/json')).json()).filter(x => x.type === 'page' && /tauri\.localhost/.test(x.url)); if (t.length) return t[0]; } catch (e) {}
+    try { const t = (await (await fetch('http://127.0.0.1:9222/json', { signal: AbortSignal.timeout(3000) })).json()).filter(x => x.type === 'page' && /tauri\.localhost/.test(x.url)); if (t.length) return t[0]; } catch (e) {}
     await sleep(1000);
   }
+  console.log('no window found; last list:', await fetch('http://127.0.0.1:9222/json').then(r=>r.text()).catch(e=>String(e)));
   throw new Error('the app window did not open');
 }
 function connect(url) {
   return new Promise((res, rej) => {
-    const ws = new WebSocket(url); let id = 0; const pend = new Map(); const events = [];
+    console.log('connecting', url); const ws = new WebSocket(url); setTimeout(()=>rej(new Error('debug connection timed out')),20000); let id = 0; const pend = new Map(); const events = [];
     ws.onmessage = m => { const d = JSON.parse(m.data); if (d.id && pend.has(d.id)) { const p = pend.get(d.id); pend.delete(d.id); d.error ? p.no(new Error(JSON.stringify(d.error))) : p.ok(d.result); } else events.push(d); };
     ws.onopen = () => res({ events, close: () => ws.close(), send: (method, params = {}) => new Promise((ok, no) => { const i = ++id; pend.set(i, { ok, no }); ws.send(JSON.stringify({ id: i, method, params })); }) });
     ws.onerror = e => rej(new Error('debug connection failed'));
@@ -24,7 +25,7 @@ function connect(url) {
 }
 const page = await findPage();
 const c = await connect(page.webSocketDebuggerUrl);
-const ev = async expr => { const r = await c.send('Runtime.evaluate', { expression: expr, awaitPromise: true, returnByValue: true }); if (r.exceptionDetails) throw new Error(r.exceptionDetails.exception?.description || r.exceptionDetails.text); return r.result.value; };
+const ev = async expr => { const r = await Promise.race([new Promise((_, no) => setTimeout(() => no(new Error('page did not answer')), 25000)), c.send('Runtime.evaluate', { expression: expr, awaitPromise: true, returnByValue: true })]); if (r.exceptionDetails) throw new Error(r.exceptionDetails.exception?.description || r.exceptionDetails.text); return r.result.value; };
 const shot = async name => { const r = await c.send('Page.captureScreenshot', { format: 'png' }); fs.writeFileSync(`${out}/${name}.png`, Buffer.from(r.data, 'base64')); };
 const until = async (expr, ms = 30000) => { const t0 = Date.now(); while (Date.now() - t0 < ms) { try { if (await ev(expr)) return true; } catch (e) {} await sleep(500); } return false; };
 

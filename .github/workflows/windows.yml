@@ -61,20 +61,25 @@ jobs:
           cp desktop/src-tauri/target/release/bundle/nsis/*-setup.exe "My-Personal-Quran-v${V}-Windows-setup.exe"
           ls -la My-Personal-Quran-v${V}-Windows-setup.exe
       - name: Install it silently, open it and check the app
+        timeout-minutes: 12
         run: |
           export WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS="--remote-debugging-port=9222 --remote-allow-origins=*"
-          "./My-Personal-Quran-v${V}-Windows-setup.exe" /S; sleep 12
+          SETUP="./My-Personal-Quran-v${V}-Windows-setup.exe"
+          echo "--- install"; timeout 120 "$SETUP" /S; echo "installer exit: $?"; sleep 8
+          find "$LOCALAPPDATA" -maxdepth 3 \( -name '*.exe' \) | head
           EXE=$(find "$LOCALAPPDATA" -maxdepth 3 -name 'my-personal-quran.exe' | head -1); echo "installed: $EXE"; test -n "$EXE"
           MARK="ci-$(date +%s)"
-          "$EXE" & sleep 5
-          node desktop/ci-smoke.mjs 1 shots "$MARK"
-          echo "--- install the same version again while the app is open (an update) ---"
-          "./My-Personal-Quran-v${V}-Windows-setup.exe" /S; sleep 12
+          echo "--- first launch"; ("$EXE" > app1.log 2>&1 &) ; sleep 6; tasklist | grep -i my-personal-quran || echo "(app is not running)"
+          timeout 240 node desktop/ci-smoke.mjs 1 shots "$MARK"; R1=$?
+          echo "--- install the same version again while the app is open (an update)"
+          timeout 120 "$SETUP" /S; echo "installer exit: $?"; sleep 8
           tasklist | grep -i my-personal-quran || echo "(app was closed by the installer)"
-          "$EXE" & sleep 5
-          node desktop/ci-smoke.mjs 2 shots "$MARK"
-          taskkill //F //IM my-personal-quran.exe || true
+          taskkill //F //IM my-personal-quran.exe > /dev/null 2>&1 || true; sleep 2
+          echo "--- launch again after the update"; ("$EXE" > app2.log 2>&1 &) ; sleep 6
+          timeout 180 node desktop/ci-smoke.mjs 2 shots "$MARK"; R2=$?
+          taskkill //F //IM my-personal-quran.exe > /dev/null 2>&1 || true
           UN=$(find "$LOCALAPPDATA" -maxdepth 3 -name 'uninstall.exe' | head -1); echo "uninstaller: $UN"; test -n "$UN"
+          echo "results: first=$R1 after-update=$R2"; test "$R1" = 0 && test "$R2" = 0
       - uses: actions/upload-artifact@v4
         if: always()
         with:
