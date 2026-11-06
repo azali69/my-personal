@@ -1827,7 +1827,7 @@ async function ktOpenHadith(id,n,sn){ document.querySelectorAll('.panel').forEac
   const s = sn!=null? k.sections.find(x=>x.n===sn) : ktSecOf(k,n); if(s) ktKitab(id,s.n,n); }
 /* Pin the title and the AR · BI · ENG boxes together at the top of a hadith page. */
 function ktPinHead(pnl){ const top=pnl.querySelector('.panel-top'), box=pnl.querySelector('.panel-b > .kt-show'); if(!top||!box) return;
-  const head=document.createElement('div'); head.className='kt-head'; top.before(head); head.append(top,box); }
+  const head=document.createElement('div'); head.className='kt-head'; top.before(head); head.append(top,box); hdGap(pnl); }
 function ktKitabSheet(k,curSn){ openSheet(k.en, `<ul class="list">${k.sections.map(s=>`<li><button class="go" data-s="${s.n}"${s.n===curSn?' style="font-weight:700"':''}><span class="t"><b>${ktSecName(s)}</b><small>${s.first===s.last?s.first:s.first+'–'+s.last} · ${s.count} hadith</small></span></button></li>`).join('')}</ul>`);
   sheetB.onclick=e=>{ const b=e.target.closest('[data-s]'); if(!b) return; closeSheet(); ktKitab(k.id,+b.dataset.s); };
   setTimeout(()=>sheetB.querySelector(`[data-s="${curSn}"]`)?.scrollIntoView({block:'center'}),50); }
@@ -3635,9 +3635,9 @@ function homeSetSheet(){ openSheet('Home and colours', `
 /* A full-screen page above the reader (prayer times, Qibla, doa), with a back arrow to Home. */
 function openPanel(id,title,html){ let el=document.getElementById(id); if(!el){ el=document.createElement('section'); el.id=id; el.className='panel'; }
   document.body.appendChild(el);   // (re)opened panels go on top of the others
-  el.hidden=false; el.classList.remove('hd-hide'); document.body.style.overflow='hidden';
+  el.hidden=false; el.classList.toggle('hd-hide',!!el.__hdKeep); document.body.style.overflow='hidden';   // a top part hidden by the reader stays hidden on the next page (Azli, 6 Nov 2026)
   el.innerHTML=`<div class="panel-in"><div class="panel-top"><button class="ib" data-back aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m15 6-6 6 6 6"/></svg></button><h2>${esc(title)}</h2>${BK_PANELS.has(id)?`<button class="ib" data-bkm aria-label="Turning pages">${BK_IC}</button>`:''}</div><div class="panel-b">${html}</div></div>`;
-  el.querySelector('[data-back]').onclick=()=>closePanel(id);
+  el.querySelector('[data-back]').onclick=()=>closePanel(id); if(el.__hdKeep) requestAnimationFrame(()=>hdGap(el));
   if(BK_PANELS.has(id)){ el.querySelector('[data-bkm]').onclick=bkSheet; bkBind(el); bkApply(el); el.__bkNav=null; el.__bkRe=null; }
   return el.querySelector('.panel-b'); }
 function closePanel(id){ const el=document.getElementById(id); if(el){ el.hidden=true; el.dispatchEvent(new Event('closed')); }
@@ -3972,7 +3972,7 @@ const HISN_GRADE={bm:'Sahih: the reference cites Sahih al-Bukhari and/or Sahih M
  mq:'Authentic chain, as the statement of a Companion (not the words of the Prophet ﷺ)',q:'Qur’an',none:'No grading given in the book; see the reference'};
 function hisnRefHtml(it){ if(!it.ref) return `<p class="note" style="font-size:12px;margin:8px 0 0">No reference for this entry on sunnah.com.</p>`;
   return `<details class="du-ref"><summary><b>Source</b> · ${esc(HISN_GRADE[it.grade]||HISN_GRADE.none)}</summary><p>${esc(it.ref)}</p><p><a href="https://sunnah.com/hisn:${it.id}" target="_blank" rel="noopener">Hisn al-Muslim ${it.id} on sunnah.com</a></p></details>`; }
-function pinHead(b,els){ const pnl=b.closest('.panel'), top=pnl.querySelector('.panel-top'); if(!top) return; const head=document.createElement('div'); head.className='kt-head'; top.before(head); head.append(top,...els.filter(Boolean)); }
+function pinHead(b,els){ const pnl=b.closest('.panel'), top=pnl.querySelector('.panel-top'); if(!top) return; const head=document.createElement('div'); head.className='kt-head'; top.before(head); head.append(top,...els.filter(Boolean)); hdGap(pnl); }
 const DUA_FAV=()=>Object.keys(duaBmAll()).map(Number);
 /* Saved chapters became bookmarks with a colour (Azli, 17 Oct 2026); the old Saved list is kept as gold bookmarks. */
 function duaBmAll(){ let m=store.get('duaBm',null); if(!m){ m={}; store.get('duaFav',[]).forEach((id,k)=>m[id]={c:'2',t:Date.now()-k}); store.set('duaBm',m); } return m; }
@@ -4736,7 +4736,12 @@ document.addEventListener('keydown',e=>{ const p=topPanel(); if(!p||!p.__bk||!bk
 document.addEventListener('click',e=>{ const pnl=e.target.closest('.panel'); if(!pnl||pnl.hidden) return; const head=pnl.querySelector('.kt-head'); if(!head) return;
   if(e.target.closest('button,a,input,select,textarea,summary,label,details>summary,.kt-head,[data-q],[data-h],[data-e],[data-c],[role=button]')) return;
   if(String(document.getSelection()||'').trim()) return;
-  pnl.classList.toggle('hd-hide'); hdGap(pnl); });
+  pnl.classList.toggle('hd-hide'); pnl.__hdKeep=pnl.classList.contains('hd-hide'); hdGap(pnl); });
+/* Pull down at the top of a page to bring a hidden top part back. */
+{ let px=0,py=0,pp=null; document.addEventListener('touchstart',e=>{ pp=null; if(e.touches.length!==1) return; const p=e.target.closest('.panel'); if(!p||!p.classList.contains('hd-hide')) return; pp=p; px=e.touches[0].clientX; py=e.touches[0].clientY; },{passive:true});
+  const end=e=>{ const p=pp; pp=null; if(!p||!p.classList.contains('hd-hide')||p.scrollTop>4) return; const t=(e.changedTouches||[])[0]; if(!t) return; const dx=t.clientX-px, dy=t.clientY-py;
+    if(dy>60&&dy>1.5*Math.abs(dx)){ p.classList.remove('hd-hide'); p.__hdKeep=false; hdGap(p); } };
+  document.addEventListener('touchend',end,{passive:true}); document.addEventListener('touchcancel',end,{passive:true}); }
 /* A hidden top part gives back its room, so the text starts at the top instead of under an empty band (Azli, 6 Nov 2026). */
 function hdGap(pnl){ const head=pnl.querySelector('.kt-head'); if(!head) return; const hid=pnl.classList.contains('hd-hide'), H=head.offsetHeight, was=parseFloat(head.style.marginBottom)||0, want=hid?-H:0;
   if(was===want) return; head.style.marginBottom=hid?want+'px':''; if(pnl.scrollTop>0) pnl.scrollTop+=(want-was); }
