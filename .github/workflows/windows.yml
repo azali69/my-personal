@@ -65,14 +65,21 @@ jobs:
         run: |
           export WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS="--remote-debugging-port=9222 --remote-allow-origins=*"
           SETUP="./My-Personal-Quran-v${V}-Windows-setup.exe"
-          echo "--- install"; timeout 120 "$SETUP" /S; echo "installer exit: $?"; sleep 8
+          echo "--- WebView2 runtime on this machine"
+          reg query "HKLM\\SOFTWARE\\WOW6432Node\\Microsoft\\EdgeUpdate\\Clients\\{F3017226-FE2A-4295-8BDF-00C3A9A7E4C5}" //v pv 2>&1 | tail -2 || true
+          reg query "HKCU\\Software\\Microsoft\\EdgeUpdate\\Clients\\{F3017226-FE2A-4295-8BDF-00C3A9A7E4C5}" //v pv 2>&1 | tail -2 || true
+          echo "--- install"
+          ("$SETUP" /S > setup.log 2>&1 &) ; INST_OK=0
+          for i in $(seq 1 40); do sleep 3; if ! tasklist | grep -qi "Windows-setup"; then INST_OK=1; echo "installer finished after ~$((i*3))s"; break; fi; done
+          if [ "$INST_OK" = 0 ]; then echo "installer still running after 120s; processes:"; tasklist | grep -iE "setup|webview|msedge|nsis|tasklist|cmd|find|my-personal" ; ls -la "$LOCALAPPDATA" | head -30; ls -la "$LOCALAPPDATA/My Personal Qur’an" 2>&1 | head; taskkill //F //IM "My-Personal-Quran-v${V}-Windows-setup.exe" > /dev/null 2>&1; fi
+          sleep 3
           find "$LOCALAPPDATA" -maxdepth 3 \( -name '*.exe' \) | head
           EXE=$(find "$LOCALAPPDATA" -maxdepth 3 -name 'my-personal-quran.exe' | head -1); echo "installed: $EXE"; test -n "$EXE"
           MARK="ci-$(date +%s)"
           echo "--- first launch"; ("$EXE" > app1.log 2>&1 &) ; sleep 6; tasklist | grep -i my-personal-quran || echo "(app is not running)"
           timeout 240 node desktop/ci-smoke.mjs 1 shots "$MARK"; R1=$?
           echo "--- install the same version again while the app is open (an update)"
-          timeout 120 "$SETUP" /S; echo "installer exit: $?"; sleep 8
+          ("$SETUP" /S > setup2.log 2>&1 &) ; for i in $(seq 1 40); do sleep 3; if ! tasklist | grep -qi "Windows-setup"; then echo "installer finished after ~$((i*3))s"; break; fi; done
           tasklist | grep -i my-personal-quran || echo "(app was closed by the installer)"
           taskkill //F //IM my-personal-quran.exe > /dev/null 2>&1 || true; sleep 2
           echo "--- launch again after the update"; ("$EXE" > app2.log 2>&1 &) ; sleep 6
