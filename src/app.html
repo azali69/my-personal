@@ -792,7 +792,7 @@ const I18N_RX=[
  [/^↺ Turn left (\d+)°$/,'↺ Pusing ke kiri $1°'],[/^↻ Turn right (\d+)°$/,'↻ Pusing ke kanan $1°'],[/^Qibla: ([\d.]+)° from true north$/,'Kiblat: $1° dari utara benar'],
  [/^(.+) · ([\d,]+) km to the Ka'bah$/,'$1 · $2 km ke Kaabah'],[/^Bookmarked (.+)$/,'Ditanda: $1'],[/^Bookmark · (.+)$/,'Penanda · $1'],
  [/^(Qur'an|Hadith|Sirah|Sifat Solat|Jumaat|Doa) · (\d+)$/,(m,a,b)=>I18N_TABS[a]+' · '+b],[/^Tafsir · (.+)$/,'Tafsir · $1'],[/^Hadith · (.+)$/,'Hadis · $1'],
- [/^No hadith with that number$/,'Tiada hadis dengan nombor itu'],[/^Google sign-in failed: (.*)$/,'Log masuk Google gagal: $1'],[/^Signed in: (.*)$/,'Log masuk: $1'],
+ [/^No hadith with that number( in the source)?$/,'Tiada hadis dengan nombor itu dalam sumber'],[/^No (.+) hadith numbered (.+) in the source$/,'Tiada hadis $1 bernombor $2 dalam sumber'],[/^Google sign-in failed: (.*)$/,'Log masuk Google gagal: $1'],[/^Signed in: (.*)$/,'Log masuk: $1'],
  [/^Sync file: (.*)$/,'Fail selaras: $1'],[/^No Sahih Muslim hadith numbered (.*)$/,'Tiada hadis Sahih Muslim bernombor $1'],[/^no\. (\d+) in this list$/,'no. $1 dalam senarai ini'],
  [/^kitab (\d+), no\. (\d+)$/,'kitab $1, no. $2'],[/^Narrated by (.+)$/,'Diriwayatkan oleh $1'],[/^Page (\d+) added$/,'Halaman $1 ditambah'],
  [/^One file with everything you set and saved in the app: (.+) saved settings in all\.$/,m=>m.replace('One file with everything you set and saved in the app:','Satu fail dengan semua yang anda tetapkan dan simpan dalam aplikasi:').replace("Qur'an bookmarks",'penanda Al-Qur\'an').replace('hadith bookmarks','penanda hadis').replace('Sirah bookmarks','penanda Sirah').replace(' notes',' nota').replace("My ruku' and My blocks","Ruku' saya dan Blok saya").replace('Hafazan results','keputusan Hafazan').replace('own places (Masjid & musollah)','tempat sendiri (Masjid & musolla)').replace('saved settings in all.','tetapan disimpan kesemuanya.')],[/^Erased (.+)$/,m=>m.replace('Erased','Dipadam').replace(' strokes',' garisan').replace(' stroke',' garisan').replace(' and typed words',' dan perkataan ditaip').replace('typed words','perkataan ditaip').replace('(Undo brings strokes back)','(Buat asal mengembalikan garisan)')],
@@ -1747,8 +1747,8 @@ function ktBook(id){ const k=ktBooks.find(x=>x.id===id); if(!k) return;
   const go=()=>{ const v=document.getElementById('ktNo').value.trim().toLowerCase().replace(/\s+/g,''); let n=+v;
     if(id==='muslim'){ if(!v) return; if(!KT_STD){ toast('Loading the Muslim numbers… try again in a moment'); return; }   /* 'Abd al-Baqi's number, as cited */
       const hit=Object.entries(KT_STD).find(([,x])=>x===v)||Object.entries(KT_STD).find(([,x])=>x===v+'a'); if(!hit){ toast('No Sahih Muslim hadith numbered '+v); return; } n=+hit[0]; }
-    if(!n) return; const s=ktSecOf(k,n);
-    if(!s){ toast('No hadith with that number'); return; } ktKitab(id,s.n,n); };
+    if(!n) return; const s=ktSecHas(k,n);
+    if(!s){ toast('No hadith with that number in the source'); return; } ktKitab(id,s.n,n); };
   document.getElementById('ktGo').onclick=go; document.getElementById('ktNo').onkeydown=e=>{ if(e.key==='Enter') go(); };
   const find=()=>{ const q=document.getElementById('ktQ').value.trim(); if(q.length<2){ toast('Type at least 2 letters'); return; } ktSearch(id,q); };
   document.getElementById('ktFind').onclick=find; document.getElementById('ktQ').onkeydown=e=>{ if(e.key==='Enter') find(); }; }
@@ -1821,7 +1821,10 @@ async function heOpen(k,h){ const ids=h[8]||[]; const b=openPanel('ktE','Syarah 
     en[1].__L=x.dataset.l; store.set('heLang',x.dataset.l); draw(); }; }
 /* The kitab a hadith number is in. Some kitab's number range overlaps the next one (a few out-of-order numbers in the
    source, e.g. Tirmidhi's Tafsir runs 2950-3723), so the narrowest kitab that covers the number is taken. */
-function ktSecOf(k,n){ const c=k.sections.filter(x=>n>=x.first&&n<=x.last).sort((a,b)=>(a.last-a.first)-(b.last-b.first)); return c[0] || k.sections.filter(x=>x.first<=n).pop(); }
+/* The kitab that really holds hadith n: looked up in the runs of numbers each kitab holds ("r", tools/add_ranges.py). A few kitab are out of number order in the sources (at-Tirmidhi 2298, Ibn Majah 2435), so first..last alone is not enough; it stays as the fallback. */
+function ktSecHas(k,n){ return k.sections.find(x=>x.r&&x.r.some(([a,b])=>n>=a&&n<=b)); }   // exact: null when the source has no hadith with that number
+function ktSecOf(k,n){ const h=k.sections.find(x=>x.r&&x.r.some(([a,b])=>n>=a&&n<=b)); if(h) return h;
+  const c=k.sections.filter(x=>n>=x.first&&n<=x.last).sort((a,b)=>(a.last-a.first)-(b.last-b.first)); return c[0] || k.sections.filter(x=>x.first<=n).pop(); }
 async function ktOpenHadith(id,n,sn){ document.querySelectorAll('.panel').forEach(p=>p.hidden=true);
   await ktPanel(); const k=(ktBooks||[]).find(x=>x.id===id); if(!k) return; ktBook(id);
   const s = sn!=null? k.sections.find(x=>x.n===sn) : ktSecOf(k,n); if(s) ktKitab(id,s.n,n); }
@@ -1933,12 +1936,12 @@ async function ktKitab(id,sn,focus,q){ const k=ktBooks.find(x=>x.id===id), s=k.s
     const bar=pnlS.querySelector('.kt-head').getBoundingClientRect().bottom, cur=[...list.children].find(c=>c.getBoundingClientRect().bottom>bar+4), off=cur?Math.max(0,cur.getBoundingClientRect().top-bar):0;
     list.innerHTML=hs.slice(0,shown).map(h=>ktCard(k,h,show,'',sn,h[0]===focus?q:null)).join('');
     const el=cur&&list.querySelector(`[data-n="${cur.dataset.n}"]`); if(el){ const pnl=document.getElementById('ktS'); pnl.scrollTop+= el.getBoundingClientRect().top-bar-off; } });
-  let fi = focus? hs.findIndex(h=>h[0]>=focus) : -1;
+  let fi = focus? (hs.findIndex(h=>Math.floor(h[0])===focus)>=0? hs.findIndex(h=>Math.floor(h[0])===focus) : hs.findIndex(h=>h[0]>=focus)) : -1;
   add(Math.max(20, fi+6));
   if(focus){ const el=list.querySelector(`[data-n="${hs[Math.max(0,fi)]?.[0]}"]`); if(el){ el.classList.add('kt-hit'); requestAnimationFrame(()=>{ const pn=document.getElementById('ktS'), mk=el.querySelector('mark.kt-q');
       if(mk) mk.scrollIntoView({block:'center'});   // the searched words in the middle of the screen
       else { const hb=pn.querySelector('.kt-head')?.getBoundingClientRect().bottom||0; pn.scrollTop+=el.getBoundingClientRect().top-hb-8; } }); }
-    if(fi<0 || hs[fi][0]!==focus) toast('No hadith '+focus+' in the source; showing the nearest'); }
+    if(fi<0 || Math.floor(hs[fi][0])!==focus) toast('No hadith '+focus+' in the source; showing the nearest'); }
   const pnl=document.getElementById('ktS');   // load the next hadith as the reader nears the end of the list
   let lrT=0; const lastRead=()=>{ const bar=pnl.querySelector('.kt-head')?.getBoundingClientRect().bottom||0, c=[...list.children].find(x=>x.getBoundingClientRect().bottom>bar+40);
     if(c){ const v={b:id,s:sn,n:+c.dataset.n,t:Date.now()}; store.set('ktLast',v); const by=store.get('ktLastBy',{}); by[id]=v; store.set('ktLastBy',by); } };
@@ -1951,8 +1954,8 @@ async function ktKitab(id,sn,focus,q){ const k=ktBooks.find(x=>x.id===id), s=k.s
 /* Book mode for a kitab (Azli, 6 Nov 2026): one hadith per page, like a printed page; ‹ › and swipes go through the kitab
    and on into the next kitab (focus -1 opens a kitab at its last hadith). */
 function ktKitabBook(k,s,hs,b,focus,q){ const id=k.id, sn=s.n, pnl=document.getElementById('ktS'); let show=ktShow(); pnl.onscroll=null;
-  let i= focus===-1? hs.length-1 : focus? hs.findIndex(h=>h[0]>=focus) : 0; if(i<0) i=focus?hs.length-1:0;
-  if(focus>0 && hs[i] && hs[i][0]!==focus) toast('No hadith '+focus+' in the source; showing the nearest');
+  let i= focus===-1? hs.length-1 : focus? (hs.findIndex(h=>Math.floor(h[0])===focus)>=0? hs.findIndex(h=>Math.floor(h[0])===focus) : hs.findIndex(h=>h[0]>=focus)) : 0; if(i<0) i=focus?hs.length-1:0;
+  if(focus>0 && hs[i] && Math.floor(hs[i][0])!==focus) toast('No hadith '+focus+' in the source; showing the nearest');
   const si=k.sections.indexOf(s), prevS=k.sections[si-1], nextS=k.sections[si+1];
   b.innerHTML=`${ktShowHtml()}<div id="ktList"></div><div id="ktBar"></div>`;
   ktPinHead(pnl);
@@ -1979,7 +1982,7 @@ async function ktGoRef(r){ await ktPanel(); const k=(ktBooks||[]).find(x=>x.id==
   let n=parseInt(r.v,10);
   if(r.id==='muslim'){ if(!KT_STD){ try{ const d=await ktGet('muslim/std.json'); KT_STD=(d&&d.n)||null; }catch(e){} }
     if(KT_STD){ const hit=Object.entries(KT_STD).find(([,x])=>x===r.v)||Object.entries(KT_STD).find(([,x])=>x===r.v+'a'); if(!hit){ toast('No Sahih Muslim hadith numbered '+r.v); return; } n=+hit[0]; } }
-  const s=ktSecOf(k,n); if(!s||n>k.sections[k.sections.length-1].last){ toast(`No ${k.en} hadith numbered ${r.v}`); return; }
+  const s=ktSecHas(k,n); if(!s){ toast(`No ${k.en} hadith numbered ${r.v} in the source`); return; }
   ktOpenHadith(r.id,n,s.n); }
 async function ktSearchAll(q){ { const r=ktRefParse(q); if(r) return ktGoRef(r); } let lang=ktShow();
   const b=openPanel('ktR',`Search · all books`,`${ktShowHtml()}<p class="note" id="ktProg">Searching…</p><div id="ktRes"></div>`);
