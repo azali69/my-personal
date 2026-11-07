@@ -40,6 +40,11 @@ check('native bridge present', info.tauri); check('secure context', info.secure)
 await shot(`p${phase}-home`);
 
 if (phase === '1') {
+  await ev("document.getElementById('cover')&&(document.getElementById('cover').hidden=true); showHome(); 1"); await sleep(1000);
+  const tiles = await ev("[...document.querySelectorAll('#home .tile[data-t]')].map(t=>t.dataset.t).join(',')");
+  console.log('home tiles:', tiles);
+  check('Windows Home hides the 7 tiles and the prayer card', !/(^|,)(hz|tq|dua|halal|masjid|pray|qibla)(,|$)/.test(tiles) && /shamail/.test(tiles) && await ev("!document.getElementById('hmSalah')"));
+  await shot('p1-home-tiles');
   await ev("document.getElementById('cover')&&(document.getElementById('cover').hidden=true); hideHome(); st.scroll=false; st.mushaf='text'; st.tr=true; renderReader(); goPage(2); 1");
   check('Qur\'an page shows ayat', await until("document.querySelectorAll('#main .row').length > 3", 20000));
   await sleep(1000); await shot('p1-quran');

@@ -358,7 +358,7 @@ All open from the **ayah menu**; they need the internet once per surah.
 | Save all 604 pages | Printed pages for offline reading |
 | Surah name | Latin or Arabic in the top bar |
 | Translation language | Bahasa Melayu or English |
-| Home and colours | Home background, bar colour, book cover, and what Home shows. The next-prayer card and the tiles Memorisation, Listen & Repeat, Du'a & Zikir, Halal Food, Mosques & Prayer Rooms, Prayer Times and Qibla are hidden by default; switch them back to **Show** here. Hiding only removes them from Home: the features, and the prayer alerts, keep working |
+| Home and colours | Home background, bar colour, book cover, and what Home shows. In the Windows app the next-prayer card and the tiles Memorisation, Listen & Repeat, Du'a & Zikir, Halal Food, Mosques & Prayer Rooms, Prayer Times and Qibla start hidden (on Android they are shown); change any of them with **Show** or **Hide** here. Hiding only removes them from Home: the features, and the prayer alerts, keep working |
 | Tap a word twice: meaning and sound | On: two quick taps on a word show its meaning and play it (one tap always shows/hides the bars) |
 | Transliteration | Under the Arabic in the translation view |
 | English footnotes | Saheeh International's notes |

@@ -3592,10 +3592,12 @@ function hijriCalendar(d0){ let cur=new Date(d0.getFullYear(),d0.getMonth(),1);
 function hijriOf(d){ const h=hijriParts(d); return `${h.d} ${HIJRI_M[h.m-1]} ${h.y} H`; }
 function hijriToday(){ return hijriOf(new Date()); }
 let homeTimer=0;
-/* What Home shows (Azli, 7 Nov 2026): the next-prayer card and these tiles are hidden unless switched on in Home settings.
+/* What Home shows (Azli, 7 Nov 2026): in the Windows app only, the next-prayer card and these tiles start hidden; switch them on in Home settings.
+   Android and the web copy show everything (they can hide them in the same place).
    Hiding only removes them from Home: the features, and the prayer alerts, keep working. */
 const HOME_OPT=[['salah','Next prayer time card'],['hz','Memorisation'],['tq','Listen & Repeat'],['dua',"Du'a & Zikir"],['halal','Halal Food'],['masjid','Mosques & Prayer Rooms'],['pray','Prayer Times'],['qibla','Qibla']];
-const homeShown=()=>new Set(store.get('homeShow',[]));
+const IS_WIN_APP=!!window.__TAURI_INTERNALS__;   // the Windows app (Tauri); Android and the web copy show everything
+const homeShown=()=>new Set(store.get('homeShow', IS_WIN_APP? [] : HOME_OPT.map(x=>x[0])));
 function showHome(){ navRetClear(); if(hz){ if(rec) stopListen(false); hz=null; document.getElementById('dock').classList.remove('hz'); }
   if(pl) {/* keep the reciter playing */}
   let el=document.getElementById('home'); if(!el){ el=document.createElement('section'); el.id='home'; el.className='home'; el.setAttribute('aria-label','Home'); document.body.appendChild(el); }

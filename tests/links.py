@@ -14,8 +14,17 @@ def fresh(b, hash_=''):
 with sync_playwright() as p:
     exe = os.environ.get('CHROME') or ('/opt/google/chrome/chrome' if os.path.exists('/opt/google/chrome/chrome') else None)
     b = p.chromium.launch(executable_path=exe, args=['--no-sandbox'])
-    # 1. Home tiles
+    # 0. Android / web copy: everything shown
     ctx, pg, errs = fresh(b)
+    pg.evaluate("document.getElementById('cover')&&(document.getElementById('cover').hidden=true); showHome()"); pg.wait_for_timeout(800)
+    allt = pg.evaluate("[...document.querySelectorAll('#home .tile[data-t]')].map(t=>t.dataset.t)")
+    chk('Android/web: all 20 tiles shown', len(allt) == 20 and all(t in allt for t in ['hz','tq','dua','halal','masjid','pray','qibla']), str(len(allt)))
+    chk('Android/web: next-prayer card shown', pg.evaluate("!!document.getElementById('hmSalah')")); ctx.close()
+    # 1. Home tiles (the Windows app: Tauri adds window.__TAURI_INTERNALS__)
+    ctx = b.new_context(viewport={'width': 393, 'height': 873}, is_mobile=True, has_touch=True)
+    ctx.route(re.compile(r'.*(github\.io|jsdelivr).*'), route)
+    pg = ctx.new_page(); errs = []; pg.on('pageerror', lambda e: errs.append(str(e))); pg.add_init_script(FAKE + "window.__TAURI_INTERNALS__={invoke:()=>Promise.resolve()};")
+    pg.goto('file://' + os.path.join(R, 'index.html')); pg.wait_for_timeout(3500)
     pg.evaluate("document.getElementById('cover')&&(document.getElementById('cover').hidden=true); showHome()"); pg.wait_for_timeout(800)
     tiles = pg.evaluate("[...document.querySelectorAll('#home .tile[data-t]')].map(t=>t.dataset.t)")
     gone = ['hz','tq','dua','halal','masjid','pray','qibla']; keep = ['read','open','bm','kutub','shamail','sirah','solat','kamus','jumuah','check','notes','set','man']

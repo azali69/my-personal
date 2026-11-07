@@ -358,7 +358,7 @@ Semuanya dibuka dari **menu ayat**; memerlukan internet sekali bagi setiap surah
 | Save all 604 pages | Simpan halaman cetakan untuk bacaan tanpa internet |
 | Surah name | Nama surah Latin atau Arab di bar atas |
 | Translation language | Bahasa Melayu atau Inggeris |
-| Home and colours | Latar Home, warna bar, kulit buku, dan apa yang Home tunjukkan. Kad waktu solat seterusnya dan jubin Hafazan, Dengar & Ulang, Doa & Zikir, Makanan Halal, Masjid & Musolla, Waktu Solat dan Kiblat disembunyikan secara lalai; tukar semula kepada **Show** di sini. Menyembunyikan hanya membuangnya dari Home: ciri-cirinya, dan penggera solat, terus berfungsi |
+| Home and colours | Latar Home, warna bar, kulit buku, dan apa yang Home tunjukkan. Dalam aplikasi Windows, kad waktu solat seterusnya dan jubin Hafazan, Dengar & Ulang, Doa & Zikir, Makanan Halal, Masjid & Musolla, Waktu Solat dan Kiblat bermula tersembunyi (di Android ia dipaparkan); ubah mana-mana dengan **Show** atau **Hide** di sini. Menyembunyikan hanya membuangnya dari Home: ciri-cirinya, dan penggera solat, terus berfungsi |
 | Tap a word twice: meaning and sound | On: ketik dua kali pada perkataan untuk makna dan bunyi (ketik sekali sentiasa papar/sembunyi bar) |
 | Transliteration | Di bawah teks Arab dalam paparan terjemahan |
 | English footnotes | Nota kaki Saheeh International |
