@@ -3773,6 +3773,7 @@ const PR_CITIES=[
 /* hours the time zone is ahead of UTC on that day (summer time included) */
 function tzOff(tz,d){ try{ const f=new Intl.DateTimeFormat('en-US',{timeZone:tz,hourCycle:'h23',year:'numeric',month:'numeric',day:'numeric',hour:'numeric',minute:'numeric'});
   const p=Object.fromEntries(f.formatToParts(d).map(x=>[x.type,x.value])); return (Date.UTC(+p.year,p.month-1,+p.day,+p.hour%24,+p.minute)-Math.floor(d.getTime()/60000)*60000)/3600000; }catch(e){ return -d.getTimezoneOffset()/60; } }
+function prMethodKey(){ const k=store.get('prMethod','auto'); return k!=='auto' && PR_METHODS[k] ? k : null; }
 function prLoc(){ return store.get('prLoc',{mode:'sg'}); }
 function ymd(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
 function sunCalc(d,lat,lng,M,tzh){ // returns hours (clock of the place, or of the phone) for the six times, or null where the sun never reaches the angle
@@ -3785,7 +3786,7 @@ function sunCalc(d,lat,lng,M,tzh){ // returns hours (clock of the place, or of t
   const T=(ang,dir)=>{ const c=(-Math.sin(ang*rad)-Math.sin(phi)*Math.sin(decl))/(Math.cos(phi)*Math.cos(decl)); if(c<-1||c>1) return null; return noon+dir*Math.acos(c)/rad/15; };
   const asr=-Math.atan(1/((M.a||1)+Math.tan(Math.abs(phi-decl))))/rad, mg=T(0.833,1);
   // Umm al-Qura / Qatar: Isha a fixed time after Maghrib (120 minutes in Ramadan for Umm al-Qura)
-  const isha = M.im ? (mg==null?null: mg+(M.im+(M===PR_METHODS.uq && hijriParts(d).m===9 ? 30 : 0))/60) : T(M.i,1);
+  const isha = M.im ? (mg==null?null: mg+(M.im+(M.n===PR_METHODS.uq.n && hijriParts(d).m===9 ? 30 : 0))/60) : T(M.i,1);
   const out=[T(M.f,-1),T(0.833,-1),noon,T(asr,1),mg,isha];
   // Kemenag RI publishes its times with minutes of ihtiyat (precaution) added. kd = minutes added to Subuh, Syuruk, Zuhur, Asar, Maghrib, Isya,
   // fitted to the Bimas Islam (SIHAT) tables for Kota Batam and Kota Jakarta, Nov-Dec 2026: every time within 1 minute of them
@@ -3802,11 +3803,14 @@ let muisExtra=null;   // a newer timetable fetched from the app's site, when the
 function prayerTimesFor(d){ const loc=prLoc(), off=store.get('prOff',[0,0,0,0,0,0]);
   let t=null, label='', tz=null, method=null;
   const inSG = loc.mode!=='sg' && inSingapore(loc.lat,loc.lng);
-  if(loc.mode==='sg' || inSG){ tz='Asia/Singapore'; const k=ymd(d); const row=(MUIS&&MUIS.days[k])||(muisExtra&&muisExtra.days[k]);
+  const ovr=prMethodKey();   // a method picked by the user, instead of the place's own
+  if((loc.mode==='sg' || inSG) && (!ovr || ovr==='muis')){ tz='Asia/Singapore'; const k=ymd(d); const row=(MUIS&&MUIS.days[k])||(muisExtra&&muisExtra.days[k]);
     if(row){ t=row.slice(); label='MUIS'; } else { const c=sunCalc(d,1.3521,103.8198,PR_METHODS.muis,tzOff(tz,d)); t=c.map((h,i)=>hhmm(h!=null&&i===2?h+1/60:h)); label='MUIS has not published this date yet, so it is calculated for Singapore'; if(!muisExtra) prFetchMuis(); } }
-  else { const city=loc.mode==='city' ? PR_CITIES.find(c=>c[0]===loc.name) : prNearCity(loc.lat,loc.lng); method=PR_METHODS[(city&&city[4])||'muis']; tz=city?city[3]:null;
-    const c=sunCalc(d,loc.lat,loc.lng,method,tz?tzOff(tz,new Date(d.getFullYear(),d.getMonth(),d.getDate(),12)):null); t=c.map((h,i)=>hhmm(h!=null&&i===2&&!method.kd?h+1/60:h));
-    label='Calculated for '+(loc.mode==='gps'?`your location (${(+loc.lat).toFixed(3)}, ${(+loc.lng).toFixed(3)})`:loc.name); }
+  else { const sgHere=loc.mode==='sg', la=sgHere?1.3521:loc.lat, lo=sgHere?103.8198:loc.lng;
+    const city=sgHere ? null : loc.mode==='city' ? PR_CITIES.find(c=>c[0]===loc.name) : prNearCity(loc.lat,loc.lng); method=PR_METHODS[ovr||(city&&city[4])||'muis']; tz=sgHere?'Asia/Singapore':city?city[3]:null;
+    if(ovr && store.get('prAsr','std')==='hanafi') method=Object.assign({},method,{a:2}); else if(ovr && method.a) method=Object.assign({},method,{a:1});
+    const c=sunCalc(d,la,lo,method,tz?tzOff(tz,new Date(d.getFullYear(),d.getMonth(),d.getDate(),12)):null); t=c.map((h,i)=>hhmm(h!=null&&i===2&&!method.kd?h+1/60:h));
+    label='Calculated for '+(sgHere?'Singapore':loc.mode==='gps'?`your location (${(+loc.lat).toFixed(3)}, ${(+loc.lng).toFixed(3)})`:loc.name); }
   t=t.map((x,i)=>{ if(!x||!off[i]) return x; const [h,m]=x.split(':').map(Number); const v=((h*60+m+off[i])%1440+1440)%1440; return String(Math.floor(v/60)).padStart(2,'0')+':'+String(v%60).padStart(2,'0'); });
   return {times:t,label,tz,method}; }
 async function prFetchMuis(){ muisExtra={days:{}}; try{ const r=await fetch('https://azali69.github.io/my-personal/prayer/muis.json',{cache:'no-cache'}); if(r.ok){ muisExtra=await r.json(); } }catch(e){} }
@@ -3851,6 +3855,10 @@ function prRender(){ const d=new Date(); d.setHours(0,0,0,0); d.setDate(d.getDat
    ${segHtml('prMode',[['sg','Singapore (MUIS)'],['gps','My location'],['city','Choose a city']],loc.mode)}
    ${loc.mode==='city'?`<button class="pill" id="prCity" style="width:100%;justify-content:space-between;margin-top:8px"><span>📍 ${esc(loc.name||'Choose a city')}${(()=>{ const c=PR_CITIES.find(x=>x[0]===loc.name); return c?' · '+esc(c[5]):''; })()}</span><span>▾</span></button>`:''}
    ${loc.mode==='gps'?`<p class="note">${loc.lat!=null?`${esc(loc.name||'')} ${loc.lat.toFixed(3)}, ${loc.lng.toFixed(3)}`:'Location not found yet.'} <button class="pill" id="prGps" style="height:34px">Update location</button></p>`:''}
+   <div class="label">Calculation method</div>
+   <select class="field" id="prMeth" style="width:100%"><option value="auto">Automatic (by place)</option>${Object.entries(PR_METHODS).map(([k,m])=>`<option value="${k}"${store.get('prMethod','auto')===k?' selected':''}>${esc(m.n)} · Fajr ${m.f}° · Isha ${m.im?m.im+' min after Maghrib':m.i+'°'}</option>`).join('')}</select>
+   ${prMethodKey()?`<div class="label">Asr</div>${segHtml('prAsr',[['std','Standard (Shafi’i, Maliki, Hanbali)'],['hanafi','Hanafi']],store.get('prAsr','std'))}`:''}
+   <p class="note" style="margin:4px 0 0">${prMethodKey()?'This method is used for every place, instead of the place’s own authority. For Singapore, the official MUIS timetable is replaced by a calculation unless you pick MUIS.':'Automatic uses the authority of each place: MUIS for Singapore, JAKIM for Malaysia, Kemenag for Indonesia, and so on.'}</p>
    <div class="label">Adjust (minutes)</div>
    <div class="row2" style="flex-wrap:wrap;gap:6px">${PR_NAMES.map((n,i)=>`<label class="note" style="display:flex;flex-direction:column;align-items:center;gap:2px;min-width:52px">${n}<input class="field" type="number" inputmode="numeric" data-off="${i}" value="${store.get('prOff',[0,0,0,0,0,0])[i]}" min="-30" max="30" style="width:56px;text-align:center"></label>`).join('')}</div>
    ${isApp?`<div class="label">Sound at prayer time</div>${segHtml('prSound',[['makkah','Makkah adhan'],['madinah','Madinah adhan'],['tone','Short tone'],['tone2','Chime'],['tone3','Bell'],['mytone','My short tone'],['silent','Notification only'],['none','None']],cfg.sound)}
@@ -3866,6 +3874,8 @@ function prRender(){ const d=new Date(); d.setHours(0,0,0,0); d.setDate(d.getDat
   seg('prMode',v=>{ if(v==='sg') store.set('prLoc',{mode:'sg'}); else if(v==='city'){ const c=PR_CITIES[1]; store.set('prLoc',{mode:'city',name:c[0],lat:c[1],lng:c[2]}); } else { store.set('prLoc',Object.assign({mode:'gps'},store.get('prGps',{}))); prLocate(); } prSchedule(); prRender(); });
   if($('prCity')) $('prCity').onclick=()=>prCitySheet(loc.name,c=>{ store.set('prLoc',{mode:'city',name:c[0],lat:c[1],lng:c[2]}); prSchedule(); prRender(); });
   if($('prGps')) $('prGps').onclick=prLocate;
+  if($('prMeth')) $('prMeth').onchange=e=>{ store.set('prMethod',e.target.value); prSchedule(); prRender(); };
+  seg('prAsr',v=>{ store.set('prAsr',v); prSchedule(); prRender(); });
   b.querySelectorAll('[data-off]').forEach(inp=>inp.onchange=()=>{ const o=store.get('prOff',[0,0,0,0,0,0]); o[+inp.dataset.off]=Math.max(-30,Math.min(30,Math.round(+inp.value||0))); store.set('prOff',o); prSchedule(); prRender(); });
   b.querySelectorAll('[data-bell]').forEach(x=>x.onclick=()=>{ const c=prAlertCfg(); c.on[+x.dataset.bell]=!c.on[+x.dataset.bell]; store.set('prAlert',c); prSchedule(); prPermCheck(true); prRender(); });
   seg('prSound',v=>{ const c=prAlertCfg(); c.sound=v; store.set('prAlert',c); prSchedule(); prRender(); });

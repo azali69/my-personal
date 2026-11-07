@@ -547,5 +547,12 @@
 "Copy link to this ayah": "Salin pautan ke ayat ini",
 "Link copied": "Pautan disalin",
 "Copy link": "Salin pautan",
-"Could not copy": "Tidak dapat menyalin"
+"Could not copy": "Tidak dapat menyalin",
+"Calculation method": "Kaedah pengiraan",
+"Automatic (by place)": "Automatik (mengikut tempat)",
+"Asr": "Asar",
+"Standard (Shafi’i, Maliki, Hanbali)": "Biasa (Syafie, Maliki, Hanbali)",
+"Hanafi": "Hanafi",
+"This method is used for every place, instead of the place’s own authority. For Singapore, the official MUIS timetable is replaced by a calculation unless you pick MUIS.": "Kaedah ini digunakan untuk setiap tempat, bukan pihak berkuasa tempat itu sendiri. Bagi Singapura, jadual rasmi MUIS diganti dengan pengiraan melainkan anda memilih MUIS.",
+"Automatic uses the authority of each place: MUIS for Singapore, JAKIM for Malaysia, Kemenag for Indonesia, and so on.": "Automatik menggunakan pihak berkuasa setiap tempat: MUIS untuk Singapura, JAKIM untuk Malaysia, Kemenag untuk Indonesia, dan seterusnya."
 }
