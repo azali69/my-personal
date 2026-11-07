@@ -37,6 +37,8 @@ if __name__ == '__main__':
         pg.add_init_script(FAKE)
         pg.goto('file://' + os.path.join(R, 'index.html')); pg.wait_for_timeout(3000)
         pg.evaluate("document.getElementById('cover')&&(document.getElementById('cover').hidden=true)")
+        # Home hides some tiles by default (7 Nov 2026); switch them all on so that every page is still tested
+        pg.evaluate("store.set('homeShow', HOME_OPT.map(x=>x[0])); renderHome()")
         tiles = pg.evaluate("[...document.querySelectorAll('[data-t]')].map(x=>x.dataset.t)")
         if len(tiles) < 15: fails.append(f'only {len(tiles)} home tiles')
         for t in tiles:

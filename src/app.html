@@ -1483,6 +1483,10 @@ async function putClipboard(t){
   try{ await navigator.clipboard.writeText(t); return true; }catch(e){}
   try{ const ta=document.createElement('textarea'); ta.value=t; ta.style.cssText='position:fixed;opacity:0'; document.body.appendChild(ta); ta.select(); const ok=document.execCommand('copy'); ta.remove(); return ok; }catch(e){ return false; }
 }
+/* Links that open the app at an ayah or a hadith (Azli, 7 Nov 2026), e.g. to paste in a PowerPoint slide:
+   .../my-personal/#2:255 (surah:ayah), #p50 (mushaf page), #bukhari-10, #muslim-8a (the book's own number). */
+const LINK_BASE='https://azali69.github.io/my-personal/';
+function copyLink(frag){ putClipboard(LINK_BASE+'#'+frag).then(ok=>toast(ok?'Link copied':'Could not copy')); }
 function copySheet(g,gEnd){
   const a=A[g], s=a[0], n=S[s-1][5];
   const toA = gEnd!=null ? (A[gEnd][0]===s? A[gEnd][1] : n) : a[1];
@@ -1764,7 +1768,8 @@ function ktBmSheet(k,n,sn,after){ const cur=ktBmGet(k.id,n);
     if(b.id==='kBmX'){ delete all[k.id+':'+n]; toast('Bookmark removed'); } else { all[k.id+':'+n]={c:b.dataset.c,t:Date.now(),s:sn}; toast(`Bookmarked ${k.en} ${ktN(k.id,n)}`); }
     store.set('ktBm',all); closeSheet(); after&&after(); }; }
 /* Clicks on a hadith card: bookmark, note, copy. redraw() repaints that card after a change. */
-function ktCardClick(e,k,find,redraw){ const bmB=e.target.closest('[data-bm]'), ntB=e.target.closest('[data-note]'), cpB=e.target.closest('[data-copy]');
+function ktCardClick(e,k,find,redraw){ const bmB=e.target.closest('[data-bm]'), ntB=e.target.closest('[data-note]'), cpB=e.target.closest('[data-copy]'), lkB=e.target.closest('[data-link]');
+  if(lkB){ const r=find(+lkB.dataset.link); if(r) copyLink(k.id+'-'+ktN(k.id,r.h[0])); return true; }
   if(cpB){ const r=find(+cpB.dataset.copy); if(r) ktCopy(k,r.h); return true; }
   if(bmB){ const r=find(+bmB.dataset.bm); if(r) ktBmSheet(k,r.h[0],r.sn,()=>redraw(r)); return true; }
   if(ntB){ const r=find(+ntB.dataset.note); if(r) noteSheet(`h:${k.id}:${r.h[0]}`,null,()=>redraw(r)); return true; }
@@ -1876,7 +1881,7 @@ function ktCard(k,h,show,extra,sn,q){ const [n,ref,ar0,en0,idn0,gr]=h, cut=h[7]|
   const grades = gr.length? `<div class="kt-gs">${gr.map(([w,v])=>`<span class="kt-g ${ktGradeCls(v)}"><small>${esc(KT_GR[w]||w)}${grWaf(w)}</small> <b${w==='tir'?' dir="rtl" lang="ar" style="font-family:var(--ar);font-weight:400"':''}>${esc(w==='tir'?v:ktGradeTxt(v))}</b></span>`).join('')}</div>`
     : (k.id==='bukhari'||k.id==='muslim')? '' : '<div class="kt-gs"><span class="kt-g"><small>No grading in the source for this hadith</small></span></div>';
   return `<div class="card kt-card" id="kt-${n}" data-n="${n}">
-   <div class="kt-ref"><span class="kt-name"><b>${esc(k.en)} ${ktN(k.id,n)}</b>${k.id==='muslim'&&ktN(k.id,n)!==String(n)?`<small>no. ${n} in this list</small>`:''}${ref&&sn!=null?`<small>Kitab ${sn} · in-book no. ${ref}</small>`:''}</span>${(()=>{ const bm=ktBmGet(k.id,n), nt=noteGet(`h:${k.id}:${n}`); return `<button class="ib kt-btn" data-bm="${n}" aria-label="Bookmark"${bm?` style="color:var(--bm${bm.c})"`:''}><svg viewBox="0 0 24 24" fill="${bm?'currentColor':'none'}" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M7 4h10v16l-5-3.5L7 20z"/></svg></button><button class="ib kt-btn${nt?' on':''}" data-note="${n}" aria-label="Note">${ic('note')}</button>`; })()}<button class="ib kt-copy" data-copy="${n}" aria-label="Copy">${ic('copy')}</button></div>
+   <div class="kt-ref"><span class="kt-name"><b>${esc(k.en)} ${ktN(k.id,n)}</b>${k.id==='muslim'&&ktN(k.id,n)!==String(n)?`<small>no. ${n} in this list</small>`:''}${ref&&sn!=null?`<small>Kitab ${sn} · in-book no. ${ref}</small>`:''}</span>${(()=>{ const bm=ktBmGet(k.id,n), nt=noteGet(`h:${k.id}:${n}`); return `<button class="ib kt-btn" data-bm="${n}" aria-label="Bookmark"${bm?` style="color:var(--bm${bm.c})"`:''}><svg viewBox="0 0 24 24" fill="${bm?'currentColor':'none'}" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M7 4h10v16l-5-3.5L7 20z"/></svg></button><button class="ib kt-btn${nt?' on':''}" data-note="${n}" aria-label="Note">${ic('note')}</button>`; })()}<button class="ib kt-copy" data-link="${n}" aria-label="Copy link">${ic('link')}</button><button class="ib kt-copy" data-copy="${n}" aria-label="Copy">${ic('copy')}</button></div>
    ${extra||''}${grades}${byLine}
    ${show.has('ar')&&!ar?'<p class="note" style="margin:4px 0">No Arabic text in the source for this hadith.</p>':''}${show.has('ar')&&ar?`<div class="kt-ar" dir="rtl" lang="ar">${ktMarked(ar,q,dA)}</div>${h[6]?'<p class="note" style="margin:2px 0 6px">One letter of this Arabic text is damaged in the source and could not be confirmed from a second copy; it is shown as …</p>':''}`:''}
    ${show.has('en')&&!en?'<p class="note" style="margin:4px 0">No English translation in the source for this hadith.</p>':''}${noId?`<p class="note" style="margin:4px 0">No Indonesian translation in the source for this hadith${show.has('en')?'.':'; English shown.'}</p>`:''}
@@ -2430,7 +2435,7 @@ async function saveOffline(set){
   const m=msg(); if(m && my===offRun) m.textContent = fail? `Saved ${ok} pages. ${fail} failed; try again with a steady connection.` : 'All 604 pages are saved for offline reading.';
 }
 function rerender(){ hz ? renderHz() : renderReader(); }
-function ic(n){ const p={trash:'<path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/>',hist:'<path d="M4 12a8 8 0 1 0 2.3-5.6M4 4v4h4M12 8v4l3 2"/>',info:'<circle cx="12" cy="12" r="8.5"/><path d="M12 11v5M12 8h.01"/>',mic:'<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/>',blk:'<path d="M5 5h14M5 12h9M5 19h14"/>',copy:'<rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/>',tr:'<path d="M4 6h10M9 4v2M6 6c1 4 4 7 8 8M12 6c-1 4-4 7-7 8M13 20l4-9 4 9M14.5 17h5"/>',book:'<path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H11v16H5.5A1.5 1.5 0 0 1 4 18.5zM20 5.5A1.5 1.5 0 0 0 18.5 4H13v16h5.5a1.5 1.5 0 0 0 1.5-1.5z"/>',play:'<path d="M4 14v-2a8 8 0 0 1 16 0v2"/><rect x="3" y="14" width="4" height="6" rx="1.5"/><rect x="17" y="14" width="4" height="6" rx="1.5"/>',
+function ic(n){ const p={trash:'<path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/>',hist:'<path d="M4 12a8 8 0 1 0 2.3-5.6M4 4v4h4M12 8v4l3 2"/>',info:'<circle cx="12" cy="12" r="8.5"/><path d="M12 11v5M12 8h.01"/>',mic:'<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/>',blk:'<path d="M5 5h14M5 12h9M5 19h14"/>',link:'<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>',copy:'<rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/>',tr:'<path d="M4 6h10M9 4v2M6 6c1 4 4 7 8 8M12 6c-1 4-4 7-7 8M13 20l4-9 4 9M14.5 17h5"/>',book:'<path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H11v16H5.5A1.5 1.5 0 0 1 4 18.5zM20 5.5A1.5 1.5 0 0 0 18.5 4H13v16h5.5a1.5 1.5 0 0 0 1.5-1.5z"/>',play:'<path d="M4 14v-2a8 8 0 0 1 16 0v2"/><rect x="3" y="14" width="4" height="6" rx="1.5"/><rect x="17" y="14" width="4" height="6" rx="1.5"/>',
   note:'<path d="M5 4h10l4 4v12H5z"/><path d="M15 4v4h4M8 12h8M8 16h5"/>',bmk:'<path d="M7 4h10v16l-5-3.5L7 20z"/>',
   cam:'<path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/>',img:'<rect x="4" y="4" width="16" height="16" rx="2"/><circle cx="9" cy="9" r="1.6"/><path d="m4 17 5-5 4 4 2-2 5 5"/>',
   search:'<circle cx="11" cy="11" r="6"/><path d="m20 20-4.5-4.5"/>',pin:'<path d="M12 21s-6.5-6-6.5-11a6.5 6.5 0 0 1 13 0c0 5-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/>',
@@ -2458,6 +2463,7 @@ function ayahSheet(g){
     <button id="aHd">${ic('book')}Hadith on this ayah${HL&&HL.has(g)?` (${((HLD.a||{})[g]||[]).length+((HLD.t||[]).includes(g)?1:0)}+)`:''}</button>
     <button id="aSim">${ic('tr')}Ayat with similar wording</button>
     <button id="aCopy">${ic('copy')}Copy ayat and translation…</button>
+    <button id="aLink">${ic('link')}Copy link to this ayah</button>
     <button id="aNote">${ic('note')}${noteGet('q:'+g)?'Edit my note':'Write a note'}</button>
    </div>${noteGet('q:'+g)?`<div class="label">My note</div><p class="kt-note" dir="auto">${esc(noteGet('q:'+g).t)}</p>`:''}`);
   sheetB.querySelector('#aBm').onclick=e=>{ const b=e.target.closest('button'); if(!b) return;
@@ -2468,6 +2474,7 @@ function ayahSheet(g){
   sheetB.querySelector('#aPlay').onclick=()=>{ closeSheet(); playSheet(g); };
   sheetB.querySelector('#aTq').onclick=()=>startTq(g);
   const hb=sheetB.querySelector('#aHzB'); if(hb) hb.onclick=()=>{ closeSheet(); startHz(bf.g0,bf.g1,bf.b); };
+  sheetB.querySelector('#aLink').onclick=()=>{ closeSheet(); copyLink(a[0]+':'+a[1]); };
   sheetB.querySelector('#aBlk').onclick=()=>blocksSheet(g);
   sheetB.querySelector('#aCopy').onclick=()=>copySheet(g);
   sheetB.querySelector('#aTaf').onclick=()=>tafsirSheet(g);
@@ -3585,6 +3592,10 @@ function hijriCalendar(d0){ let cur=new Date(d0.getFullYear(),d0.getMonth(),1);
 function hijriOf(d){ const h=hijriParts(d); return `${h.d} ${HIJRI_M[h.m-1]} ${h.y} H`; }
 function hijriToday(){ return hijriOf(new Date()); }
 let homeTimer=0;
+/* What Home shows (Azli, 7 Nov 2026): the next-prayer card and these tiles are hidden unless switched on in Home settings.
+   Hiding only removes them from Home: the features, and the prayer alerts, keep working. */
+const HOME_OPT=[['salah','Next prayer time card'],['hz','Memorisation'],['tq','Listen & Repeat'],['dua',"Du'a & Zikir"],['halal','Halal Food'],['masjid','Mosques & Prayer Rooms'],['pray','Prayer Times'],['qibla','Qibla']];
+const homeShown=()=>new Set(store.get('homeShow',[]));
 function showHome(){ navRetClear(); if(hz){ if(rec) stopListen(false); hz=null; document.getElementById('dock').classList.remove('hz'); }
   if(pl) {/* keep the reciter playing */}
   let el=document.getElementById('home'); if(!el){ el=document.createElement('section'); el.id='home'; el.className='home'; el.setAttribute('aria-label','Home'); document.body.appendChild(el); }
@@ -3619,6 +3630,7 @@ function renderHome(){ const el=document.getElementById('home'); const g=pageSta
     <button class="tile" data-t="man">${hic('man')}<b>User Guide</b><small>English and Bahasa Melayu</small></button>
     <div class="tile langtile">${hic('lang')}<b>Language · Bahasa</b>${langPick()}</div>
    </div></div>`;
+  { const on=homeShown(); HOME_OPT.forEach(([k])=>{ if(on.has(k)) return; if(k==='salah') el.querySelector('#hmSalah')?.remove(); else el.querySelector(`.tile[data-t="${k}"]`)?.remove(); }); }
   renderSalahCard();
   el.querySelector('#hmSet').onclick=homeSetSheet;
   el.querySelector('.tiles').onclick=e=>{ const b=e.target.closest('.tile'); if(!b) return; const t=b.dataset.t;
@@ -3654,6 +3666,9 @@ function fmtT(t){ if(!t) return '–'; const [h,m]=t.split(':').map(Number); ret
 function homeSetSheet(){ openSheet('Home and colours', `
    <div class="label" style="margin-top:0">Home background</div>${segHtml('hmTheme',HOME_THEMES,store.get('homeTheme','hijau'))}
    <div class="label">Top and bottom bar colour</div>${segHtml('hmDock',DOCK_COLS,store.get('dockCol','hijau'))}
+   <div class="label">On Home</div>
+   ${HOME_OPT.map(([k,l])=>`<div class="row2" style="gap:8px;align-items:center;margin:4px 0"><span style="flex:1">${l}</span>${segHtml('hmv-'+k,[[true,'Show'],[false,'Hide']],homeShown().has(k))}</div>`).join('')}
+   <p class="note">Hidden items only leave this screen. The features, and the prayer alerts, keep working.</p>
    <div class="label">Book cover when the app opens</div>${segHtml('hmCover',[[true,'Show'],[false,'Skip']],store.get('cover',true))}
    <div class="label">Book cover colour</div>${segHtml('hmCoverCol',COVER_COLS,coverColSet())}
    <div class="label">"Tap change colour" on the book cover changes</div>${segHtml('hmCoverAll',[[true,'Whole app (cover, Home, bars)'],[false,'Book cover only']],store.get('coverAll',true))}
@@ -3661,6 +3676,8 @@ function homeSetSheet(){ openSheet('Home and colours', `
   sheetB.querySelector('#hmCoverCol').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; sheetB.querySelectorAll('#hmCoverCol button').forEach(x=>x.setAttribute('aria-pressed',x===b)); store.set('coverCol',b.dataset.v); };
   sheetB.querySelector('#hmCoverAll').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; sheetB.querySelectorAll('#hmCoverAll button').forEach(x=>x.setAttribute('aria-pressed',x===b)); store.set('coverAll',b.dataset.v==='true'); };
   sheetB.querySelector('#hmCoverPv').onclick=()=>{ closeSheet(); showCover(); };
+  HOME_OPT.forEach(([k])=>{ sheetB.querySelector('#hmv-'+k).onclick=e=>{ const b=e.target.closest('button'); if(!b) return; sheetB.querySelectorAll('#hmv-'+k+' button').forEach(x=>x.setAttribute('aria-pressed',x===b));
+    const on=homeShown(); b.dataset.v==='true'? on.add(k) : on.delete(k); store.set('homeShow',[...on]); if(!document.getElementById('home')?.hidden) renderHome(); }; });
   const on=(id,key,conv)=>{ sheetB.querySelector('#'+id).onclick=e=>{ const b=e.target.closest('button'); if(!b) return; sheetB.querySelectorAll('#'+id+' button').forEach(x=>x.setAttribute('aria-pressed',x===b)); store.set(key,conv(b.dataset.v)); applyHomeLook(); if(!document.getElementById('home')?.hidden) applyHomeBars(); }; };
   on('hmTheme','homeTheme',v=>v); on('hmDock','dockCol',v=>{ setTimeout(()=>{ if(document.getElementById('home')?.hidden!==false) applyLook(); },0); return v; }); on('hmCover','cover',v=>v==='true'); }
 /* A full-screen page above the reader (prayer times, Qibla, doa), with a back arrow to Home. */
@@ -4818,11 +4835,16 @@ applyLook();
 setTimeout(()=>syncNow(false),2500);   // bring what changed on the other device
 if(store.get('imm',false)) setImmersive(true);
 if('serviceWorker' in navigator && /github\.io$/.test(location.hostname)){ navigator.serviceWorker.register('sw.js').catch(()=>{}); }
-(function boot(){ const h=(location.hash||'').slice(1); let r=null;
-  if(h){ r=parseRef(h.replace('.',':')) || parseRef(h); }
+(function boot(){ const h=(location.hash||'').slice(1); let r=null, hr=null;
+  if(h){ r=parseRef(h.replace('.',':')) || parseRef(h); if(!r){ try{ hr=ktRefParse(decodeURIComponent(h)); }catch(e){} } }
   // opened from a prayer notification: straight to the prayer times, no book cover
   let fromN=''; try{ fromN=window.AndroidExtra?.takeOpen?.()||''; }catch(e){}
-  if(r){ r.page? goPage(r.page) : goAyah(r.g); } else { renderReader(); applyHomeLook(); showHome(); if(fromN==='prayer') prayerPanel(); else if(ckTakeShared()){} else if(store.get('cover',true) && !(()=>{ try{ const x=sessionStorage.getItem('mpq.noCover'); sessionStorage.removeItem('mpq.noCover'); return x; }catch(e){ return null; } })()) showCover(); } })();
+  if(r){ r.page? goPage(r.page) : goAyah(r.g); } else if(hr){ renderReader(); ktGoRef(hr); } else { renderReader(); applyHomeLook(); showHome(); if(fromN==='prayer') prayerPanel(); else if(ckTakeShared()){} else if(store.get('cover',true) && !(()=>{ try{ const x=sessionStorage.getItem('mpq.noCover'); sessionStorage.removeItem('mpq.noCover'); return x; }catch(e){ return null; } })()) showCover(); } })();
+/* A link clicked while the app is already open (same tab) only changes the # part: open it. */
+window.addEventListener('hashchange',()=>{ const h=(location.hash||'').slice(1); if(!h) return; let r=parseRef(h.replace('.',':')) || parseRef(h), hr=null;
+  if(!r){ try{ hr=ktRefParse(decodeURIComponent(h)); }catch(e){} } if(!r&&!hr) return;
+  const c=document.getElementById('cover'); if(c) c.hidden=true; closeSheet();
+  if(r){ document.querySelectorAll('.panel').forEach(p=>p.hidden=true); hideHome(); r.page? goPage(r.page) : goAyah(r.g); } else { hideHome(); ktGoRef(hr); } });
 window.__openFrom=w=>{ if(w!=='prayer') return; const c=document.getElementById('cover'); if(c) c.hidden=true; if(document.getElementById('home')?.hidden!==false){ applyHomeLook(); showHome(); } prayerPanel(); };
 applyHomeLook();
 document.addEventListener('visibilitychange',()=>{ if(document.hidden) coverOnLeave(); });
