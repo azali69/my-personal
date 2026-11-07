@@ -3739,7 +3739,7 @@ const MUIS=%%MUIS%%;
 const PR_NAMES=['Subuh','Syuruk','Zohor','Asar','Maghrib','Isyak'];
 /* Cities: [name, lat, lng, time zone, method, country]. Each place uses the method of its own authority or the one its
    Muslims commonly follow; times are shown in the city's own clock. */
-const PR_METHODS={muis:{f:20,i:18,n:'MUIS'},jakim:{f:20,i:18,n:'JAKIM'},kemenag:{f:20,i:18,n:'Kemenag'},brunei:{f:20,i:18,n:'Brunei'},
+const PR_METHODS={muis:{f:20,i:18,n:'MUIS'},jakim:{f:20,i:18,n:'JAKIM'},kemenag:{f:20,i:18,ih:2,n:'Kemenag'},brunei:{f:20,i:18,n:'Brunei'},
   mwl:{f:18,i:17,n:'Muslim World League'},isna:{f:15,i:15,n:'ISNA'},egypt:{f:19.5,i:17.5,n:'Egyptian General Authority of Survey'},
   karachi:{f:18,i:18,a:2,n:'Karachi (Hanafi Asr)'},uq:{f:18.5,im:90,n:'Umm al-Qura'},dubai:{f:18.2,i:18.2,n:'Dubai'},qatar:{f:18,im:90,n:'Qatar'},
   kuwait:{f:18,i:17.5,n:'Kuwait'},turkey:{f:18,i:17,a:2,n:'Diyanet (Hanafi Asr)'},morocco:{f:19,i:17,n:'Morocco'}};
@@ -3786,16 +3786,25 @@ function sunCalc(d,lat,lng,M,tzh){ // returns hours (clock of the place, or of t
   const asr=-Math.atan(1/((M.a||1)+Math.tan(Math.abs(phi-decl))))/rad, mg=T(0.833,1);
   // Umm al-Qura / Qatar: Isha a fixed time after Maghrib (120 minutes in Ramadan for Umm al-Qura)
   const isha = M.im ? (mg==null?null: mg+(M.im+(M===PR_METHODS.uq && hijriParts(d).m===9 ? 30 : 0))/60) : T(M.i,1);
-  return [T(M.f,-1),T(0.833,-1),noon,T(asr,1),mg,isha]; }
+  const out=[T(M.f,-1),T(0.833,-1),noon,T(asr,1),mg,isha];
+  // Kemenag RI adds 2 minutes of ihtiyat (precaution) to every time, and takes 2 minutes off Syuruk so Subuh ends early
+  if(M.ih) return out.map((h,i)=> h==null?null: h+(i===1?-M.ih:M.ih)/60);
+  return out; }
 function hhmm(h){ if(h==null) return null; let m=Math.ceil(h*60-1e-9); m=((m%1440)+1440)%1440; return String(Math.floor(m/60)).padStart(2,'0')+':'+String(m%60).padStart(2,'0'); }
+/* Singapore's land and islands, with a small margin: Batam (1.0–1.2°N) and Johor Bahru lie outside it */
+const SG_POLY=[[103.595,1.28],[103.64,1.255],[103.72,1.18],[103.76,1.15],[103.80,1.20],[103.87,1.20],[103.93,1.28],[104.02,1.30],[104.10,1.37],[104.10,1.42],[104.02,1.43],[103.95,1.45],[103.85,1.48],[103.75,1.48],[103.67,1.45],[103.62,1.40],[103.595,1.33]];
+function inSingapore(lat,lng){ let o=false; for(let i=0,j=SG_POLY.length-1;i<SG_POLY.length;j=i++){ const [xi,yi]=SG_POLY[i],[xj,yj]=SG_POLY[j];
+  if((yi>lat)!==(yj>lat) && lng<(xj-xi)*(lat-yi)/(yj-yi)+xi) o=!o; } return o; }
+/* the listed city within 100 km of a GPS fix: its authority's method and its clock apply (a phone in Batam follows Kemenag) */
+function prNearCity(lat,lng){ let best=null,bd=100; for(const c of PR_CITIES){ const dy=(c[1]-lat)*111.2, dx=(c[2]-lng)*111.2*Math.cos(lat*Math.PI/180), dd=Math.hypot(dx,dy); if(dd<bd){ bd=dd; best=c; } } return best; }
 let muisExtra=null;   // a newer timetable fetched from the app's site, when the built-in one has run out
 function prayerTimesFor(d){ const loc=prLoc(), off=store.get('prOff',[0,0,0,0,0,0]);
   let t=null, label='', tz=null, method=null;
-  const inSG = loc.mode!=='sg' && loc.lat>1.15 && loc.lat<1.48 && loc.lng>103.6 && loc.lng<104.1;
+  const inSG = loc.mode!=='sg' && inSingapore(loc.lat,loc.lng);
   if(loc.mode==='sg' || inSG){ tz='Asia/Singapore'; const k=ymd(d); const row=(MUIS&&MUIS.days[k])||(muisExtra&&muisExtra.days[k]);
     if(row){ t=row.slice(); label='MUIS'; } else { const c=sunCalc(d,1.3521,103.8198,PR_METHODS.muis,tzOff(tz,d)); t=c.map((h,i)=>hhmm(h!=null&&i===2?h+1/60:h)); label='MUIS has not published this date yet, so it is calculated for Singapore'; if(!muisExtra) prFetchMuis(); } }
-  else { const city=loc.mode==='city' ? PR_CITIES.find(c=>c[0]===loc.name) : null; method=PR_METHODS[(city&&city[4])||'muis']; tz=city?city[3]:null;
-    const c=sunCalc(d,loc.lat,loc.lng,method,tz?tzOff(tz,new Date(d.getFullYear(),d.getMonth(),d.getDate(),12)):null); t=c.map((h,i)=>hhmm(h!=null&&i===2?h+1/60:h));
+  else { const city=loc.mode==='city' ? PR_CITIES.find(c=>c[0]===loc.name) : prNearCity(loc.lat,loc.lng); method=PR_METHODS[(city&&city[4])||'muis']; tz=city?city[3]:null;
+    const c=sunCalc(d,loc.lat,loc.lng,method,tz?tzOff(tz,new Date(d.getFullYear(),d.getMonth(),d.getDate(),12)):null); t=c.map((h,i)=>hhmm(h!=null&&i===2&&!method.ih?h+1/60:h));
     label='Calculated for '+(loc.mode==='gps'?`your location (${(+loc.lat).toFixed(3)}, ${(+loc.lng).toFixed(3)})`:loc.name); }
   t=t.map((x,i)=>{ if(!x||!off[i]) return x; const [h,m]=x.split(':').map(Number); const v=((h*60+m+off[i])%1440+1440)%1440; return String(Math.floor(v/60)).padStart(2,'0')+':'+String(v%60).padStart(2,'0'); });
   return {times:t,label,tz,method}; }
