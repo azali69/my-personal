@@ -3761,7 +3761,7 @@ const PR_CITIES=[
  ['Jakarta',-6.17033,106.83105,'Asia/Jakarta','kemenag','Indonesia'],['Batam',1.12647,104.05296,'Asia/Jakarta','kemenag','Indonesia'],['Surabaya',-7.2575,112.7521,'Asia/Jakarta','kemenag','Indonesia'],['Medan',3.5952,98.6722,'Asia/Jakarta','kemenag','Indonesia'],['Bali (Denpasar)',-8.6705,115.2126,'Asia/Makassar','kemenag','Indonesia'],
  ['Bandar Seri Begawan',4.9031,114.9398,'Asia/Brunei','brunei','Brunei'],
  ['Bangkok',13.7563,100.5018,'Asia/Bangkok','mwl','Thailand'],['Hat Yai',7.0086,100.4747,'Asia/Bangkok','mwl','Thailand'],['Ho Chi Minh City',10.8231,106.6297,'Asia/Ho_Chi_Minh','mwl','Vietnam'],['Phnom Penh',11.5564,104.9282,'Asia/Phnom_Penh','mwl','Cambodia'],['Manila',14.5995,120.9842,'Asia/Manila','mwl','Philippines'],['Yangon',16.8409,96.1735,'Asia/Yangon','karachi','Myanmar'],
- ['Tokyo',35.6762,139.6503,'Asia/Tokyo','mwl','Japan'],['Osaka',34.6937,135.5023,'Asia/Tokyo','mwl','Japan'],['Seoul',37.5665,126.978,'Asia/Seoul','mwl','South Korea'],['Busan',35.1796,129.0756,'Asia/Seoul','mwl','South Korea'],
+ ['Tokyo',35.6762,139.6503,'Asia/Tokyo','mwl','Japan'],['Osaka',34.6937,135.5023,'Asia/Tokyo','mwl','Japan'],['Kyoto',35.0116,135.7681,'Asia/Tokyo','mwl','Japan'],['Seoul',37.5665,126.978,'Asia/Seoul','mwl','South Korea'],['Busan',35.1796,129.0756,'Asia/Seoul','mwl','South Korea'],
  ['Beijing',39.9042,116.4074,'Asia/Shanghai','mwl','China'],['Shanghai',31.2304,121.4737,'Asia/Shanghai','mwl','China'],['Hong Kong',22.3193,114.1694,'Asia/Hong_Kong','mwl','Hong Kong'],['Taipei',25.033,121.5654,'Asia/Taipei','mwl','Taiwan'],
  ['Delhi',28.6139,77.209,'Asia/Kolkata','karachi','India'],['Mumbai',19.076,72.8777,'Asia/Kolkata','karachi','India'],['Dhaka',23.8103,90.4125,'Asia/Dhaka','karachi','Bangladesh'],['Karachi',24.8607,67.0011,'Asia/Karachi','karachi','Pakistan'],['Lahore',31.5204,74.3587,'Asia/Karachi','karachi','Pakistan'],['Colombo',6.9271,79.8612,'Asia/Colombo','mwl','Sri Lanka'],['Malé',4.1755,73.5093,'Indian/Maldives','karachi','Maldives'],
  ['Makkah',21.4225,39.8262,'Asia/Riyadh','uq','Saudi Arabia'],['Madinah',24.4672,39.6111,'Asia/Riyadh','uq','Saudi Arabia'],['Riyadh',24.7136,46.6753,'Asia/Riyadh','uq','Saudi Arabia'],['Jeddah',21.4858,39.1925,'Asia/Riyadh','uq','Saudi Arabia'],
@@ -3798,7 +3798,10 @@ const SG_POLY=[[103.595,1.28],[103.64,1.255],[103.72,1.18],[103.76,1.15],[103.80
 function inSingapore(lat,lng){ let o=false; for(let i=0,j=SG_POLY.length-1;i<SG_POLY.length;j=i++){ const [xi,yi]=SG_POLY[i],[xj,yj]=SG_POLY[j];
   if((yi>lat)!==(yj>lat) && lng<(xj-xi)*(lat-yi)/(yj-yi)+xi) o=!o; } return o; }
 /* the listed city within 100 km of a GPS fix: its authority's method and its clock apply (a phone in Batam follows Kemenag) */
-function prNearCity(lat,lng){ let best=null,bd=100; for(const c of PR_CITIES){ const dy=(c[1]-lat)*111.2, dx=(c[2]-lng)*111.2*Math.cos(lat*Math.PI/180), dd=Math.hypot(dx,dy); if(dd<bd){ bd=dd; best=c; } } return best; }
+function prNearCity(lat,lng){ let best=null,bd=100; for(const c of PR_CITIES){ const dy=(c[1]-lat)*111.2, dx=(c[2]-lng)*111.2*Math.cos(lat*Math.PI/180), dd=Math.hypot(dx,dy); if(dd<bd){ bd=dd; best=c; } }
+  // far from every listed city: all of Japan follows one clock and, there, the Muslim World League angles
+  if(!best && ((lat>30&&lat<46&&lng>129.3&&lng<146)||(lat>24&&lat<28&&lng>122.9&&lng<131.5))) best=['Japan',lat,lng,'Asia/Tokyo','mwl','Japan'];
+  return best; }
 let muisExtra=null;   // a newer timetable fetched from the app's site, when the built-in one has run out
 function prayerTimesFor(d){ const loc=prLoc(), off=store.get('prOff',[0,0,0,0,0,0]);
   let t=null, label='', tz=null, method=null;

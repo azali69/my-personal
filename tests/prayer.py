@@ -40,6 +40,9 @@ with sync_playwright() as p:
     pg.evaluate("()=>{store.set('prLoc',{mode:'sg'});store.set('prMethod','egypt');}"); pg.evaluate("prRender()"); pg.wait_for_timeout(500)
     chk('method picker shown, Asr shown once a method is picked', pg.evaluate("!!document.getElementById('prMeth') && !!document.getElementById('prAsr') && document.getElementById('prMeth').value==='egypt'"))
     pg.evaluate("()=>{store.set('prMethod','auto');}")
+    for n, la, ln in [('Kyoto', 35.0116, 135.7681), ('Hiroshima', 34.39, 132.46), ('Sapporo', 43.06, 141.35), ('Fukuoka', 33.59, 130.40)]:
+        r = T({'mode': 'gps', 'lat': la, 'lng': ln}); chk(f'Japan {n}: Muslim World League, Tokyo clock', r['method']['n'] == 'Muslim World League' and r['tz'] == 'Asia/Tokyo', r['times'][0])
+    chk('Kyoto is in the city list', pg.evaluate("PR_CITIES.some(c=>c[0]==='Kyoto')"))
     chk('no page errors', not errs, str(errs))
     b.close()
 print('FAILED:', fails) if fails else print('all ok'); sys.exit(1 if fails else 0)
