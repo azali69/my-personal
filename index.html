@@ -712,7 +712,7 @@ a.tile{text-decoration:none;color:inherit}
 <header class="top"><div class="top-in">
   <button class="ib" id="btnHome" aria-label="Home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11.5 12 5l8 6.5V20h-5v-5h-6v5H4z"/></svg></button>
   <button class="ib" id="btnNav" aria-label="Surahs and pages"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg></button>
-  <button class="where" id="where"><b id="whereT">My Personal Qur'an</b><small id="whereS">v1.0.0.104</small></button>
+  <button class="where" id="where"><b id="whereT">My Personal Qur'an</b><small id="whereS">v1.0.0.105</small></button>
   <button class="ib" id="btnBlk" aria-label="Waqaf and ibtida' colours" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="4" y="5" width="16" height="5" rx="1.5" fill="currentColor" fill-opacity=".25"/><rect x="4" y="14" width="16" height="5" rx="1.5"/></svg></button>
   <button class="ib" id="btnBm" aria-label="Bookmarks"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M7 4h10v16l-5-3.5L7 20z"/></svg></button>
   <button class="ib" id="btnSearch" aria-label="Search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/></svg></button>
@@ -3999,7 +3999,7 @@ function histSheet(){
 async function sha(s){ const b=await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s)); return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join(''); }
 function aboutSheet(){
   openSheet('Sources & verification', `
-  <p class="note" style="margin-top:0"><b>My Personal Qur'an v1.0.0.104.</b> The Qur'an text is shown exactly as published by its source. The app never edits it.</p>
+  <p class="note" style="margin-top:0"><b>My Personal Qur'an v1.0.0.105.</b> The Qur'an text is shown exactly as published by its source. The app never edits it.</p>
   <div class="card" style="padding:10px 12px;margin:8px 0"><b>${sL()==='ms'?'Penafian':'Disclaimer'}</b><p class="note" style="margin:4px 0 0">${sL()==='ms'?'Untuk kegunaan peribadi sahaja: percuma, tidak dijual dan tidak boleh digunakan secara komersial. Kandungan milik penerbit masing-masing (disenaraikan di bawah) dan dipaparkan tanpa diubah. Sirah, Sifat Solat dan Solat Jumaat ditulis untuk aplikasi ini daripada sumber yang dinamakan. Ini alat bantu belajar, bukan fatwa: rujuk ulama yang berkelayakan untuk hukum.':'For personal use only: free, not for sale, and not to be used commercially. The contents belong to their publishers (listed below) and are shown unchanged. The Sirah, Sifat Solat and Solat Jumaat are written for this app from the sources named in them. This is a study aid, not a fatwa: ask a qualified scholar for rulings.'}</p></div>
   <p id="integ" class="note">Checking the text in this copy of the app…</p>
   <ul class="src">
@@ -4290,7 +4290,7 @@ const MUIS={"source":"MUIS, Muslim Prayer Timetable, data.gov.sg (Open Data Lice
 const PR_NAMES=['Subuh','Syuruk','Zohor','Asar','Maghrib','Isyak'];
 /* Cities: [name, lat, lng, time zone, method, country]. Each place uses the method of its own authority or the one its
    Muslims commonly follow; times are shown in the city's own clock. */
-const PR_METHODS={muis:{f:20,i:18,n:'MUIS'},jakim:{f:20,i:18,n:'JAKIM'},kemenag:{f:20,i:18,ih:2,n:'Kemenag'},brunei:{f:20,i:18,n:'Brunei'},
+const PR_METHODS={muis:{f:20,i:18,n:'MUIS'},jakim:{f:20,i:18,n:'JAKIM'},kemenag:{f:20,i:18,kd:[2,-3.7,3,2,2.7,2],n:'Kemenag'},brunei:{f:20,i:18,n:'Brunei'},
   mwl:{f:18,i:17,n:'Muslim World League'},isna:{f:15,i:15,n:'ISNA'},egypt:{f:19.5,i:17.5,n:'Egyptian General Authority of Survey'},
   karachi:{f:18,i:18,a:2,n:'Karachi (Hanafi Asr)'},uq:{f:18.5,im:90,n:'Umm al-Qura'},dubai:{f:18.2,i:18.2,n:'Dubai'},qatar:{f:18,im:90,n:'Qatar'},
   kuwait:{f:18,i:17.5,n:'Kuwait'},turkey:{f:18,i:17,a:2,n:'Diyanet (Hanafi Asr)'},morocco:{f:19,i:17,n:'Morocco'}};
@@ -4309,7 +4309,7 @@ function prCitySheet(cur,pick){
 const PR_CITIES=[
  ['Singapore',1.3521,103.8198,'Asia/Singapore','muis','Singapore'],
  ['Kuala Lumpur',3.139,101.6869,'Asia/Kuala_Lumpur','jakim','Malaysia'],['Johor Bahru',1.4927,103.7414,'Asia/Kuala_Lumpur','jakim','Malaysia'],['Melaka',2.1896,102.2501,'Asia/Kuala_Lumpur','jakim','Malaysia'],['George Town (Penang)',5.4141,100.3288,'Asia/Kuala_Lumpur','jakim','Malaysia'],['Kota Bharu',6.1254,102.2381,'Asia/Kuala_Lumpur','jakim','Malaysia'],['Kuching',1.5533,110.3592,'Asia/Kuching','jakim','Malaysia'],['Kota Kinabalu',5.9804,116.0735,'Asia/Kuching','jakim','Malaysia'],
- ['Jakarta',-6.2088,106.8456,'Asia/Jakarta','kemenag','Indonesia'],['Batam',1.0456,104.0305,'Asia/Jakarta','kemenag','Indonesia'],['Surabaya',-7.2575,112.7521,'Asia/Jakarta','kemenag','Indonesia'],['Medan',3.5952,98.6722,'Asia/Jakarta','kemenag','Indonesia'],['Bali (Denpasar)',-8.6705,115.2126,'Asia/Makassar','kemenag','Indonesia'],
+ ['Jakarta',-6.17033,106.83105,'Asia/Jakarta','kemenag','Indonesia'],['Batam',1.12647,104.05296,'Asia/Jakarta','kemenag','Indonesia'],['Surabaya',-7.2575,112.7521,'Asia/Jakarta','kemenag','Indonesia'],['Medan',3.5952,98.6722,'Asia/Jakarta','kemenag','Indonesia'],['Bali (Denpasar)',-8.6705,115.2126,'Asia/Makassar','kemenag','Indonesia'],
  ['Bandar Seri Begawan',4.9031,114.9398,'Asia/Brunei','brunei','Brunei'],
  ['Bangkok',13.7563,100.5018,'Asia/Bangkok','mwl','Thailand'],['Hat Yai',7.0086,100.4747,'Asia/Bangkok','mwl','Thailand'],['Ho Chi Minh City',10.8231,106.6297,'Asia/Ho_Chi_Minh','mwl','Vietnam'],['Phnom Penh',11.5564,104.9282,'Asia/Phnom_Penh','mwl','Cambodia'],['Manila',14.5995,120.9842,'Asia/Manila','mwl','Philippines'],['Yangon',16.8409,96.1735,'Asia/Yangon','karachi','Myanmar'],
  ['Tokyo',35.6762,139.6503,'Asia/Tokyo','mwl','Japan'],['Osaka',34.6937,135.5023,'Asia/Tokyo','mwl','Japan'],['Seoul',37.5665,126.978,'Asia/Seoul','mwl','South Korea'],['Busan',35.1796,129.0756,'Asia/Seoul','mwl','South Korea'],
@@ -4338,8 +4338,9 @@ function sunCalc(d,lat,lng,M,tzh){ // returns hours (clock of the place, or of t
   // Umm al-Qura / Qatar: Isha a fixed time after Maghrib (120 minutes in Ramadan for Umm al-Qura)
   const isha = M.im ? (mg==null?null: mg+(M.im+(M===PR_METHODS.uq && hijriParts(d).m===9 ? 30 : 0))/60) : T(M.i,1);
   const out=[T(M.f,-1),T(0.833,-1),noon,T(asr,1),mg,isha];
-  // Kemenag RI adds 2 minutes of ihtiyat (precaution) to every time, and takes 2 minutes off Syuruk so Subuh ends early
-  if(M.ih) return out.map((h,i)=> h==null?null: h+(i===1?-M.ih:M.ih)/60);
+  // Kemenag RI publishes its times with minutes of ihtiyat (precaution) added. kd = minutes added to Subuh, Syuruk, Zuhur, Asar, Maghrib, Isya,
+  // fitted to the Bimas Islam (SIHAT) tables for Kota Batam and Kota Jakarta, Nov-Dec 2026: every time within 1 minute of them
+  if(M.kd) return out.map((h,i)=> h==null?null: h+M.kd[i]/60);
   return out; }
 function hhmm(h){ if(h==null) return null; let m=Math.ceil(h*60-1e-9); m=((m%1440)+1440)%1440; return String(Math.floor(m/60)).padStart(2,'0')+':'+String(m%60).padStart(2,'0'); }
 /* Singapore's land and islands, with a small margin: Batam (1.0–1.2°N) and Johor Bahru lie outside it */
@@ -4355,7 +4356,7 @@ function prayerTimesFor(d){ const loc=prLoc(), off=store.get('prOff',[0,0,0,0,0,
   if(loc.mode==='sg' || inSG){ tz='Asia/Singapore'; const k=ymd(d); const row=(MUIS&&MUIS.days[k])||(muisExtra&&muisExtra.days[k]);
     if(row){ t=row.slice(); label='MUIS'; } else { const c=sunCalc(d,1.3521,103.8198,PR_METHODS.muis,tzOff(tz,d)); t=c.map((h,i)=>hhmm(h!=null&&i===2?h+1/60:h)); label='MUIS has not published this date yet, so it is calculated for Singapore'; if(!muisExtra) prFetchMuis(); } }
   else { const city=loc.mode==='city' ? PR_CITIES.find(c=>c[0]===loc.name) : prNearCity(loc.lat,loc.lng); method=PR_METHODS[(city&&city[4])||'muis']; tz=city?city[3]:null;
-    const c=sunCalc(d,loc.lat,loc.lng,method,tz?tzOff(tz,new Date(d.getFullYear(),d.getMonth(),d.getDate(),12)):null); t=c.map((h,i)=>hhmm(h!=null&&i===2&&!method.ih?h+1/60:h));
+    const c=sunCalc(d,loc.lat,loc.lng,method,tz?tzOff(tz,new Date(d.getFullYear(),d.getMonth(),d.getDate(),12)):null); t=c.map((h,i)=>hhmm(h!=null&&i===2&&!method.kd?h+1/60:h));
     label='Calculated for '+(loc.mode==='gps'?`your location (${(+loc.lat).toFixed(3)}, ${(+loc.lng).toFixed(3)})`:loc.name); }
   t=t.map((x,i)=>{ if(!x||!off[i]) return x; const [h,m]=x.split(':').map(Number); const v=((h*60+m+off[i])%1440+1440)%1440; return String(Math.floor(v/60)).padStart(2,'0')+':'+String(v%60).padStart(2,'0'); });
   return {times:t,label,tz,method}; }

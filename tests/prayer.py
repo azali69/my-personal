@@ -14,9 +14,15 @@ with sync_playwright() as p:
     pg = ctx.new_page(); errs = []; pg.on('pageerror', lambda e: errs.append(str(e))); pg.add_init_script(FAKE)
     pg.goto('file://' + os.path.join(R, 'index.html')); pg.wait_for_timeout(3500)
     T = lambda loc: pg.evaluate("l=>{store.set('prLoc',l);return prayerTimesFor(new Date(2026,10,7))}", loc)
-    r = T({'mode': 'city', 'name': 'Batam', 'lat': 1.0456, 'lng': 104.0305})
-    exp = ['04:28', '05:44', '11:50', '15:12', '17:52', '19:04']
-    chk('Batam city = Kemenag (2 min ihtiyat)', r['times'] == exp, str(r['times']))
+    # official Bimas Islam (SIHAT, Kemenag RI) tables, every time within 1 minute
+    tm = lambda x: int(x[:2]) * 60 + int(x[3:])
+    OFF = {('Batam', 7, 11): '04:28 05:42 11:51 15:12 17:53 19:04', ('Batam', 22, 11): '04:29 05:45 11:53 15:16 17:55 19:08',
+           ('Batam', 15, 12): '04:36 05:54 12:02 15:26 18:04 19:18', ('Jakarta', 7, 11): '04:07 05:22 11:40 14:58 17:50 19:02',
+           ('Jakarta', 30, 11): '04:06 05:24 11:45 15:09 17:58 19:13'}
+    for (c, d, mo), e in OFF.items():
+        r = pg.evaluate("a=>{const c=PR_CITIES.find(x=>x[0]===a[0]);store.set('prLoc',{mode:'city',name:c[0],lat:c[1],lng:c[2]});return prayerTimesFor(new Date(2026,a[2]-1,a[1])).times}", [c, d, mo])
+        diff = [abs(tm(x) - tm(y)) for x, y in zip(r, e.split())]
+        chk(f'{c} {d}/{mo} within 1 min of Bimas Islam', max(diff) <= 1, f'{r} vs {e}')
     for n, la, ln in [('Harbour Bay', 1.16, 104.02), ('Nongsa', 1.19, 104.09), ('Batam centre', 1.05, 104.03)]:
         r = T({'mode': 'gps', 'lat': la, 'lng': ln})
         chk(f'My location {n}: calculated, not MUIS', r['label'] != 'MUIS' and r['method'] and r['method']['n'] == 'Kemenag' and r['tz'] == 'Asia/Jakarta', f"{r['label'][:30]} {r['times'][0]}")
