@@ -4381,7 +4381,9 @@ const CK_AR_DROP=[normAr('صلى الله عليه وسلم'),normAr('رضي ا�
 /* "Skeleton" spelling: alif and hamza dropped (ى→ي, ة→ه already), so the Uthmani spelling of the mushaf (قُرْءَانًا, ٱلسَّمَٰوَٰتِ),
    the plain spelling (قرآنا, السماوات) and small scanning slips on alif/hamza all compare the same. */
 const ckSk=w=>w.replace(/[اء]/g,'');
-function ckArWords(t){ let s=' '+normAr((t||'').replace(/ﷺ|ﷻ|﴿|﴾|[0-9٠-٩]/g,' '))+' '; for(const p of CK_AR_DROP) s=s.split(' '+p+' ').join(' '); return s.trim().split(' ').map(ckSk).filter(w=>w.length>0); }
+/* punctuation (، ؛ ؟ " , . …) and digits become spaces, so "بالنيات،" is the word بالنيات (the comma used to stay stuck to it) */
+const ckClean=t=>(t||'').replace(/[0-9٠-٩]|[،؛؟۔٪٫٬٭]|[^؀-ۿ\s]/g,' ');
+function ckArWords(t){ let s=' '+normAr(ckClean(t))+' '; for(const p of CK_AR_DROP) s=s.split(' '+p+' ').join(' '); return s.trim().split(' ').map(ckSk).filter(w=>w.length>0); }
 /* Qur'an, Arabic, by letters: runs of three letters of the skeleton (spaces ignored), so words that the camera splits,
    joins or misreads a letter of still mostly match. Windows of 1-3 consecutive ayat in one surah.
    cov = the ayat's letter-runs found in the text; qc = the text's letter-runs found in the ayat. */
@@ -4390,7 +4392,7 @@ function ckTri(str){ const t=new Set(); for(let i=0;i+3<=str.length;i++) t.add(s
 function ckTriIndex(){ if(CK_TRI) return CK_TRI; const sets=[], inv=new Map();
   for(let g=0;g<N;g++){ const st_=ckTri(ckSk(normAr(A[g][3])).replace(/ /g,'')); sets.push(st_); for(const t of st_){ let l=inv.get(t); if(!l) inv.set(t,l=[]); l.push(g); } }
   return CK_TRI={sets,inv}; }
-function ckQuranTri(text){ const {sets,inv}=ckTriIndex(); const q=ckTri(ckSk(normAr((text||'').replace(/[0-9٠-٩]/g,' '))).replace(/ /g,'')); if(q.size<6) return [];
+function ckQuranTri(text){ const {sets,inv}=ckTriIndex(); const q=ckTri(ckSk(normAr(ckClean(text))).replace(/ /g,'')); if(q.size<6) return [];
   const cnt=new Map(); for(const t of q){ const l=inv.get(t); if(l && l.length<900) for(const g of l) cnt.set(g,(cnt.get(g)||0)+1); }
   const cand=[...cnt.entries()].sort((a,b)=>b[1]-a[1]).slice(0,150).map(x=>x[0]), wins=[];
   for(const g of cand){ let W=new Set(), best=null, last=0;
@@ -4408,7 +4410,7 @@ function ckQwIndex(){ if(CK_QW) return CK_QW; const sets=[], df=new Map(), inv=n
   for(let g=0;g<N;g++){ const s_=new Set(normAr(A[g][3]).split(' ').map(ckSk).filter(Boolean)); sets.push(s_); for(const w of s_){ df.set(w,(df.get(w)||0)+1); let l=inv.get(w); if(!l) inv.set(w,l=[]); l.push(g); } }
   const idf=w=>Math.log(1+N/(df.get(w)||N)); return CK_QW={sets,df,inv,idf}; }
 function ckQuranWords(text){ const {sets,df,inv,idf}=ckQwIndex();
-  const q=[...new Set(normAr((text||'').replace(/[0-9٠-٩]/g,' ')).split(' ').map(ckSk).filter(w=>w.length>=2 && df.has(w)))];
+  const q=[...new Set(normAr(ckClean(text)).split(' ').map(ckSk).filter(w=>w.length>=2 && df.has(w)))];
   if(q.length<3) return []; const qW=q.reduce((a,w)=>a+idf(w),0);
   const sc=new Map(); for(const w of q){ const l=inv.get(w); if(l.length<1200) for(const g of l) sc.set(g,(sc.get(g)||0)+idf(w)); }
   const cand=[...sc.entries()].sort((a,b)=>b[1]-a[1]).slice(0,120).map(x=>x[0]), out=[];
@@ -4447,6 +4449,51 @@ function ckHadithScore(qp,h){
   let best=null; for(const [L,t] of [['en',h[3]],['id',h[4]]]){ if(!t) continue; const set=new Set(ckTok(t)); if(!set.size) continue; let n=0; for(const w of qp.w) if(set.has(w)) n++;
     const qc=n/qp.w.size, hc=n/set.size; if(n>=6 && (qc>=0.55 || hc>=0.6)){ const s=n*(0.5+Math.max(qc,hc)); if(!best||s>best.s) best={n,qc,hc,s,L}; } }
   return best; }
+
+/* ===== Search by words (Azli, 9 Nov 2026) =====
+   A few words (1-5) are a ranked SEARCH of the Qur'an and the eight hadith books; longer text is the exact CHECK above.
+   Arabic: harakat, alif/hamza spelling and the prefixes و ف ب ل ك ال are ignored, so "النيات" finds "بِالنِّيَّاتِ" and a stray "و" does not matter.
+   Malay / English: light stemming (niat = niatnya, intentions = intention). Every word must be in the text to rank first;
+   words in the same order rank above words scattered about; a hadith with only some of the words comes last. */
+const CK_ARMODE=t=>{ const a=(t.match(/[؀-ۿ]/g)||[]).length, l=(t.match(/[A-Za-z]/g)||[]).length; return a>0 && a>=l; };
+function ckArStem(w){ let s=w;
+  if(s.length>=4 && (s[0]==='و'||s[0]==='ف')) s=s.slice(1);
+  let cut=false; for(const p of ['بال','كال','لل','ال']) if(s.startsWith(p) && s.length>p.length+1){ s=s.slice(p.length); cut=true; break; }
+  if(!cut && s.length>=4 && (s[0]==='ب'||s[0]==='ل'||s[0]==='ك')) s=s.slice(1);
+  return ckSk(s); }
+function ckArToks(t){ let s=' '+normAr(ckClean(t))+' '; for(const p of CK_AR_DROP) s=s.split(' '+p+' ').join(' ');
+  const out=[]; for(const w of s.trim().split(' ')){ if(w.length<2) continue; const x=ckArStem(w); if(x) out.push(x); } return out; }
+const CK_AR_COMMON=new Set('في من على عن الى ان ما لا لم قال قالت فقال الله رسول النبي يا هو هي ذلك هذا هذه كان كانت'.split(' ').map(w=>ckArStem(normAr(w))));
+const ckLSt=w=>{ if(w.length>5) w=w.replace(/(nya|lah|kah|kan|ing|ed|es)$/,''); if(w.length>4) w=w.replace(/^(ber|ter|mem|men|meng|di|ke|se|me|pe)/,''); if(w.length>3) w=w.replace(/s$/,''); return w; };
+const ckLToksAll=t=>fold(t||'').replace(/[^a-z0-9]+/g,' ').split(' ').filter(Boolean).map(ckLSt);
+const CK_L_COMMON=new Set([...CK_STOP].map(ckLSt));
+function ckSearchQ(text){ const ar=CK_ARMODE(text); let Q;
+  if(ar) Q=[...new Set(ckArToks(text))];
+  else { const all=[...new Set(fold(text).replace(/[^a-z0-9]+/g,' ').split(' ').filter(w=>w.length>=2).map(ckLSt))]; const keep=all.filter(w=>!CK_L_COMMON.has(w)); Q= keep.length? (all.length<=2? all : keep) : all; }
+  return {ar,Q,QS:new Set(Q),wt:ar? (q=>CK_AR_COMMON.has(q)?0.3:q.length<=2?0.6:1) : (q=>CK_L_COMMON.has(q)?0.3:1)}; }
+/* T = the text's words in order (stems), SQ = the search; null when too little of the search is in it */
+function ckSeq(T,SQ){ const {Q,QS,wt}=SQ, pos=new Map();
+  for(let i=0;i<T.length;i++){ const w=T[i]; if(QS.has(w)){ let l=pos.get(w); if(!l) pos.set(w,l=[]); l.push(i); } }
+  if(!pos.size) return null;
+  let tw=0,mw=0,m=0; for(const q of Q){ const w=wt(q); tw+=w; if(pos.has(q)){ mw+=w; m++; } }
+  const cov=mw/tw; if(cov<0.5) return null;
+  let adj=0; for(let j=0;j+1<Q.length;j++){ const a=pos.get(Q[j]), b=pos.get(Q[j+1]); if(a&&b&&a.some(i=>b.includes(i+1))) adj++; }
+  let run=0; if(m===Q.length) for(const i of pos.get(Q[0])){ let k=1; while(k<Q.length && T[i+k]===Q[k]) k++; if(k>run) run=k; }
+  let occ=0; for(const q of Q) if(pos.has(q)) occ+=pos.get(q).length;   // a word said again and again: a little higher
+  const full=m===Q.length && run===Q.length, pairs=Q.length>1?adj/(Q.length-1):0;
+  return {m,t:Q.length,cov,pairs,full,all:m===Q.length,qc:cov,hc:0,search:true,s:cov*10+pairs*8+(full?6:0)+3/(1+T.length/40)+Math.min(3,occ-m)*0.7}; }
+/* every result that has all the words; then, below them, the ones with most of them (with 1-2 words, only when nothing has them all) */
+const ckKeep=(sc,SQ,nAll)=> sc.all || (SQ.Q.length>=3 ? sc.cov>=0.6 : nAll===0);
+let CK_QS=null;
+function ckQSearch(SQ){ const L=SQ.ar?'ar':'lat';
+  if(!CK_QS) CK_QS={}; if(!CK_QS[L]){ CK_QS[L]=[]; for(let g=0;g<N;g++) CK_QS[L].push(SQ.ar? ckArToks(A[g][3]) : [ckLToksAll(A[g][6]),ckLToksAll(A[g][7])]); }
+  const out=[]; let all=0;
+  for(let g=0;g<N;g++){ let sc=null; if(SQ.ar) sc=ckSeq(CK_QS.ar[g],SQ); else for(const T of CK_QS.lat[g]){ const x=ckSeq(T,SQ); if(x && (!sc||x.s>sc.s)) sc=x; }
+    if(sc){ if(sc.all) all++; out.push({g,e:g,p:sc.cov,qc:sc.cov,n:0,srch:sc}); } }
+  const keep=out.filter(w=>ckKeep(w.srch,SQ,all)).sort((a,b)=>b.srch.s-a.srch.s);
+  return {list:keep.slice(0,8),all}; }
+function ckHSearch(SQ,h){ if(SQ.ar) return ckSeq(ckArToks(h[2]||''),SQ);
+  let best=null; for(const [L,t] of [['en',h[3]],['id',h[4]]]){ if(!t) continue; const x=ckSeq(ckLToksAll(t),SQ); if(x && (!best||x.s>best.s)){ best=x; best.L=L; } } return best; }
 function ckPct(x){ return Math.round(Math.min(1,x)*100)+'%'; }
 
 function checkPanel(init){ const ms=sL()==='ms', app=!!window.AndroidExtra?.scanCamera;
@@ -4457,14 +4504,14 @@ function checkPanel(init){ const ms=sL()==='ms', app=!!window.AndroidExtra?.scan
    ${window.AndroidExtra?.lens?`<button class="pill" id="ckLens" style="width:100%;justify-content:center;margin-top:8px">${ic('search')}${ms?'Baca dengan Google Lens':'Read with Google Lens'}</button><p class="note" style="margin:4px 0 0;font-size:12px">${ms?'Jika bacaan kamera kurang tepat: Lens membaca gambar terakhir (atau buka kameranya); pilih teks, ketik Kongsi → My Personal Qur\'an.':'If the camera reading is not right: Lens reads the last picture (or opens its camera); select the text, tap Share → My Personal Qur\'an.'}</p>`:''}
    <div class="label">${ms?'Bahasa tulisan dalam gambar':'Language of the text in the picture'}</div>${segHtml('ckLang',[['ar','Arabic · عربي'],['lat','Melayu / English']],lang)}`
    :`<p class="note" style="margin-top:0">${ms?'Imbas dengan kamera ada dalam aplikasi Android. Di sini, tampal teks.':'Camera scanning is in the Android app. Here, paste the text.'}</p>`}
-   <div class="label">${ms?'Teks untuk disemak (boleh dibetulkan)':'Text to check (you can correct it)'}</div>
-   <textarea class="field" id="ckT" rows="6" dir="auto" style="width:100%;resize:vertical;font:inherit;line-height:1.6" placeholder="${ms?'Tampal atau imbas ayat / hadis di sini…':'Paste or scan the ayah / hadith here…'}">${esc(ckSt.text)}</textarea>
+   <div class="label">${ms?'Carian, atau teks untuk disemak (boleh dibetulkan)':'Search, or text to check (you can correct it)'}</div>
+   <textarea class="field" id="ckT" rows="6" dir="auto" style="width:100%;resize:vertical;font:inherit;line-height:1.6" enterkeyhint="search" placeholder="${ms?'Taip beberapa perkataan (1 atau 2 pun boleh), atau tampal / imbas ayat atau hadis…':'Type a few words (even 1 or 2), or paste / scan an ayah or hadith…'}">${esc(ckSt.text)}</textarea>
    <div class="row2" style="gap:8px;margin-top:8px"><button class="pill" id="ckClr">${ms?'Kosongkan':'Clear'}</button><span style="flex:1"></span><button class="pill primary" id="ckGo">${ic('search')||''}${ms?'Semak':'Check'}</button></div>
    <p class="note" id="ckMsg"></p><div id="ckQ"></div><div id="ckH"></div>
-   <details class="card ck-how"><summary>${ms?'Bagaimana semakan ini dibuat':'How this check works'}</summary>
+   <details class="card ck-how"><summary>${ms?'Bagaimana carian dan semakan ini dibuat':'How this search and check works'}</summary>
     <p class="note">${ms?
-    'Teks dibandingkan dengan isi aplikasi ini sahaja: Al-Qur\'an (Arab, terjemahan Melayu Basmeih dan Inggeris Saheeh International) dan lapan kitab hadis (Kutub as-Sittah, al-Muwatta\' dan asy-Syama\'il: Arab, Inggeris, Indonesia). Peratus ialah kadar perkataan yang sama, bukan hukum. Arab: perkataan yang sama mengikut susunan (baris diabaikan). Melayu/Inggeris: perkataan penting yang sama; penterjemah berbeza memilih perkataan berbeza, jadi peratus rendah tidak semestinya bermakna tiada. Hadis dalam Bahasa Melayu dibandingkan dengan terjemahan Indonesia. "Tidak dijumpai" hanya bermaksud tidak ada dalam kitab-kitab ini dengan lafaz ini; hadis itu mungkin ada dalam kitab lain (seperti Musnad Ahmad) atau diriwayatkan dengan lafaz lain. Ia bukan bukti hadis itu palsu. Untuk hukum, rujuk ulama yang berkelayakan. Imbasan kamera boleh tersilap huruf; betulkan teks sebelum menyemak.'
-    :'The text is compared with what is inside this app only: the Qur\'an (Arabic, the Malay translation of Basmeih and the English of Saheeh International) and the eight hadith books (the six books, al-Muwatta\' and the Syama\'il: Arabic, English, Indonesian). The percentage is how many words are the same, not a ruling. Arabic: the same words in the same order (harakat ignored). Malay/English: the same important words; different translators choose different words, so a low percentage does not mean it is absent. Malay hadith text is compared with the Indonesian translation. "Not found" only means it is not in these books in this wording; it may be in other books (such as Musnad Ahmad) or narrated in other words. It is not proof that a hadith is fabricated. For a ruling, ask a qualified scholar. Camera scanning can misread letters; correct the text before checking.'}</p></details>`);
+    'Teks dibandingkan dengan isi aplikasi ini sahaja: Al-Qur\'an (Arab, terjemahan Melayu Basmeih dan Inggeris Saheeh International) dan lapan kitab hadis (Kutub as-Sittah, al-Muwatta\' dan asy-Syama\'il: Arab, Inggeris, Indonesia). Peratus ialah kadar perkataan yang sama, bukan hukum. Arab: perkataan yang sama mengikut susunan (baris diabaikan). Melayu/Inggeris: perkataan penting yang sama; penterjemah berbeza memilih perkataan berbeza, jadi peratus rendah tidak semestinya bermakna tiada. Hadis dalam Bahasa Melayu dibandingkan dengan terjemahan Indonesia. "Tidak dijumpai" hanya bermaksud tidak ada dalam kitab-kitab ini dengan lafaz ini; hadis itu mungkin ada dalam kitab lain (seperti Musnad Ahmad) atau diriwayatkan dengan lafaz lain. Ia bukan bukti hadis itu palsu. Untuk hukum, rujuk ulama yang berkelayakan. Imbasan kamera boleh tersilap huruf; betulkan teks sebelum menyemak. CARIAN: 1 hingga 5 perkataan dicari dalam Al-Qur\'an dan lapan kitab hadis. Dalam bahasa Arab, baris dan awalan seperti ال, و, ب, ل diabaikan; dalam Melayu/Inggeris, akhiran seperti -nya diabaikan. Hasil yang mengandungi semua perkataan mengikut susunan didahulukan, kemudian semua perkataan, kemudian sebahagian. Antara hasil yang setara, Sahih al-Bukhari dan Sahih Muslim diletakkan lebih awal sedikit; itu hanya susunan paparan, bukan hukum. Lebih banyak perkataan, lebih tepat. Tulisan Latin untuk lafaz Arab (cth. "innamal a\'malu") tidak dicari; guna tulisan Arab, atau perkataan Melayu/Inggeris.'
+    :'The text is compared with what is inside this app only: the Qur\'an (Arabic, the Malay translation of Basmeih and the English of Saheeh International) and the eight hadith books (the six books, al-Muwatta\' and the Syama\'il: Arabic, English, Indonesian). The percentage is how many words are the same, not a ruling. Arabic: the same words in the same order (harakat ignored). Malay/English: the same important words; different translators choose different words, so a low percentage does not mean it is absent. Malay hadith text is compared with the Indonesian translation. "Not found" only means it is not in these books in this wording; it may be in other books (such as Musnad Ahmad) or narrated in other words. It is not proof that a hadith is fabricated. For a ruling, ask a qualified scholar. Camera scanning can misread letters; correct the text before checking. SEARCH: 1 to 5 words are searched in the Qur\'an and the eight hadith books. In Arabic, harakat and prefixes such as ال, و, ب, ل are ignored; in Malay/English, endings such as -nya or -s are ignored. Results with all the words in order come first, then all the words, then some of them. Among equal results, Sahih al-Bukhari and Sahih Muslim are placed slightly earlier; that is only the display order, not a ruling. More words, more precise. Latin spelling of Arabic wording (e.g. "innamal a\'malu") is not searched; use Arabic script, or Malay/English words.'}</p></details>`);
   const ta=b.querySelector('#ckT');
   b.querySelector('#ckLang')?.addEventListener('click',e=>{ const x=e.target.closest('button'); if(!x) return; b.querySelectorAll('#ckLang button').forEach(y=>y.setAttribute('aria-pressed',y===x)); store.set('scanLang',x.dataset.v); });
   const scanLang=()=>store.get('scanLang','ar')==='ar'?'ar':'ms';
@@ -4474,6 +4521,7 @@ function checkPanel(init){ const ms=sL()==='ms', app=!!window.AndroidExtra?.scan
   b.querySelector('#ckClr').onclick=()=>{ ta.value=''; ckSt={text:'',res:null}; ckRunId++; b.querySelector('#ckQ').innerHTML=''; b.querySelector('#ckH').innerHTML=''; b.querySelector('#ckMsg').textContent=''; ta.focus(); };
   b.querySelector('#ckGo').onclick=()=>{ ta.blur(); checkRun(ta.value); };
   ta.oninput=()=>{ ckSt.text=ta.value; };
+  ta.onkeydown=e=>{ if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); ta.blur(); checkRun(ta.value); } };
   b.onclick=e=>{ const q=e.target.closest('[data-ckq]'); if(q){ const g=+q.dataset.ckq; document.querySelectorAll('.panel').forEach(p=>p.hidden=true); hideHome(); goAyah(g); navRetSet('reader',()=>checkPanel(),ms?'Semakan':'Check'); return; } };
   document.getElementById('chk').addEventListener('closed',()=>{ ckRunId++; },{once:true});
   if(init && init.run && ckSt.text.trim()) checkRun(ckSt.text);
@@ -4511,39 +4559,56 @@ window.__sharedIn=()=>{ ckTakeShared(); };
 async function checkRun(text){ const run=++ckRunId, ms=sL()==='ms'; text=(text||'').trim(); ckSt.text=text;
   const msg=document.getElementById('ckMsg'), qBox=document.getElementById('ckQ'), hBox=document.getElementById('ckH'); if(!msg) return;
   qBox.innerHTML=''; hBox.innerHTML=''; ckSt.res=null;
-  if(text.length<8){ msg.textContent=ms?'Teks terlalu pendek untuk disemak.':'The text is too short to check.'; return; }
-  const isAr=ckIsAr(text); msg.textContent=ms?'Menyemak Al-Qur\'an…':'Checking the Qur\'an…';
+  const SQ=ckSearchQ(text);
+  if(!SQ.Q.length || text.replace(/\s/g,'').length<2){ msg.textContent=ms?'Taip sekurang-kurangnya satu perkataan.':'Type at least one word.'; return; }
+  const search=SQ.Q.length<=5;   // a few words: a ranked search. Longer text: the exact check, with the search as its back-up.
+  const isAr=ckIsAr(text); msg.textContent=search?(ms?'Mencari dalam Al-Qur\'an…':'Searching the Qur\'an…'):(ms?'Menyemak Al-Qur\'an…':'Checking the Qur\'an…');
   await new Promise(r=>setTimeout(r,30));
-  const qw=isAr?ckArWords(text):null;
-  const qr= isAr? (()=>{ const a=ckQuranTri(text), b=ckQuranWords(text), all=a.concat(b).sort((x,y)=>(y.cov+2*y.qc)-(x.cov+2*x.qc)) /* the ayah holding most of the text first */, out=[];
-    for(const w of all){ if(out.length>=6) break; if(out.length && w.cov<0.15) continue; if(out.some(o=>!(w.e<o.g||w.g>o.e))) continue; out.push(w); } return out; })() : ckQuranLat(text);
+  const qw=isAr?ckArWords(text):null; let qr, qAll=0, qBack=false;
+  if(search){ const r=ckQSearch(SQ); qr=r.list; qAll=r.all; }
+  else { qr= isAr? (()=>{ const a=ckQuranTri(text), b=ckQuranWords(text), all=a.concat(b).sort((x,y)=>(y.cov+2*y.qc)-(x.cov+2*x.qc)) /* the ayah holding most of the text first */, out=[];
+      for(const w of all){ if(out.length>=6) break; if(out.length && w.cov<0.15) continue; if(out.some(o=>!(w.e<o.g||w.g>o.e))) continue; out.push(w); } return out; })() : ckQuranLat(text);
+    if(!qr.length){ const r=ckQSearch(SQ); qr=r.list; qAll=r.all; qBack=qr.length>0; } }
   if(run!==ckRunId) return;
-  const res={isAr, q:qr.map(w=>({g:w.g,e:w.e,p:w.cov,qc:w.qc||0,n:w.L||w.n})), h:[], hDone:false, fail:0};
+  const res={isAr, search, qBack, qAll, hAll:0, hBack:false, q:qr.map(w=>({g:w.g,e:w.e,p:w.cov!=null?w.cov:w.p,qc:w.qc||0,n:w.L||w.n,srch:w.srch})), h:[], hDone:false, fail:0};
   ckSt.res=res; checkShow(res);
   // hadith: every kitab of the seven books (downloaded the first time, then kept on the phone)
   await sirahBooks(); if(!ktBooks){ res.hDone=true; res.fail=-1; checkShow(res); return; }
   const qp= isAr? (()=>{ const bi=new Set(); for(let i=1;i<qw.length;i++) bi.add(qw[i-1]+' '+qw[i]); return {ar:true,bi}; })() : {ar:false,w:new Set(ckTok(text))};
-  if((qp.ar?qp.bi.size:qp.w.size)<4){ res.hDone=true; res.short=true; checkShow(res); return; }
-  const total=ktBooks.reduce((a,k)=>a+k.sections.length,0); let done=0;
+  const exact= !search && (qp.ar?qp.bi.size:qp.w.size)>=4;
+  const total=ktBooks.reduce((a,k)=>a+k.sections.length,0); let done=0, hS=[];
+  const trim=()=>{ hS.sort((a,b)=>b.sc.s-a.sc.s); hS=hS.slice(0,300); };
   for(const k of ktBooks){ for(const s of k.sections){ if(run!==ckRunId) return;
     let d=null; try{ d=await ktGet(`${k.id}/${s.n}.json`); }catch(e){ res.fail++; }
-    done++; if(d) for(const h of d.h){ const sc=ckHadithScore(qp,h); if(sc) res.h.push({k:k.id,sn:s.n,h,sc}); }
-    if(done%8===0){ const pg=document.getElementById('ckHP'); if(pg) pg.textContent=(ms?'Menyemak kitab hadis… ':'Checking the hadith books… ')+Math.round(done*100/total)+'%'; await new Promise(r=>setTimeout(r,0)); } } }
-  res.h.sort((a,b)=>b.sc.s-a.sc.s); res.h=res.h.slice(0,30); res.hDone=true; if(run===ckRunId) checkShow(res); }
+    done++; if(d) for(const h of d.h){
+      if(exact){ const sc=ckHadithScore(qp,h); if(sc) res.h.push({k:k.id,sn:s.n,h,sc}); }
+      const sc2=ckHSearch(SQ,h); if(sc2){ if(sc2.all) res.hAll++; sc2.s+= k.id==='bukhari'?0.3:k.id==='muslim'?0.25:0; hS.push({k:k.id,sn:s.n,h,sc:sc2}); if(hS.length>600) trim(); } }
+    if(done%8===0){ const pg=document.getElementById('ckHP'); if(pg) pg.textContent=(search?(ms?'Mencari dalam kitab hadis… ':'Searching the hadith books… '):(ms?'Menyemak kitab hadis… ':'Checking the hadith books… '))+Math.round(done*100/total)+'%'; await new Promise(r=>setTimeout(r,0)); } } }
+  res.h.sort((a,b)=>b.sc.s-a.sc.s); res.h=res.h.slice(0,30);
+  if(!res.h.length || search){ hS=hS.filter(r=>ckKeep(r.sc,SQ,res.hAll)).sort((a,b)=>b.sc.s-a.sc.s); res.h=hS.slice(0,30); res.hBack=!search && res.h.length>0; }
+  res.hDone=true; if(run===ckRunId) checkShow(res); }
 
 function checkShow(res, restored){ const ms=sL()==='ms', msg=document.getElementById('ckMsg'), qBox=document.getElementById('ckQ'), hBox=document.getElementById('ckH'); if(!msg) return;
   const ref=(g,e)=>`${S[A[g][0]-1][1]} ${A[g][0]}:${A[g][1]}${e>g?'–'+A[e][1]:''}`;
   const top=res.q[0], full=w=>w.p>=0.85, part=w=>w.p<0.5;
-  const qv= !res.q.length ? `<div class="ck-v ck-no">${ms?'Tiada ayat Al-Qur\'an yang sepadan.':'No ayah of the Qur\'an matched.'}</div><p class="note">${ms?'Jika teks ini dikatakan ayat Al-Qur\'an, semak dengan teliti: ia mungkin terjemahan dengan lafaz lain, hadis, doa, atau bukan dari Al-Qur\'an.':'If this text is presented as an ayah, check it carefully: it may be a translation worded differently, a hadith, a doa, or not from the Qur\'an.'}</p>`
+  const sq=res.q.length&&res.q[0].srch, nQ=res.q.length;
+  const qv= sq ? (()=>{ const full=res.q[0].srch.full, all=res.q[0].srch.all;
+      return `<div class="ck-v ${full?'ck-ok':'ck-mid'}">${full?(ms?'Dijumpai dalam Al-Qur\'an: perkataan itu mengikut susunan':'Found in the Qur\'an: the words in this order'):all?(ms?'Ayat yang mengandungi semua perkataan itu':'Ayat that contain all your words'):(ms?'Tiada ayat yang mengandungi semua perkataan: ini yang paling hampir':'No ayah has all the words: these are the closest')}</div>`
+      +`<p class="note">${res.qBack?(ms?'Semakan tepat tidak menemui padanan; ini carian mengikut perkataan. ':'The exact check found no match; this is a search by words. '):''}${res.qAll>nQ?(ms?`${res.qAll} ayat mengandungi semua perkataan; ${nQ} yang terbaik ditunjukkan. Taip lebih banyak perkataan untuk menyempitkannya.`:`${res.qAll} ayat contain all the words; the best ${nQ} are shown. Type more words to narrow it down.`):''}</p>`; })()
+    : !res.q.length ? `<div class="ck-v ck-no">${ms?'Tiada ayat Al-Qur\'an yang sepadan.':'No ayah of the Qur\'an matched.'}</div><p class="note">${ms?'Jika teks ini dikatakan ayat Al-Qur\'an, semak dengan teliti: ia mungkin terjemahan dengan lafaz lain, hadis, doa, atau bukan dari Al-Qur\'an.':'If this text is presented as an ayah, check it carefully: it may be a translation worded differently, a hadith, a doa, or not from the Qur\'an.'}</p>`
     : `<div class="ck-v ${full(top)||(part(top)&&top.qc>=0.9)?'ck-ok':'ck-mid'}">${full(top)?(ms?'Dijumpai dalam Al-Qur\'an':'Found in the Qur\'an'):part(top)&&top.qc>=0.9?(ms?'Dijumpai: sebahagian daripada ayat':'Found: part of an ayah'):(ms?'Hampir dengan ayat Al-Qur\'an: ada perbezaan':'Close to an ayah of the Qur\'an: there are differences')}</div>`;
-  qBox.innerHTML=`<div class="label">${ms?'Al-Qur\'an':'Qur\'an'}</div>${qv}`+res.q.map(w=>{ const a=A[w.g]; let ar='', tr='';
+  const qPart=sq && !res.q[0].srch.all;   // only some of the words: the closest ayat are tucked away, so the real answer is not pushed down
+  qBox.innerHTML=`<div class="label">${ms?'Al-Qur\'an':'Qur\'an'}</div>${qv}`+(qPart?`<details class="card ck-how"><summary>${ms?'Tunjukkan ayat yang paling hampir':'Show the closest ayat'}</summary>`:'')+res.q.map(w=>{ const a=A[w.g]; let ar='', tr='';
     for(let g=w.g;g<=w.e;g++){ ar+=(ar?' ':'')+A[g][2]; tr+=(tr?' ':'')+(st.lang==='ms'?A[g][6]:A[g][7]); }
-    return `<button class="ck-r" data-ckq="${w.g}"><span class="ck-h"><b>${esc(ref(w.g,w.e))}</b><small>${res.isAr&&part(w)?(ms?`Sebahagian ayat ini (${ckPct(w.qc)} teks itu ada dalam ayat ini)`:`Part of this ayah (${ckPct(w.qc)} of the text is in this ayah)`):ckPct(w.p)+' '+(res.isAr?(ms?'daripada ayat ini sepadan dengan teks':'of this ayah matches the text'):(ms?'perkataan penting sama dengan terjemahan':'of the important words match the translation'))}</small></span>
-      <span dir="rtl" lang="ar" class="ck-ar">${esc(ar.length>420?ar.slice(0,420)+'…':ar)}</span><span class="note">${esc(tr.length>300?tr.slice(0,300)+'…':tr)}</span><span class="ck-go">${ms?'Buka ayat ›':'Open the ayah ›'}</span></button>`; }).join('');
+    return `<button class="ck-r" data-ckq="${w.g}"><span class="ck-h"><b>${esc(ref(w.g,w.e))}</b><small>${w.srch?(ms?`${w.srch.m} daripada ${w.srch.t} perkataan`+(w.srch.full&&w.srch.t>1?', mengikut susunan':''):`${w.srch.m} of ${w.srch.t} words`+(w.srch.full&&w.srch.t>1?', in this order':'')):res.isAr&&part(w)?(ms?`Sebahagian ayat ini (${ckPct(w.qc)} teks itu ada dalam ayat ini)`:`Part of this ayah (${ckPct(w.qc)} of the text is in this ayah)`):ckPct(w.p)+' '+(res.isAr?(ms?'daripada ayat ini sepadan dengan teks':'of this ayah matches the text'):(ms?'perkataan penting sama dengan terjemahan':'of the important words match the translation'))}</small></span>
+      <span dir="rtl" lang="ar" class="ck-ar">${esc(ar.length>420?ar.slice(0,420)+'…':ar)}</span><span class="note">${esc(tr.length>300?tr.slice(0,300)+'…':tr)}</span><span class="ck-go">${ms?'Buka ayat ›':'Open the ayah ›'}</span></button>`; }).join('')+(qPart?'</details>':'');
   const nH=res.h.length;
   let hv;
   if(!res.hDone) hv=`<p class="note" id="ckHP">${ms?'Menyemak kitab hadis…':'Checking the hadith books…'}</p>`;
   else if(res.fail===-1) hv=`<p class="note">${ms?'Kitab hadis tidak dapat dimuatkan (tiada internet).':'The hadith books could not be loaded (no internet).'}</p>`;
+  else if((res.search||res.hBack) && !nH) hv=`<div class="ck-v ck-no">${ms?'Tiada hadis dengan perkataan itu dalam lapan kitab hadis dalam aplikasi ini.':'No hadith with these words in the eight hadith books in this app.'}</div><p class="note">${ms?'Cuba kurangkan perkataan, atau tulis dalam bahasa Arab, Melayu atau Inggeris seperti dalam kitab. Ini bukan bukti ia palsu.':'Try fewer words, or write them in Arabic, Malay or English as in the books. This is not proof that it is fabricated.'}</p>`;
+  else if(res.search||res.hBack){ const f=res.h[0].sc; hv=`<div class="ck-v ${f.full?'ck-ok':'ck-mid'}">${f.full?(ms?'Dijumpai: perkataan itu mengikut susunan':'Found: the words in this order'):f.all?(ms?'Hadis yang mengandungi semua perkataan itu':'Hadith that contain all your words'):(ms?'Tiada hadis yang mengandungi semua perkataan: ini yang paling hampir':'No hadith has all the words: these are the closest')}</div>
+    <p class="note">${res.hBack?(ms?'Semakan tepat tidak menemui padanan; ini carian mengikut perkataan. ':'The exact check found no match; this is a search by words. '):''}${res.hAll>nH?(ms?`${res.hAll} hadis mengandungi semua perkataan; ${nH} yang terbaik ditunjukkan. Taip lebih banyak perkataan untuk menyempitkannya.`:`${res.hAll} hadith contain all the words; the best ${nH} are shown. Type more words to narrow it down.`):(ms?'Lihat penilaian (darjat) setiap satu. Hadis yang sama boleh ada dalam beberapa kitab.':'See the grading of each. The same hadith can be in several books.')}</p>`; }
   else if(res.short) hv=`<p class="note">${ms?'Teks terlalu pendek untuk disemak dengan kitab hadis.':'The text is too short to check against the hadith books.'}</p>`;
   else if(!nH) hv=`<div class="ck-v ck-no">${ms?'Tidak dijumpai dalam lapan kitab hadis dalam aplikasi ini.':'Not found in the eight hadith books in this app.'}</div><p class="note">${ms?'Ini bukan bukti ia palsu: ia mungkin ada dalam kitab lain atau dengan lafaz lain. Tanya ulama yang berkelayakan.':'This is not proof that it is fabricated: it may be in other books or in other words. Ask a qualified scholar.'}</p>`;
   else if(!res.h.some(r=>r.sc.qc>=0.8)) hv=`<div class="ck-v ck-mid">${ms?'Hanya sebahagian teks itu sepadan dengan hadis':'Only part of the text matches a hadith'}</div><p class="note">${ms?'Bahagian yang lain tidak dijumpai dalam lapan kitab ini. Bandingkan lafaznya dan lihat penilaian (darjat).':'The rest was not found in these eight books. Compare the wording and see the grading.'}</p>`;
@@ -4551,16 +4616,19 @@ function checkShow(res, restored){ const ms=sL()==='ms', msg=document.getElement
   if(res.hDone && res.fail>0) hv+=`<p class="note">${ms?`${res.fail} kitab tidak dapat dimuatkan (tiada internet).`:`${res.fail} kitab could not be loaded (no internet).`}</p>`;
   /* Not in this app's books (or only partly): check it outside (Azli, 17 Oct 2026). The text is copied first, because
      Semak Hadis has no search link: paste it in their search box. */
+  let outBlock='';   // in a search with results, the outside links go after the results
   if(res.hDone && !res.short){ const t=encodeURIComponent((ckSt.text||'').slice(0,300));
-    hv+=`<div class="ck-out"><div class="label" style="margin-top:10px">${ms?'Semak di luar aplikasi':'Check outside the app'}</div>
+    outBlock=`<div class="ck-out"><div class="label" style="margin-top:10px">${ms?'Semak di luar aplikasi':'Check outside the app'}</div>
      <p class="note" style="margin-top:0">${ms?'Teks anda disalin dahulu; untuk Semak Hadis, tampal di kotak cariannya.':'Your text is copied first; for Semak Hadis, paste it in its search box.'}</p>
      <div class="row2" style="gap:8px;flex-wrap:wrap"><a class="pill" data-ckx href="https://semakhadis.com/" target="_blank" rel="noopener">Semak Hadis ›</a><a class="pill" data-ckx href="https://dorar.net/hadith/search?q=${t}" target="_blank" rel="noopener">Dorar.net ›</a><a class="pill" data-ckx href="https://sunnah.com/search?q=${t}" target="_blank" rel="noopener">Sunnah.com ›</a></div>
-     <p class="note" style="font-size:12px">${ms?'Semak Hadis (Bahasa Melayu): semakhadis.com. Dorar.net: ensiklopedia hadis ad-Durar as-Saniyyah dengan penilaian ulama. Sunnah.com: kitab-kitab hadis dalam bahasa Inggeris.':'Semak Hadis (Malay): semakhadis.com. Dorar.net: the hadith encyclopedia of ad-Durar as-Saniyyah, with scholars\' gradings. Sunnah.com: the hadith books in English.'}</p></div>`; }
+     <p class="note" style="font-size:12px">${ms?'Semak Hadis (Bahasa Melayu): semakhadis.com. Dorar.net: ensiklopedia hadis ad-Durar as-Saniyyah dengan penilaian ulama. Sunnah.com: kitab-kitab hadis dalam bahasa Inggeris.':'Semak Hadis (Malay): semakhadis.com. Dorar.net: the hadith encyclopedia of ad-Durar as-Saniyyah, with scholars\' gradings. Sunnah.com: the hadith books in English.'}</p></div>`;
+    if(!((res.search||res.hBack) && nH)){ hv+=outBlock; outBlock=''; } }
   const show=ktShow();
-  hBox.innerHTML=`<div class="label">${ms?'Hadis':'Hadith'}</div>${hv}`+res.h.map((r,i)=>{ const k=(ktBooks||[]).find(x=>x.id===r.k); if(!k) return '';
-    const sc=r.sc, how=res.isAr?(ms?`${ckPct(Math.max(sc.qc,sc.hc))} sama (Arab)`:`${ckPct(Math.max(sc.qc,sc.hc))} the same (Arabic)`):(ms?`${ckPct(Math.max(sc.qc,sc.hc))} perkataan sama (${sc.L==='id'?'Indonesia':'Inggeris'})`:`${ckPct(Math.max(sc.qc,sc.hc))} of words the same (${sc.L==='id'?'Indonesian':'English'})`);
-    const whole=sc.qc>=0.8, part=`<div class="ck-v ${whole?'ck-ok':'ck-mid'}" style="font-size:13.5px;padding:5px 10px">${whole?(ms?'Teks itu ada dalam hadis ini':'The text is in this hadith'):(ms?'Hanya sebahagian teks itu sepadan dengan hadis ini':'Only part of the text matches this hadith')}</div>`;
-    return `<div data-ck="${i}" class="ck-hd">${part}${ktCard(k,r.h,show,`<div class="row2" style="gap:6px;margin:0 0 6px"><button class="pill" data-open="${i}">${esc(KT_SHORT[k.id]||k.en)} ${ktN(k.id,r.h[0])} ›</button><small class="note" style="margin:0">${how}</small></div>`,r.sn,null)}</div>`; }).join('');
+  const hPart=(res.search||res.hBack) && res.hDone && res.h.length>0 && !res.h[0].sc.all;
+  hBox.innerHTML=`<div class="label">${ms?'Hadis':'Hadith'}</div>${hv}`+(hPart?`<details class="card ck-how"><summary>${ms?'Tunjukkan hadis yang paling hampir':'Show the closest hadith'}</summary>`:'')+res.h.map((r,i)=>{ const k=(ktBooks||[]).find(x=>x.id===r.k); if(!k) return '';
+    const sc=r.sc, how=sc.search?(ms?`${sc.m} daripada ${sc.t} perkataan`+(sc.full&&sc.t>1?', mengikut susunan':'')+(res.isAr||sc.L==null?' (Arab)':` (${sc.L==='id'?'Indonesia':'Inggeris'})`):`${sc.m} of ${sc.t} words`+(sc.full&&sc.t>1?', in this order':'')+(res.isAr||sc.L==null?' (Arabic)':` (${sc.L==='id'?'Indonesian':'English'})`)):res.isAr?(ms?`${ckPct(Math.max(sc.qc,sc.hc))} sama (Arab)`:`${ckPct(Math.max(sc.qc,sc.hc))} the same (Arabic)`):(ms?`${ckPct(Math.max(sc.qc,sc.hc))} perkataan sama (${sc.L==='id'?'Indonesia':'Inggeris'})`:`${ckPct(Math.max(sc.qc,sc.hc))} of words the same (${sc.L==='id'?'Indonesian':'English'})`);
+    const whole=sc.search?sc.all:sc.qc>=0.8, part=`<div class="ck-v ${whole?'ck-ok':'ck-mid'}" style="font-size:13.5px;padding:5px 10px">${sc.search?(sc.full?(ms?'Perkataan itu ada dalam hadis ini, mengikut susunan':'The words are in this hadith, in this order'):sc.all?(ms?'Semua perkataan itu ada dalam hadis ini':'All the words are in this hadith'):(ms?'Sebahagian perkataan itu ada dalam hadis ini':'Some of the words are in this hadith')):whole?(ms?'Teks itu ada dalam hadis ini':'The text is in this hadith'):(ms?'Hanya sebahagian teks itu sepadan dengan hadis ini':'Only part of the text matches this hadith')}</div>`;
+    return `<div data-ck="${i}" class="ck-hd">${part}${ktCard(k,r.h,show,`<div class="row2" style="gap:6px;margin:0 0 6px"><button class="pill" data-open="${i}">${esc(KT_SHORT[k.id]||k.en)} ${ktN(k.id,r.h[0])} ›</button><small class="note" style="margin:0">${how}</small></div>`,r.sn,null)}</div>`; }).join('')+(hPart?'</details>':'')+outBlock;
   hBox.onclick=e=>{ if(e.target.closest('[data-ckx]')){ putClipboard(ckSt.text||''); goingAway(); return; } const o=e.target.closest('[data-open]'); const w=e.target.closest('[data-ck]'); if(!w) return; const r=res.h[+w.dataset.ck]; if(!r) return;
     if(o){ ktOpenHadith(r.k,r.h[0],r.sn).then(()=>navRetSet('panel',()=>checkPanel(),ms?'Semakan':'Check')); return; }
     const k=ktBooks.find(x=>x.id===r.k); ktCardClick(e,k,n=>n===r.h[0]?{h:r.h,sn:r.sn}:null,()=>{ w.outerHTML=`<div data-ck="${w.dataset.ck}" class="ck-hd">${ktCard(k,r.h,ktShow(),'',r.sn,null)}</div>`; }); };
