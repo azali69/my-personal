@@ -712,7 +712,7 @@ a.tile{text-decoration:none;color:inherit}
 <header class="top"><div class="top-in">
   <button class="ib" id="btnHome" aria-label="Home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11.5 12 5l8 6.5V20h-5v-5h-6v5H4z"/></svg></button>
   <button class="ib" id="btnNav" aria-label="Surahs and pages"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg></button>
-  <button class="where" id="where"><b id="whereT">My Personal Qur'an</b><small id="whereS">v1.0.0.108</small></button>
+  <button class="where" id="where"><b id="whereT">My Personal Qur'an</b><small id="whereS">v1.0.0.109</small></button>
   <button class="ib" id="btnBlk" aria-label="Waqaf and ibtida' colours" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="4" y="5" width="16" height="5" rx="1.5" fill="currentColor" fill-opacity=".25"/><rect x="4" y="14" width="16" height="5" rx="1.5"/></svg></button>
   <button class="ib" id="btnBm" aria-label="Bookmarks"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M7 4h10v16l-5-3.5L7 20z"/></svg></button>
   <button class="ib" id="btnSearch" aria-label="Search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/></svg></button>
@@ -4006,7 +4006,7 @@ function histSheet(){
 async function sha(s){ const b=await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s)); return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join(''); }
 function aboutSheet(){
   openSheet('Sources & verification', `
-  <p class="note" style="margin-top:0"><b>My Personal Qur'an v1.0.0.108.</b> The Qur'an text is shown exactly as published by its source. The app never edits it.</p>
+  <p class="note" style="margin-top:0"><b>My Personal Qur'an v1.0.0.109.</b> The Qur'an text is shown exactly as published by its source. The app never edits it.</p>
   <div class="card" style="padding:10px 12px;margin:8px 0"><b>${sL()==='ms'?'Penafian':'Disclaimer'}</b><p class="note" style="margin:4px 0 0">${sL()==='ms'?'Untuk kegunaan peribadi sahaja: percuma, tidak dijual dan tidak boleh digunakan secara komersial. Kandungan milik penerbit masing-masing (disenaraikan di bawah) dan dipaparkan tanpa diubah. Sirah, Sifat Solat dan Solat Jumaat ditulis untuk aplikasi ini daripada sumber yang dinamakan. Ini alat bantu belajar, bukan fatwa: rujuk ulama yang berkelayakan untuk hukum.':'For personal use only: free, not for sale, and not to be used commercially. The contents belong to their publishers (listed below) and are shown unchanged. The Sirah, Sifat Solat and Solat Jumaat are written for this app from the sources named in them. This is a study aid, not a fatwa: ask a qualified scholar for rulings.'}</p></div>
   <p id="integ" class="note">Checking the text in this copy of the app…</p>
   <ul class="src">
@@ -5356,7 +5356,7 @@ document.addEventListener('click',e=>{ if(!IS_ANDROID_APP || !(window.AndroidExt
 async function khutbahBox(box,ms){ if(!box) return; const all='https://www.muis.gov.sg/resources/khutbah-and-religious-advice/khutbah/';
   const base=`<div class="label">${ms?'Khutbah Jumaat MUIS':'MUIS Friday khutbah'}</div>`;
   box.innerHTML=base+`<a class="tile wide sr-cont" href="${all}" target="_blank" rel="noopener"><span style="flex:1"><small>muis.gov.sg</small><br><b>${ms?'Semua khutbah MUIS':'All MUIS khutbahs'}</b></span>›</a>`;
-  let j=null; try{ j=await ktGet('../khutbah/latest.json'); }catch(e){} if(!j||!(j.items||[]).length) return;
+  let j=null; try{ j=await dlGet('kutub','../khutbah/latest.json',{wide:true,fresh:true}); }catch(e){}   // asked afresh on every opening (not kept in memory while the app stays open); the kept copy is only for offline if(!j||!(j.items||[]).length) return;
   const want=ms?'ms':'en', its=j.items.filter(x=>!x.lang||x.lang===want), other=j.items.find(x=>x.lang===(ms?'en':'ms')&&x.date===(its[0]||{}).date);
   box.innerHTML=base+[its[0],other,its[1]].filter(Boolean).map(x=>`<a class="tile wide sr-cont" href="${esc(x.url)}" target="_blank" rel="noopener"><span style="flex:1"><small>${esc(x.date||'')}</small><br><b>${esc(x.title)}</b></span>›</a>${x.pdf?`<a class="sl-src" style="margin:0 0 8px 14px;display:inline-block" href="${esc(x.pdf)}" data-name="${esc(x.title)}" target="_blank" rel="noopener">PDF ›</a>`:''}`).join('')+`<a class="sl-src" style="margin:2px 0 10px 4px;display:inline-block" href="${all}" target="_blank" rel="noopener">${ms?'Semua khutbah MUIS':'All MUIS khutbahs'} ›</a>`; }
 /* ---- Back to where you came from (Azli, 15 Oct 2026) ----
