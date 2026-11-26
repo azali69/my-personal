@@ -1,8 +1,12 @@
 name: MUIS khutbah
 on:
   schedule:
-    - cron: '17 11 * * 4'   # Thursday 19:17 Singapore
-    - cron: '17 23 * * 4'   # Friday 07:17 Singapore
+    # GitHub often delays or skips scheduled runs (the 26 Nov 19:17 run never happened), so there are several slots; a run that finds nothing new commits nothing
+    - cron: '17 9 * * 4'    # Thursday 17:17 Singapore
+    - cron: '17 11 * * 4'   # Thursday 19:17
+    - cron: '47 13 * * 4'   # Thursday 21:47
+    - cron: '17 23 * * 4'   # Friday 07:17
+    - cron: '17 2 * * 5'    # Friday 10:17
   workflow_dispatch:
 permissions:
   contents: write

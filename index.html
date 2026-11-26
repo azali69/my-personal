@@ -712,7 +712,7 @@ a.tile{text-decoration:none;color:inherit}
 <header class="top"><div class="top-in">
   <button class="ib" id="btnHome" aria-label="Home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11.5 12 5l8 6.5V20h-5v-5h-6v5H4z"/></svg></button>
   <button class="ib" id="btnNav" aria-label="Surahs and pages"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg></button>
-  <button class="where" id="where"><b id="whereT">My Personal Qur'an</b><small id="whereS">v1.0.0.110</small></button>
+  <button class="where" id="where"><b id="whereT">My Personal Qur'an</b><small id="whereS">v1.0.0.111</small></button>
   <button class="ib" id="btnBlk" aria-label="Waqaf and ibtida' colours" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="4" y="5" width="16" height="5" rx="1.5" fill="currentColor" fill-opacity=".25"/><rect x="4" y="14" width="16" height="5" rx="1.5"/></svg></button>
   <button class="ib" id="btnBm" aria-label="Bookmarks"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M7 4h10v16l-5-3.5L7 20z"/></svg></button>
   <button class="ib" id="btnSearch" aria-label="Search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/></svg></button>
@@ -1357,7 +1357,7 @@ const APP_LANG=store.get('appLang','en'), I18N_MS={
 "Praying on a plane: what the scholars say": "Solat di dalam kapal terbang: pandangan ulama",
 "ESTIMATE": "ANGGARAN",
 "Live GPS fix": "Fix GPS langsung",
-"✈ Flying? Flight Prayer: times for where the aircraft is": "✈ Dalam penerbangan? Flight Prayer: waktu di tempat kapal terbang berada"
+"✈ Flying? Open Flight Prayer": "✈ Dalam penerbangan? Buka Flight Prayer"
 }
 ;
 const I18N_DAYS={Monday:'Isnin',Tuesday:'Selasa',Wednesday:'Rabu',Thursday:'Khamis',Friday:'Jumaat',Saturday:'Sabtu',Sunday:'Ahad'};
@@ -4027,7 +4027,7 @@ function histSheet(){
 async function sha(s){ const b=await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s)); return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join(''); }
 function aboutSheet(){
   openSheet('Sources & verification', `
-  <p class="note" style="margin-top:0"><b>My Personal Qur'an v1.0.0.110.</b> The Qur'an text is shown exactly as published by its source. The app never edits it.</p>
+  <p class="note" style="margin-top:0"><b>My Personal Qur'an v1.0.0.111.</b> The Qur'an text is shown exactly as published by its source. The app never edits it.</p>
   <div class="card" style="padding:10px 12px;margin:8px 0"><b>${sL()==='ms'?'Penafian':'Disclaimer'}</b><p class="note" style="margin:4px 0 0">${sL()==='ms'?'Untuk kegunaan peribadi sahaja: percuma, tidak dijual dan tidak boleh digunakan secara komersial. Kandungan milik penerbit masing-masing (disenaraikan di bawah) dan dipaparkan tanpa diubah. Sirah, Sifat Solat dan Solat Jumaat ditulis untuk aplikasi ini daripada sumber yang dinamakan. Ini alat bantu belajar, bukan fatwa: rujuk ulama yang berkelayakan untuk hukum.':'For personal use only: free, not for sale, and not to be used commercially. The contents belong to their publishers (listed below) and are shown unchanged. The Sirah, Sifat Solat and Solat Jumaat are written for this app from the sources named in them. This is a study aid, not a fatwa: ask a qualified scholar for rulings.'}</p></div>
   <p id="integ" class="note">Checking the text in this copy of the app…</p>
   <ul class="src">
@@ -4440,7 +4440,7 @@ function prRender(){ const d=new Date(); d.setHours(0,0,0,0); d.setDate(d.getDat
    ${segHtml('prMode',[['sg','Singapore (MUIS)'],['gps','My location'],['city','Choose a city']],loc.mode)}
    ${loc.mode==='city'?`<button class="pill" id="prCity" style="width:100%;justify-content:space-between;margin-top:8px"><span>📍 ${esc(loc.name||'Choose a city')}${(()=>{ const c=PR_CITIES.find(x=>x[0]===loc.name); return c?' · '+esc(c[5]):''; })()}</span><span>▾</span></button>`:''}
    ${loc.mode==='gps'?`<p class="note">${loc.lat!=null?`${esc(loc.name||'')} ${loc.lat.toFixed(3)}, ${loc.lng.toFixed(3)}`:'Location not found yet.'} <button class="pill" id="prGps" style="height:34px">Update location</button></p>`:''}
-   <div class="row2" style="margin:10px 0 2px"><button class="pill" id="prFlight" style="width:100%">✈ Flying? Flight Prayer: times for where the aircraft is</button></div>
+      ${IS_WIN_APP?'':`<div class="row2" style="margin:10px 0 2px"><button class="pill" id="prFlight" style="width:100%;white-space:normal;line-height:1.3">✈ Flying? Open Flight Prayer</button></div>`}
    <div class="label">Calculation method</div>
    <select class="field" id="prMeth" style="width:100%"><option value="auto">Automatic (by place)</option>${Object.entries(PR_METHODS).map(([k,m])=>`<option value="${k}"${store.get('prMethod','auto')===k?' selected':''}>${esc(m.n)} · Fajr ${m.f}° · Isha ${m.im?m.im+' min after Maghrib':m.i+'°'}</option>`).join('')}</select>
    ${prMethodKey()?`<div class="label">Asr</div>${segHtml('prAsr',[['std','Standard (Shafi’i, Maliki, Hanbali)'],['hanafi','Hanafi']],store.get('prAsr','std'))}`:''}
@@ -4460,7 +4460,7 @@ function prRender(){ const d=new Date(); d.setHours(0,0,0,0); d.setDate(d.getDat
   seg('prMode',v=>{ if(v==='sg') store.set('prLoc',{mode:'sg'}); else if(v==='city'){ const c=PR_CITIES[1]; store.set('prLoc',{mode:'city',name:c[0],lat:c[1],lng:c[2]}); } else { store.set('prLoc',Object.assign({mode:'gps'},store.get('prGps',{}))); prLocate(); } prSchedule(); prRender(); });
   if($('prCity')) $('prCity').onclick=()=>prCitySheet(loc.name,c=>{ store.set('prLoc',{mode:'city',name:c[0],lat:c[1],lng:c[2]}); prSchedule(); prRender(); });
   if($('prGps')) $('prGps').onclick=prLocate;
-  $('prFlight').onclick=()=>flightPanel();
+  if($('prFlight')) $('prFlight').onclick=()=>flightPanel();
   if($('prMeth')) $('prMeth').onchange=e=>{ store.set('prMethod',e.target.value); prSchedule(); prRender(); };
   seg('prAsr',v=>{ store.set('prAsr',v); prSchedule(); prRender(); });
   b.querySelectorAll('[data-off]').forEach(inp=>inp.onchange=()=>{ const o=store.get('prOff',[0,0,0,0,0,0]); o[+inp.dataset.off]=Math.max(-30,Math.min(30,Math.round(+inp.value||0))); store.set('prOff',o); prSchedule(); prRender(); });
@@ -4641,7 +4641,7 @@ window.__flFix=o=>{ if(!o) return; if(o.error){ flGpsOn=false; toast(o.error==='
   flFix={lat:o.lat,lng:o.lng,alt:o.alt,spd:o.spd,brg:o.brg!=null&&!isNaN(o.brg)?o.brg:null,acc:o.acc,t:o.t||Date.now()}; const r=document.getElementById('flRes'); if(r) r.innerHTML=flResHtml(); const g=document.getElementById('flGpsInfo'); if(g) g.textContent=flGpsInfo(); };
 function flGpsInfo(){ if(!flFix) return flGpsOn?'Searching for satellites…':'GPS is not running.'; return `Fix ${Math.max(0,Math.round((Date.now()-flFix.t)/1000))} s ago · ${flPos(flFix.lat,flFix.lng)} · height ${flFix.alt!=null?Math.round(flFix.alt).toLocaleString('en')+' m':'unknown'} · speed ${flFix.spd!=null?Math.round(flFix.spd*3.6)+' km/h':'unknown'} · ±${Math.round(flFix.acc||0)} m`; }
 function flRenderForm(){ const b=document.getElementById('flForm'); if(!b) return; const S=flState(), o=flApFind(S.o), d=flApFind(S.d);
-  const apBtn=(id,a,lab)=>`<button class="pill" id="${id}" style="width:100%;text-align:left;justify-content:flex-start">${lab}: <b>${a?esc(a[2])+' ('+esc(a[0])+')':'choose…'}</b></button>`;
+  const apBtn=(id,a,lab)=>`<button class="pill" id="${id}" style="width:100%;text-align:left;justify-content:flex-start;white-space:normal;line-height:1.3;height:auto;padding-top:8px;padding-bottom:8px">${lab}: <b>${a?esc(a[2])+' ('+esc(a[0])+')':'choose…'}</b></button>`;
   b.innerHTML=`${segHtml('flMode',[['route','From my route'],['gps','Live GPS']],S.mode)}
    <div class="row2" style="gap:8px;margin:.5em 0">${apBtn('flO',o,S.mode==='gps'?'From':'From')}${apBtn('flD',d,'To')}</div>
    ${S.mode==='route'?`<label class="note">Departure (local time at ${o?esc(o[2]):'the airport'})</label><input class="field" type="datetime-local" id="flDep" value="${esc(S.dep||'')}" style="width:100%">
