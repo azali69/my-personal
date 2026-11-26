@@ -3546,6 +3546,7 @@ const homeIc={
  qibla:["#d4a73a","#8a6417","<circle cx=\"12\" cy=\"12\" r=\"9\" fill=\"none\" stroke=\"#fff\" stroke-width=\"1.6\"/><path d=\"M12 3.8l1.6 5.6L12 8.6l-1.6.8z\" fill=\"#fff\"/><rect x=\"9.2\" y=\"10.2\" width=\"5.6\" height=\"5.6\" rx=\".6\" fill=\"#111\"/><rect x=\"9.2\" y=\"11.4\" width=\"5.6\" height=\"1.1\" fill=\"#fde68a\"/><path d=\"M12 18v2.2M3.8 12H6M18 12h2.2\" stroke=\"#fff\" stroke-width=\"1.4\" stroke-linecap=\"round\" stroke-opacity=\".8\"/>"],
  set:["#94a3b8","#475569","<path d=\"M12 2.8l1.7.3.5 2.2 1.5.8 2.1-.8 1.2 1.2-.8 2.1.8 1.5 2.2.5.3 1.7-.3 1.7-2.2.5-.8 1.5.8 2.1-1.2 1.2-2.1-.8-1.5.8-.5 2.2-1.7.3-1.7-.3-.5-2.2-1.5-.8-2.1.8-1.2-1.2.8-2.1-.8-1.5-2.2-.5-.3-1.7.3-1.7 2.2-.5.8-1.5-.8-2.1 1.2-1.2 2.1.8 1.5-.8.5-2.2z\" fill=\"#fff\"/><circle cx=\"12\" cy=\"12\" r=\"3.2\" fill=\"#475569\"/>"],
  man:["#c084fc","#7e22ce","<path d=\"M5 4.5A1.5 1.5 0 0 1 6.5 3H19v15.5H6.5A1.5 1.5 0 0 0 5 20z\" fill=\"#fff\"/><path d=\"M5 20a1.5 1.5 0 0 0 1.5 1.5H19v-3\" fill=\"none\" stroke=\"#fff\" stroke-width=\"1.5\"/><circle cx=\"12\" cy=\"7.4\" r=\"1.25\" fill=\"#7e22ce\"/><path d=\"M12 10.4v5\" stroke=\"#7e22ce\" stroke-width=\"2\" stroke-linecap=\"round\"/>"],
+ flight:["#38bdf8","#0369a1","<path d=\"M21 15.5v-1.6l-8-5V4.4a1.5 1.5 0 0 0-3 0v3.9l-8 5v1.6l8-2.3v3.9l-2 1.5V21l3.5-1 3.5 1v-1.5l-2-1.5v-3.9z\" fill=\"#fff\"/>"],
  lang:["#38bdf8","#075985","<circle cx=\"12\" cy=\"12\" r=\"9\" fill=\"#fff\" fill-opacity=\".18\" stroke=\"#fff\" stroke-width=\"1.6\"/><path d=\"M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z\" fill=\"none\" stroke=\"#fff\" stroke-width=\"1.4\"/>"]};
 const hic=n=>{ const d=homeIc[n]||homeIc.read; return `<span class="hb" style="--c1:${d[0]};--c2:${d[1]}"><svg viewBox="0 0 24 24" aria-hidden="true">${d[2]}</svg></span>`; };
 /* Hijri date: the phone's Umm al-Qura calendar where it has one; Android's WebView often does not (it then shows Gregorian
@@ -3595,7 +3596,7 @@ let homeTimer=0;
 /* What Home shows (Azli, 7 Nov 2026): in the Windows app only, the next-prayer card and these tiles start hidden; switch them on in Home settings.
    Android and the web copy show everything (they can hide them in the same place).
    Hiding only removes them from Home: the features, and the prayer alerts, keep working. */
-const HOME_OPT=[['salah','Next prayer time card'],['hz','Memorisation'],['tq','Listen & Repeat'],['dua',"Du'a & Zikir"],['halal','Halal Food'],['masjid','Mosques & Prayer Rooms'],['pray','Prayer Times'],['qibla','Qibla']];
+const HOME_OPT=[['salah','Next prayer time card'],['hz','Memorisation'],['tq','Listen & Repeat'],['dua',"Du'a & Zikir"],['halal','Halal Food'],['masjid','Mosques & Prayer Rooms'],['pray','Prayer Times'],['qibla','Qibla'],['flight','Flight Prayer']];
 const IS_WIN_APP=!!window.__TAURI_INTERNALS__;   // the Windows app (Tauri); Android and the web copy show everything
 const homeShown=()=>new Set(store.get('homeShow', IS_WIN_APP? [] : HOME_OPT.map(x=>x[0])));
 function showHome(){ navRetClear(); if(hz){ if(rec) stopListen(false); hz=null; document.getElementById('dock').classList.remove('hz'); }
@@ -3628,6 +3629,7 @@ function renderHome(){ const el=document.getElementById('home'); const g=pageSta
     <button class="tile" data-t="notes">${hic('notes')}<b>Notes</b><small>Notepad for typing and handwriting; notes on ayat and hadith</small></button>
     <button class="tile" data-t="pray">${hic('pray')}<b>Prayer Times</b><small>MUIS timetable and alerts</small></button>
     <button class="tile" data-t="qibla">${hic('qibla')}<b>Qibla</b><small>Compass to the Ka'bah</small></button>
+    <button class="tile" data-t="flight">${hic('flight')}<b>Flight Prayer</b><small>Prayer times and Qibla for where the aircraft is; works offline</small></button>
     <button class="tile" data-t="set">${hic('set')}<b>Settings</b><small>Reading, sound, colours, language</small></button>
     <button class="tile" data-t="man">${hic('man')}<b>User Guide</b><small>English and Bahasa Melayu</small></button>
     <div class="tile langtile">${hic('lang')}<b>Language · Bahasa</b>${langPick()}</div>
@@ -3653,6 +3655,7 @@ function renderHome(){ const el=document.getElementById('home'); const g=pageSta
     else if(t==='halal'){ halalPanel(); }
     else if(t==='dua'){ typeof duaPanel==='function' ? duaPanel() : toast('Coming soon'); }
     else if(t==='pray'){ typeof prayerPanel==='function' ? prayerPanel() : toast('Coming soon'); }
+    else if(t==='flight'){ flightPanel(); }
     else if(t==='qibla'){ typeof qiblaPanel==='function' ? qiblaPanel() : toast('Coming soon'); }
     else if(t==='set'){ setSheet(); }
     else if(t==='man'){ manualPanel(); } }; }
@@ -3858,6 +3861,7 @@ function prRender(){ const d=new Date(); d.setHours(0,0,0,0); d.setDate(d.getDat
    ${segHtml('prMode',[['sg','Singapore (MUIS)'],['gps','My location'],['city','Choose a city']],loc.mode)}
    ${loc.mode==='city'?`<button class="pill" id="prCity" style="width:100%;justify-content:space-between;margin-top:8px"><span>📍 ${esc(loc.name||'Choose a city')}${(()=>{ const c=PR_CITIES.find(x=>x[0]===loc.name); return c?' · '+esc(c[5]):''; })()}</span><span>▾</span></button>`:''}
    ${loc.mode==='gps'?`<p class="note">${loc.lat!=null?`${esc(loc.name||'')} ${loc.lat.toFixed(3)}, ${loc.lng.toFixed(3)}`:'Location not found yet.'} <button class="pill" id="prGps" style="height:34px">Update location</button></p>`:''}
+   <div class="row2" style="margin:10px 0 2px"><button class="pill" id="prFlight" style="width:100%">✈ Flying? Flight Prayer: times for where the aircraft is</button></div>
    <div class="label">Calculation method</div>
    <select class="field" id="prMeth" style="width:100%"><option value="auto">Automatic (by place)</option>${Object.entries(PR_METHODS).map(([k,m])=>`<option value="${k}"${store.get('prMethod','auto')===k?' selected':''}>${esc(m.n)} · Fajr ${m.f}° · Isha ${m.im?m.im+' min after Maghrib':m.i+'°'}</option>`).join('')}</select>
    ${prMethodKey()?`<div class="label">Asr</div>${segHtml('prAsr',[['std','Standard (Shafi’i, Maliki, Hanbali)'],['hanafi','Hanafi']],store.get('prAsr','std'))}`:''}
@@ -3877,6 +3881,7 @@ function prRender(){ const d=new Date(); d.setHours(0,0,0,0); d.setDate(d.getDat
   seg('prMode',v=>{ if(v==='sg') store.set('prLoc',{mode:'sg'}); else if(v==='city'){ const c=PR_CITIES[1]; store.set('prLoc',{mode:'city',name:c[0],lat:c[1],lng:c[2]}); } else { store.set('prLoc',Object.assign({mode:'gps'},store.get('prGps',{}))); prLocate(); } prSchedule(); prRender(); });
   if($('prCity')) $('prCity').onclick=()=>prCitySheet(loc.name,c=>{ store.set('prLoc',{mode:'city',name:c[0],lat:c[1],lng:c[2]}); prSchedule(); prRender(); });
   if($('prGps')) $('prGps').onclick=prLocate;
+  $('prFlight').onclick=()=>flightPanel();
   if($('prMeth')) $('prMeth').onchange=e=>{ store.set('prMethod',e.target.value); prSchedule(); prRender(); };
   seg('prAsr',v=>{ store.set('prAsr',v); prSchedule(); prRender(); });
   b.querySelectorAll('[data-off]').forEach(inp=>inp.onchange=()=>{ const o=store.get('prOff',[0,0,0,0,0,0]); o[+inp.dataset.off]=Math.max(-30,Math.min(30,Math.round(+inp.value||0))); store.set('prOff',o); prSchedule(); prRender(); });
@@ -3925,6 +3930,169 @@ window.__loc=o=>{ if(!o||o.error){ toast(o&&o.error==='denied'?'Location permiss
   if(typeof window.mqOnLoc==='function') window.mqOnLoc(g); };
 // keep the alerts topped up whenever the app opens
 setTimeout(prSchedule, 2500);
+/* ============================ FLIGHT PRAYER ============================
+   Added 26 Nov 2026 (Azli). Prayer times for where the aircraft actually is, from the sun's position there (not the airport's timetable).
+   The sun's altitude and bearing are worked out from the date and the aircraft's latitude/longitude (the usual solar-position
+   formulae, within about 0.02°); a prayer begins when the sun at the aircraft reaches the angle of the chosen method. The aircraft's position
+   comes from the GPS receiver (live fixes), or is estimated along the great circle between the two airports between the departure and arrival
+   times, at constant speed. Everything is calculated on the phone: no internet is needed (airports: src/airports.json, made by tools/build_airports.py).
+   Height: at flight level the horizon dips about 3.3° (acos(R/(R+h))), so the sun is seen to set later and rise earlier than it is
+   from the ground. That affects sunrise and sunset (so the end of Fajr and the start of Maghrib) and is shown as a second figure;
+   dawn and twilight angles are not changed by height. */
+const FL_AP=%%AIRPORTS%%;   // [IATA, name, city, country, lat, lng, IANA time zone]
+const FL_ALT=10500;         // metres: the height assumed when the real one is unknown (then the result says it is an estimate)
+const flR=Math.PI/180;
+function flSun(ms,lat,lng){   // altitude, bearing (from north), hour angle and declination of the sun, in degrees
+  const n=ms/864e5+2440587.5-2451545.0, L=(280.460+0.9856474*n)%360, g=((357.528+0.9856003*n)%360)*flR;
+  const lam=(L+1.915*Math.sin(g)+0.020*Math.sin(2*g))*flR, eps=(23.439-0.0000004*n)*flR;
+  const dec=Math.asin(Math.sin(eps)*Math.sin(lam)), ra=Math.atan2(Math.cos(eps)*Math.sin(lam),Math.cos(lam));
+  const gm=((280.46061837+360.98564736629*n)%360)*flR; let ha=gm+lng*flR-ra; ha=Math.atan2(Math.sin(ha),Math.cos(ha));
+  const ph=lat*flR, alt=Math.asin(Math.sin(ph)*Math.sin(dec)+Math.cos(ph)*Math.cos(dec)*Math.cos(ha));
+  const az=Math.atan2(-Math.sin(ha),Math.tan(dec)*Math.cos(ph)-Math.sin(ph)*Math.cos(ha));
+  return {alt:alt/flR, az:(az/flR+360)%360, ha:ha/flR, dec:dec/flR}; }
+function flTzOff(tz,ms){ try{ const o={}; new Intl.DateTimeFormat('en-US',{timeZone:tz,hourCycle:'h23',year:'numeric',month:'numeric',day:'numeric',hour:'numeric',minute:'numeric',second:'numeric'})
+    .formatToParts(new Date(ms)).forEach(x=>o[x.type]=+x.value); return Date.UTC(o.year,o.month-1,o.day,o.hour%24,o.minute,o.second)-Math.floor(ms/1000)*1000; }catch(e){ return 0; } }
+function flFromLocal(str,tz){ const m=/^(\d+)-(\d+)-(\d+)T(\d+):(\d+)/.exec(str||''); if(!m) return NaN; const g=Date.UTC(+m[1],m[2]-1,+m[3],+m[4],+m[5]); let t=g-flTzOff(tz,g); t=g-flTzOff(tz,t); return t; }
+function flToLocal(ms,tz){ return new Date(ms+flTzOff(tz,ms)).toISOString().slice(0,16); }
+function flDist(a,b){ const p1=a[0]*flR,p2=b[0]*flR; return 12742*Math.asin(Math.sqrt(Math.sin((p2-p1)/2)**2+Math.cos(p1)*Math.cos(p2)*Math.sin((b[1]-a[1])*flR/2)**2)); }
+function flBrg(a,b){ const p1=a[0]*flR,p2=b[0]*flR,dl=(b[1]-a[1])*flR; return (Math.atan2(Math.sin(dl)*Math.cos(p2),Math.cos(p1)*Math.sin(p2)-Math.sin(p1)*Math.cos(p2)*Math.cos(dl))/flR+360)%360; }
+function flGC(a,b,f){ const p1=a[0]*flR,l1=a[1]*flR,p2=b[0]*flR,l2=b[1]*flR, d=flDist(a,b)/6371;
+  if(d<1e-7) return {lat:a[0],lng:a[1]}; const A=Math.sin((1-f)*d)/Math.sin(d), B=Math.sin(f*d)/Math.sin(d);
+  const x=A*Math.cos(p1)*Math.cos(l1)+B*Math.cos(p2)*Math.cos(l2), y=A*Math.cos(p1)*Math.sin(l1)+B*Math.cos(p2)*Math.sin(l2), z=A*Math.sin(p1)+B*Math.sin(p2);
+  return {lat:Math.atan2(z,Math.hypot(x,y))/flR, lng:Math.atan2(y,x)/flR}; }
+function flFwd(a,brg,km){ const p=a[0]*flR,l=a[1]*flR,d=km/6371,b=brg*flR; const p2=Math.asin(Math.sin(p)*Math.cos(d)+Math.cos(p)*Math.sin(d)*Math.cos(b));
+  const l2=l+Math.atan2(Math.sin(b)*Math.sin(d)*Math.cos(p),Math.cos(d)-Math.sin(p)*Math.sin(p2)); return {lat:p2/flR, lng:((l2/flR+540)%360)-180}; }
+/* the aircraft's position (and heading) at a time: along the great circle from o to d, leaving at t0 and arriving at t1 */
+function flRouteTrack(o,d,t0,t1){ return ms=>{ const f=Math.min(1,Math.max(0,(ms-t0)/(t1-t0))), p=flGC(o,d,f), q0=flGC(o,d,Math.max(0,f-.002)), q1=flGC(o,d,Math.min(1,f+.002));
+  p.brg=flBrg([q0.lat,q0.lng],[q1.lat,q1.lng]); return p; }; }
+/* from a live fix: on to the destination if there is one, else straight on at the heading and speed of the fix */
+function flFixTrack(fix,dest,kmh){ const here=[fix.lat,fix.lng];
+  if(dest){ const T=Math.max(60e3,flDist(here,dest)/kmh*3600e3); return ms=>{ const f=Math.min(1,Math.max(0,(ms-fix.t)/T)), p=flGC(here,dest,f), q=flGC(here,dest,Math.min(1,f+.002)); p.brg=flBrg(here,[q.lat,q.lng])||flBrg(here,dest); return p; }; }
+  return ms=>{ const p=flFwd(here,fix.brg||0,Math.max(0,ms-fix.t)/3600e3*kmh); p.brg=fix.brg||0; return p; }; }
+/* the prayer events met between t0 and t1 (ms). key: fajr, rise (sunrise, ground), riseA (sunrise seen from the aircraft), zuhr, asr, set (sunset, ground), setA (as seen from the aircraft), isha */
+function flEvents(track,t0,t1,M,altM){
+  const dip=Math.acos(6371/(6371+altM/1000))/flR, step=60e3, out=[];
+  const asrAlt=(lat,dec)=>Math.atan(1/((M.a||1)+Math.tan(Math.abs((lat-dec)*flR))))/flR;   // altitude of the sun when the shadow is (1 or 2) lengths + its noon shadow
+  const defs=[['fajr',()=>-M.f,1],['rise',()=>-0.833,1],['riseA',()=>-0.833-dip,1],['asr',(p,s)=>asrAlt(p.lat,s.dec),-1],['set',()=>-0.833,-1],['setA',()=>-0.833-dip,-1]];
+  if(!M.im) defs.push(['isha',()=>-M.i,-1]);
+  const st=ms=>{ const p=track(ms), s=flSun(ms,p.lat,p.lng); return [p,s]; };
+  const val=(d,ms)=>{ const [p,s]=st(ms); return s.alt-d[1](p,s); };
+  const bis=(f,a,b)=>{ let fa=f(a); for(let i=0;i<22;i++){ const m=(a+b)/2, fm=f(m); if((fa<0)===(fm<0)){ a=m; fa=fm; } else b=m; } return (a+b)/2; };
+  let prev=null;
+  for(let ms=t0;ms<=t1+step;ms+=step){ const t=Math.min(ms,t1), cur=defs.map(d=>val(d,t)), [p,s]=st(t), cs={ha:s.ha};
+    if(prev){ defs.forEach((d,i)=>{ const a=prev.v[i], b=cur[i]; if(d[2]>0? (a<0&&b>=0) : (a>0&&b<=0)){
+        if(d[0]==='asr' && s.ha<0) return; out.push({k:d[0], t:bis(x=>val(d,x)*d[2],prev.t,t)}); } });
+      if(prev.ha<0 && cs.ha>=0 && Math.abs(cs.ha)<60) out.push({k:'zuhr', t:bis(x=>{ const [q,u]=st(x); return u.ha; },prev.t,t)}); }
+    prev={t,v:cur,ha:cs.ha}; if(t>=t1) break; }
+  if(M.im) out.filter(e=>e.k==='set').forEach(e=>{ const ramadan=M.n===PR_METHODS.uq.n && hijriParts(new Date(e.t)).m===9; out.push({k:'isha',t:e.t+(M.im+(ramadan?30:0))*60e3}); });
+  out.sort((x,y)=>x.t-y.t);
+  out.forEach(e=>{ const p=track(e.t), s=flSun(e.t,p.lat,p.lng); e.lat=p.lat; e.lng=p.lng; e.brg=p.brg; e.az=s.az; e.salt=s.alt; });
+  return out; }
+/* which period of the day the sun is in at a place and time (the angles of the method; Isha and Maghrib are not told apart by minutes) */
+function flPeriod(ms,lat,lng,M,altM){ const dip=Math.acos(6371/(6371+(altM||0)/1000))/flR, s=flSun(ms,lat,lng), asr=Math.atan(1/((M.a||1)+Math.tan(Math.abs((lat-s.dec)*flR))))/flR, i=M.i||18;
+  if(s.ha<0) return s.alt>=-0.833-dip?'rise': s.alt>=-M.f?'fajr':'night';
+  return s.alt>=asr?'zuhr': s.alt>=-0.833-dip?'asr': s.alt>=-i?'maghrib':'isha'; }
+/* ---- the Flight Prayer page ---- */
+const FL_NAMES={fajr:'Fajr',rise:'Sunrise',riseA:'Sunrise',zuhr:'Zuhr',asr:'Asr',set:'Sunset',setA:'Sunset',isha:'Isha'};
+let flFix=null, flGpsOn=false, flTick=null;
+const flApFind=c=>FL_AP.find(a=>a[0]===c)||null;
+const flState=()=>Object.assign({mode:'route',o:null,d:null,dep:'',arr:'',clock:'phone',meth:'auto'},store.get('flight',{}));
+const flSave=o=>store.set('flight',Object.assign(flState(),o));
+function flMethod(){ const k=flState().meth; return PR_METHODS[k!=='auto'&&PR_METHODS[k]?k:(prMethodKey()||'muis')]; }
+function flFmt(ms,clock,o,d){ const tz= clock==='utc'?'UTC': clock==='o'&&o? o[6] : clock==='d'&&d? d[6] : undefined;
+  try{ return new Intl.DateTimeFormat('en-GB',{timeZone:tz,hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).format(new Date(ms)); }catch(e){ return new Date(ms).toISOString().slice(11,16); } }
+function flDay(ms,clock,o,d){ const tz= clock==='utc'?'UTC': clock==='o'&&o? o[6] : clock==='d'&&d? d[6] : undefined;
+  try{ return new Intl.DateTimeFormat('en-GB',{timeZone:tz,weekday:'short',day:'numeric',month:'short'}).format(new Date(ms)); }catch(e){ return ''; } }
+const flLeft=ms=>{ const m=Math.max(0,Math.round(ms/60e3)), h=Math.floor(m/60); return h? h+' h '+String(m%60).padStart(2,'0')+' min' : m+' min'; };
+function flNear(lat,lng){ let b=null,bd=1e9; for(const a of FL_AP){ const dd=flDist([lat,lng],[a[4],a[5]]); if(dd<bd){ bd=dd; b=a; } } return b&&bd<500? `${Math.round(bd/10)*10} km from ${b[2]} (${b[0]})` : ''; }
+const flPos=(lat,lng)=>`${Math.abs(lat).toFixed(1)}°${lat<0?'S':'N'} ${Math.abs(lng).toFixed(1)}°${lng<0?'W':'E'}`;
+function flQibla(lat,lng,brg){ const q=qiblaBearing(lat,lng); let s=`Qibla ${Math.round(q)}° from north`;
+  if(brg!=null){ const rel=((q-brg)%360+360)%360, hr=Math.round(rel/30)%12||12; s+=` · ${rel<10||rel>350?'straight ahead': Math.abs(rel-180)<10?'straight behind': rel<180? Math.round(rel)+'° to the right':Math.round(360-rel)+'° to the left'} of the nose (about ${hr} o'clock)`; }
+  return s; }
+/* the whole calculation from the saved choices; returns what the page shows */
+function flCompute(){ const S=flState(), M=flMethod(), now=Date.now(), o=flApFind(S.o), d=flApFind(S.d);
+  let track=null,t0,t1,altM=FL_ALT,altKnown=false,src='route',note='';
+  if(S.mode==='gps'){ const f=flFix; if(!f) return {M,o,d,S,wait:'gps'};
+    const kmh= f.spd!=null&&f.spd*3.6>150? f.spd*3.6 : 850; if(f.alt!=null&&f.alt>-100){ altM=Math.max(0,f.alt); altKnown=true; }
+    t0=now; track=flFixTrack(f,d?[d[4],d[5]]:null,kmh); const T= d? flDist([f.lat,f.lng],[d[4],d[5]])/kmh*3600e3 : 8*3600e3; t1=f.t+Math.max(T,60e3)+(d?0:0); if(t1<now) t1=now+60e3; src='gps';
+    note=f.t>now-3*60e3?'live':'stale'; }
+  else { if(!o||!d) return {M,o,d,S,wait:'route'}; const a=flFromLocal(S.dep,o[6]), b=flFromLocal(S.arr,d[6]);
+    if(!(a>0)||!(b>a)||b-a>26*3600e3||b-a<15*60e3) return {M,o,d,S,wait:'times'};
+    t0=a; t1=b; track=flRouteTrack([o[4],o[5]],[d[4],d[5]],a,b); }
+  const ev=flEvents(track,t0,t1,M,altM), ref=Math.min(Math.max(now,t0),t1), p=track(ref), s=flSun(ref,p.lat,p.lng);
+  return {M,o,d,S,ev,ref,p,s,t0,t1,now,altM,altKnown,src,note,per:flPeriod(ref,p.lat,p.lng,M,altM),before:now<t0,after:now>t1&&src==='route'}; }
+const FL_PER={fajr:'Fajr time',rise:'After sunrise (no prayer time until Zuhr)',zuhr:'Zuhr time',asr:'Asr time',maghrib:'Maghrib time',isha:'Isha time',night:'Night, before Fajr'};
+function flResHtml(){ const R=flCompute(); if(R.wait){ return `<div class="card"><b>${R.wait==='gps'?'Waiting for a GPS fix':R.wait==='times'?'Check the two times':'Choose your two airports'}</b><br><span class="note">${
+    R.wait==='gps'?'Tap Start GPS. The phone’s GPS can work in airplane mode without internet, but it needs a clear sky: a window seat helps, and the first fix can take several minutes.'
+    :R.wait==='times'?'Departure and arrival must be the local times printed on your boarding pass, with arrival after departure (a flight is at most 26 hours here).'
+    :'Pick where you take off and where you land, then the departure and arrival times, as printed on your boarding pass.'}</span></div>`; }
+  const {M,o,d,S,ev,ref,p,s}=R, clk=S.clock, nowTxt=flFmt(R.now,clk,o,d);
+  const live=R.src==='gps', est=!live || !R.altKnown || R.note==='stale';
+  const why=[]; if(!live) why.push('the position is worked out from your route and times, not measured'); else if(R.note==='stale') why.push('the last GPS fix is old'); if(!R.altKnown) why.push(`the height is unknown, so ${FL_ALT.toLocaleString('en')} m is assumed (it moves sunrise and sunset by only 1–2 minutes either way)`);
+  const badge= est? `<div class="card" style="border-left:4px solid #d97706"><b>ESTIMATE</b><br><span class="note">${esc(why.join('; '))}. Treat these times as a guide (a few minutes either way), and when in doubt wait for the signs below.</span></div>`
+    : `<div class="card" style="border-left:4px solid #16a34a"><b>Live GPS fix</b><br><span class="note">Position and height from the phone’s GPS (height ${Math.round(R.altM).toLocaleString('en')} m). Times ahead are projected along your route, so they stay estimates until they come.</span></div>`;
+  const nextP=ev.find(e=>e.t>R.now&&['fajr','zuhr','asr','setA','isha'].includes(e.k));
+  const nowCard=`<div class="card"><b>${R.before?'Before departure: the plan below starts when you take off':R.after?'You should have landed: use Prayer Times for the city':'Now · '+FL_PER[R.per]}</b><br><span class="note">${esc(flPos(p.lat,p.lng))}${flNear(p.lat,p.lng)?' · '+esc(flNear(p.lat,p.lng)):''} · sun ${Math.abs(s.alt).toFixed(1)}° ${s.alt>=0?'above':'below'} the horizon, bearing ${Math.round(s.az)}°${est?' (estimated position)':''}<br>${esc(flQibla(p.lat,p.lng,p.brg))}</span>`
+    +(nextP&&!R.after?`<div style="font-size:1.5em;margin:.4em 0 .1em"><b>${({fajr:'Fajr',zuhr:'Zuhr',asr:'Asr',setA:'Maghrib',isha:'Isha'})[nextP.k]}</b> in ${flLeft(nextP.t-R.now)}</div><span class="note">at ${flFmt(nextP.t,clk,o,d)} ${esc(flClkName(clk))} · ${esc(flPos(nextP.lat,nextP.lng))}${est?' · estimate':''}</span>`:`<div class="note" style="margin-top:.4em">No further prayer time on this flight.</div>`)+`</div>`;
+  const prayerRow=(e,label,sub)=>`<div class="card"><div class="row2" style="align-items:baseline"><b style="flex:1">${label}</b><b style="font-size:1.25em">${flFmt(e.t,clk,o,d)}</b></div><span class="note">${esc(flDay(e.t,clk,o,d))} · ${R.now>e.t?'passed · ':'in '+flLeft(e.t-R.now)+' · '}over ${esc(flPos(e.lat,e.lng))}${flNear(e.lat,e.lng)?', '+esc(flNear(e.lat,e.lng)):''}<br>${esc(flQibla(e.lat,e.lng,e.brg))}${sub?'<br>'+sub:''}</span></div>`;
+  const rows=[]; const seen=new Set();
+  ev.forEach(e=>{ if(e.k==='rise'||e.k==='set') return;   // the ground figure goes under the aircraft one
+    const gnd=(k)=>ev.find(x=>x.k===k&&Math.abs(x.t-e.t)<30*60e3);
+    if(e.k==='setA'){ const g=gnd('set'); rows.push([e.t,prayerRow(e,'Maghrib <small>(sunset seen from the aircraft)</small>',(g?`Sunset at the ground below: ${flFmt(g.t,clk,o,d)}. The aircraft sees the sun for longer; starting from the later time is the cautious choice.`:'')+(M.im?'':''))]); }
+    else if(e.k==='riseA'){ const g=gnd('rise'); rows.push([e.t,prayerRow(e,'Sunrise <small>(seen from the aircraft: Fajr ends)</small>',g?`Sunrise at the ground below: ${flFmt(g.t,clk,o,d)}. Fajr ending at the earlier time is the cautious choice.`:'')]); }
+    else rows.push([e.t,prayerRow(e,({fajr:'Fajr',zuhr:'Zuhr',asr:'Asr',isha:'Isha'})[e.k]+(e.k==='zuhr'?' <small>(sun at its highest)</small>':''),'')]); });
+  const list= rows.length? rows.map(r=>r[1]).join('') : `<div class="card"><span class="note">No prayer time falls inside this flight (or the sun does not reach the angles on this route, as at high latitudes).</span></div>`;
+  return badge+nowCard+`<h3 style="margin:1em 0 .3em">Prayer times along the flight</h3>`+list; }
+function flClkName(c){ const S=flState(), o=flApFind(S.o), d=flApFind(S.d); return c==='utc'?'UTC': c==='o'&&o? 'at '+o[2] : c==='d'&&d? 'at '+d[2] : 'phone time'; }
+function flAirportSheet(cur,pick){ openSheet('Choose an airport',`<input class="field" id="faQ" type="search" placeholder="Airport, city, country or code (SIN, KIX…)" autocomplete="off" style="width:100%"><div id="faL" class="pclist"></div>`);
+  const L=sheetB.querySelector('#faL'), Q=sheetB.querySelector('#faQ');
+  const draw=()=>{ const q=Q.value.trim().toLowerCase(); let r=FL_AP;
+    if(q){ const sc=a=>{ const hay=(a[0]+' '+a[2]+' '+a[1]+' '+a[3]).toLowerCase(); return a[0].toLowerCase()===q?0: a[0].toLowerCase().startsWith(q)?1: a[2].toLowerCase().startsWith(q)?2: hay.includes(q)?3:9; };
+      r=FL_AP.map(a=>[sc(a),a]).filter(x=>x[0]<9).sort((x,y)=>x[0]-y[0]).map(x=>x[1]); }
+    else r=['SIN','KUL','CGK','BTH','NRT','HND','KIX','JED','MED','DOH','DXB','IST','LHR','JFK','SYD','PER'].map(flApFind).filter(Boolean);
+    L.innerHTML= r.length? r.slice(0,60).map(a=>`<button class="pc-c${a[0]===cur?' on':''}" data-c="${a[0]}"><span>${esc(a[2])} · ${esc(a[1])} <small>${esc(a[0])}, ${esc(a[3])}</small></span>${a[0]===cur?'<b>✓</b>':''}</button>`).join('')+(r.length>60?'<p class="note">Type more to narrow the list.</p>':'')
+      : `<p class="note">No airport matches. Try the 3-letter code or the city.</p>`; };
+  Q.oninput=draw; draw(); L.onclick=e=>{ const x=e.target.closest('[data-c]'); if(!x) return; closeSheet(); pick(x.dataset.c); }; }
+function flGpsStart(){ flFix=null; flGpsOn=true; if(window.AndroidExtra?.startFlightGps){ window.AndroidExtra.startFlightGps(); }
+  else if(navigator.geolocation){ window.__flWatch=navigator.geolocation.watchPosition(p=>window.__flFix({lat:p.coords.latitude,lng:p.coords.longitude,alt:p.coords.altitude,spd:p.coords.speed,brg:p.coords.heading,acc:p.coords.accuracy,t:p.timestamp}),
+    ()=>window.__flFix({error:'denied'}),{enableHighAccuracy:true,maximumAge:0,timeout:60000}); }
+  else window.__flFix({error:'off'}); }
+function flGpsStop(){ flGpsOn=false; try{ window.AndroidExtra?.stopFlightGps?.(); }catch(e){} if(window.__flWatch!=null){ try{ navigator.geolocation.clearWatch(window.__flWatch); }catch(e){} window.__flWatch=null; } }
+window.__flFix=o=>{ if(!o) return; if(o.error){ flGpsOn=false; toast(o.error==='denied'?'Location permission was not given.':'GPS is off. Turn on Location (GPS works in airplane mode).'); flRenderForm(); return; }
+  flFix={lat:o.lat,lng:o.lng,alt:o.alt,spd:o.spd,brg:o.brg!=null&&!isNaN(o.brg)?o.brg:null,acc:o.acc,t:o.t||Date.now()}; const r=document.getElementById('flRes'); if(r) r.innerHTML=flResHtml(); const g=document.getElementById('flGpsInfo'); if(g) g.textContent=flGpsInfo(); };
+function flGpsInfo(){ if(!flFix) return flGpsOn?'Searching for satellites…':'GPS is not running.'; return `Fix ${Math.max(0,Math.round((Date.now()-flFix.t)/1000))} s ago · ${flPos(flFix.lat,flFix.lng)} · height ${flFix.alt!=null?Math.round(flFix.alt).toLocaleString('en')+' m':'unknown'} · speed ${flFix.spd!=null?Math.round(flFix.spd*3.6)+' km/h':'unknown'} · ±${Math.round(flFix.acc||0)} m`; }
+function flRenderForm(){ const b=document.getElementById('flForm'); if(!b) return; const S=flState(), o=flApFind(S.o), d=flApFind(S.d);
+  const apBtn=(id,a,lab)=>`<button class="pill" id="${id}" style="width:100%;text-align:left;justify-content:flex-start">${lab}: <b>${a?esc(a[2])+' ('+esc(a[0])+')':'choose…'}</b></button>`;
+  b.innerHTML=`${segHtml('flMode',[['route','From my route'],['gps','Live GPS']],S.mode)}
+   <div class="row2" style="gap:8px;margin:.5em 0">${apBtn('flO',o,S.mode==='gps'?'From':'From')}${apBtn('flD',d,'To')}</div>
+   ${S.mode==='route'?`<label class="note">Departure (local time at ${o?esc(o[2]):'the airport'})</label><input class="field" type="datetime-local" id="flDep" value="${esc(S.dep||'')}" style="width:100%">
+   <label class="note">Arrival (local time at ${d?esc(d[2]):'the airport'})</label><input class="field" type="datetime-local" id="flArr" value="${esc(S.arr||'')}" style="width:100%">`
+   :`<div class="row2" style="gap:8px;margin:.4em 0"><button class="pill" id="flG">${flGpsOn?'Stop GPS':'Start GPS'}</button></div><div class="note" id="flGpsInfo">${esc(flGpsInfo())}</div>
+   <p class="note">The destination is optional: with one, times are projected along the straight route to it; without, along your current heading and speed.</p>`}
+   <label class="note">Show times in</label>${segHtml('flClk',[['phone','Phone'],['o','Departure'],['d','Arrival'],['utc','UTC']],S.clock)}
+   <label class="note">Calculation method</label><select class="field" id="flMeth" style="width:100%"><option value="auto">Same as Prayer Times (${esc((PR_METHODS[prMethodKey()||'muis']).n)})</option>${Object.entries(PR_METHODS).map(([k,m])=>`<option value="${k}"${S.meth===k?' selected':''}>${esc(m.n)} · Fajr ${m.f}° · Isha ${m.im?m.im+' min after Maghrib':m.i+'°'}</option>`).join('')}</select>`;
+  const redo=()=>{ flRenderForm(); const r=document.getElementById('flRes'); if(r) r.innerHTML=flResHtml(); };
+  b.querySelector('#flMode').onclick=e=>{ const x=e.target.closest('button'); if(!x) return; if(x.dataset.v==='route') flGpsStop(); flSave({mode:x.dataset.v}); redo(); };
+  b.querySelector('#flO').onclick=()=>flAirportSheet(S.o,c=>{ const n={o:c}; const a=flApFind(c); if(S.mode==='route'&&a&&!S.dep){ n.dep=flToLocal(Date.now()+3600e3,a[6]).slice(0,16); } flSave(n); flAutoArr(); redo(); });
+  b.querySelector('#flD').onclick=()=>flAirportSheet(S.d,c=>{ flSave({d:c}); flAutoArr(); redo(); });
+  if(S.mode==='route'){ b.querySelector('#flDep').onchange=e=>{ flSave({dep:e.target.value}); flAutoArr(true); redo(); }; b.querySelector('#flArr').onchange=e=>{ flSave({arr:e.target.value}); redo(); }; }
+  else b.querySelector('#flG').onclick=()=>{ if(flGpsOn) flGpsStop(); else flGpsStart(); redo(); };
+  b.querySelector('#flClk').onclick=e=>{ const x=e.target.closest('button'); if(!x) return; flSave({clock:x.dataset.v}); redo(); };
+  b.querySelector('#flMeth').onchange=e=>{ flSave({meth:e.target.value}); redo(); }; }
+/* a first guess at the arrival time (distance at about 830 km/h plus 30 min); the boarding-pass time should replace it */
+function flAutoArr(force){ const S=flState(), o=flApFind(S.o), d=flApFind(S.d); if(!o||!d||!S.dep||(S.arr&&!force&&S.arr>'')) return;
+  const a=flFromLocal(S.dep,o[6]); if(!(a>0)) return; const ms=a+(flDist([o[4],o[5]],[d[4],d[5]])/830*60+30)*60e3; flSave({arr:flToLocal(Math.round(ms/6e4)*6e4,d[6])}); }
+function flightPanel(){ const S=flState(); if(S.mode==='gps'&&!flGpsOn&&window.AndroidExtra?.startFlightGps) { /* started by the button, so the permission is asked when meant */ }
+  const b=openPanel('flight','Flight Prayer',`<div class="card"><b>Prayer times for where the aircraft is</b><br><span class="note">Worked out from the sun’s position at the aircraft, not the airport’s timetable. Works without internet. If the position or height is not known exactly, the result says ESTIMATE.</span></div>
+   <div id="flForm"></div><div id="flRes"></div>
+   <details class="card"><summary><b>Praying on a plane: what the scholars say</b></summary>
+    <p class="note">This page gives times, not a ruling. The fatwas I read (links below) say to judge the time by the signs you can see from the aircraft, to ask the crew where you are, and to estimate Zuhr and Asr from the region flown over. They do not settle whether to take the time at flight level or at the ground, so both are shown and the cautious one is named. Ask your teacher about combining and shortening prayers, and about what to do if the estimate proves wrong.</p>
+    <p class="note"><a href="https://islamqa.info/en/answers/102449" target="_blank" rel="noopener">IslamQA 102449</a> · <a href="https://www.amjaonline.org/fatwa/en/22041/" target="_blank" rel="noopener">AMJA fatwa 22041</a> · <a href="https://www.islamweb.net/en/fatwa/20198/times-of-prayer-on-a-plane" target="_blank" rel="noopener">Islamweb 20198</a></p></details>
+   <p class="note">How it works: the aircraft’s latitude and longitude at each minute (live GPS, or along the great circle between the airports) give the sun’s altitude there; a prayer starts when it reaches the method’s angle. Route times assume constant speed and a straight great-circle path, so detours and delays move them a few minutes. At about 11 km the horizon dips about 3°, so sunset is seen later and sunrise earlier than on the ground.</p>`);
+  flRenderForm(); const r=b.querySelector('#flRes'); r.innerHTML=flResHtml(); flAutoArr();
+  clearInterval(flTick); flTick=setInterval(()=>{ const el=document.getElementById('flRes'); if(!el||document.getElementById('flight')?.hidden!==false){ clearInterval(flTick); return; } el.innerHTML=flResHtml(); const g=document.getElementById('flGpsInfo'); if(g) g.textContent=flGpsInfo(); },15000);
+  document.getElementById('flight').addEventListener('closed',()=>{ clearInterval(flTick); flGpsStop(); },{once:true}); }
+
 /* ============================ QIBLA ============================
    Direction: great-circle bearing from your position to the Ka'bah (21.4225° N, 39.8262° E), from true north.
    The phone's compass (rotation sensor, corrected to true north with Android's magnetic declination) turns the dial. */

@@ -18,7 +18,7 @@ with sync_playwright() as p:
     ctx, pg, errs = fresh(b)
     pg.evaluate("document.getElementById('cover')&&(document.getElementById('cover').hidden=true); showHome()"); pg.wait_for_timeout(800)
     allt = pg.evaluate("[...document.querySelectorAll('#home .tile[data-t]')].map(t=>t.dataset.t)")
-    chk('Android/web: all 20 tiles shown', len(allt) == 20 and all(t in allt for t in ['hz','tq','dua','halal','masjid','pray','qibla']), str(len(allt)))
+    chk('Android/web: all 21 tiles shown', len(allt) == 21 and all(t in allt for t in ['hz','tq','dua','halal','masjid','pray','qibla','flight']), str(len(allt)))
     chk('Android/web: next-prayer card shown', pg.evaluate("!!document.getElementById('hmSalah')")); ctx.close()
     # 1. Home tiles (the Windows app: Tauri adds window.__TAURI_INTERNALS__)
     ctx = b.new_context(viewport={'width': 393, 'height': 873}, is_mobile=True, has_touch=True)
@@ -27,12 +27,12 @@ with sync_playwright() as p:
     pg.goto('file://' + os.path.join(R, 'index.html')); pg.wait_for_timeout(3500)
     pg.evaluate("document.getElementById('cover')&&(document.getElementById('cover').hidden=true); showHome()"); pg.wait_for_timeout(800)
     tiles = pg.evaluate("[...document.querySelectorAll('#home .tile[data-t]')].map(t=>t.dataset.t)")
-    gone = ['hz','tq','dua','halal','masjid','pray','qibla']; keep = ['read','open','bm','kutub','shamail','sirah','solat','kamus','jumuah','check','notes','set','man']
+    gone = ['hz','tq','dua','halal','masjid','pray','qibla','flight']; keep = ['read','open','bm','kutub','shamail','sirah','solat','kamus','jumuah','check','notes','set','man']
     chk('hidden tiles are not on Home', not any(t in tiles for t in gone), str([t for t in gone if t in tiles]))
     chk('other tiles (incl. Shama\'il) are still there', all(t in tiles for t in keep), str([t for t in keep if t not in tiles]))
     chk('next-prayer card is not on Home', pg.evaluate("!document.getElementById('hmSalah')"))
     pg.evaluate("homeSetSheet()"); pg.wait_for_timeout(500)
-    chk('Home settings lists the 8 switches', pg.evaluate("document.querySelectorAll('#sheetB [id^=hmv-]').length") == 8)
+    chk('Home settings lists the 9 switches', pg.evaluate("document.querySelectorAll('#sheetB [id^=hmv-]').length") == 9)
     pg.evaluate("document.querySelector('#hmv-qibla button[data-v=\"true\"]').click(); document.querySelector('#hmv-salah button[data-v=\"true\"]').click()"); pg.wait_for_timeout(500)
     chk('switching Qibla on brings the tile back', pg.evaluate("!!document.querySelector('#home .tile[data-t=qibla]')"))
     chk('switching the prayer card on brings it back', pg.evaluate("!!document.getElementById('hmSalah')"))

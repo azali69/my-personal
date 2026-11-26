@@ -56,6 +56,7 @@ Return to Home from anywhere with the **house button** (top left of the reading 
 | Notes | Your notepad: notes on ayat, on hadith, and free notes (section 8) |
 | Prayer Times | MUIS times, alerts and reminders (section 8) |
 | Qibla | Compass to the Ka'bah (section 8) |
+| Flight Prayer | Prayer times and Qibla for where the aircraft is, calculated from the sun there; works offline (section 8) |
 | Settings | All settings (section 9) |
 | User Guide | This manual, in English or Bahasa Melayu |
 | Language · Bahasa | Tick English or Bahasa Melayu for the whole app (section 9) |
@@ -343,6 +344,18 @@ All open from the **ayah menu**; they need the internet once per surah.
 5. Alerts are **on by default** for the five prayers, and the app asks once to allow notifications. They follow the phone's sound mode: **ring** = the adhan or tone plays; **vibrate** = the phone vibrates with the notification, no sound; **silent or Do Not Disturb** = a silent notification only. **Test the sound** follows the same rule (on vibrate it only vibrates). With earphones or a Bluetooth earpiece connected, the adhan plays in the earphones only.
 6. **Prayer times in the notification bar**: **Always** (default) keeps today's times and the time left to the next prayer in the pull-down bar; **30 min before each prayer** shows it only in the half hour before each prayer; **Off**. Tap it to open Prayer times.
 
+**Flight Prayer**
+
+Prayer times and the Qibla for where the aircraft actually is: they are worked out from the sun's position at the aircraft, not from the airport's timetable, and they need no internet.
+
+1. Home → **Flight Prayer** (or Prayer Times → **Flying?**).
+2. **From my route** (works anywhere, also with GPS off): choose the two airports and type the departure and arrival times as printed on your boarding pass (local time at each airport). The plane is placed along the straight route between them at constant speed. **Everything is then marked ESTIMATE**: a detour, a delay or a headwind moves the times by a few minutes (10 minutes of delay moves them about 5).
+3. **Live GPS**: tap **Start GPS**. The phone's GPS receiver works in airplane mode and needs no internet, but it needs a clear view of the sky (sit at a window; the first fix can take several minutes), and some phones do not get a fix inside a cabin. With a fix the position and the height are measured; the times ahead are still projected along your route (or your current heading), so they stay estimates until they arrive. If the phone gives no height, 10,500 m is assumed and the page says so.
+4. The page shows: the prayer now, the next prayer with the time left, then each prayer time on the flight with where the aircraft will be, and the Qibla at that moment (degrees from north, and where it is compared with the nose of the aircraft, as a clock position). **Show times in** lets you read them in phone time, the departure or arrival city's time, or UTC.
+5. **Sunset and sunrise at height**: at flight level the horizon dips about 3°, so the sun is seen to set about 10 minutes later and rise about 10 minutes earlier than on the ground below. The page shows both: Maghrib is given from sunset as seen from the aircraft (the cautious start) with the ground sunset under it; Fajr ends at sunrise as seen from the aircraft. The angles for Fajr and Isha are not changed by height.
+6. The calculation method is the one in Prayer Times (or choose another on this page). This page gives times, not a ruling. The fatwas it links to (IslamQA 102449, AMJA 22041, Islamweb 20198) say to go by the signs seen from the aircraft, to ask the crew, and to estimate Zuhr and Asr from the region flown over; ask your teacher about combining and shortening prayers.
+7. If no time appears for a prayer, the sun does not reach that angle on this route (as at high latitudes), or the time falls before take-off or after landing.
+
 **Qibla**
 
 1. Home → **Qibla**; allow location.
@@ -360,7 +373,7 @@ All open from the **ayah menu**; they need the internet once per surah.
 | Save all 604 pages | Printed pages for offline reading |
 | Surah name | Latin or Arabic in the top bar |
 | Translation language | Bahasa Melayu or English |
-| Home and colours | Home background, bar colour, book cover, and what Home shows. In the Windows app the next-prayer card and the tiles Memorisation, Listen & Repeat, Du'a & Zikir, Halal Food, Mosques & Prayer Rooms, Prayer Times and Qibla start hidden (on Android they are shown); change any of them with **Show** or **Hide** here. Hiding only removes them from Home: the features, and the prayer alerts, keep working |
+| Home and colours | Home background, bar colour, book cover, and what Home shows. In the Windows app the next-prayer card and the tiles Memorisation, Listen & Repeat, Du'a & Zikir, Halal Food, Mosques & Prayer Rooms, Prayer Times, Qibla and Flight Prayer start hidden (on Android they are shown); change any of them with **Show** or **Hide** here. Hiding only removes them from Home: the features, and the prayer alerts, keep working |
 | Tap a word twice: meaning and sound | On: two quick taps on a word show its meaning and play it (one tap always shows/hides the bars) |
 | Transliteration | Under the Arabic in the translation view |
 | English footnotes | Saheeh International's notes |

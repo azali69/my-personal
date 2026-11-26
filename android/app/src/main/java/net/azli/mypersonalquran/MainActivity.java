@@ -557,6 +557,7 @@ public class MainActivity extends Activity {
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] results) {
         if (requestCode == REQ_LOC) { boolean ok = results.length > 0 && results[0] == PackageManager.PERMISSION_GRANTED; if (ok) findLocation(); else js("window.__loc && window.__loc({error:'denied'})"); return; }
+        if (requestCode == REQ_FLIGHT) { boolean ok = results.length > 0 && results[0] == PackageManager.PERMISSION_GRANTED; if (ok) flightGpsOn(); else js("window.__flFix && window.__flFix({error:'denied'})"); return; }
         if (requestCode == REQ_NOTIF) { js("window.__notifPerm && window.__notifPerm()"); return; }
         if (requestCode != REQ_MIC) return;
         if (results.length > 0 && results[0] == PackageManager.PERMISSION_GRANTED && pendingLang != null) {
@@ -783,7 +784,7 @@ public class MainActivity extends Activity {
 
 
     /* ---------------- Prayer alerts, adhan files, location, compass ---------------- */
-    private static final int REQ_NOTIF = 21, REQ_LOC = 22, REQ_PICK = 23, REQ_SAVE = 24, REQ_OPEN = 25, REQ_SYNC = 28, REQ_GAUTH = 29, REQ_GLEGACY = 30;   // 26/27 are the camera and image scans
+    private static final int REQ_NOTIF = 21, REQ_LOC = 22, REQ_PICK = 23, REQ_SAVE = 24, REQ_OPEN = 25, REQ_SYNC = 28, REQ_GAUTH = 29, REQ_GLEGACY = 30, REQ_FLIGHT = 31;   // 26/27 are the camera and image scans
     private String pendingBackup = null, openedBackup = null;   // backup file text: to be written / just read
     private String pickSlot = null;
     private SensorManager sm; private SensorEventListener compassL; private float decl = 0f; private long lastCompass = 0;
@@ -1136,6 +1137,13 @@ public class MainActivity extends Activity {
                 if (checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, REQ_LOC); return; }
                 findLocation(); }); }
+        /* Flight Prayer: live fixes from the GPS receiver itself (works in airplane mode, no internet needed; at a window seat) */
+        @JavascriptInterface public void startFlightGps() {
+            runOnUiThread(() -> {
+                if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQ_FLIGHT); return; }
+                flightGpsOn(); }); }
+        @JavascriptInterface public void stopFlightGps() { runOnUiThread(() -> flightGpsOff()); }
         @JavascriptInterface public void startCompass(double lat, double lng) {
             runOnUiThread(() -> {
                 try { decl = new GeomagneticField((float) lat, (float) lng, 0f, System.currentTimeMillis()).getDeclination(); } catch (Exception e) { decl = 0f; }
@@ -1167,6 +1175,26 @@ public class MainActivity extends Activity {
     private void sendLoc(Location l) {
         if (l == null) { js("window.__loc && window.__loc(null)"); return; }
         js("window.__loc && window.__loc({lat:" + l.getLatitude() + ",lng:" + l.getLongitude() + ",acc:" + l.getAccuracy() + ",t:" + l.getTime() + "})"); }
+
+    private LocationListener flightL;
+    @SuppressWarnings("MissingPermission")
+    private void flightGpsOn() {
+        flightGpsOff();
+        LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if (lm == null || !lm.isProviderEnabled(LocationManager.GPS_PROVIDER)) { js("window.__flFix && window.__flFix({error:'off'})"); return; }
+        flightL = new LocationListener() {
+            @Override public void onLocationChanged(Location l) {
+                js("window.__flFix && window.__flFix({lat:" + l.getLatitude() + ",lng:" + l.getLongitude() + ",alt:" + (l.hasAltitude() ? l.getAltitude() : "null")
+                    + ",spd:" + (l.hasSpeed() ? l.getSpeed() : "null") + ",brg:" + (l.hasBearing() ? l.getBearing() : "null") + ",acc:" + l.getAccuracy() + ",t:" + l.getTime() + "})"); }
+            @Override public void onStatusChanged(String p, int s, Bundle b) { }
+            @Override public void onProviderEnabled(String p) { }
+            @Override public void onProviderDisabled(String p) { js("window.__flFix && window.__flFix({error:'off'})"); }
+        };
+        try { lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 0, flightL, getMainLooper()); } catch (Exception e) { flightL = null; js("window.__flFix && window.__flFix({error:'off'})"); }
+    }
+    private void flightGpsOff() {
+        try { LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE); if (lm != null && flightL != null) lm.removeUpdates(flightL); } catch (Exception ignored) { }
+        flightL = null; }
 
     @SuppressWarnings("MissingPermission")
     private void findLocation() {
@@ -1460,6 +1488,7 @@ public class MainActivity extends Activity {
         stopPump();
         recStandaloneStop();
         btRouteOff();
+        flightGpsOff();
         try { if (bxHelper != null && bxOpened) bxHelper.setRawDrawingEnabled(false); } catch (Throwable ignored) { }
         web.evaluateJavascript("window.__pause && window.__pause()", null);
     }

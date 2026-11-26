@@ -56,6 +56,7 @@ Kembali ke Home dari mana-mana dengan **butang rumah** (atas kiri skrin bacaan) 
 | Notes (Nota) | Buku nota anda: nota pada ayat, pada hadis, dan nota bebas (bahagian 8) |
 | Prayer Times (Waktu Solat) | Waktu solat MUIS, peringatan (bahagian 8) |
 | Qibla (Kiblat) | Kompas arah Kaabah (bahagian 8) |
+| Flight Prayer (Solat dalam Penerbangan) | Waktu solat dan kiblat di tempat kapal terbang berada, dikira daripada kedudukan matahari di sana; berfungsi tanpa internet (bahagian 8) |
 | Settings (Tetapan) | Semua tetapan (bahagian 9) |
 | User Guide (Panduan Pengguna) | Panduan ini, dalam bahasa Inggeris atau Bahasa Melayu |
 | Language · Bahasa | Tanda English atau Bahasa Melayu untuk seluruh aplikasi (bahagian 9) |
@@ -342,6 +343,18 @@ Semuanya dibuka dari **menu ayat**; memerlukan internet sekali bagi setiap surah
 4. **Test the sound** / **Stop**. Jika peringatan tidak berbunyi, benarkan notifikasi dan penggera, dan buang had bateri.
 5. Peringatan **dihidupkan secara lalai** untuk lima waktu solat, dan aplikasi meminta kebenaran notifikasi sekali. Ia mengikut mod bunyi telefon: **dering** = azan atau nada dimainkan; **getar** = telefon bergetar bersama notifikasi, tanpa bunyi; **senyap atau Jangan Ganggu** = notifikasi senyap sahaja. **Test the sound** mengikut peraturan yang sama (dalam mod getar ia hanya bergetar). Jika fon telinga atau earpiece Bluetooth disambung, azan dimainkan dalam fon telinga sahaja.
 6. **Prayer times in the notification bar** (waktu solat di bar notifikasi): **Always** (lalai) memaparkan waktu hari ini dan baki masa ke waktu seterusnya di bar tarik-turun; **30 min before each prayer** memaparkannya hanya dalam setengah jam sebelum setiap waktu; **Off** mematikannya. Ketik untuk membuka Prayer times.
+
+**Solat dalam Penerbangan (Flight Prayer)**
+
+Waktu solat dan kiblat di tempat kapal terbang sebenarnya berada: dikira daripada kedudukan matahari di kapal terbang, bukan jadual lapangan terbang, dan tidak memerlukan internet.
+
+1. Home → **Flight Prayer** (atau Prayer Times → **Flying?**).
+2. **From my route** (boleh digunakan di mana-mana, juga tanpa GPS): pilih dua lapangan terbang dan taip masa berlepas dan tiba seperti yang tercetak pada pas masuk (waktu tempatan setiap lapangan terbang). Kapal terbang diletakkan di sepanjang laluan lurus antara keduanya pada kelajuan tetap. **Semuanya ditandakan ESTIMATE (anggaran)**: lencongan, kelewatan atau angin sakal mengubah waktu beberapa minit (kelewatan 10 minit mengubahnya kira-kira 5 minit).
+3. **Live GPS**: ketik **Start GPS**. Penerima GPS telefon berfungsi dalam mod penerbangan dan tidak memerlukan internet, tetapi memerlukan pandangan langit yang jelas (duduk di tepi tingkap; fix pertama boleh mengambil beberapa minit), dan sesetengah telefon tidak mendapat fix di dalam kabin. Dengan fix, kedudukan dan ketinggian diukur; waktu yang akan datang masih diunjurkan di sepanjang laluan (atau arah semasa), jadi ia kekal anggaran sehingga tiba. Jika telefon tidak memberi ketinggian, 10,500 m diandaikan dan halaman menyatakannya.
+4. Halaman memaparkan: waktu solat sekarang, waktu seterusnya dengan baki masa, kemudian setiap waktu solat dalam penerbangan beserta kedudukan kapal terbang dan kiblat pada ketika itu (darjah dari utara, dan kedudukannya berbanding hidung kapal terbang, sebagai kedudukan jam). **Show times in** membolehkan anda membacanya dalam waktu telefon, waktu bandar berlepas atau tiba, atau UTC.
+5. **Matahari terbenam dan terbit pada ketinggian**: pada paras penerbangan ufuk menurun kira-kira 3°, maka matahari kelihatan terbenam kira-kira 10 minit lebih lewat dan terbit kira-kira 10 minit lebih awal berbanding di darat. Halaman menunjukkan kedua-duanya: Maghrib diberikan daripada matahari terbenam yang dilihat dari kapal terbang (permulaan berhati-hati) dengan matahari terbenam di darat di bawahnya; Subuh tamat pada matahari terbit yang dilihat dari kapal terbang. Sudut Subuh dan Isyak tidak diubah oleh ketinggian.
+6. Kaedah pengiraan ialah yang dipilih dalam Prayer Times (atau pilih yang lain di halaman ini). Halaman ini memberi waktu, bukan hukum. Fatwa yang dipautkan (IslamQA 102449, AMJA 22041, Islamweb 20198) menyatakan agar berpandukan tanda yang dilihat dari kapal terbang, bertanya anak kapal, dan menganggar Zuhur dan Asar mengikut kawasan yang dilalui; tanyakan guru anda tentang jamak dan qasar.
+7. Jika tiada waktu muncul bagi sesuatu solat, matahari tidak mencapai sudut itu di laluan ini (seperti di latitud tinggi), atau waktunya jatuh sebelum berlepas atau selepas mendarat.
 
 **Kiblat**
 

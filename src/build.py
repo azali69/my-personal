@@ -33,6 +33,7 @@ rep = {
     'FONT2': b64(S, 'fonts', 'kfgqpc-hafs-2021.woff2'),         # KFGQPC HAFS Uthmanic Script 1.001 (text)
     'FONT3': b64(S, 'fonts', 'qcf-surah-header.woff2'),         # QCF surah header frames
     'FONT4': b64(S, 'fonts', 'great-vibes.woff2'),              # cover name (OFL)
+    'AIRPORTS': rd(S, 'airports.json'),                         # made by tools/build_airports.py (Flight Prayer)
     'DATA': js(rd(S, 'data.json')),
     'I18N_MS': js(rd(S, 'i18n_ms.json')),                       # Malay for the app's own words (Settings → Language)                             # made by src/quran-data/build_data.py
 }
